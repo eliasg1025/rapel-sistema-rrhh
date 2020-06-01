@@ -14,10 +14,10 @@ class CreateDistritosTable extends Migration
     public function up()
     {
         Schema::create('distritos', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
             $table->timestamps();
             $table->string('name');
-            $table->unsignedBigInteger('provincia_id');
+            $table->string('provincia_id');
             $table->foreign('provincia_id')->references('id')->on('provincias');
         });
     }

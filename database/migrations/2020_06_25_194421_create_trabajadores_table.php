@@ -30,20 +30,20 @@ class CreateTrabajadoresTable extends Migration
             $table->string('nombre_zona')->nullable();
             $table->string('nombre_via')->nullable();
 
-            $table->unsignedBigInteger('distrito_id');
+            $table->string('distrito_id');
             $table->foreign('distrito_id')->references('id')->on('distritos');
 
-            $table->unsignedBigInteger('estado_civil_id');
+            $table->string('estado_civil_id');
             $table->foreign('estado_civil_id')->references('id')->on('estado_civiles');
 
-            $table->unsignedBigInteger('nacionalidad_id');
+            $table->string('nacionalidad_id');
             $table->foreign('nacionalidad_id')->references('id')->on('nacionalidades');
-
-            $table->unsignedBigInteger('grupo_id');
-            $table->foreign('grupo_id')->references('id')->on('grupos');
 
             $table->unsignedBigInteger('ruta_id');
             $table->foreign('ruta_id')->references('id')->on('rutas');
+
+            $table->string('zona_labor_id');
+            $table->foreign('zona_labor_id')->references('id')->on('zona_labores');
         });
     }
 
@@ -54,6 +54,6 @@ class CreateTrabajadoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trabajadors');
+        Schema::dropIfExists('trabajadores');
     }
 }
