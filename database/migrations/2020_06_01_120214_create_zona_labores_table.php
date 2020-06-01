@@ -14,9 +14,11 @@ class CreateZonaLaboresTable extends Migration
     public function up()
     {
         Schema::create('zona_labores', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id('id');
             $table->timestamps();
-            $table->string('empresa_id');
+            $table->string('code');
+            $table->string('name');
+            $table->unsignedBigInteger('empresa_id');
             $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }

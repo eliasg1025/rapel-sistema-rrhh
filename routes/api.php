@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'sistema'], function () {
+    Route::post('/actualizar-datos/por-empresa', 'ActualizarController@porEmpresa');
+    Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
     Route::post('/trabajador', 'TrabajadorController@create');
 });
-

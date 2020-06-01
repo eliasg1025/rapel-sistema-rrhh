@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFundosTable extends Migration
+class CreateNacionalidadesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateFundosTable extends Migration
      */
     public function up()
     {
-        Schema::create('fundos', function (Blueprint $table) {
+        Schema::create('nacionalidades', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('code', 3);
             $table->string('name');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 
@@ -27,6 +30,6 @@ class CreateFundosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fundos');
+        Schema::dropIfExists('nacionalidades');
     }
 }

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ZonaLabor extends Model
 {
-    public $incrementing = false;
+    protected $table = 'zona_labores';
 }

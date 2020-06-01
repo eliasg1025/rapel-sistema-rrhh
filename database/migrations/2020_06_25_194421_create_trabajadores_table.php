@@ -30,19 +30,19 @@ class CreateTrabajadoresTable extends Migration
             $table->string('nombre_zona')->nullable();
             $table->string('nombre_via')->nullable();
 
-            $table->string('distrito_id');
+            $table->unsignedBigInteger('distrito_id');
             $table->foreign('distrito_id')->references('id')->on('distritos');
 
-            $table->string('estado_civil_id');
+            $table->unsignedBigInteger('estado_civil_id');
             $table->foreign('estado_civil_id')->references('id')->on('estado_civiles');
 
-            $table->string('nacionalidad_id');
+            $table->unsignedBigInteger('nacionalidad_id');
             $table->foreign('nacionalidad_id')->references('id')->on('nacionalidades');
 
             $table->unsignedBigInteger('ruta_id');
             $table->foreign('ruta_id')->references('id')->on('rutas');
 
-            $table->string('zona_labor_id');
+            $table->unsignedBigInteger('zona_labor_id');
             $table->foreign('zona_labor_id')->references('id')->on('zona_labores');
         });
     }

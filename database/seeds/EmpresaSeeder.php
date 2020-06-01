@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Empresa;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -12,16 +13,16 @@ class EmpresaSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('empresas')->insert([
-            'id' => '9',
-            'name' => 'SOCIEDAD AGRICOLA RAPEL SAC',
-            'ruc' => '20451779711'
-        ]);
+        $empresa = new Empresa();
+        $empresa->code = '9';
+        $empresa->name = 'SOCIEDAD AGRICOLA RAPEL SAC';
+        $empresa->ruc = '20451779711';
+        $empresa->save();
 
-        DB::table('empresas')->insert([
-            'id' => '14',
-            'name' => 'SOCIEDAD EXPORTADORA VERFRUT SAC',
-            'ruc' => '20601438586'
-        ]);
+        $empresa = new Empresa();
+        $empresa->code = '14';
+        $empresa->name = 'SOCIEDAD EXPORTADORA VERFRUT SAC';
+        $empresa->ruc = '20601438586';
+        $empresa->save();
     }
 }

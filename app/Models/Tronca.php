@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tronca extends Model
 {
-    public $incrementing = false;
+    protected $table = 'troncas';
 }

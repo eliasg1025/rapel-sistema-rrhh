@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ruta extends Model
 {
-    public $incrementing = false;
+    protected $table = 'rutas';
 }

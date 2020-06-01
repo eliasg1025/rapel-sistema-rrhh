@@ -15,6 +15,7 @@ class CreateViasTable extends Migration
     {
         Schema::create('vias', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->timestamps();
             $table->string('name');
         });

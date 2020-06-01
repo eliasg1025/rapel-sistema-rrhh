@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class EstadoCivil extends Model
 {
-    public $incrementing = false;
+    protected $table = 'estado_civiles';
 }

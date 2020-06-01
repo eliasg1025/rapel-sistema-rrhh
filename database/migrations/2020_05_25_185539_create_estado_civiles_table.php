@@ -14,8 +14,9 @@ class CreateEstadoCivilesTable extends Migration
     public function up()
     {
         Schema::create('estado_civiles', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->timestamps();
+            $table->string('code');
             $table->string('name');
         });
     }
