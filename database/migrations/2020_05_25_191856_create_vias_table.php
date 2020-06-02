@@ -18,6 +18,8 @@ class CreateViasTable extends Migration
             $table->string('code');
             $table->timestamps();
             $table->string('name');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 
