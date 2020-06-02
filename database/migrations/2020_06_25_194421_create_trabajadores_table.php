@@ -21,14 +21,24 @@ class CreateTrabajadoresTable extends Migration
             $table->string('apellido_materno');
             $table->string('rut');
             $table->string('fecha_nacimiento');
-            $table->boolean('tipo');
+            $table->string('tipo')->nullable();
             $table->string('codigo_bus')->nullable();
-            $table->boolean('sexo');
+            $table->string('sexo');
             $table->string('telefono')->nullable();
             $table->string('email')->nullable();
 
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
+
+            $table->unsignedBigInteger('tipo_zona_id')->nullable();
+            $table->foreign('tipo_zona_id')->references('id')->on('zonas');
             $table->string('nombre_zona')->nullable();
+
+            $table->unsignedBigInteger('tipo_via_id')->nullable();
+            $table->foreign('tipo_via_id')->references('id')->on('vias');
             $table->string('nombre_via')->nullable();
+
+            $table->string('direccion')->nullable();
 
             $table->unsignedBigInteger('distrito_id');
             $table->foreign('distrito_id')->references('id')->on('distritos');
@@ -39,7 +49,7 @@ class CreateTrabajadoresTable extends Migration
             $table->unsignedBigInteger('nacionalidad_id');
             $table->foreign('nacionalidad_id')->references('id')->on('nacionalidades');
 
-            $table->unsignedBigInteger('ruta_id');
+            $table->unsignedBigInteger('ruta_id')->nullable();
             $table->foreign('ruta_id')->references('id')->on('rutas');
 
             $table->unsignedBigInteger('zona_labor_id');
