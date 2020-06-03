@@ -15,6 +15,8 @@ class CreateTrabajadoresTable extends Migration
     {
         Schema::create('trabajadores', function (Blueprint $table) {
             $table->id();
+            $table->boolean('editable')->default(false);
+            $table->boolean('cargado')->default(false);
             $table->timestamps();
             $table->string('nombre');
             $table->string('apellido_paterno');

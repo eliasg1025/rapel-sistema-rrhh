@@ -13,8 +13,9 @@ class TrabajadorController extends Controller
             $crear_trabajador = Trabajador::_create($request->all());
 
             return response()->json([
-                'message' => $crear_trabajador ? 'Trabajador creado correctamente' : 'El trabajador ya existe fue actualizado'
-            ], $crear_trabajador ? 201 :200);
+                'message' => $crear_trabajador  ? 'Trabajador creado correctamente' : 'No se creo trabajador'
+            ], $crear_trabajador ? 200 : 400);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => $e->getMessage() . ' ' . $e->getTraceAsString()
@@ -24,10 +25,16 @@ class TrabajadorController extends Controller
 
     public function get()
     {
-        $trabajadores = Trabajador::_get();
-        return response()->json([
-            'message' => 'Trabajadores obtenidos',
-            'data' => $trabajadores
-        ], 200);
+        try {
+            $trabajadores = Trabajador::_get();
+            return response()->json([
+                'message' => 'Trabajadores obtenidos',
+                'data' => $trabajadores
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 400);
+        }
     }
 }

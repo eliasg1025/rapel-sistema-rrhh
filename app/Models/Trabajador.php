@@ -3,19 +3,28 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Trabajador extends Model
 {
     protected $table = 'trabajadores';
 
-    public static function _create(array $data=[]): bool
+    public function empresa()
+    {
+        return $this->hasMany('App\Empresa');
+    }
+
+    public function zona_labor()
+    {
+        return $this->hasMany('App\ZonaLabor');
+    }
+
+    public static function _create(array $data=[])
     {
         $no_existe_trabajador = self::where([
             'rut' => $data['rut'],
             'empresa_id' => Empresa::firstWhere('code', $data['empresa_id'])->id
         ])->doesntExist();
-
-        return $no_existe_trabajador;
 
         if ($no_existe_trabajador) {
 
@@ -39,11 +48,14 @@ class Trabajador extends Model
             $trabajador->distrito_id =  Distrito::firstWhere('code', $data['distrito_id'])->id ;
             $trabajador->estado_civil_id = EstadoCivil::firstWhere('code', $data['estado_civil_id'])->id;
             $trabajador->nacionalidad_id = Nacionalidad::firstWhere('code', $data['nacionalidad_id'])->id;
-            $trabajador->ruta_id = $data['ruta_id'];
-            $trabajador->zona_labor_id = $data['zona_labor_id'];
-            $trabajador->save();
+            $trabajador->ruta_id = $data['ruta_id'] ? $data['ruta_id'] : null;
+            $trabajador->zona_labor_id = ZonaLabor::firstWhere('code', $data['zona_labor_id'])->id;
 
-            return true;
+            if ($trabajador->save()) {
+                return true;
+            }
+            return false;
+
         } else {
 
             $trabajador = self::where([
@@ -69,10 +81,21 @@ class Trabajador extends Model
             $trabajador->estado_civil_id = EstadoCivil::firstWhere('code', $data['estado_civil_id'])->id;
             $trabajador->nacionalidad_id = Nacionalidad::firstWhere('code', $data['nacionalidad_id'])->id;
             $trabajador->ruta_id = $data['ruta_id'];
-            $trabajador->zona_labor_id = $data['zona_labor_id'];
-            $trabajador->save();
+            $trabajador->zona_labor_id = ZonaLabor::firstWhere('code', $data['zona_labor_id'])->id;
 
+            if ($trabajador->save()) {
+                return true;
+            }
             return false;
         }
+    }
+
+    public static function _get()
+    {
+        return DB::table('trabajadores')
+            ->join('empresas', 'empresas.id', '=', 'trabajadores.empresa_id')
+            ->join('zona_labores', 'zona_labores.id', '=', 'trabajadores.zona_labor_id')
+            ->select('trabajadores.*', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
+            ->paginate(15);
     }
 }
