@@ -15,13 +15,11 @@ class CreateTrabajadoresTable extends Migration
     {
         Schema::create('trabajadores', function (Blueprint $table) {
             $table->id();
-            $table->boolean('editable')->default(false);
-            $table->boolean('cargado')->default(false);
             $table->timestamps();
             $table->string('nombre');
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
-            $table->string('rut');
+            $table->string('rut')->unique();
             $table->string('fecha_nacimiento');
             $table->string('tipo')->nullable();
             $table->string('codigo_bus')->nullable();
