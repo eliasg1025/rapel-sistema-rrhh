@@ -107,13 +107,13 @@ class Trabajador extends Model
                     DB::commit();
                     return true;
                 } else {
-                    throw new \Exception();
+                    DB::rollBack();
+                    return false;
                 }
 
-                /* DB::commit();
-                return true; */
             } else {
-                throw new \Exception();
+                DB::rollBack();
+                return false;
             }
         } catch (\Exception $e) {
             DB::rollBack();

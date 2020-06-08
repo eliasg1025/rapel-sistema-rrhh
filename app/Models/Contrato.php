@@ -20,17 +20,17 @@ class Contrato extends Model
             $contrato = Contrato::firstWhere([
                 'code' => $data['code'],
                 'fecha_inicio' => $data['fecha_inicio'],
-                'fecha_termino' => $data['fecha_termino'],
+                'fecha_termino_c' => $data['fecha_termino_c'],
             ]);
 
             if (!$contrato) {
                 $contrato = new Contrato();
                 $contrato->code = $data['code'];
                 $contrato->fecha_inicio = $data['fecha_inicio'];
-                $contrato->fecha_termino = $data['fecha_termino'];
+                $contrato->fecha_termino_c = $data['fecha_termino_c'];
             }
 
-            $contrato->fecha_termino_c = $data['fecha_termino_c'];
+            $contrato->fecha_termino = $data['fecha_termino'] ?? null;
             $contrato->sueldo_base = $data['sueldo_base'];
             $contrato->cussp = $data['cussp'];
             $contrato->trabajador_id = $data['trabajador_id'];
@@ -39,9 +39,8 @@ class Contrato extends Model
 
             if ($contrato->save()) {
                 return true;
-            } else {
-                throw new \Exception();
             }
+            return false;
 
         } catch (\Exception $e) {
             return false;
@@ -54,19 +53,32 @@ class Contrato extends Model
         DB::beginTransaction();
         try {
             for ($i=0; $i < sizeof($contratos); $i++) {
-                $contrato = new Contrato();
-                $contrato->code = $contratos[$i]['id'];
-                $contrato->fecha_inicio = $contratos[$i]['fecha_inicio'];
-                $contrato->fecha_termino = $contratos[$i]['fecha_termino'];
-                $contrato->fecha_termino_c = $contratos[$i]['fecha_termino_c'];
+
+                $contrato = self::where([
+                    'code' => $contratos[$i]['code'],
+                    'fecha_inicio' => $contratos[$i]['fecha_inicio'],
+                    'empresa_id' => $data['empresa_id'],
+                    'trabajador_id' => $data['trabajador_id'],
+                    'fecha_termino_c' => $contratos[$i]['fecha_termino_c']
+                ])->first();
+
+                if (!$contrato) {
+                    $contrato = new Contrato();
+                    $contrato->code = $contratos[$i]['code'];
+                    $contrato->fecha_inicio = $contratos[$i]['fecha_inicio'];
+                    $contrato->empresa_id = $data['empresa_id'];
+                    $contrato->trabajador_id = $data['trabajador_id'];
+                    $contrato->fecha_termino_c = $contratos[$i]['fecha_termino_c'];
+                }
+
+                $contrato->fecha_termino = $contratos[$i]['fecha_termino'] ?? null;
                 $contrato->sueldo_base = $contratos[$i]['sueldo_base'];
                 $contrato->cussp = $contratos[$i]['cussp'];
-                $contrato->trabajador_id = $data['trabajador_id'];
-                $contrato->empresa_id = $data['empresa_id'];
                 $contrato->zona_labor_id = $data['zona_labor_id'];
 
                 if (!$contrato->save()) {
-                    throw new \Exception();
+                    DB::rollBack();
+                    return false;
                 }
             }
             DB::commit();
