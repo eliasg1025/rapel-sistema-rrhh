@@ -63,14 +63,15 @@ class Trabajador extends Model
         $nacionalidad_id = Nacionalidad::firstWhere(['code' => $data['nacionalidad_id'],'empresa_id' => $empresa_id])->id;
         $zona_labor_id = ZonaLabor::firstWhere(['code' => $data['zona_labor_id'],'empresa_id' => $empresa_id])->id;
 
-        $trabajador_id = self::where(['rut' => $data['rut'], 'empresa_id' => $empresa_id])->first();
-
         DB::beginTransaction();
         try {
-            $trabajador = Trabajador::firstOrNew([
-                'rut' => $data['rut'],
-                'empresa_id' => $empresa_id,
-            ]);
+            $trabajador = self::where(['rut' => $data['rut'], 'empresa_id' => $empresa_id])->first();
+
+            if (!$trabajador) {
+                $trabajador = new Trabajador();
+                $trabajador->empresa_id = $empresa_id;
+                $trabajador->rut = $data['rut'];
+            }
 
             $trabajador->nombre = $data['nombre'];
             $trabajador->apellido_paterno = $data['apellido_paterno'];
@@ -93,9 +94,24 @@ class Trabajador extends Model
             $trabajador->zona_labor_id = $zona_labor_id;
 
             if ($trabajador->save()) {
-                DB::commit();
-                return true;
 
+                $contratos_data = [
+                    'empresa_id' => $empresa_id,
+                    'zona_labor_id' => $zona_labor_id,
+                    'trabajador_id' => $trabajador->id,
+                    'contratos' => $data['contratos']
+                ];
+
+
+                if ( Contrato::masive_save($contratos_data) ) {
+                    DB::commit();
+                    return true;
+                } else {
+                    throw new \Exception();
+                }
+
+                /* DB::commit();
+                return true; */
             } else {
                 throw new \Exception();
             }
@@ -104,72 +120,6 @@ class Trabajador extends Model
             var_dump($e);
             return false;
         }
-
-        /*
-        if (!$trabajador_id) {
-            $trabajador = new Trabajador();
-            $trabajador->rut = $data['rut'];
-            $trabajador->empresa_id = $empresa_id;
-            $trabajador->nombre = $data['nombre'];
-            $trabajador->apellido_paterno = $data['apellido_paterno'];
-            $trabajador->apellido_materno = $data['apellido_materno'];
-            $trabajador->fecha_nacimiento = $data['fecha_nacimiento'];
-            $trabajador->tipo = $data['tipo'];
-            $trabajador->codigo_bus = $data['codigo_bus'];
-            $trabajador->sexo = $data['sexo'];
-            $trabajador->telefono = $data['telefono'];
-            $trabajador->email = $data['email'];
-            $trabajador->tipo_zona_id = $tipo_zona_id;
-            $trabajador->nombre_zona = $data['nombre_zona'];
-            $trabajador->tipo_via_id = $tipo_via_id;
-            $trabajador->nombre_via = $data['nombre_via'];
-            $trabajador->direccion = $data['direccion'];
-            $trabajador->distrito_id = $distrito_id;
-            $trabajador->estado_civil_id = $estado_civil_id;
-            $trabajador->nacionalidad_id = $nacionalidad_id;
-            $trabajador->ruta_id = $data['ruta_id'] ? $data['ruta_id'] : null;
-            $trabajador->zona_labor_id = $zona_labor_id;
-
-            if ($trabajador->save()) {
-                Contrato::masive_save($data['contratos']);
-                return true;
-            }
-            return false;
-
-        } else {
-
-            $trabajador = self::where([
-                'rut' => $data['rut'],
-                'empresa_id' => $empresa_id
-            ])->first();
-
-            $trabajador->nombre = $data['nombre'];
-            $trabajador->apellido_paterno = $data['apellido_paterno'];
-            $trabajador->apellido_materno = $data['apellido_materno'];
-            $trabajador->fecha_nacimiento = $data['fecha_nacimiento'];
-            $trabajador->tipo = $data['tipo'];
-            $trabajador->codigo_bus = $data['codigo_bus'];
-            $trabajador->sexo = $data['sexo'];
-            $trabajador->telefono = $data['telefono'];
-            $trabajador->email = $data['email'];
-            $trabajador->tipo_zona_id = $tipo_zona_id;
-            $trabajador->nombre_zona = $data['nombre_zona'];
-            $trabajador->tipo_via_id = $tipo_via_id;
-            $trabajador->nombre_via = $data['nombre_via'];
-            $trabajador->direccion = $data['direccion'];
-            $trabajador->distrito_id = $distrito_id;
-            $trabajador->estado_civil_id = $estado_civil_id;
-            $trabajador->nacionalidad_id = $nacionalidad_id;
-            $trabajador->ruta_id = $data['ruta_id'] ? $data['ruta_id'] : null;
-            $trabajador->zona_labor_id = $zona_labor_id;
-
-            if ($trabajador->save()) {
-                Contrato::_create_masive($data['contratos']);
-                return true;
-            }
-            return false;
-        }
-        */
     }
 
     public static function _get()

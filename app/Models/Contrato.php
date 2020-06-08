@@ -14,34 +14,63 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Trabajador');
     }
 
-    public static function masive_save($contratos = []): bool
+    public static function _save(array $data): bool
     {
-        DB::beginTransaction();
         try {
-            $bandera = true;
-            for ($i=0; $i < sizeof($contratos); $i++) {
-                $contrato = new Contrato();
-                $contrato->code = $contratos[$i]['IdContrato'];
-                $contrato->fecha_inicio = $contratos[$i]['FechaInicio'];
-                $contrato->fecha_termino = $contratos[$i]['FechaTermino'];
-                $contrato->fecha_termino_c = $contratos[$i]['FechaTerminoC'];
-                $contrato->sueldo_base = $contratos[$i]['SueldoBase'];
-                $contrato->cussp = $contratos[$i]['Cussp'];
-                $contrato->trabajador_id = $contratos[$i]['RutTrabajador'];
-                $contrato->empresa_id = $contratos[$i]['IdEmpresa'];
-                $contrato->zona_labor_id = $contrato[$i]['IdZona'];
+            $contrato = Contrato::firstWhere([
+                'code' => $data['code'],
+                'fecha_inicio' => $data['fecha_inicio'],
+                'fecha_termino' => $data['fecha_termino'],
+            ]);
 
-                if (!$contrato->save()) {
-                    $bandera = false;
-                }
+            if (!$contrato) {
+                $contrato = new Contrato();
+                $contrato->code = $data['code'];
+                $contrato->fecha_inicio = $data['fecha_inicio'];
+                $contrato->fecha_termino = $data['fecha_termino'];
             }
 
-            if ($bandera) {
-                DB::commit();
+            $contrato->fecha_termino_c = $data['fecha_termino_c'];
+            $contrato->sueldo_base = $data['sueldo_base'];
+            $contrato->cussp = $data['cussp'];
+            $contrato->trabajador_id = $data['trabajador_id'];
+            $contrato->empresa_id = $data['empresa_id'];
+            $contrato->zona_labor_id = $data['zona_labor_id'];
+
+            if ($contrato->save()) {
                 return true;
             } else {
                 throw new \Exception();
             }
+
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public static function masive_save(array $data): bool
+    {
+        $contratos = $data['contratos'];
+        DB::beginTransaction();
+        try {
+            for ($i=0; $i < sizeof($contratos); $i++) {
+                $contrato = new Contrato();
+                $contrato->code = $contratos[$i]['id'];
+                $contrato->fecha_inicio = $contratos[$i]['fecha_inicio'];
+                $contrato->fecha_termino = $contratos[$i]['fecha_termino'];
+                $contrato->fecha_termino_c = $contratos[$i]['fecha_termino_c'];
+                $contrato->sueldo_base = $contratos[$i]['sueldo_base'];
+                $contrato->cussp = $contratos[$i]['cussp'];
+                $contrato->trabajador_id = $data['trabajador_id'];
+                $contrato->empresa_id = $data['empresa_id'];
+                $contrato->zona_labor_id = $data['zona_labor_id'];
+
+                if (!$contrato->save()) {
+                    throw new \Exception();
+                }
+            }
+            DB::commit();
+            return true;
         } catch (\Exception $e) {
             DB::rollBack();
             return false;
