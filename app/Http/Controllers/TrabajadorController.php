@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empresa;
 use App\Models\Trabajador;
 use Illuminate\Http\Request;
 
@@ -22,9 +23,11 @@ class TrabajadorController extends Controller
         }
     }
 
-    public function get()
+    public function get(Request $request)
     {
-        $trabajadores = Trabajador::_get();
+        $filtro = $request->all();
+
+        $trabajadores = Trabajador::_get($filtro);
         return response()->json([
             'message' => 'Trabajadores obtenidos',
             'data' => $trabajadores

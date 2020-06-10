@@ -22,5 +22,5 @@ Route::group(['prefix' => 'sistema'], function () {
     Route::post('/actualizar-datos/por-empresa', 'ActualizarController@porEmpresa');
     Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
     Route::post('/trabajador', 'TrabajadorController@create');
-    Route::get('/trabajador', 'TrabajadorController@get');
+    Route::put('/trabajador', 'TrabajadorController@get');
 });

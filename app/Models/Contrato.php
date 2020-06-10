@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -54,24 +55,26 @@ class Contrato extends Model
         try {
             for ($i=0; $i < sizeof($contratos); $i++) {
 
+                $fecha_inicio = Carbon::parse($contratos[$i]['fecha_inicio'])->format('Y-m-d');
+                $fecha_termino_c = $contratos[$i]['fecha_termino_c'] ? Carbon::parse($contratos[$i]['fecha_termino_c'])->format('Y-m-d') : null;
+                $fecha_termino = $contratos[$i]['fecha_termino'] ? Carbon::parse($contratos[$i]['fecha_termino'])->format('Y-m-d') : null;
+
                 $contrato = self::where([
                     'code' => $contratos[$i]['code'],
-                    'fecha_inicio' => $contratos[$i]['fecha_inicio'],
                     'empresa_id' => $data['empresa_id'],
                     'trabajador_id' => $data['trabajador_id'],
-                    'fecha_termino_c' => $contratos[$i]['fecha_termino_c']
                 ])->first();
 
                 if (!$contrato) {
                     $contrato = new Contrato();
                     $contrato->code = $contratos[$i]['code'];
-                    $contrato->fecha_inicio = $contratos[$i]['fecha_inicio'];
                     $contrato->empresa_id = $data['empresa_id'];
                     $contrato->trabajador_id = $data['trabajador_id'];
-                    $contrato->fecha_termino_c = $contratos[$i]['fecha_termino_c'];
                 }
 
-                $contrato->fecha_termino = $contratos[$i]['fecha_termino'] ?? null;
+                $contrato->fecha_inicio = $fecha_inicio;
+                $contrato->fecha_termino_c = $fecha_termino_c;
+                $contrato->fecha_termino = $fecha_termino;
                 $contrato->sueldo_base = $contratos[$i]['sueldo_base'];
                 $contrato->cussp = $contratos[$i]['cussp'];
                 $contrato->zona_labor_id = $data['zona_labor_id'];

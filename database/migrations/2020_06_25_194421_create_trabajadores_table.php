@@ -20,7 +20,7 @@ class CreateTrabajadoresTable extends Migration
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->string('rut')->unique();
-            $table->string('fecha_nacimiento');
+            $table->date('fecha_nacimiento');
             $table->string('tipo')->nullable();
             $table->string('codigo_bus')->nullable();
             $table->string('sexo');
