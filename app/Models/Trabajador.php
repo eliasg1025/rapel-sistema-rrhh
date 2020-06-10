@@ -124,6 +124,7 @@ class Trabajador extends Model
 
     public static function _get(array $filtro = [])
     {
+
         $trabajadores = DB::table('trabajadores')
             ->join('empresas', 'empresas.id', '=', 'trabajadores.empresa_id')
             ->join('zona_labores', 'zona_labores.id', '=', 'trabajadores.zona_labor_id')
