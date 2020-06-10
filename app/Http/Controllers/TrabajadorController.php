@@ -22,8 +22,10 @@ class TrabajadorController extends Controller
         }
     }
 
-    public function get()
+    public function get(Request $request)
     {
+        
+
         $trabajadores = Trabajador::_get();
         return response()->json([
             'message' => 'Trabajadores obtenidos',
