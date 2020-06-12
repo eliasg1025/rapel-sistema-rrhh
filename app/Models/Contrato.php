@@ -20,6 +20,40 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Empresa');
     }
 
+    /**
+     * Mutators
+     */
+
+    public function getFechaLargaAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_inicio);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
+    public function getAnioContratoAttribute($value)
+    {
+        return Carbon::parse($this->fecha_inicio)->format('Y');
+    }
+
+    public function getMesContratoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_inicio);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $mes;
+    }
+
+    public function getFechaFormatAttribute($value)
+    {
+        return Carbon::parse($this->fecha_inicio)->format('d/m/Y');
+    }
+
+    /**
+     * CRUD methods
+     */
+
     public static function _save(array $data): bool
     {
         try {

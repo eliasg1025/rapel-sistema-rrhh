@@ -8,41 +8,30 @@ use Illuminate\Http\Request;
 
 class ContratoController extends Controller
 {
-    public function verFichaIngresoObrero($empresa, $rut)
+    public function verFichaIngreso(Contrato $contrato)
     {
-        $empresa_id = $empresa === 9 ? 1 : 2;
+        try {
+            $trabajador = $contrato->trabajador;
+            if ($contrato->empresa->code === "9") {
+                $data = [
+                    'trabajador' => $trabajador,
+                    'contrato' => $contrato
+                ];
 
-        switch ($empresa) {
-            case '9':
-                $empresa_id = 1;
-                break;
+                $pdf = \PDF::setOptions([
+                    'images' => true
+                ])->loadView('fichas-ingresos-obreros.rapel.contrato', $data);
 
-            case '14':
-                $empresa_id = 2;
-                break;
+                $filename = $trabajador->apellido_paterno . '-' . $trabajador->apellido_materno . '-' . $trabajador->rut . '-FICHA.pdf';
 
-            default:
-                break;
-        }
+                return $pdf->stream($filename);
+            } else {
+                throw new \Exception();
+            }
 
-        $trabajador = Trabajador::where([
-            'empresa_id' => $empresa_id,
-            'rut' => $rut
-        ])->first();
-
-        $data = [
-            'trabajador' => $trabajador
-        ];
-
-        if ($empresa_id === 1) {
-            $pdf = \PDF::loadView('fichas-ingresos-obreros.rapel.contrato', $data);
-
-            $filename = "rapel-{$rut}-contrato.pdf";
-
-            return $pdf->stream($filename);
-        } else {
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Ficha para verfrut aún no disponibles'
+                'message' => $e->getMessage()
             ]);
         }
     }

@@ -35,6 +35,11 @@ class Trabajador extends Model
         return $this->belongsTo('App\Models\Nacionalidad');
     }
 
+    public function estado_civil()
+    {
+        return $this->belongsTo('App\Models\EstadoCivil');
+    }
+
     /**
      * Mutators
      */
