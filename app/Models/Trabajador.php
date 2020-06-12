@@ -138,8 +138,8 @@ class Trabajador extends Model
             ->select('trabajadores.*', 'contratos.fecha_inicio', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
             ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
             ->where('contratos.empresa_id', $filtro['empresa_id'])
-            ->where('trabajadores.nombre', 'LIKE', '%' . $filtro['nombre'] . '%')
-            ->where('trabajadores.rut', 'LIKE', '%' . $filtro['dni'] . '%')
+            ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
+            ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
             ->get();
 
         return $contratos;

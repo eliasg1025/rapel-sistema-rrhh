@@ -28,8 +28,10 @@ class TrabajadorController extends Controller
         $filtro = $request->all();
 
         $trabajadores = Trabajador::_get($filtro);
+        $cantidad = sizeof($trabajadores);
+
         return response()->json([
-            'message' => 'Trabajadores obtenidos',
+            'message' => $cantidad !== 1 ? "{$cantidad} coincidencias encontradas" : "{$cantidad} coincidencia encontrada",
             'data' => $trabajadores
         ], 200);
     }
