@@ -15,6 +15,11 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Trabajador');
     }
 
+    public function empresa()
+    {
+        return $this->belongsTo('App\Models\Empresa');
+    }
+
     public static function _save(array $data): bool
     {
         try {

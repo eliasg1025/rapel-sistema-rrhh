@@ -72,7 +72,7 @@
                 <b>SOCIEDAD AGRICOLA RAPEL S.A.C.</b>, R.U.C. Nº 20451779711, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, Sr. Carrillo Curay Federico, identificado con Documento Nacional de Identidad Nº  44554215, a la que en adelante le denominará <b>EL EMPLEADOR</b>; y de la otra parte,
             </li>
             <li>
-                <b><i>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</i></b> con DNI o C.E. Nº <b>{{ $trabajador->rut }}</b>, con domicilio en <b>{{ $trabajador->direccion }}</b>, Distrito de <b>{{ $trabajador->distrito->name }}</b>, Provincia de <b>{{ $trabajador->distrito->provincia->name }}</b>, Departamento de <b>{{ $trabajador->distrito->provincia->departamento->name }}</b>, con fecha de nacimiento <b>{{ $trabajador->fecha_format }}</b> y de Nacionalidad <b>PERUANO (A)</b>, a quien en adelante se le denominará <b>EL TRABAJADOR</b>.
+            <b><i>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</i></b> con DNI o C.E. Nº <b>{{ $trabajador->rut }}</b>, con domicilio en <b>{{ $trabajador->direccion }}</b>, Distrito de <b>{{ $trabajador->distrito->name }}</b>, Provincia de <b>{{ $trabajador->distrito->provincia->name }}</b>, Departamento de <b>{{ $trabajador->distrito->provincia->departamento->name }}</b>, con fecha de nacimiento <b>{{ $trabajador->fecha_format }}</b> y de Nacionalidad <b>{{ $trabajador-> }}</b>, a quien en adelante se le denominará <b>EL TRABAJADOR</b>.
             </li>
         </ul>
         <p>En los términos y condiciones que constan en las cláusulas siguientes:</p>

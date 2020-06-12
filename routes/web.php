@@ -18,6 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/ficha/{empresa}/{rut}', 'FichaController@verFichaIngresoObrero');
+Route::get('/ficha/{empresa}/{rut}', 'ContratoController@verFichaIngresoObrero');
 
-Route::get('/test2', 'FichaContorller@test2');
+Route::get('/test/{contrato}', 'ContratoController@test');

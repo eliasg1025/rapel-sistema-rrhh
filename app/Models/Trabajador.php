@@ -30,6 +30,11 @@ class Trabajador extends Model
         return $this->hasMany('App\Models\Contrato');
     }
 
+    public function nacionalidad()
+    {
+        return $this->belongsTo('App\Models\Nacionalidad');
+    }
+
     /**
      * Mutators
      */
@@ -125,19 +130,15 @@ class Trabajador extends Model
     public static function _get(array $filtro = [])
     {
 
-        $trabajadores = DB::table('trabajadores')
-            ->join('empresas', 'empresas.id', '=', 'trabajadores.empresa_id')
-            ->join('zona_labores', 'zona_labores.id', '=', 'trabajadores.zona_labor_id')
-            ->select('trabajadores.*', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
-            ->get();
+        $empresa_id = Empresa::firstWhere('code', $filtro['empresa_id'])->id;
 
         $contratos = DB::table('contratos')
             ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
             ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
             ->join('zona_labores', 'zona_labores.id', '=', 'trabajadores.zona_labor_id')
-            ->select('trabajadores.*', 'contratos.fecha_inicio', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
+            ->select('trabajadores.*', 'contratos.id as contrato_id', 'contratos.fecha_inicio', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
             ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
-            ->where('contratos.empresa_id', $filtro['empresa_id'])
+            ->where('contratos.empresa_id', $empresa_id)
             ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
             ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
             ->get();
