@@ -1003,7 +1003,7 @@
         <table style="width: 100%;">
             <tr>
                 <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
-                <td><h4 style="text-align: left" class="titulo">FICHA DE INGRESO Y CONTRATACIÓN</h4></td>
+                <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DE SISTEMA PENSIONARIO</h4></td>
             </tr>
         </table>
         <div style="font-size: 13px; text-align: justify">
@@ -1094,14 +1094,25 @@
                                 <li>SISTEMA NACIONAL DE PENSIONES <span></span></li>
                                 <li>SISTEMA PRIVADO DE PENSIONES (AFP) <span></span></li>
                                 <small>* Si deseas afiliarte al Sistema Privado de Pensiones, llenar los siguientes datos:</small>
-                                <ul>
-                                    <li>Correo Electrónico: <span></span></li>
-                                    <li>Teléfono Fijo: <span></span></li>
-                                    <li>Teléfono Móvil: <span></span></li>
-                                    <li>
+                                <div>
+                                    <table>
+                                        <tr>
+                                            <td>Correo Electrónico:</td>
+                                            <td>__________________________________</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Teléfono Fijo:</td>
+                                            <td>__________________________________</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Teléfono Móvil:</td>
+                                            <td>__________________________________</td>
+                                        </tr>
+                                    </table>
+                                    <p>
                                         Envio de estado de cuenta por correo <span>SI</span> <span>NO</span>
-                                    </li>
-                                </ul>
+                                    </p>
+                                </div>
                             </ul>
                         </li>
                         <li>
@@ -1109,15 +1120,23 @@
                             <table style="font-weight: bold; margin: auto; width: 40%">
                                 <tr>
                                     <td>INTEGRA</td>
+                                    <td>
+                                        <div></div>
+                                    </td>
                                     <td>PRIMA</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>PROFUTURO</td>
+                                    <td></td>
                                     <td>HABITAT</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>HORIZONTE</td>
+                                    <td></td>
                                     <td>O.N.P.</td>
+                                    <td></td>
                                 </tr>
                             </table>
                         </li>
