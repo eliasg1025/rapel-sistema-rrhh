@@ -205,7 +205,7 @@
                 <b><u>DECIMO NOVENO:</u> Solución de Controversias.-</b>
                 Para todos los efectos emergentes de este contrato, las partes constituyen domicilio especial en los indicados en el encabezamiento del presente, donde serán válidas y surtirán plenos efectos todas las comunicaciones que deban cursarse con motivo del mismo. Asimismo, para cualquier discrepancia que se suscite entre las partes con motivo del presente, se pacta la jurisdicción y competencia de los Tribunales Ordinarios del Distrito Judicial de Piura.
             </li>
-        </ul>
+        </ol>
         <p>En señal de conformidad, las partes suscriben el presente documento por triplicado, en la ciudad de Piura, el <b>{{ $contrato->fecha_larga }}</b>.</p>
         <table style="width: 100%; font-weight: bold; text-align: center; margin-top: 100px">
             <tr>
@@ -1006,93 +1006,149 @@
                 <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DE SISTEMA PENSIONARIO</h4></td>
             </tr>
         </table>
-        <div style="font-size: 13px; text-align: justify">
+        <div style="font-size: 11px; text-align: justify">
             <ol style="list-style: upper-roman">
                 <li>
-                    <b>DATOS DEL TRABAJADOR</b><br>
+                    <b><u>DATOS DEL TRABAJADOR</u></b><br>
                     <table style="width: 100%">
                         <tr>
                             <td>1.- APELLIDO PATERNO:</td>
-                            <td><b>{{ $trabajador->apellido_paterno }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->apellido_paterno }}</b></td>
                         </tr>
                         <tr>
                             <td>2.- APELLIDO MATERNO:</td>
-                            <td><b>{{ $trabajador->apellido_materno }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->apellido_materno }}</b></td>
                         </tr>
                         <tr>
                             <td>3.- NOMBRES:</td>
-                            <td><b>{{ $trabajador->nombre }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->nombre }}</b></td>
                         </tr>
                         <tr>
                             <td>4.- TIPO DOCUMENTO:</td>
-                            <td></td>
+                            <td>
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td><div style="border: 1px black solid; height: 15px; width: 15px;">{{ $trabajador->nacionalidad->code === 'PE' ? 'X' : null }}</div></td>
+                                        <td>DNI</td>
+                                        <td>N°</td>
+                                        <td style="border-bottom: 0.5px solid black; width: 65%">{{ $trabajador->nacionalidad->code === 'PE' ? $trabajador->rut : null }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><div style="border: 1px black solid; height: 15px; width: 15px;"></div></td>
+                                        <td>Carnet Extranjería</td>
+                                        <td>N°</td>
+                                        <td style="border-bottom: 0.5px solid black; width: 65%"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div style="border: 1px black solid; height: 15px; width: 15px;"></div></td>
+                                        <td>Pasaporte</td>
+                                        <td>N°</td>
+                                        <td style="border-bottom: 0.5px solid black; width: 65%"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div style="border: 1px black solid; height: 15px; width: 15px;"></div></td>
+                                        <td>Otros</td>
+                                        <td>N°</td>
+                                        <td style="border-bottom: 0.5px solid black; width: 65%"></td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         <tr>
                             <td>5.- SEXO:</td>
-                            <td><b>{{ $trabajador->sexo }}</b></td>
+                            <td>
+                                <table style="width: 40%">
+                                    <tr>
+                                        <td>
+                                            <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;">
+                                                {{ $trabajador->sexo === 'M' ? 'X' : null }}
+                                            </div>
+                                        </td>
+                                        <td><b>M</b></td>
+                                        <td>
+                                            <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;">
+                                                {{ $trabajador->sexo === 'F' ? 'X' : null }}
+                                            </div>
+                                        </td>
+                                        <td><b>F</b></td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                         <tr>
                             <td>6.- FECHA DE NACIMIENTO:</td>
-                            <td><b>{{ $trabajador->fecha_format }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->fecha_format }}</b></td>
                         </tr>
                         <tr>
                             <td>7.- DOMICILIO:</td>
-                            <td><b>{{ $trabajador->direccion }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->direccion }}</b></td>
                         </tr>
                         <table style="margin-left: 45px">
                             <tr>
                                 <td>DISTRITO:</td>
-                                <td><b>{{ $trabajador->distrito->name }}</b></td>
+                                <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->distrito->name }}</b></td>
                             </tr>
                             <tr>
                                 <td>PROVINCIA:</td>
-                                <td><b>{{ $trabajador->distrito->provincia->name }}</b></td>
+                                <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->distrito->provincia->name }}</b></td>
                             </tr>
                             <tr>
                                 <td>DEPARTAMENTO:</td>
-                                <td><b>{{ $trabajador->distrito->provincia->departamento->name }}</b></td>
+                                <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->distrito->provincia->departamento->name }}</b></td>
                             </tr>
                         </table>
                     </table>
                 </li>
                 <li>
-                    <b>DATOS DE LA ENTIDAD EMPLEADORA</b><br>
+                    <b><u>DATOS DE LA ENTIDAD EMPLEADORA</u></b><br>
                     <table>
                         <tr>
                             <td>1.- NOMBRE O RAZON SOCIAL:</td>
-                            <td><b>SOCIEDAD AGRICOLA RAPEL SAC</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>SOCIEDAD AGRICOLA RAPEL SAC</b></td>
                         </tr>
                         <tr>
                             <td>2.- N° DE RUC:</td>
-                            <td><b>20451779711</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>20451779711</b></td>
                         </tr>
                         <tr>
                             <td>3.- DEPARTAMENTO DEL DOMICILIO FISCAL:</td>
-                            <td><b>CASERIO EL PAPAYO MZ "O"-CASTILLA-PIURA</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>CASERIO EL PAPAYO MZ "O"-CASTILLA-PIURA</b></td>
                         </tr>
                     </table>
                 </li>
                 <li>
-                    <b>DATOS DEL VÍNCULO LABORAL</b><br>
+                    <b><u>DATOS DEL VÍNCULO LABORAL</u></b><br>
                     <table>
                         <tr>
                             <td>1.- FECHA DE INICIO DE LA RELACION:</td>
-                            <td><b>{{ $contrato->fecha_larga }}</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>{{ $contrato->fecha_larga }}</b></td>
                         </tr>
                         <tr>
                             <td>2.- REMUNERACIÓN:</td>
-                            <td><b>S/ 39.19</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b>S/ 39.19</b></td>
                         </tr>
                     </table>
                 </li>
                 <li>
-                    <b>ELECCIÓN DEL SISTEMA PENSIONARIO</b><br>
+                    <b><u>ELECCIÓN DEL SISTEMA PENSIONARIO</u></b><br>
                     <ol>
                         <li>
                             DESEO AFILIARME (Marcar el que corresponda)<br>
                             <ul style="list-style: none">
-                                <li>SISTEMA NACIONAL DE PENSIONES <span></span></li>
-                                <li>SISTEMA PRIVADO DE PENSIONES (AFP) <span></span></li>
+                                <table>
+                                    <tr>
+                                        <td>SISTEMA NACIONAL DE PENSIONES</td>
+                                        <td>
+                                            <div style="border: 1px black solid; height: 15px; width: 15px;"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SISTEMA PRIVADO DE PENSIONES (AFP)</td>
+                                        <td>
+                                            <div style="border: 1px black solid; height: 15px; width: 15px;"></div>
+                                        </td>
+                                    </tr>
+                                </table>
                                 <small>* Si deseas afiliarte al Sistema Privado de Pensiones, llenar los siguientes datos:</small>
                                 <div>
                                     <table>
@@ -1109,34 +1165,56 @@
                                             <td>__________________________________</td>
                                         </tr>
                                     </table>
-                                    <p>
-                                        Envio de estado de cuenta por correo <span>SI</span> <span>NO</span>
-                                    </p>
+                                    <table style="width: 70%">
+                                        <tr>
+                                            <td>Envio de estado de cuenta por correo</td>
+                                            <td>
+                                                <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                            </td>
+                                            <td>SI</td>
+                                            <td>
+                                                <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                            </td>
+                                            <td>
+                                                NO
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </ul>
                         </li>
                         <li>
                             ESTOY ACTUALMENTE AFILIADO (Marcar el que corresponda)<br>
-                            <table style="font-weight: bold; margin: auto; width: 40%">
+                            <table style="font-weight: bold; margin: auto; width: 50%;">
                                 <tr>
+                                    <td>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                    </td>
                                     <td>INTEGRA</td>
                                     <td>
-                                        <div></div>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
                                     </td>
                                     <td>PRIMA</td>
-                                    <td></td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                    </td>
                                     <td>PROFUTURO</td>
-                                    <td></td>
+                                    <td>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                    </td>
                                     <td>HABITAT</td>
-                                    <td></td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                    </td>
                                     <td>HORIZONTE</td>
-                                    <td></td>
+                                    <td>
+                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
+                                    </td>
                                     <td>O.N.P.</td>
-                                    <td></td>
                                 </tr>
                             </table>
                         </li>
@@ -1146,8 +1224,16 @@
             <small>
                 DECLARO HABER RECIBIDO EL BOLETIN INFORMATIVO SOBRE LAS CARACTERÍSTICAS, DIFERENCIAS Y DEMÁS PECULIARIDADES PERNSIONARIOS VIGENTES SPP - SNP.
             </small>
-            <br><br>
+            <br><br><br>
             <table style="width: 100%">
+                <tr>
+                    <td style="text-align: right; font-size: 12px">
+                        <b>Firma del trabajador</b>
+                    </td>
+                    <td style="border-bottom: 0.5px solid black">
+
+                    </td>
+                </tr>
                 <tr>
                     <td><b>RR.HH. - {{ $contrato->anio_contrato }}</b></td>
                     <td style="text-align: right">Piura, {{ $contrato->fecha_larga }}</td>
@@ -1164,210 +1250,237 @@
     <div class="page-break"></div>
 
     <section id="page21">
-        <span>
-            <div></div>
-            <div>
-                <div>
-                    <small>Código: FG-SSO-01</small>
-                </div>
-                <div>
-                    <small>Revisión: 00</small>
-                </div>
-            </div>
-        </span>
-
-        <h4>PROGRAMA DE INDUCCIÓN PARA PERSONAL NUEVO O TRANSFERIDO</h4>
-
-        <h5>Hoja de Ruta para Trabajadores Nuevos</h5>
-
-        <table>
+        <table style="width: 100%;">
             <tr>
-                <td>
-                    Apellidos y Nombres:<br>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                <td style="text-align: right;"><small>Código: FG-SSO-01<br>Revisión: 00</small></td>
+            </tr>
+        </table>
+
+        <h4 class="titulo">PROGRAMA DE INDUCCIÓN PARA PERSONAL NUEVO O TRANSFERIDO</h4>
+
+        <h4 style="text-align: center">Hoja de Ruta para Trabajadores Nuevos</h4>
+
+        <table class="tabla" style="font-size: 14px; width: 80%; margin: auto">
+            <tr style="height: 200px;">
+                <td style="width: 50%">
+                    <b>Apellidos y Nombres:</b><br>
                     <span>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</span>
                 </td>
                 <td>
-                    Fecha de Ingreso:<br>
+                    <b>Fecha de Ingreso:</b><br>
                     <span>{{ $contrato->fecha_larga }}</span>
                 </td>
             </tr>
-            <tr>
+            <tr style="height: 200px">
                 <td>
-                    Puesto de Trabajo:<br>
+                    <b>Puesto de Trabajo:</b><br>
                     <span>OBRERO DE CAMPO</span>
                 </td>
                 <td>
-                    Firma:<br>
+                    <b>Firma:</b><br>
                     <span> </span>
                 </td>
             </tr>
         </table>
+        <br><br>
 
-        <div>
-            <div>
-                <div>
-                    <p>Recursos Humanos/Administración</p><br>
-                    <small>Nombre del Instructor: </small>
-                </div>
-                <div>
-                    <div>VILELA LUDEÑA OLGA STEFFANA</div>
-                    <div></div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>Seguridad y Salud en el Trabajo </p><br>
-                    <small>Nombre del Instructor: </small>
-                </div>
-                <div>
-                    <div>REYES TINOCO JOSE LENIN</div>
-                    <div></div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>BPA</p><br>
-                    <small>Nombre del Instructor: </small>
-                </div>
-                <div>
-                    <div>SALAZAR CAMPOS KARLA MAGALY</div>
-                    <div></div>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <p>Jefe de Campo</p><br>
-                    <small>Nombre del Instructor: </small>
-                </div>
-                <div>
-                    <div>GALINDO CARRION REMO YUNIOR</div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
+        <div style="font-size: 14px">
+            <table style="width: 90%; margin: auto">
+                <tr>
+                    <td>
+                        <b>Recursos Humanos/Administración</b><br>
+                        <small>Nombre del Instructor: </small>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>VILELA LUDEÑA OLGA STEFFANA</b>
+                    </td>
+                    <td style="border-bottom: 1px solid black; width: 50%"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Seguridad y Salud en el Trabajo</b><br>
+                        <small>Nombre del Instructor: </small>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>REYES TINOCO JOSE LENIN</b>
+                    </td>
+                    <td style="border-bottom: 1px solid black; width: 50%"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>BPA</b><br>
+                        <small>Nombre del Instructor: </small>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>SALAZAR CAMPOS KARLA MAGALY</b>
+                    </td>
+                    <td style="border-bottom: 1px solid black; width: 50%"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Jefe de Campo</b><br>
+                        <small>Nombre del Instructor: </small>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>GALINDO CARRION REMO YUNIOR</b>
+                    </td>
+                    <td style="border-bottom: 1px solid black; width: 50%"></td>
+                </tr>
+            </table>
 
-        <ol>
-            <li>
-                <b>Recursos Humanos/Administración</b><br>
-                Puntos a considerar:
-                <ul>
-                    <li>Giro o actividad principal de la Empresa  y sus principales clientes</li>
-                    <li>Reseña Histórica de la Empresa</li>
-                    <li>Filosofía de la Empresa: Misión, Visión y valores organizacionales</li>
-                    <li>Planillas, Horarios Laborales, Boletas y Beneficios Sociales (días de descanso, días de pago, prestaciones de servicio personal, etc.)</li>
-                    <li>Organigrama y Departamentalización</li>
-                    <li>Reglamento Interno del Trabajador</li>
-                    <li>Medidas Disciplinarias</li>
-                </ul>
-            </li>
-            <li>
-                <b>INDUCCCION GENERAL EN SEGURIDAD Y SALUD EN EL TRABAJO.</b><br>
-                Puntos a considerar:
-                <ul>
-                    <li>Importancia del trabajador en el Sistema de Gestión de SST.</li>
-                    <li>Reglamento Interno de Seguridad y Salud en el Trabajo.</li>
-                    <li>Políticas de SST, Deberes y Derechos.</li>
-                    <li>Reglas Generales de SST de acuerdo a la identificación de Peligros y evaluación de Riesgos, reporte, investigación y elaboración de informes de incidentes accidentes de SST. </li>
-                    <li>Equipos de protección personal y equipo de protección colectivo: uso y mantenimiento. </li>
-                    <li>Orden y Limpieza.</li>
-                    <li>Comentarios generales de Primeros auxilios</li>
-                </ul>
-            </li>
-            <li>
-                <b>BPA</b><br>
-                <ul>
-                    <li>Inocuidad </li>
-                    <li>Manipulación de producto en pre recolección (introducción especial</li>
-                    <li>Cuidado del Medio Ambiente y conservación. </li>
-                    <li>Gestión de Residuos y contaminantes, reciclaje y reutilización (introducción especial). </li>
-                    <li> Fertilización, fertirrigación y Riego (Salud, Seguridad y bienestar del trabajador). </li>
-                    <li>Mejora del sistema de calidad </li>
-                </ul>
-            </li>
-            <li>
-                <b>JEFE DE CAMPO/SUPERVISOR </b><br>
-                Puntos a considerar:
-                <ul>
-                    <li>Explicación de las expectativas del Jefe o Supervisor inmediato</li>
-                    <li> Identificación de Peligros y Evaluación de Riesgos en su área del trabajo</li>
-                </ul>
-            </li>
-            <li>
-                <b>ALMACEN</b><br>
-                Entrega de Equipos de Protección personal
-                <ul>
-                    <li>Casco de seguridad <span></span></li>
-                    <li>Zapatos de seguridad <span></span></li>
-                    <li>Guantes de seguridad <span></span></li>
-                    <li>Tapones auditivos/Orejeras <span></span></li>
-                    <li>Respirador <span></span></li>
-                    <li>Lentes de Seguridad <span></span></li>
-                </ul>
-            </li>
-        </ol>
-        <br>
-        <div>
-            <p>
-                _____________________________<br>
-                {{ $trabajador->nombre_completo }}<br>
-                DNI: {{ $trabajador->rut }}
-            </p>
+            <ol>
+                <li>
+                    <b>Recursos Humanos/Administración</b><br>
+                    Puntos a considerar:
+                    <ul>
+                        <li>Giro o actividad principal de la Empresa  y sus principales clientes</li>
+                        <li>Reseña Histórica de la Empresa</li>
+                        <li>Filosofía de la Empresa: Misión, Visión y valores organizacionales</li>
+                        <li>Planillas, Horarios Laborales, Boletas y Beneficios Sociales (días de descanso, días de pago, prestaciones de servicio personal, etc.)</li>
+                        <li>Organigrama y Departamentalización</li>
+                        <li>Reglamento Interno del Trabajador</li>
+                        <li>Medidas Disciplinarias</li>
+                    </ul>
+                </li>
+                <li>
+                    <b>INDUCCIÓN GENERAL EN SEGURIDAD Y SALUD EN EL TRABAJO.</b><br>
+                    Puntos a considerar:
+                    <ul>
+                        <li>Importancia del trabajador en el Sistema de Gestión de SST.</li>
+                        <li>Reglamento Interno de Seguridad y Salud en el Trabajo.</li>
+                        <li>Políticas de SST, Deberes y Derechos.</li>
+                        <li>Reglas Generales de SST de acuerdo a la identificación de Peligros y evaluación de Riesgos, reporte, investigación y elaboración de informes de incidentes accidentes de SST. </li>
+                        <li>Equipos de protección personal y equipo de protección colectivo: uso y mantenimiento. </li>
+                        <li>Orden y Limpieza.</li>
+                        <li>Comentarios generales de Primeros auxilios</li>
+                    </ul>
+                </li>
+                <li>
+                    <b>BPA</b><br>
+                    <ul>
+                        <li>Inocuidad </li>
+                        <li>Manipulación de producto en pre recolección (introducción especial</li>
+                        <li>Cuidado del Medio Ambiente y conservación. </li>
+                        <li>Gestión de Residuos y contaminantes, reciclaje y reutilización (introducción especial). </li>
+                        <li> Fertilización, fertirrigación y Riego (Salud, Seguridad y bienestar del trabajador). </li>
+                        <li>Mejora del sistema de calidad </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>JEFE DE CAMPO/SUPERVISOR </b><br>
+                    Puntos a considerar:
+                    <ul>
+                        <li>Explicación de las expectativas del Jefe o Supervisor inmediato</li>
+                        <li> Identificación de Peligros y Evaluación de Riesgos en su área del trabajo</li>
+                    </ul>
+                </li>
+                <li>
+                    <b>ALMACEN</b><br>
+                    Entrega de Equipos de Protección personal
+                    <ul>
+                        <li>Casco de seguridad <span></span></li>
+                        <li>Zapatos de seguridad <span></span></li>
+                        <li>Guantes de seguridad <span></span></li>
+                        <li>Tapones auditivos/Orejeras <span></span></li>
+                        <li>Respirador <span></span></li>
+                        <li>Lentes de Seguridad <span></span></li>
+                    </ul>
+                </li>
+            </ol>
+            <br>
+            <div style="text-align: center">
+                <p style="font-weight: bold">
+                    _____________________________<br>
+                    {{ $trabajador->nombre_completo }}<br>
+                    DNI: {{ $trabajador->rut }}
+                </p>
+            </div>
         </div>
     </section>
 
     <div class="page-break"></div>
 
     <section id="page22">
-        <h4>MEMORÁNDUM N° 001-{{ $contrato->anio_contrato }}-G.GRAL./RAPEL </h4>
+        <img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" />
+        <h4 class="titulo">MEMORÁNDUM N° 001-{{ $contrato->anio_contrato }}-G.GRAL./RAPEL </h4>
         <br>
-        <ul>
-            <li>A       :    TODO EL PERSONAL</li>
-            <li>DE      :    GENERACIA GENERAL</li>
-            <li>ASUNTO  :    ENTREGA DE BOLETA DIGITAL</li>
-            <li>FECHA   :    {{ strtoupper($contrato->fecha_larga) }}</li>
-        </ul>
+        <div style="font-size: 14px;">
+            <table style="font-weight: bold">
+                <tr>
+                    <td>A:</td>
+                    <td>TODO EL PERSONAL</td>
+                </tr>
+                <tr>
+                    <td>DE:</td>
+                    <td>GERENCIA GENERAL</td>
+                </tr>
+                <tr>
+                    <td>ASUNTO:</td>
+                    <td>ENTREGA DE BOLETA DIGITAL</td>
+                </tr>
+                <tr>
+                    <td>FECHA:</td>
+                    <td>{{ strtoupper($contrato->fecha_larga) }}</td>
+                </tr>
+            </table>
+            <br>
+            <hr>
+            <br>
+            <p>
+                Por medio de la presente, tenemos a bien a comunicarnos con usted con la finalidad de informarle lo siguiente:
+            </p>
 
-        <hr>
+            <p>
+                Que en ejercicio de nuestro poder de dirección y al amparo de lo que establece el artículo 3° numeral 3.2° Decreto Legislativo Nº 1310, Decreto Legislativo que aprueba medidas adicionales de simplificación administrativa y demás normas complementarias; a partir del mes de {{ $contrato->mes_contrato }}, La Empresa realizará la entrega de sus boletas de pago de remuneraciones en forma digital, las cuales pondremos a su disponibilidad a través de la Plataforma <b>“rapel.turecibo.com”</b>.
+            </p>
 
-        <p>
-            Por medio de la presente, tenemos a bien a comunicarnos con usted con la finalidad de informarle lo siguiente:
-        </p>
+            <p>
+                Las boletas de pago serán puestas a su disposición en la plataforma virtual, de manera mensual, a más tardar el tercer día hábil siguiente a la fecha de pago de la remuneración, siendo su obligación acusar recibo de la boleta de pago en la plataforma virtual dentro del día hábil siguiente de recibida. En caso de incumplimiento de esta obligación, la Empresa podrá aplicar las sanciones disciplinarias que considere pertinentes.
+            </p>
 
-        <p>
-            Que en ejercicio de nuestro poder de dirección y al amparo de lo que establece el artículo 3° numeral 3.2° Decreto Legislativo Nº 1310, Decreto Legislativo que aprueba medidas adicionales de simplificación administrativa y demás normas complementarias; a partir del mes de {{ $contrato->mes_contrato }}, La Empresa realizará la entrega de sus boletas de pago de remuneraciones en forma digital, las cuales pondremos a su disponibilidad a través de la Plataforma <b>“rapel.turecibo.com”</b>.
-        </p>
+            <p>
+                Asimismo, le informamos que para poder acceder a la plataforma en mención, el área de Recursos Humanos le hará entrega de su usuario y clave en el desglosable de este documento.
+            </p>
 
-        <p>
-            Las boletas de pago serán puestas a su disposición en la plataforma virtual, de manera mensual, a más tardar el tercer día hábil siguiente a la fecha de pago de la remuneración, siendo su obligación acusar recibo de la boleta de pago en la plataforma virtual dentro del día hábil siguiente de recibida. En caso de incumplimiento de esta obligación, la Empresa podrá aplicar las sanciones disciplinarias que considere pertinentes.
-        </p>
+            <p>Atentamente,</p>
+            <br>
 
-        <p>
-            Asimismo, le informamos que para poder acceder a la plataforma en mención, el área de Recursos Humanos le hará entrega de su usuario y clave en el desglosable de este documento.
-        </p>
+            <img src="{{ public_path() . '/img/PostFirma - Daniel E  RAPEL SAC.jpg'}}" width="200px" />
 
-        <p>Atentamente,</p>
+            <br><br><br>
 
-        <img src="" alt="">
-
-        <br><br><br>
-
-        <div>
-            -----------------------------------------------
-            <p>Nombre: <span>{{ $trabajador->nombre . ' ' . $trabajador->apellidos }}</span></p>
-            <p>DNI: <span>{{ $trabajador->rut }}</span></p>
-            <p>Fecha de recepción: {{ $contrato->fecha_larga }}</p>
-        </div>
-
-        <hr>
-
-        <div>
-            <div>
-                <span>USUARIO: {{ $trabajador->rut }}</span>
-                <span>CLAVE: {{ $trabajador->fecha_format }}</span>
+            <div style="font-weight: bold;">
+                _______________________________________________<br>
+                Nombre: <span>{{ $trabajador->nombre . ' ' . $trabajador->apellidos }}</span><br>
+                DNI: <span>{{ $trabajador->rut }}</span><br>
+                Fecha de recepción: {{ $contrato->fecha_larga }}
             </div>
+            <br>
+            <hr>
+            <br>
             <div>
-                RECUERDA: La primera vez que ingreses, deberás cambiar la contraseña por una de tu elección y de fácil recordación. Como mínimo debe tener 8 dígitos. <u>No olvides firmar tu boleta, es tu obligación</u>. Para cualquier consulta, acércate a la oficina de Recursos Humanos de tu fundo. <br> <b>Página Web:</b> rapel.turecibo.com
+                <div>
+                    <span style="font-weight: bold; background: gray">USUARIO: {{ $trabajador->rut }}</span> <br>
+                    <span style="font-weight: bold; background: gray">CLAVE: {{ $trabajador->fecha_format }}</span> 
+                </div>
+                <div>
+                    <b>RECUERDA:</b> La primera vez que ingreses, deberás cambiar la contraseña por una de tu elección y de fácil recordación. Como mínimo debe tener 8 dígitos. <u>No olvides firmar tu boleta, es tu obligación</u>. Para cualquier consulta, acércate a la oficina de Recursos Humanos de tu fundo. <br> <b>Página Web:</b> rapel.turecibo.com
+                </div>
             </div>
+
         </div>
 
     </section>
