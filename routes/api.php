@@ -23,4 +23,6 @@ Route::group(['prefix' => 'sistema'], function () {
     Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
     Route::post('/trabajador', 'TrabajadorController@create');
     Route::put('/trabajador', 'TrabajadorController@get');
+
+    Route::post('/contrato', 'ContratoController@test');
 });

@@ -130,4 +130,20 @@ class Contrato extends Model
             return false;
         }
     }
+
+    public static function check_worker($ruts)
+    {
+        $result = [];
+        foreach ($ruts as $rut) {
+            $trabajador =  Trabajador::where('rut', $rut)->first();
+
+            if ($trabajador) {
+                array_push($result, "El trabajador con rut {$rut} ya existe");
+            } else {
+                array_push($result, "El trabajador con rut {$rut} no existe, se generará la consulta a la sunat");
+            }
+        }
+
+        return $result;
+    }
 }

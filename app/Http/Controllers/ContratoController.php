@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contrato;
+use App\Models\Empresa;
 use App\Models\Trabajador;
 use Illuminate\Http\Request;
 
@@ -36,22 +37,10 @@ class ContratoController extends Controller
         }
     }
 
-    public function test(Contrato $contrato)
+    public function test(Request $request)
     {
-        try {
-            $contrato->trabajador;
-            if ($contrato->empresa->code === "9") {
-                return response()->json([
-                    'data' => $contrato
-                ]);
-            } else {
-                throw new \Exception();
-            }
+        $ruts = $request->ruts;
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Ficha aún no disponible'
-            ]);
-        }
+        return Contrato::check_worker($ruts);
     }
 }
