@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contrato;
-use App\Models\Empresa;
-use App\Models\Trabajador;
+use App\Services\ContratosService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use iio\libmergepdf\Merger;
 
 class ContratoController extends Controller
 {
@@ -39,8 +41,16 @@ class ContratoController extends Controller
 
     public function generarPdf(Request $request)
     {
-        $result = Contrato::generate_pdf($request->all());
-        return response()->json($result);
+        $result = (new ContratosService())->generate_pdf($request->all());
+
+        if (!$result) {
+            return response()->json([
+                'message' => 'Hubo un problema'
+            ], 400);
+        }
+        return response()->json([
+            'message' => "Los contratos se guardarán en public/storage/" . $result
+        ], 200);
     }
 
     public function registroMasivo(Request $request)
@@ -51,7 +61,28 @@ class ContratoController extends Controller
 
     public function test(Request $request)
     {
-        $result = Contrato::record($request->all());
-        return response()->json($result);
+        $fecha_actual = Carbon::parse(Carbon::now())->format('Y-m-d');
+
+        $files = \Storage::disk('public')->files($fecha_actual);
+        $path = storage_path() . '/app/public';
+
+        $f = [];
+        foreach ($files as $file) {
+            array_push($f, $path . '/' . $file);
+        }
+
+        $merger = new Merger();
+
+        foreach ($f as $file) {
+            $merger->addFile($file);
+        }
+        $createdPdf = $merger->merge();
+        $filename = 'carga-pdf/' . $fecha_actual . '.pdf';
+
+        if (\Storage::disk('public')->put($filename, $createdPdf)) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -181,31 +181,4 @@ class Contrato extends Model
             return false;
         }
     }
-
-    public static function generate_pdf(array $data=[])
-    {
-        try {
-            foreach ($data as $d) {
-                $contrato = Contrato::find($d['contrato_id']);
-                $trabajador = $contrato->trabajador;
-
-                $data = [
-                    'trabajador' => $trabajador,
-                    'contrato' => $contrato
-                ];
-
-                $content = \PDF::setOptions([
-                    'images' => true
-                ])->loadView('fichas-ingresos-obreros.rapel.contrato', $data)->output();
-
-                $filename = Carbon::parse(Carbon::now())->format('Y-m-d') . '/' . time() . '-' .$trabajador->apellido_paterno . '_' . $trabajador->nombre  .'-CONTRATO.pdf';
-
-                \Storage::disk('public')->put($filename, $content);
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
 }
