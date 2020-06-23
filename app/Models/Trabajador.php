@@ -65,7 +65,7 @@ class Trabajador extends Model
 
     public static function _save(array $data=[])
     {
-        $empresa_id = Empresa::firstWhere('code', $data['empresa_id'])->id;
+        $empresa_id = $data['empresa_id'];
         $distrito_id = Distrito::firstWhere('code', $data['distrito_id'])->id;
         $estado_civil_id = EstadoCivil::firstWhere('code', $data['estado_civil_id'])->id;
         $tipo_zona_id = $data['tipo_zona_id'] ? Zona::firstWhere(['code' => $data['tipo_zona_id'],'empresa_id' => $empresa_id])->id : null;
@@ -101,7 +101,6 @@ class Trabajador extends Model
             $trabajador->estado_civil_id = $estado_civil_id;
             $trabajador->nacionalidad_id = $nacionalidad_id;
             $trabajador->ruta_id = $data['ruta_id'] ? $data['ruta_id'] : null;
-            $trabajador->zona_labor_id = $zona_labor_id;
 
             if ($trabajador->save()) {
 
@@ -132,22 +131,91 @@ class Trabajador extends Model
         }
     }
 
-    public static function _get(array $filtro = [])
+    public static function _get(array $filtro=[])
     {
-
-        $empresa_id = Empresa::firstWhere('code', $filtro['empresa_id'])->id;
-
         $contratos = DB::table('contratos')
+            ->select(
+                'trabajadores.*',
+                'contratos.id as contrato_id',
+                'contratos.fecha_inicio',
+                'contratos.group as grupo',
+                'empresas.name as empresa_name',
+                'empresas.id as empresa_id',
+                'zona_labores.name as zona_labor_name'
+            )
             ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
             ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
-            ->join('zona_labores', 'zona_labores.id', '=', 'trabajadores.zona_labor_id')
-            ->select('trabajadores.*', 'contratos.id as contrato_id', 'contratos.fecha_inicio', 'empresas.name as empresa_name', 'empresas.code as empresa_code', 'zona_labores.name as zona_labor_name')
+            ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
             ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
-            ->where('contratos.empresa_id', $empresa_id)
+            ->where('contratos.empresa_id', $filtro['empresa_id'])
             ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
             ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
             ->get();
 
         return $contratos;
+    }
+
+    public static function revision(array $trabajadores=[])
+    {
+        $registrados = [];
+        $no_registrados = [];
+        foreach ($trabajadores as $trabajador) {
+            $rut = $trabajador['rut'];
+            $t =  Trabajador::where('rut', $rut)->first();
+
+            if ($t) {
+                $data = [
+                    'rut' => $rut,
+                    'contrato' => $trabajador
+                ];
+                array_push($registrados, $data);
+            } else {
+                array_push($no_registrados, $trabajador);
+            }
+        }
+
+        return [
+            'registrados' => $registrados,
+            'no_registrados' => $no_registrados
+        ];
+    }
+
+    public static function findOrCreate(array $data=[])
+    {
+        try {
+            $trabajador = Trabajador::whereRut($data['rut'])->first();
+            if ($trabajador) {
+                return $trabajador->id;
+            }
+
+            $empresa_id = $data['contrato']['empresa_id'];
+            $distrito_id = Distrito::firstWhere('code', $data['trabajador']['distrito_id'])->id;
+            $tipo_zona_id = $data['trabajador']['tipo_zona_id'] ? Zona::firstWhere(['code' => $data['trabajador']['tipo_zona_id'],'empresa_id' => $empresa_id])->id : null;
+            $tipo_via_id = $data['trabajador']['tipo_via_id'] ? Via::firstWhere(['code' => $data['trabajador']['tipo_via_id'],'empresa_id' => $empresa_id])->id : null;
+            $nacionalidad_id = Nacionalidad::firstWhere(['code' => $data['trabajador']['nacionalidad_id'],'empresa_id' => $empresa_id])->id;
+            $estado_civil_id = EstadoCivil::firstWhere('code', $data['trabajador']['estado_civil_id'])->id;
+
+            $trabajador = new Trabajador();
+            $trabajador->nombre = $data['trabajador']['nombre'];
+            $trabajador->rut = $data['rut'];
+            $trabajador->apellido_paterno = $data['trabajador']['apellido_paterno'];
+            $trabajador->apellido_materno = $data['trabajador']['apellido_materno'];
+            $trabajador->fecha_nacimiento = $data['trabajador']['fecha_nacimiento'];
+            $trabajador->sexo = $data['trabajador']['sexo'];
+            $trabajador->email = $data['trabajador']['email'] ?? null;
+            $trabajador->tipo_zona_id = $tipo_zona_id ?? null;
+            $trabajador->nombre_zona = $data['trabajador']['nombre_zona'];
+            $trabajador->tipo_via_id = $tipo_via_id ?? null;
+            $trabajador->nombre_via = $data['trabajador']['nombre_via'];
+            $trabajador->direccion = $data['trabajador']['direccion'];
+            $trabajador->distrito_id = $distrito_id;
+            $trabajador->estado_civil_id = $estado_civil_id;
+            $trabajador->nacionalidad_id = $nacionalidad_id;
+            if ( $trabajador->save() ) {
+                return $trabajador->id;
+            }
+        } catch(\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

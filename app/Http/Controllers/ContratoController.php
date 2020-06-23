@@ -13,7 +13,7 @@ class ContratoController extends Controller
     {
         try {
             $trabajador = $contrato->trabajador;
-            if ($contrato->empresa->code === "9") {
+            if ($contrato->empresa_id === 9) {
                 $data = [
                     'trabajador' => $trabajador,
                     'contrato' => $contrato
@@ -37,10 +37,21 @@ class ContratoController extends Controller
         }
     }
 
+    public function generarPdf(Request $request)
+    {
+        $result = Contrato::generate_pdf($request->all());
+        return response()->json($result);
+    }
+
+    public function registroMasivo(Request $request)
+    {
+        $result = Contrato::massive_record($request->all());
+        return response()->json($result);
+    }
+
     public function test(Request $request)
     {
-        $ruts = $request->ruts;
-
-        return Contrato::check_worker($ruts);
+        $result = Contrato::record($request->all());
+        return response()->json($result);
     }
 }

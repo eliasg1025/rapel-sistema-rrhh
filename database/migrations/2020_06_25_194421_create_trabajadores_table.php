@@ -27,7 +27,7 @@ class CreateTrabajadoresTable extends Migration
             $table->string('telefono')->nullable();
             $table->string('email')->nullable();
 
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas');
 
             $table->unsignedBigInteger('tipo_zona_id')->nullable();
@@ -51,9 +51,6 @@ class CreateTrabajadoresTable extends Migration
 
             $table->unsignedBigInteger('ruta_id')->nullable();
             $table->foreign('ruta_id')->references('id')->on('rutas');
-
-            $table->unsignedBigInteger('zona_labor_id');
-            $table->foreign('zona_labor_id')->references('id')->on('zona_labores');
         });
     }
 

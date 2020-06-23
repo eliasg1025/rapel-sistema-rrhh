@@ -131,19 +131,81 @@ class Contrato extends Model
         }
     }
 
-    public static function check_worker($ruts)
+    public static function massive_record(array $data=[])
     {
-        $result = [];
-        foreach ($ruts as $rut) {
-            $trabajador =  Trabajador::where('rut', $rut)->first();
-
-            if ($trabajador) {
-                array_push($result, "El trabajador con rut {$rut} ya existe");
-            } else {
-                array_push($result, "El trabajador con rut {$rut} no existe, se generará la consulta a la sunat");
+        $registrados = $data['registrados'];
+        $guardados = [];
+        foreach($registrados as $registrado) {
+            $is_save = self::record($registrado);
+            if ( $is_save ) {
+                array_push($guardados, [
+                    'rut' => $is_save
+                ]);
             }
         }
 
-        return $result;
+        return [
+            'guardados' => $guardados
+        ];
+    }
+
+    public static function record(array $data=[])
+    {
+        DB::beginTransaction();
+        try {
+            $zona_labor = ZonaLabor::where([
+                'code' => $data['contrato']['zona_labor_id'],
+                'empresa_id' => $data['contrato']['empresa_id']
+            ])->first();
+
+            $contrato = new Contrato();
+            $contrato->editable = true;
+            $contrato->cargado = false;
+            $contrato->activo = true;
+            $contrato->fecha_inicio = $data['contrato']['fecha_ingreso'];
+            $contrato->fecha_termino_c = $data['contrato']['fecha_termino'];
+            $contrato->empresa_id = $data['contrato']['empresa_id'];
+            $contrato->group = $data['contrato']['grupo'];
+            $contrato->codigo_bus = $data['contrato']['codigo_bus'];
+            $contrato->zona_labor_id = $zona_labor->id;
+            $contrato->trabajador_id = Trabajador::findOrCreate($data);
+            if ($contrato->save()) {
+                DB::commit();
+                return $data['rut'];
+            }
+
+            DB::rollBack();
+            return false;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public static function generate_pdf(array $data=[])
+    {
+        try {
+            foreach ($data as $d) {
+                $contrato = Contrato::find($d['contrato_id']);
+                $trabajador = $contrato->trabajador;
+
+                $data = [
+                    'trabajador' => $trabajador,
+                    'contrato' => $contrato
+                ];
+
+                $content = \PDF::setOptions([
+                    'images' => true
+                ])->loadView('fichas-ingresos-obreros.rapel.contrato', $data)->output();
+
+                $filename = Carbon::parse(Carbon::now())->format('Y-m-d') . '/' . time() . '-' .$trabajador->apellido_paterno . '_' . $trabajador->nombre  .'-CONTRATO.pdf';
+
+                \Storage::disk('public')->put($filename, $content);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

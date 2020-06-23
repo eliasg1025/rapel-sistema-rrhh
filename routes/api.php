@@ -23,6 +23,11 @@ Route::group(['prefix' => 'sistema'], function () {
     Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
     Route::post('/trabajador', 'TrabajadorController@create');
     Route::put('/trabajador', 'TrabajadorController@get');
+    Route::post('/trabajador/revision', 'TrabajadorController@revision');
+    Route::post('/trabajador/test', 'TrabajadorController@test');
 
     Route::post('/contrato', 'ContratoController@test');
+    Route::post('/contrato/registro-masivo', 'ContratoController@registroMasivo');
+    Route::post('/contrato/test', 'ContratoController@test');
+    Route::post('/contrato/generar-pdf', 'ContratoController@generarPdf');
 });

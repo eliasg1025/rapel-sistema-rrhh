@@ -24,7 +24,7 @@ class ActualizarController extends Controller
         try {
             for ($i = 0; $i < sizeof($nacionalidades); $i++) {
 
-                $empresa = $nacionalidades[$i]['empresa_id'] === '9' ? 1 : 2;
+                $empresa = $nacionalidades[$i]['empresa_id'];
                 $doesntExist = Nacionalidad::where([
                     'code' => $nacionalidades[$i]['id'],
                     'empresa_id' => $empresa
@@ -49,7 +49,7 @@ class ActualizarController extends Controller
 
             for ($i = 0; $i < sizeof($tipos_vias); $i++) {
 
-                $empresa = $tipos_vias[$i]['empresa_id'] === '9' ? 1 : 2;
+                $empresa = $tipos_vias[$i]['empresa_id'];
                 $doesntExist = Via::where([
                     'code' => $tipos_vias[$i]['id'],
                     'empresa_id' => $empresa
@@ -73,7 +73,7 @@ class ActualizarController extends Controller
 
             for ($i = 0; $i < sizeof($tipos_zonas); $i++) {
 
-                $empresa = $tipos_zonas[$i]['empresa_id'] === '9' ? 1 : 2;
+                $empresa = $tipos_zonas[$i]['empresa_id'];
                 $doesntExist = Zona::where([
                     'code' => $tipos_zonas[$i]['id'],
                     'empresa_id' => $empresa
@@ -97,7 +97,7 @@ class ActualizarController extends Controller
 
             for ($i = 0; $i < sizeof($zonas_labor); $i++) {
 
-                $empresa = $zonas_labor[$i]['empresa_id'] === '9' ? 1 : 2;
+                $empresa = $zonas_labor[$i]['empresa_id'];
                 $doesntExist = ZonaLabor::where([
                     'code' => $zonas_labor[$i]['id'],
                     'empresa_id' => $empresa

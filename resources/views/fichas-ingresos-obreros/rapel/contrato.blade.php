@@ -821,14 +821,14 @@
 
     <div class="page-break"></div>
 
-    <section id="page18" style="font-size: 14px">
+    <section id="page18" style="font-size: 12px">
         <table style="width: 100%;">
             <tr>
                 <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
                 <td><h4 style="text-align: left" class="titulo">FICHA DE INGRESO Y CONTRATACIÓN</h4></td>
             </tr>
         </table>
-        <div style="font-size: 11px">
+        <div style="font-size: 10px">
             <table class="tabla" style="width: 100%">
                 <tr>
                     <td>Apellido Paterno:</td>
@@ -1474,7 +1474,7 @@
             <div>
                 <div>
                     <span style="font-weight: bold; background: gray">USUARIO: {{ $trabajador->rut }}</span> <br>
-                    <span style="font-weight: bold; background: gray">CLAVE: {{ $trabajador->fecha_format }}</span> 
+                    <span style="font-weight: bold; background: gray">CLAVE: {{ $trabajador->fecha_format }}</span>
                 </div>
                 <div>
                     <b>RECUERDA:</b> La primera vez que ingreses, deberás cambiar la contraseña por una de tu elección y de fácil recordación. Como mínimo debe tener 8 dígitos. <u>No olvides firmar tu boleta, es tu obligación</u>. Para cualquier consulta, acércate a la oficina de Recursos Humanos de tu fundo. <br> <b>Página Web:</b> rapel.turecibo.com
@@ -1484,4 +1484,6 @@
         </div>
 
     </section>
+
+    <div class="page-break"></div>
 @endsection

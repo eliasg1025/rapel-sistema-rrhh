@@ -35,4 +35,16 @@ class TrabajadorController extends Controller
             'data' => $trabajadores
         ], 200);
     }
+
+    public function revision(Request $request)
+    {
+        $result = Trabajador::revision($request->trabajadores);
+        return response()->json($result);
+    }
+
+    public function test(Request $request)
+    {
+        $result = Trabajador::findOrCreate($request->all());
+        return response()->json($result);
+    }
 }
