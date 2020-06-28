@@ -8,7 +8,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use iio\libmergepdf\Merger;
-use Illuminate\Support\Facades\File;
 
 class ContratoGenerarZipJob implements ShouldQueue
 {

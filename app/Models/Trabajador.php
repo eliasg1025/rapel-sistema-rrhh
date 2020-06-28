@@ -59,6 +59,11 @@ class Trabajador extends Model
         return  Carbon::parse($this->fecha_nacimiento)->format('d/m/Y');
     }
 
+    public function getNombreArchivoAttribute($value)
+    {
+        return $this->apellido_paterno . '-' . $this->apellido_materno . '-' . str_replace(' ', '-', $this->nombre);
+    }
+
     /**
      * CRUD static methods
      */
@@ -203,9 +208,9 @@ class Trabajador extends Model
             $trabajador->fecha_nacimiento = $data['trabajador']['fecha_nacimiento'];
             $trabajador->sexo = $data['trabajador']['sexo'];
             $trabajador->email = $data['trabajador']['email'] ?? null;
-            $trabajador->tipo_zona_id = $tipo_zona_id ?? null;
+            $trabajador->tipo_zona_id = $tipo_zona_id;
             $trabajador->nombre_zona = $data['trabajador']['nombre_zona'];
-            $trabajador->tipo_via_id = $tipo_via_id ?? null;
+            $trabajador->tipo_via_id = $tipo_via_id;
             $trabajador->nombre_via = $data['trabajador']['nombre_via'];
             $trabajador->direccion = $data['trabajador']['direccion'];
             $trabajador->distrito_id = $distrito_id;

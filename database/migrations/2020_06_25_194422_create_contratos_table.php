@@ -20,9 +20,9 @@ class CreateContratosTable extends Migration
             $table->boolean('editable')->default(false);
             $table->boolean('cargado')->default(true);
             $table->boolean('activo')->default(true);
-            $table->date('fecha_inicio');
-            $table->date('fecha_termino')->nullable();
-            $table->date('fecha_termino_c')->nullable();
+            $table->string('fecha_inicio');
+            $table->string('fecha_termino')->nullable();
+            $table->string('fecha_termino_c')->nullable();
             $table->double('sueldo_base')->nullable();
             $table->string('codigo_bus')->nullable();
             $table->string('group')->nullable();

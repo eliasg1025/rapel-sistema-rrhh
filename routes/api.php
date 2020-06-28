@@ -30,4 +30,6 @@ Route::group(['prefix' => 'sistema'], function () {
     Route::post('/contrato/registro-masivo', 'ContratoController@registroMasivo');
     Route::post('/contrato/test', 'ContratoController@test');
     Route::post('/contrato/generar-pdf', 'ContratoController@generarPdf');
+
+    Route::get('/cargas-pdf', 'CargaPdfController@get');
 });

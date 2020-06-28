@@ -133,20 +133,34 @@ class Contrato extends Model
 
     public static function massive_record(array $data=[])
     {
-        $registrados = $data['registrados'];
-        $guardados = [];
-        foreach($registrados as $registrado) {
-            $is_save = self::record($registrado);
-            if ( $is_save ) {
-                array_push($guardados, [
-                    'rut' => $is_save
-                ]);
-            }
-        }
+        try {
+            $registrados = $data['registrados'];
+            $guardados = [];
+            $errores = [];
 
-        return [
-            'guardados' => $guardados
-        ];
+            foreach($registrados as $registrado) {
+                $is_save = self::record($registrado);
+                if ( !$is_save['error'] ) {
+                    array_push($guardados, [
+                        'rut' => $is_save['rut']
+                    ]);
+                } else {
+                    array_push($errores, [
+                        'rut' => $is_save['rut'],
+                        'error' => $is_save['error']
+                    ]);
+                }
+            }
+
+            return [
+                'guardados' => $guardados,
+                'errores' => $errores
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
     }
 
     public static function record(array $data=[])
@@ -157,6 +171,20 @@ class Contrato extends Model
                 'code' => $data['contrato']['zona_labor_id'],
                 'empresa_id' => $data['contrato']['empresa_id']
             ])->first();
+            $trabajador_id = Trabajador::findOrCreate($data);
+
+            $existe_contrato = Contrato::where([
+                'trabajador_id' => $trabajador_id,
+                'fecha_inicio'  =>  $data['contrato']['fecha_ingreso'],
+            ])->exists();
+
+            if ($existe_contrato) {
+                DB::rollBack();
+                return [
+                    'rut' => $data['rut'],
+                    'error' => 'Ya existe un contrato generado con fecha de ingreso ' . $data['contrato']['fecha_ingreso']
+                ];
+            }
 
             $contrato = new Contrato();
             $contrato->editable = true;
@@ -168,17 +196,26 @@ class Contrato extends Model
             $contrato->group = $data['contrato']['grupo'];
             $contrato->codigo_bus = $data['contrato']['codigo_bus'];
             $contrato->zona_labor_id = $zona_labor->id;
-            $contrato->trabajador_id = Trabajador::findOrCreate($data);
-            if ($contrato->save()) {
+            $contrato->trabajador_id = $trabajador_id;
+            if ( $contrato->save() ) {
                 DB::commit();
-                return $data['rut'];
+                return [
+                    'rut' => $data['rut'],
+                    'error' => false
+                ];
             }
 
             DB::rollBack();
-            return false;
+            return [
+                'rut' => $data['rut'],
+                'error' => true
+            ];
         } catch (\Exception $e) {
             DB::rollBack();
-            return false;
+            return [
+                'rut' => $data['rut'],
+                'error' => $e->getMessage()
+            ];
         }
     }
 }

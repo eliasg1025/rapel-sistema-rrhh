@@ -41,16 +41,8 @@ class ContratoController extends Controller
 
     public function generarPdf(Request $request)
     {
-        $result = (new ContratosService())->generate_pdf($request->all());
-
-        if (!$result) {
-            return response()->json([
-                'message' => 'Hubo un problema'
-            ], 400);
-        }
-        return response()->json([
-            'message' => "Los contratos se guardarán en public/storage/" . $result
-        ], 200);
+        $result = (new ContratosService())->generarPdfMasivo($request->all());
+        return response()->json($result, 200);
     }
 
     public function registroMasivo(Request $request)
