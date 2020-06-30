@@ -20,10 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'sistema'], function () {
     Route::post('/actualizar-datos/por-empresa', 'ActualizarController@porEmpresa');
+    Route::post('/actualizar-datos/por-empresa-2', 'ActualizarController@porEmpresa2');
     Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
     Route::post('/trabajador', 'TrabajadorController@create');
     Route::put('/trabajador', 'TrabajadorController@get');
+    Route::get('/trabajador/observados', 'TrabajadorController@getObservados');
     Route::post('/trabajador/revision', 'TrabajadorController@revision');
+    Route::put('/trabajador/{id}/habilitar', 'TrabajadorController@habilitar');
     Route::post('/trabajador/test', 'TrabajadorController@test');
 
     Route::post('/contrato', 'ContratoController@test');

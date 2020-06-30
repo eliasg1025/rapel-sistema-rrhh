@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cuartel;
 use App\Models\Departamento;
 use App\Models\Distrito;
 use App\Models\Empresa;
@@ -11,6 +12,7 @@ use App\Models\Via;
 use App\Models\Zona;
 use App\Models\ZonaLabor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActualizarController extends Controller
 {
@@ -20,6 +22,14 @@ class ActualizarController extends Controller
         $tipos_zonas = $request->tipos_zonas;
         $tipos_vias = $request->tipos_vias;
         $zonas_labor = $request->zonas_labor;
+        /*
+        $oficios = $request->oficios;
+        $regimenes = $request->regimenes;
+        $actividades = $request->actividades;
+        $cuarteles = $request->cuarteles;
+        $agrupaciones = $request->agrupaciones;
+        $labores = $request->labores;
+        $tipos_contratos = $request->tipos_contratos;*/
 
         try {
             for ($i = 0; $i < sizeof($nacionalidades); $i++) {
@@ -119,6 +129,186 @@ class ActualizarController extends Controller
                 }
             }
 
+            /*
+            for ($i = 0; $i < sizeof($oficios); $i++) {
+                $doesntExist = DB::table('oficios')->where([
+                    'code' => $oficios[$i]['id'],
+                    'empresa_id' => $oficios[$i]['empresa_id']
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('oficios')->insert([
+                        'code' => $oficios[$i]['id'],
+                        'name' => $oficios[$i]['name'],
+                        'cod_equ' => $oficios[$i]['cod_equ'],
+                        'empresa_id' => $oficios[$i]['empresa_id']
+                    ]);
+                } else {
+                    $oficio = DB::table('oficios')->where([
+                        'code' => $oficios[$i]['id'],
+                        'empresa_id' => $oficios[$i]['empresa_id']
+                    ])->first();
+                    $oficio->name = $oficios[$i]['name'];
+                    $oficio->cod_equ = $oficios[$i]['cod_equ'];
+                    $oficio->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($regimenes); $i++) {
+                $doesntExist = DB::table('regimenes')->where([
+                    'id' => (int) $regimenes[$i]['id'],
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('regimenes')->insert([
+                        'id' => (int) $regimenes[$i]['id'],
+                        'name' => $regimenes[$i]['name'],
+                    ]);
+                } else {
+                    $oficio = DB::table('regimenes')->where([
+                        'id' => (int) $regimenes[$i]['id'],
+                    ])->first();
+                    $oficio->name = $regimenes[$i]['name'];
+                    $oficio->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($actividades); $i++) {
+                $doesntExist = DB::table('actividades')->where([
+                    'code' => $actividades[$i]['id'],
+                    'empresa_id' => $actividades[$i]['empresa_id']
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('actividades')->insert([
+                        'code' => $actividades[$i]['id'],
+                        'name' => $actividades[$i]['name'],
+                        'cod_cuenta' => $actividades[$i]['cod_cuenta'],
+                        'empresa_id' => $actividades[$i]['empresa_id']
+                    ]);
+                } else {
+                    $actividad = DB::table('actividades')->where([
+                        'code' => $actividades[$i]['id'],
+                        'empresa_id' => $actividades[$i]['empresa_id']
+                    ])->first();
+                    $actividad->name = $actividades[$i]['name'];
+                    $actividad->cod_cuenta = $actividades[$i]['cod_cuenta'];
+                    $actividad->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($agrupaciones); $i++) {
+                $doesntExist = DB::table('agrupaciones')->where([
+                    'code' => $agrupaciones[$i]['id'],
+                    'empresa_id' => $agrupaciones[$i]['empresa_id']
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('agrupaciones')->insert([
+                        'code' => $agrupaciones[$i]['id'],
+                        'name' => $agrupaciones[$i]['name'],
+                        'empresa_id' => $agrupaciones[$i]['empresa_id']
+                    ]);
+                } else {
+                    $agrupacion = DB::table('agrupaciones')->where([
+                        'code' => $agrupaciones[$i]['id'],
+                        'empresa_id' => $agrupaciones[$i]['empresa_id']
+                    ])->first();
+                    $agrupacion->name = $agrupaciones[$i]['name'];
+                    $agrupacion->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($cuarteles); $i++) {
+                $zona_labor = DB::table('zona_labores')->where([
+                    'empresa_id' => $cuarteles[$i]['empresa_id'],
+                    'code' => $cuarteles[$i]['zona_labor_id']
+                ])->first();
+
+                $doesntExist = DB::table('cuarteles')->where([
+                    'code' => $cuarteles[$i]['id'],
+                    'empresa_id' => $cuarteles[$i]['empresa_id'],
+                    'zona_labor_id' => $zona_labor->id
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('cuarteles')->insert([
+                        'code' => $cuarteles[$i]['id'],
+                        'name' => $cuarteles[$i]['name'],
+                        'cod_subcentro' => $cuarteles[$i]['cod_subcentro'],
+                        'nom_subcentro' => $cuarteles[$i]['nom_subcentro'],
+                        'zona_labor_id' => $zona_labor->id,
+                        'empresa_id' => $cuarteles[$i]['empresa_id']
+                    ]);
+                } else {
+                    $cuartel = DB::table('cuarteles')->where([
+                        'code' => $cuarteles[$i]['id'],
+                        'empresa_id' => $cuarteles[$i]['empresa_id'],
+                        'zona_labor_id' => $zona_labor->id
+                    ])->first();
+                    $cuartel->name = $cuarteles[$i]['name'];
+                    $cuartel->cod_subcentro = $cuarteles[$i]['cod_subcentro'];
+                    $cuartel->nom_subcentro = $cuarteles[$i]['nom_subcentro'];
+                    $cuartel->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($labores); $i++) {
+                $actividad = DB::table('actividades')->where([
+                    'empresa_id' => $labores[$i]['empresa_id'],
+                    'code' => $labores[$i]['actividad_id']
+                ])->first();
+
+                $doesntExist = DB::table('labores')->where([
+                    'code' => $labores[$i]['id'],
+                    'empresa_id' => $labores[$i]['empresa_id'],
+                    'actividad_id' => $actividad->id
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('labores')->insert([
+                        'code' => $labores[$i]['id'],
+                        'name' => $labores[$i]['name'],
+                        'unidad_medida' => $labores[$i]['unidad_medida'],
+                        'actividad_id' => $actividad->id,
+                        'empresa_id' => $labores[$i]['empresa_id']
+                    ]);
+                } else {
+                    $cuartel = DB::table('labores')->where([
+                        'code' => $labores[$i]['id'],
+                        'empresa_id' => $labores[$i]['empresa_id'],
+                        'actividad_id' => $actividad->id
+                    ])->first();
+                    $cuartel->name = $labores[$i]['name'];
+                    $cuartel->unidad_medida = $labores[$i]['unidad_medida'];
+                    $cuartel->save();
+                }
+            }
+
+            for ($i = 0; $i < sizeof($tipos_contratos); $i++) {
+                $doesntExist = DB::table('tipo_contratos')->where([
+                    'code' => $tipos_contratos[$i]['id'],
+                    'empresa_id' => $tipos_contratos[$i]['empresa_id']
+                ])->doesntExist();
+
+                if ($doesntExist) {
+                    DB::table('tipo_contratos')->insert([
+                        'code'       => $tipos_contratos[$i]['id'],
+                        'name'       => $tipos_contratos[$i]['name'],
+                        'empresa_id' => $tipos_contratos[$i]['empresa_id'],
+                        'cod_equ'    => $tipos_contratos[$i]['cod_equ']
+                    ]);
+                } else {
+                    $tipos_contrato = DB::table('tipo_contratos')->where([
+                        'code'       => $tipos_contratos[$i]['id'],
+                        'empresa_id' => $tipos_contratos[$i]['empresa_id']
+                    ])->first();
+                    $tipos_contrato->name = $tipos_contratos[$i]['name'];
+                    $tipos_contrato->cod_equ = $tipos_contratos[$i]['cod_equ'];
+                    $tipos_contrato->save();
+                }
+            }*/
+
             return response()->json([
                 'message' => 'Actualizacion completada exitosamente'
             ], 201);
@@ -136,7 +326,6 @@ class ActualizarController extends Controller
         $distritos = $request->distritos;
 
         try {
-
             for ($i = 0; $i < sizeof($departamentos); $i++) {
 
                 $doesntExist = Departamento::where([

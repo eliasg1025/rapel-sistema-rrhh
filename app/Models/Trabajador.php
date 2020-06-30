@@ -108,14 +108,15 @@ class Trabajador extends Model
             $trabajador->ruta_id = $data['ruta_id'] ? $data['ruta_id'] : null;
 
             if ($trabajador->save()) {
-
+                DB::commit();
+                return true;
+                /*
                 $contratos_data = [
                     'empresa_id' => $empresa_id,
                     'zona_labor_id' => $zona_labor_id,
                     'trabajador_id' => $trabajador->id,
                     'contratos' => $data['contratos']
                 ];
-
 
                 if ( Contrato::masive_save($contratos_data) ) {
                     DB::commit();
@@ -124,6 +125,7 @@ class Trabajador extends Model
                     DB::rollBack();
                     return false;
                 }
+                */
 
             } else {
                 DB::rollBack();
@@ -153,11 +155,35 @@ class Trabajador extends Model
             ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
             ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
             ->where('contratos.empresa_id', $filtro['empresa_id'])
+            ->where('contratos.group', 'LIKE', '%' . ($filtro['grupo'] ?? '') . '%')
             ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
             ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
+            ->where('trabajadores.observado', false)
+            ->orderBy('trabajadores.apellido_paterno', 'ASC')
             ->get();
 
         return $contratos;
+    }
+
+    public static function _getObservados()
+    {
+        $trabajadores = DB::table('trabajadores')
+            ->where('trabajadores.observado', true)
+            ->orderBy('trabajadores.apellido_paterno', 'ASC')
+            ->get();
+
+        $result = [];
+        foreach($trabajadores as $trabajador) {
+            $observaciones = DB::table('observaciones')->where([
+                'trabajador_id' => $trabajador->id
+            ])->get();
+
+            $trabajador->observaciones = $observaciones;
+
+            array_push($result, $trabajador);
+        }
+
+        return $result;
     }
 
     public static function revision(array $trabajadores=[])

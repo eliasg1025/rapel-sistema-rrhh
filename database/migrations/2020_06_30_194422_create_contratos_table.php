@@ -33,6 +33,21 @@ class CreateContratosTable extends Migration
             $table->foreign('empresa_id')->references('id')->on('empresas');
             $table->unsignedBigInteger('zona_labor_id');
             $table->foreign('zona_labor_id')->references('id')->on('zona_labores');
+            // new
+            $table->unsignedBigInteger('oficio_id');
+            $table->foreign('oficio_id')->references('id')->on('oficios');
+            $table->unsignedBigInteger('regimen_id');
+            $table->foreign('regimen_id')->references('id')->on('regimenes');
+            $table->unsignedBigInteger('actividad_id');
+            $table->foreign('actividad_id')->references('id')->on('actividades');
+            $table->unsignedBigInteger('cuartel_id');
+            $table->foreign('cuartel_id')->references('id')->on('cuarteles');
+            $table->unsignedBigInteger('agrupacion_id');
+            $table->foreign('agrupacion_id')->references('id')->on('agrupaciones');
+            $table->unsignedBigInteger('labor_id');
+            $table->foreign('labor_id')->references('id')->on('labores');
+            $table->unsignedBigInteger('tipo_contrato_id');
+            $table->foreign('tipo_contrato_id')->references('id')->on('tipo_contratos');
         });
     }
 

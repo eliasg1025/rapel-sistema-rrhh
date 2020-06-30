@@ -36,6 +36,14 @@ class TrabajadorController extends Controller
         ], 200);
     }
 
+    public function getObservados()
+    {
+        $trabajadores = Trabajador::_getObservados();
+        return response()->json([
+            'data' => $trabajadores
+        ]);
+    }
+
     public function revision(Request $request)
     {
         $result = Trabajador::revision($request->trabajadores);
@@ -46,5 +54,22 @@ class TrabajadorController extends Controller
     {
         $result = Trabajador::findOrCreate($request->all());
         return response()->json($result);
+    }
+
+    public function habilitar($id)
+    {
+        try {
+            $trabajador = Trabajador::findOrFail($id);
+            $trabajador->observado = false;
+            if ($trabajador->save()) {
+                return response()->json([
+                    'message' => 'Trabajador habilitado'
+                ]);
+            }
+        } catch (\Exception $e)  {
+            return response()->json([
+                'message' => 'Trabajador no existe'
+            ]);
+        }
     }
 }
