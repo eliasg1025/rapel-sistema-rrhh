@@ -9,7 +9,7 @@ class CargaPdfController extends Controller
 {
     public function get()
     {
-        $cargas = CargaPdf::all();
+        $cargas = CargaPdf::orderBy('fecha_hora', 'DESC')->get();
         return response()->json($cargas);
     }
 }
