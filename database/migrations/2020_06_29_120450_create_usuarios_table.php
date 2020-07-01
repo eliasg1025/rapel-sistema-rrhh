@@ -16,6 +16,12 @@ class CreateUsuariosTable extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('username')->unique();
+            $table->string('password');
+            $table->boolean('activo')->default(true);
+            $table->enum('rol', ['admin', 'defecto', 'lectura', 'otro']);
+            $table->unsignedBigInteger('trabajador_id');
+            $table->foreign('trabajador_id')->references('id')->on('trabajadores');
         });
     }
 

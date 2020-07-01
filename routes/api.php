@@ -19,20 +19,35 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'sistema'], function () {
-    Route::post('/actualizar-datos/por-empresa', 'ActualizarController@porEmpresa');
-    Route::post('/actualizar-datos/por-empresa-2', 'ActualizarController@porEmpresa2');
-    Route::post('/actualizar-datos/localidades', 'ActualizarController@localidades');
-    Route::post('/trabajador', 'TrabajadorController@create');
-    Route::put('/trabajador', 'TrabajadorController@get');
-    Route::get('/trabajador/observados', 'TrabajadorController@getObservados');
-    Route::post('/trabajador/revision', 'TrabajadorController@revision');
-    Route::put('/trabajador/{id}/habilitar', 'TrabajadorController@habilitar');
-    Route::post('/trabajador/test', 'TrabajadorController@test');
 
-    Route::post('/contrato', 'ContratoController@test');
-    Route::post('/contrato/registro-masivo', 'ContratoController@registroMasivo');
-    Route::post('/contrato/test', 'ContratoController@test');
-    Route::post('/contrato/generar-pdf', 'ContratoController@generarPdf');
+    Route::group(['prefix' => 'auth'], function() {
+        Route::post('register', 'AuthController@register');
+        Route::post('login', 'AuthController@login');
+        Route::post('logout', 'AuthController@logout');
+        Route::post('me', 'AuthController@me')->middleware('api.auth');
+    });
+
+    Route::group(['prefix' => 'actualizar-datos'], function() {
+        Route::post('/por-empresa', 'ActualizarController@porEmpresa');
+        Route::post('/por-empresa-2', 'ActualizarController@porEmpresa2');
+        Route::post('/localidades', 'ActualizarController@localidades');
+    });
+
+    Route::group(['prefix' => 'trabajador'], function() {
+        Route::post('/', 'TrabajadorController@create');
+        Route::put('/', 'TrabajadorController@get');
+        Route::get('/observados', 'TrabajadorController@getObservados');
+        Route::post('/revision', 'TrabajadorController@revision');
+        Route::put('/{id}/habilitar', 'TrabajadorController@habilitar');
+        Route::post('/test', 'TrabajadorController@test');
+    });
+
+    Route::group(['prefix' => 'contrato'], function() {
+        Route::post('/', 'ContratoController@test');
+        Route::post('/registro-masivo', 'ContratoController@registroMasivo');
+        Route::post('/test', 'ContratoController@test');
+        Route::post('/generar-pdf', 'ContratoController@generarPdf');
+    });
 
     Route::get('/cargas-pdf', 'CargaPdfController@get');
 });
