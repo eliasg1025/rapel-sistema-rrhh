@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empresa;
-use App\Models\Trabajador;
+use App\Models\{Contrato, Empresa, Trabajador};
 use Illuminate\Http\Request;
 
 class TrabajadorController extends Controller
@@ -59,16 +58,16 @@ class TrabajadorController extends Controller
     public function habilitar($id)
     {
         try {
-            $trabajador = Trabajador::findOrFail($id);
-            $trabajador->observado = false;
-            if ($trabajador->save()) {
+            $contrato = Contrato::findOrFail($id);
+            $contrato->observado = false;
+            if ($contrato->save()) {
                 return response()->json([
-                    'message' => 'Trabajador habilitado'
+                    'message' => 'Contrato habilitado'
                 ]);
             }
         } catch (\Exception $e)  {
             return response()->json([
-                'message' => 'Trabajador no existe'
+                'message' => 'Contrato no existe'
             ]);
         }
     }

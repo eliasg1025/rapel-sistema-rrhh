@@ -20,6 +20,7 @@ class CreateContratosTable extends Migration
             $table->boolean('editable')->default(false);
             $table->boolean('cargado')->default(true);
             $table->boolean('activo')->default(true);
+            $table->boolean('observado')->default(false);
             $table->string('fecha_inicio');
             $table->string('fecha_termino')->nullable();
             $table->string('fecha_termino_c')->nullable();
@@ -27,6 +28,7 @@ class CreateContratosTable extends Migration
             $table->string('codigo_bus')->nullable();
             $table->string('group')->nullable();
             $table->string('cussp')->nullable();
+            $table->string('tipo_trabajador');
             $table->unsignedBigInteger('trabajador_id');
             $table->foreign('trabajador_id')->references('id')->on('trabajadores');
             $table->unsignedBigInteger('empresa_id');
@@ -48,6 +50,10 @@ class CreateContratosTable extends Migration
             $table->foreign('labor_id')->references('id')->on('labores');
             $table->unsignedBigInteger('tipo_contrato_id');
             $table->foreign('tipo_contrato_id')->references('id')->on('tipo_contratos');
+            $table->unsignedBigInteger('ruta_id');
+            $table->foreign('ruta_id')->references('id')->on('rutas');
+            $table->unsignedBigInteger('troncal_id');
+            $table->foreign('troncal_id')->references('id')->on('troncales');
         });
     }
 

@@ -11,6 +11,22 @@ use iio\libmergepdf\Merger;
 
 class ContratoController extends Controller
 {
+    public function show($id)
+    {
+        $contrato = Contrato::_show($id);
+
+        if ($contrato) {
+            return response()->json([
+                'message' => 'Contrato obtenido correctamente',
+                'data' => $contrato
+            ], 200);
+        }
+
+        return response()->json([
+            'message' => 'Contrato no encontrado'
+        ], 404);
+    }
+
     public function verFichaIngreso(Contrato $contrato)
     {
         try {
@@ -49,6 +65,31 @@ class ContratoController extends Controller
     {
         $result = Contrato::massive_record($request->all());
         return response()->json($result);
+    }
+
+    public function registroIndividual(Request $request)
+    {
+        $result = Contrato::record($request->all());
+        return response()->json($result, $result['error'] ? 400 : 200);
+    }
+
+    public function delete($id)
+    {
+        try {
+            $contrato = Contrato::findOrFail($id);
+            if ($contrato->delete()) {
+                return response()->json([
+                    'message' => 'Contrato eliminado correctamente'
+                ], 200);
+            }
+            return response()->json([
+                'message' => 'Error al eliminar contrato, inténtelo más tarde.'
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Contrato no encontrado'
+            ], 404);
+        }
     }
 
     public function test(Request $request)

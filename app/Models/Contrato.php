@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class Contrato extends Model
 {
+    protected $connection = 'mysql';
+
     protected $table = 'contratos';
 
     public function trabajador()
@@ -53,81 +55,71 @@ class Contrato extends Model
     /**
      * CRUD methods
      */
-
-    public static function _save(array $data): bool
+    public static function _show($id)
     {
         try {
-            $contrato = Contrato::firstWhere([
-                'code' => $data['code'],
-                'fecha_inicio' => $data['fecha_inicio'],
-                'fecha_termino_c' => $data['fecha_termino_c'],
-            ]);
+            $contrato = Contrato::findOrFail($id);
+            $trabajador = Trabajador::findOrFail($contrato->trabajador_id);
+            $distrito = Distrito::findOrFail($trabajador->distrito_id);
+            $provincia = Provincia::findOrFail($distrito->provincia_id);
+            $departamento = Departamento::findOrFail($provincia->departamento_id);
+            $nacionalidad = Nacionalidad::findOrFail($trabajador->nacionalidad_id);
+            $estado_civil = EstadoCivil::findOrFail($trabajador->estado_civil_id);
+            $tipo_zona = $trabajador->tipo_zona_id ? Zona::findOrFail($trabajador->tipo_zona_id) : false;
+            $tipo_via = $trabajador->tipo_via_id ? Via::findOrFail($trabajador->tipo_via_id) : false;
 
-            if (!$contrato) {
-                $contrato = new Contrato();
-                $contrato->code = $data['code'];
-                $contrato->fecha_inicio = $data['fecha_inicio'];
-                $contrato->fecha_termino_c = $data['fecha_termino_c'];
-            }
+            $zona_labor = ZonaLabor::findOrFail($contrato->zona_labor_id);
+            $oficio = Oficio::findOrFail($contrato->oficio_id);
+            $cuartel = Cuartel::findOrFail($contrato->cuartel_id);
+            $agrupacion = Agrupacion::findOrFail($contrato->agrupacion_id);
+            $actividad =  Actividad::findOrFail($contrato->actividad_id);
+            $labor = Labor::findOrFail($contrato->labor_id);
+            $tipo_contrato = TipoContrato::findOrFail($contrato->tipo_contrato_id);
+            $ruta = Ruta::findOrFail($contrato->ruta_id);
+            $troncal = Troncal::findOrFail($contrato->troncal_id);
 
-            $contrato->fecha_termino = $data['fecha_termino'] ?? null;
-            $contrato->sueldo_base = $data['sueldo_base'];
-            $contrato->cussp = $data['cussp'];
-            $contrato->trabajador_id = $data['trabajador_id'];
-            $contrato->empresa_id = $data['empresa_id'];
-            $contrato->zona_labor_id = $data['zona_labor_id'];
-
-            if ($contrato->save()) {
-                return true;
-            }
-            return false;
-
+            return [
+                'contrato' => [
+                    'id' => $contrato->id,
+                    'fecha_inicio' => $contrato->fecha_inicio,
+                    'fecha_termino' => $contrato->fecha_termino_c,
+                    'empresa_id' => $contrato->empresa_id,
+                    'zona_labor_id' => $zona_labor->code,
+                    'grupo' => $contrato->group,
+                    'regimen_id' => $contrato->regimen_id,
+                    'oficio_id' => $oficio->code,
+                    'cuartel_id' => $cuartel->code,
+                    'agrupacion_id' => $agrupacion->code,
+                    'actividad_id' => $actividad->code,
+                    'labor_id' => $labor->code,
+                    'tipo_contrato_id' => $tipo_contrato->code,
+                    'ruta_id' => $ruta->code,
+                    'troncal_id' => $troncal->code,
+                    'codigo_bus' => $contrato->codigo_bus,
+                    'tipo_trabajador' => $contrato->tipo_trabajador,
+                ],
+                'trabajador' => [
+                    'rut' => $trabajador->rut,
+                    'apellido_paterno' => $trabajador->apellido_paterno,
+                    'apellido_materno' => $trabajador->apellido_materno,
+                    'nombre' => $trabajador->nombre,
+                    'fecha_nacimiento' => $trabajador->fecha_nacimiento,
+                    'sexo' => $trabajador->sexo,
+                    'telefono' => $trabajador->telefono,
+                    'distrito_id' => $distrito->code,
+                    'provincia_id' => $provincia->code,
+                    'departamento_id' => $departamento->code,
+                    'nacionalidad_id' => $nacionalidad->code,
+                    'estado_civil_id' => $estado_civil->code,
+                    'tipo_zona_id' => $trabajador->tipo_zona_id ? $tipo_zona->code : "",
+                    'nombre_zona' => $trabajador->nombre_zona,
+                    'tipo_via_id' => $trabajador->tipo_via_id ? $tipo_via->code : "",
+                    'nombre_via' => $trabajador->nombre_via,
+                    'direccion' => $trabajador->direccion
+                ]
+            ];
         } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    public static function masive_save(array $data): bool
-    {
-        $contratos = $data['contratos'];
-        DB::beginTransaction();
-        try {
-            for ($i=0; $i < sizeof($contratos); $i++) {
-
-                $fecha_inicio = Carbon::parse($contratos[$i]['fecha_inicio'])->format('Y-m-d');
-                $fecha_termino_c = $contratos[$i]['fecha_termino_c'] ? Carbon::parse($contratos[$i]['fecha_termino_c'])->format('Y-m-d') : null;
-                $fecha_termino = $contratos[$i]['fecha_termino'] ? Carbon::parse($contratos[$i]['fecha_termino'])->format('Y-m-d') : null;
-
-                $contrato = self::where([
-                    'code' => $contratos[$i]['code'],
-                    'empresa_id' => $data['empresa_id'],
-                    'trabajador_id' => $data['trabajador_id'],
-                ])->first();
-
-                if (!$contrato) {
-                    $contrato = new Contrato();
-                    $contrato->code = $contratos[$i]['code'];
-                    $contrato->empresa_id = $data['empresa_id'];
-                    $contrato->trabajador_id = $data['trabajador_id'];
-                }
-
-                $contrato->fecha_inicio = $fecha_inicio;
-                $contrato->fecha_termino_c = $fecha_termino_c;
-                $contrato->fecha_termino = $fecha_termino;
-                $contrato->sueldo_base = $contratos[$i]['sueldo_base'];
-                $contrato->cussp = $contratos[$i]['cussp'];
-                $contrato->zona_labor_id = $data['zona_labor_id'];
-
-                if (!$contrato->save()) {
-                    DB::rollBack();
-                    return false;
-                }
-            }
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return false;
+            return $e->getMessage();
         }
     }
 
@@ -183,6 +175,8 @@ class Contrato extends Model
             $cuartel_id = Cuartel::findOrCreate($contrato_data['cuartel'], $zona_labor->id);
             $tipo_contrato_id = TipoContrato::findOrCreate($contrato_data['tipo_contrato']);
             $labor_id = Labor::findOrCreate($contrato_data['labor'], $actividad_id);
+            $troncal_id = Troncal::findOrCreate($contrato_data['troncal']);
+            $ruta_id = Ruta::findOrCreate($contrato_data['ruta'], $troncal_id);
 
             $contrato_activo = $data['contrato_activo'] ?? [];
             $alertas = $data['alertas'] ?? [];
@@ -235,21 +229,17 @@ class Contrato extends Model
                 $observado = true;
             }
 
-            if ($observado) {
-                $trabajador = Trabajador::whereRut($data['rut'])->first();
-                $trabajador->observado = true;
-                $trabajador->save();
-            }
-
             $contrato = new Contrato();
             $contrato->editable = true;
             $contrato->cargado = false;
             $contrato->activo = true;
+            $contrato->observado = $observado;
             $contrato->fecha_inicio = $contrato_data['fecha_ingreso'];
             $contrato->fecha_termino_c = $contrato_data['fecha_termino'];
             $contrato->empresa_id = $contrato_data['empresa_id'];
             $contrato->group = $contrato_data['grupo'];
             $contrato->codigo_bus = $contrato_data['codigo_bus'];
+            $contrato->tipo_trabajador = $contrato_data['tipo_trabajador'];
             $contrato->zona_labor_id = $zona_labor->id;
             $contrato->trabajador_id = $trabajador_id;
             $contrato->oficio_id = $oficio_id;
@@ -259,6 +249,8 @@ class Contrato extends Model
             $contrato->tipo_contrato_id = $tipo_contrato_id;
             $contrato->cuartel_id = $cuartel_id;
             $contrato->labor_id = $labor_id;
+            $contrato->troncal_id = $troncal_id;
+            $contrato->ruta_id = $ruta_id;
             if ( $contrato->save() ) {
                 DB::commit();
                 return [

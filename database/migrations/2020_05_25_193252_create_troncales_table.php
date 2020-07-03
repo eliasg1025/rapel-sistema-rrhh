@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTroncasTable extends Migration
+class CreateTroncalesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateTroncasTable extends Migration
      */
     public function up()
     {
-        Schema::create('troncas', function (Blueprint $table) {
+        Schema::create('troncales', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('code');
             $table->string('name');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 
@@ -28,6 +30,6 @@ class CreateTroncasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('troncas');
+        Schema::dropIfExists('troncales');
     }
 }

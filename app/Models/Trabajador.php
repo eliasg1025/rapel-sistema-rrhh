@@ -158,7 +158,7 @@ class Trabajador extends Model
             ->where('contratos.group', 'LIKE', '%' . ($filtro['grupo'] ?? '') . '%')
             ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
             ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
-            ->where('trabajadores.observado', false)
+            ->where('contratos.observado', false)
             ->orderBy('trabajadores.apellido_paterno', 'ASC')
             ->get();
 
@@ -167,23 +167,40 @@ class Trabajador extends Model
 
     public static function _getObservados()
     {
-        $trabajadores = DB::table('trabajadores')
-            ->where('trabajadores.observado', true)
+        try {
+            $contratos = DB::table('contratos')
+            ->select(
+                'trabajadores.*',
+                'contratos.id as contrato_id',
+                'contratos.fecha_inicio',
+                'contratos.group as grupo',
+                'empresas.name as empresa_name',
+                'empresas.id as empresa_id',
+                'zona_labores.name as zona_labor_name'
+            )
+            ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
+            ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
+            ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
+            ->where('contratos.observado', true)
+            ->orderBy('contratos.fecha_inicio', 'DESC')
             ->orderBy('trabajadores.apellido_paterno', 'ASC')
             ->get();
 
-        $result = [];
-        foreach($trabajadores as $trabajador) {
-            $observaciones = DB::table('observaciones')->where([
-                'trabajador_id' => $trabajador->id
-            ])->get();
+            $result = [];
+            foreach($contratos as $contrato) {
+                $observaciones = DB::table('observaciones')->where([
+                    'trabajador_id' => $contrato->id
+                ])->get();
 
-            $trabajador->observaciones = $observaciones;
+                $contrato->observaciones = $observaciones;
 
-            array_push($result, $trabajador);
+                array_push($result, $contrato);
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
-
-        return $result;
     }
 
     public static function revision(array $trabajadores=[])

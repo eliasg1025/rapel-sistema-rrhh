@@ -18,8 +18,10 @@ class CreateRutasTable extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('code');
-            $table->unsignedBigInteger('tronca_id');
-            $table->foreign('tronca_id')->references('id')->on('troncas');
+            $table->unsignedBigInteger('troncal_id');
+            $table->foreign('troncal_id')->references('id')->on('troncales');
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 
