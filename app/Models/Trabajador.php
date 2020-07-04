@@ -236,26 +236,26 @@ class Trabajador extends Model
                 return $trabajador->id;
             }
 
-            $empresa_id = $data['contrato']['empresa_id'];
-            $distrito_id = Distrito::firstWhere('code', $data['trabajador']['distrito_id'])->id;
-            $tipo_zona_id = $data['trabajador']['tipo_zona_id'] ? Zona::firstWhere(['code' => $data['trabajador']['tipo_zona_id'],'empresa_id' => $empresa_id])->id : null;
-            $tipo_via_id = $data['trabajador']['tipo_via_id'] ? Via::firstWhere(['code' => $data['trabajador']['tipo_via_id'],'empresa_id' => $empresa_id])->id : null;
-            $nacionalidad_id = Nacionalidad::firstWhere(['code' => $data['trabajador']['nacionalidad_id'],'empresa_id' => $empresa_id])->id;
-            $estado_civil_id = EstadoCivil::firstWhere('code', $data['trabajador']['estado_civil_id'])->id;
+            $empresa_id = $data['empresa_id'];
+            $distrito_id = Distrito::firstWhere('code', $data['distrito_id'])->id;
+            $tipo_zona_id = $data['tipo_zona_id'] ? Zona::firstWhere(['code' => $data['tipo_zona_id'],'empresa_id' => $empresa_id])->id : null;
+            $tipo_via_id = $data['tipo_via_id'] ? Via::firstWhere(['code' => $data['tipo_via_id'],'empresa_id' => $empresa_id])->id : null;
+            $nacionalidad_id = Nacionalidad::firstWhere(['code' => $data['nacionalidad_id'],'empresa_id' => $empresa_id])->id;
+            $estado_civil_id = EstadoCivil::firstWhere('code', $data['estado_civil_id'])->id;
 
             $trabajador = new Trabajador();
-            $trabajador->nombre = $data['trabajador']['nombre'];
+            $trabajador->nombre = $data['nombre'];
             $trabajador->rut = $data['rut'];
-            $trabajador->apellido_paterno = $data['trabajador']['apellido_paterno'];
-            $trabajador->apellido_materno = $data['trabajador']['apellido_materno'];
-            $trabajador->fecha_nacimiento = $data['trabajador']['fecha_nacimiento'];
-            $trabajador->sexo = $data['trabajador']['sexo'];
-            $trabajador->email = $data['trabajador']['email'] ?? null;
+            $trabajador->apellido_paterno = $data['apellido_paterno'];
+            $trabajador->apellido_materno = $data['apellido_materno'];
+            $trabajador->fecha_nacimiento = $data['fecha_nacimiento'];
+            $trabajador->sexo = $data['sexo'];
+            $trabajador->email = $data['email'] ?? null;
             $trabajador->tipo_zona_id = $tipo_zona_id;
-            $trabajador->nombre_zona = $data['trabajador']['nombre_zona'];
+            $trabajador->nombre_zona = $data['nombre_zona'];
             $trabajador->tipo_via_id = $tipo_via_id;
-            $trabajador->nombre_via = $data['trabajador']['nombre_via'];
-            $trabajador->direccion = $data['trabajador']['direccion'];
+            $trabajador->nombre_via = $data['nombre_via'];
+            $trabajador->direccion = $data['direccion'];
             $trabajador->distrito_id = $distrito_id;
             $trabajador->estado_civil_id = $estado_civil_id;
             $trabajador->nacionalidad_id = $nacionalidad_id;

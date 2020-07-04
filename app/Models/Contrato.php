@@ -167,7 +167,7 @@ class Contrato extends Model
                 'empresa_id' => $contrato_data['empresa_id']
             ])->first();
 
-            $trabajador_id = Trabajador::findOrCreate($data);
+            $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
             $oficio_id = Oficio::findOrCreate($contrato_data['oficio']);
             $regimen_id = Regimen::findOrCreate($contrato_data['regimen']);
             $actividad_id = Actividad::findOrCreate($contrato_data['actividad']);

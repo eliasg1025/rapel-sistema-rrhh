@@ -21,7 +21,7 @@ class CreateTrabajadoresTable extends Migration
             $table->string('apellido_materno');
             $table->string('rut')->unique();
             $table->string('fecha_nacimiento');
-            $table->boolean('observado')->default(false);
+            //$table->boolean('observado')->default(false);
             $table->string('tipo')->nullable();
             $table->string('codigo_bus')->nullable();
             $table->string('sexo');

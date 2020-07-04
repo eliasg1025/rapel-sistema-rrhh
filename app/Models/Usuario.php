@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
+    protected $hidden = ['password'];
+
     /**
      * Eloquent relationships
      */
@@ -15,12 +17,50 @@ class Usuario extends Model
         return $this->belongsTo(Trabajador::class);
     }
 
-
     /**
-     * @param array $data
-     * @return array
-     *
+     * Static methods
      */
+    public static function _get(bool $activo)
+    {
+        $usuarios = Usuario::where('activo', $activo)->get();
+        return $usuarios->map(function($usuario) {
+            $usuario->trabajador = $usuario->trabajador->select('nombre', 'apellido_paterno', 'apellido_materno');
+            return $usuario;
+        });
+    }
+
+    public static function _update(array $data=[], $usuario)
+    {
+        try {
+            $usuario->username = $data['username'];
+            if ($data['password'] && $data['confirm_password']) {
+                if (!self::comparePassword($data)) {
+                    return [
+                        'error'   => true,
+                        'message' => 'Las contraseñas son diferentes'
+                    ];
+                }
+                $usuario->password = md5(sha1($data['password']));
+            }
+            $usuario->rol = $data['rol'];
+            if ($usuario->save()) {
+                return [
+                    'message' => 'Usuario ' . $data['username'] . ' actualizado correctamente',
+                    'error'   => false
+                ];
+            } else {
+                return [
+                    'error'   => true,
+                    'message' => 'Ocurrió un error inesperado, consulte con el administrador'
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'error'   => true,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
 
     public static function register($data=[])
     {
@@ -35,7 +75,7 @@ class Usuario extends Model
             $usuario = new Usuario();
             $usuario->username = $data['username'];
             $usuario->password = md5(sha1($data['password']));
-            $usuario->trabajador_id = $data['trabajador_id'];
+            $usuario->trabajador_id = $data['trabajador_id'] ?? Trabajador::findOrCreate($data['trabajador']);
             $usuario->activo = true;
             $usuario->rol = $data['rol'];
             if ($usuario->save()) {

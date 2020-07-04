@@ -17,7 +17,13 @@ class ApiAuthenticate
     public function handle($request, Closure $next)
     {
         $token = $request->header('Authorization');
-        $check = JwtAuthService::checkToken($token);
+
+        if (!$token) {
+            return response()->json([
+                'message' => 'Token no existe o inválido'
+            ], 401);
+        }
+        $check = JwtAuthService::checkToken($token, true);
 
         if (!$check) {
             return response()->json([

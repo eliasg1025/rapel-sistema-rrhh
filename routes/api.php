@@ -19,10 +19,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'auth'], function() {
-    Route::post('register', 'AuthController@register');
+    Route::post('register', 'AuthController@register')->middleware('api.auth', 'rol:admin');
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
     Route::post('me', 'AuthController@me')->middleware('api.auth');
+});
+
+Route::group(['prefix' => 'usuario'], function() {
+    Route::get('/', 'UserController@get')->middleware('api.auth', 'rol:admin');
+    Route::post('/', 'UserController@store')->middleware('api.auth', 'rol:admin');
+    Route::put('/{usuario}/toggle-activate', 'UserController@toggleActivate')->middleware('api.auth', 'rol:admin');
+    Route::put('/{usuario}', 'UserController@update')->middleware('api.auth', 'rol:admin');
 });
 
 Route::group(['prefix' => 'actualizar-datos'], function() {
