@@ -76,7 +76,6 @@
 
 @section('contenido')
     <section id="page1" class="contrato">
-        <small>{{ $trabajador->rut ?? '' }}</small>
         <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>INTERMITENTE</b></h4>
         <p>Conste mediante el presente documento el <b>Contrato de Trabajo sujeto a modalidad Intermitente</b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 27360, Ley de Promoción del Sector Agrario; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
         <ul>
