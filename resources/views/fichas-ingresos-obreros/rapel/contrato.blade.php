@@ -1865,4 +1865,6 @@
             <b>DNI: {{ $trabajador->rut }}</b>
         </div>
     </section>
+
+    <div class="page-break"></div>
 @endsection
