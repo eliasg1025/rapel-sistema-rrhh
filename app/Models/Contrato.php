@@ -49,6 +49,14 @@ class Contrato extends Model
         return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
     }
 
+    public function getFechaLargaTerminoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_termino_c);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
     public function getAnioContratoAttribute($value)
     {
         return Carbon::parse($this->fecha_inicio)->format('Y');
