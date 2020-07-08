@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ContratosExport;
 use App\Models\Contrato;
-use App\Services\ContratosService;
+use App\Services\{ContratosService, FichasExcelService};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -32,21 +33,25 @@ class ContratoController extends Controller
         try {
             $trabajador = $contrato->trabajador;
             if ($contrato->empresa_id === 9) {
-                $data = [
-                    'trabajador' => $trabajador,
-                    'contrato' => $contrato
-                ];
-
-                $pdf = \PDF::setOptions([
-                    'images' => true
-                ])->loadView('fichas-ingresos-obreros.rapel.contrato', $data);
-
-                $filename = $trabajador->apellido_paterno . '-' . $trabajador->apellido_materno . '-' . $trabajador->rut . '-FICHA.pdf';
-
-                return $pdf->stream($filename);
+                $view = 'fichas-ingresos-obreros.rapel.contrato';
+            } else if ($contrato->empresa_id === 14) {
+                $view = 'fichas-ingresos-obreros.verfrut.contrato';
             } else {
                 throw new \Exception();
             }
+
+            $data = [
+                'trabajador' => $trabajador,
+                'contrato' => $contrato
+            ];
+
+            $pdf = \PDF::setOptions([
+                'images' => true
+            ])->loadView($view, $data);
+
+            $filename = $trabajador->apellido_paterno . '-' . $trabajador->apellido_materno . '-' . $trabajador->rut . '-FICHA.pdf';
+
+            return $pdf->stream($filename);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -61,9 +66,15 @@ class ContratoController extends Controller
         return response()->json($result, 200);
     }
 
+    public function generarFichaExcel(Request $request)
+    {
+        $result = (new FichasExcelService())->generarExcel($request->all());
+        return response()->json($result);
+    }
+
     public function registroMasivo(Request $request)
     {
-        $result = Contrato::massive_record($request->all());
+        $result = Contrato::massiveRecord($request->all());
         return response()->json($result);
     }
 
@@ -71,6 +82,14 @@ class ContratoController extends Controller
     {
         $result = Contrato::record($request->all());
         return response()->json($result, $result['error'] ? 400 : 200);
+    }
+
+    public function editarMasivo(Request $request)
+    {
+        $contratos = $request->get('contratos');
+        $datos_contrato = $request->get('datos_contrato');
+        $result = Contrato::massiveEdit($contratos, $datos_contrato);
+        return response()->json($result);
     }
 
     public function delete($id)
@@ -94,28 +113,6 @@ class ContratoController extends Controller
 
     public function test(Request $request)
     {
-        $fecha_actual = Carbon::parse(Carbon::now())->format('Y-m-d');
-
-        $files = \Storage::disk('public')->files($fecha_actual);
-        $path = storage_path() . '/app/public';
-
-        $f = [];
-        foreach ($files as $file) {
-            array_push($f, $path . '/' . $file);
-        }
-
-        $merger = new Merger();
-
-        foreach ($f as $file) {
-            $merger->addFile($file);
-        }
-        $createdPdf = $merger->merge();
-        $filename = 'carga-pdf/' . $fecha_actual . '.pdf';
-
-        if (\Storage::disk('public')->put($filename, $createdPdf)) {
-            return true;
-        }
-
-        return false;
+        return (new ContratosExport(2))->download('test.xlsx');
     }
 }

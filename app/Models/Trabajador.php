@@ -140,29 +140,36 @@ class Trabajador extends Model
 
     public static function _get(array $filtro=[])
     {
-        $contratos = DB::table('contratos')
-            ->select(
-                'trabajadores.*',
-                'contratos.id as contrato_id',
-                'contratos.fecha_inicio',
-                'contratos.group as grupo',
-                'empresas.name as empresa_name',
-                'empresas.id as empresa_id',
-                'zona_labores.name as zona_labor_name'
-            )
-            ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
-            ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
-            ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
-            ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
-            ->where('contratos.empresa_id', $filtro['empresa_id'])
-            ->where('contratos.group', 'LIKE', '%' . ($filtro['grupo'] ?? '') . '%')
-            ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
-            ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
-            ->where('contratos.observado', false)
-            ->orderBy('trabajadores.apellido_paterno', 'ASC')
-            ->get();
+        try {
+            $contratos = DB::table('contratos')
+                ->select(
+                    'trabajadores.*',
+                    'contratos.id as contrato_id',
+                    'contratos.fecha_inicio',
+                    'contratos.group as grupo',
+                    'empresas.name as empresa_name',
+                    'empresas.id as empresa_id',
+                    'zona_labores.name as zona_labor_name'
+                )
+                ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
+                ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
+                ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
+                ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
+                ->where('contratos.empresa_id', $filtro['empresa_id'])
+                //->where('contratos.group', 'LIKE', '%' . ($filtro['grupo'] ?? '') . '%')
+                ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')
+                ->where('trabajadores.rut', 'LIKE', '%' . ($filtro['dni'] ?? '') . '%')
+                ->where('contratos.observado', false)
+                ->orderBy('trabajadores.apellido_paterno', 'ASC')
+                ->when($filtro['grupo'], function($query) use ($filtro) {
+                    $query->where('contratos.group', '=', $filtro['grupo']);
+                })
+                ->get();
 
-        return $contratos;
+            return $contratos;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public static function _getObservados()

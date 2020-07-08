@@ -20,4 +20,4 @@ Route::get('/', function () {
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
 
-Route::post('/test', 'ContratoController@test');
+Route::get('/test', 'ContratoController@test');

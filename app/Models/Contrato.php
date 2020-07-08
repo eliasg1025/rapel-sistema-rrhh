@@ -22,6 +22,21 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Empresa');
     }
 
+    public function zona_labor()
+    {
+        return $this->belongsTo('App\Models\ZonaLabor');
+    }
+
+    public function troncal()
+    {
+        return $this->belongsTo('App\Models\Troncal');
+    }
+
+    public function ruta()
+    {
+        return $this->belongsTo('App\Models\Ruta');
+    }
+
     /**
      * Mutators
      */
@@ -48,6 +63,11 @@ class Contrato extends Model
     }
 
     public function getFechaFormatAttribute($value)
+    {
+        return Carbon::parse($this->fecha_inicio)->format('d/m/Y');
+    }
+
+    public function getFechaTerminoFormatAttribute($value)
     {
         return Carbon::parse($this->fecha_inicio)->format('d/m/Y');
     }
@@ -82,6 +102,7 @@ class Contrato extends Model
                 'contrato' => [
                     'id' => $contrato->id,
                     'fecha_inicio' => $contrato->fecha_inicio,
+                    'fecha_ingreso' => $contrato->fecha_inicio,
                     'fecha_termino' => $contrato->fecha_termino_c,
                     'empresa_id' => $contrato->empresa_id,
                     'zona_labor_id' => $zona_labor->code,
@@ -123,7 +144,81 @@ class Contrato extends Model
         }
     }
 
-    public static function massive_record(array $data=[])
+    public static function _showFila($id)
+    {
+        try {
+            $contrato = Contrato::findOrFail($id);
+            $trabajador = Trabajador::findOrFail($contrato->trabajador_id);
+
+            $estado_civil = EstadoCivil::findOrFail($trabajador->estado_civil_id);
+            $distrito = Distrito::findOrFail($trabajador->distrito_id);
+            $nacionalidad = Nacionalidad::findOrFail($trabajador->nacionalidad_id);
+            $tipo_zona = $trabajador->tipo_zona_id ? Zona::findOrFail($trabajador->tipo_zona_id) : false;
+            $tipo_via = $trabajador->tipo_via_id ? Via::findOrFail($trabajador->tipo_via_id) : false;
+
+            $zona_labor = ZonaLabor::findOrFail($contrato->zona_labor_id);
+            $oficio = Oficio::findOrFail($contrato->oficio_id);
+            $cuartel = Cuartel::findOrFail($contrato->cuartel_id);
+            $agrupacion = Agrupacion::findOrFail($contrato->agrupacion_id);
+            $actividad =  Actividad::findOrFail($contrato->actividad_id);
+            $labor = Labor::findOrFail($contrato->labor_id);
+            $tipo_contrato = TipoContrato::findOrFail($contrato->tipo_contrato_id);
+            $ruta = Ruta::findOrFail($contrato->ruta_id);
+            $troncal = Troncal::findOrFail($contrato->troncal_id);
+
+            return [
+                'DNI' => $trabajador->rut,
+                'TIPODOCIDEN' => '1',
+                'APELLIDOP' => $trabajador->apellido_paterno,
+                'APELLIDOM' => $trabajador->apellido_materno,
+                'NOMBRES' => $trabajador->nombre,
+                'FECHA NAC' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
+                'ESTADO' => $estado_civil->code,
+                'SEXO' => $trabajador->sexo,
+                'NACIONALIDAD' => $nacionalidad->code,
+                'DIRECCION' => $trabajador->direccion,
+                'COMUNA' => $distrito->code,
+                'ZONA LABORES' => $zona_labor->code,
+                'TIPO DE ZONA' => $trabajador->tipo_zona_id ? $tipo_zona->code : "",
+                'NOMBRE ZONA' => $trabajador->nombre_zona,
+                'TIPO DE VIA' => $trabajador->tipo_via_id ? $tipo_via->code : "",
+                'NOMBRE VIA' => $trabajador->nombre_via,
+                'MANZANA' => '',
+                'LOTE' => '',
+                'NUMERO' => '',
+                'INTERIOR' => '',
+                'NIVEL EDUCACIONAL' => 4,
+                'TRONCAL' => $troncal->code,
+                'RUTA' => $ruta->code,
+                'TELEFONO' => '',
+                'TIPO DE TRABAJADOR' => 64,
+                'T. TRABAJADOR' => 2,
+                'A.F.P.' => 'VALIDAR',
+                'ISAPRE' => 1,
+                'MONEDA' => 4,
+                'Comisión' => '',
+                'CUSSP' => 'VALIDAR',
+                'MIXTA' => 'VALIDAR',
+                'F. AFILIACION' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
+                'REGIMEN' => $contrato->regimen_id,
+                'C. COSTO/ PREDIO' => $zona_labor->code,
+                'SC.COSTO/CUARTEL' => $cuartel->code,
+                'AGRUPACION' => $agrupacion->code,
+                'ACTIVIDAD' => $actividad->code,
+                'LABOR' => $labor->code,
+                'OFICIO' => $oficio->code,
+                'SUELDO DIARIO' => 31.01,
+                'MONEDASUELDO' => 4,
+                'Fecha de Inicio' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
+                'Fecha de Término' => Carbon::parse($contrato->fecha_termino_c)->format('d/m/Y'),
+                'TIPO DE CONTRATO' => 0
+            ];
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function massiveRecord(array $data=[])
     {
         try {
             $registrados = $data['registrados'];
@@ -186,12 +281,14 @@ class Contrato extends Model
                 'fecha_inicio'  =>  $contrato_data['fecha_ingreso'],
             ])->exists();
 
-            if ($existe_contrato) {
-                DB::rollBack();
-                return [
-                    'rut' => $data['rut'],
-                    'error' => 'Ya existe un contrato generado con fecha de ingreso ' . $contrato_data['fecha_ingreso']
-                ];
+            if (!isset($contrato_data['id'])) {
+                if ($existe_contrato) {
+                    DB::rollBack();
+                    return [
+                        'rut' => $data['rut'],
+                        'error' => 'Ya existe un contrato generado con fecha de ingreso ' . $contrato_data['fecha_ingreso']
+                    ];
+                }
             }
 
             $observado = false;
@@ -228,8 +325,11 @@ class Contrato extends Model
 
                 $observado = true;
             }
-
-            $contrato = new Contrato();
+            if (isset($contrato_data['id'])) {
+                $contrato = Contrato::find($contrato_data['id']);
+            } else {
+                $contrato = new Contrato();
+            }
             $contrato->editable = true;
             $contrato->cargado = false;
             $contrato->activo = true;
@@ -272,5 +372,16 @@ class Contrato extends Model
                 'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
+    }
+
+    /**
+     * TODO: Impementacion de la funcion
+     * @param array $contratos
+     * @param $datos_contrato
+     * @return array
+     */
+    public static function massiveEdit(array $contratos, $datos_contrato)
+    {
+        return $contratos;
     }
 }

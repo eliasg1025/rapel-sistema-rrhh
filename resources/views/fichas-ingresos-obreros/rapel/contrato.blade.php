@@ -126,7 +126,7 @@
             </li>
             <li>
                 <b><u>QUINTO:</u> Plazo del Contrato.-</b>
-                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) meses, y rige desde el  hasta el  .
+                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) meses, y rige desde el  hasta el <b>{{ $contrato->fecha_termino_format }}</b>.
                 <br>5.2 <b>EL EMPLEADOR</b> no está obligado a dar aviso adicional alguno referente al término del presente contrato, operando su extinción en la fecha de su vencimiento, oportunidad en la cual se abonará a <b>EL TRABAJADOR</b> los beneficios sociales que le pudieran corresponder, de acuerdo a Ley.
                 <br>5.3	Si la naturaleza del trabajo así lo requiere se podrá prorrogar el tiempo de vigencia de <b>EL CONTRATO</b>, en común acuerdo de ambas partes, debiéndose de firmar en este caso la prórroga respectiva.
                 <br>5.4	La suspensión de <b>EL CONTRATO</b>, cualquiera que fuera el supuesto, no interrumpe ni suspende el plazo de extinción de la relación laboral sujeta a plazo fijo. Por ende, si por alguna circunstancia <b>EL TRABAJADOR</b> estuviera percibiendo prestaciones por enfermedad o accidente de trabajo al vencimiento calendario del presente contrato, ello no significa en forma alguna la prolongación del plazo fijo contratado, ni la conversión de éste en indeterminado.
@@ -828,33 +828,33 @@
                 <td><h4 style="text-align: left" class="titulo">FICHA DE INGRESO Y CONTRATACIÓN</h4></td>
             </tr>
         </table>
-        <div style="font-size: 10px">
+        <div style="font-size: 11px">
             <table class="tabla" style="width: 100%">
                 <tr>
                     <td>Apellido Paterno:</td>
-                    <td>{{ $trabajador->apellido_paterno }}</td>
+                    <td colspan="2">{{ $trabajador->apellido_paterno }}</td>
                     <td>Apellido Materno:</td>
-                    <td>{{ $trabajador->apellido_materno }}</td>
+                    <td colspan="12">{{ $trabajador->apellido_materno }}</td>
                 </tr>
                 <tr>
                     <td>Nombres:</td>
-                    <td>{{ $trabajador->nombre }}</td>
+                    <td colspan="15">{{ $trabajador->nombre }}</td>
                 </tr>
                 <tr>
                     <td>DNI:</td>
-                    <td>{{ $trabajador->rut }}</td>
+                    <td colspan="2">{{ $trabajador->rut }}</td>
                     <td>Nacionalidad:</td>
-                    <td>{{ $trabajador->nacionalidad->name }}</td>
+                    <td colspan="12">{{ $trabajador->nacionalidad->name }}</td>
                 </tr>
                 <tr>
                     <td>Fecha de Nacimiento:</td>
-                    <td>{{ $trabajador->fecha_format }}</td>
+                    <td colspan="2">{{ $trabajador->fecha_format }}</td>
                     <td>Estado Civil:</td>
-                    <td>{{ $trabajador->estado_civil->name }}</td>
+                    <td colspan="12">{{ $trabajador->estado_civil->name }}</td>
                 </tr>
                 <tr>
                     <td>Dirección(1)</td>
-                    <td>{{ $trabajador->direccion }}</td>
+                    <td colspan="15">{{ $trabajador->direccion }}</td>
                 </tr>
                 <tr>
                     <td>Departamento:</td>
@@ -862,21 +862,19 @@
                     <td>Provincia:</td>
                     <td>{{ $trabajador->distrito->provincia->name }}</td>
                     <td>Distrito:</td>
-                    <td>{{ $trabajador->distrito->name }}</td>
+                    <td colspan="11">{{ $trabajador->distrito->name }}</td>
                 </tr>
                 <tr>
                     <td>Telf./Celular:</td>
-                    <td>{{ $trabajador->telefono ?? '-' }}</td>
-                </tr>
-                <tr>
+                    <td colspan="2">{{ $trabajador->telefono ?? '' }}</td>
                     <td>Correo Electrónico:</td>
-                    <td>{{ $trabajador->email ?? '-' }}</td>
+                    <td colspan="12">{{ $trabajador->email ?? '' }}</td>
                 </tr>
                 <tr>
                     <td>Dirección(2):</td>
-                    <td></td>
-                    <td>Centro de costo:</td>
-                    <td>{{ $trabajador->zona_labor->name ?? '-' }}</td>
+                    <td colspan="2"></td>
+                    <td>Centro de Costo:</td>
+                    <td colspan="12">{{ $contrato->zona_labor->name ?? '' }}</td>
                 </tr>
                 <tr>
                     <td>Departamento:</td>
@@ -884,7 +882,7 @@
                     <td>Provincia:</td>
                     <td></td>
                     <td>Distrito:</td>
-                    <td></td>
+                    <td colspan="11"></td>
                 </tr>
                 <tr>
                     <td>Sistema Pensionario:</td>
@@ -893,36 +891,47 @@
                     <td>ESSALUD</td>
                     <td>Hijos:</td>
                     <td>SI</td>
-                    <td></td>
+                    <td colspan="2"></td>
                     <td>NO</td>
-                    <td></td>
+                    <td colspan="7"></td>
                 </tr>
                 <tr>
                     <td>Cargo:</td>
                     <td><b>OBRERO DE CAMPO</b></td>
                     <td>Nivel Educativo:</td>
-                    <td></td>
+                    <td colspan="2"></td>
                     <td>
                         <small>¿Inst. Educ. del Perú?</small>
                     </td>
-                    <td>SI</td>
-                    <td>NO</td>
+                    <td colspan="3">SI</td>
+                    <td colspan="7">NO</td>
+                </tr>
+                <tr>
+                    <td>Tipo de Institución Educativa:</td>
+                    <td></td>
+                    <td>Nombre de Inst. Educ.:</td>
+                    <td colspan="2"></td>
+                    <td>
+                        <small>Régimen</small>
+                    </td>
+                    <td colspan="3">Pública</td>
+                    <td colspan="7">Privada</td>
                 </tr>
                 <tr>
                     <td>Tiempo Estimado de Contrato</td>
                     <td><b>03 Meses (Periodo de Prueba)</b></td>
                     <td>Carrera</td>
-                    <td></td>
+                    <td colspan="2"></td>
                     <td>Año de egreso</td>
-                    <td></td>
+                    <td colspan="10"></td>
                 </tr>
                 <tr>
                     <td>Fecha de Ingreso</td>
                     <td><b>{{ $contrato->fecha_format }}</b></td>
                     <td>Troncal:</td>
-                    <td>ALTO PIURA</td>
+                    <td><b>{{ $contrato->troncal->name ?? '' }}</b></td>
                     <td>Ruta:</td>
-                    <td>SANTA ANA</td>
+                    <td colspan="11"><b>{{ $contrato->ruta->name }}</b></td>
                 </tr>
                 <tr>
                     <td>Tipo de Trabajador:</td>
@@ -931,40 +940,42 @@
                     <td>Destajo:</td>
                     <td></td>
                     <td>Mensual</td>
-                    <td></td>
+                    <td colspan="10"></td>
                 </tr>
                 <tr>
                     <td>Tipo de Contratos:</td>
                     <td>Parcial:</td>
                     <td> </td>
                     <td>Indefinido</td>
-                    <td> </td>
+                    <td colspan="12"> </td>
                 </tr>
                 <tr>
                     <td>Sueldo Bruto:</td>
-                    <td> </td>
+                    <td colspan="2"> </td>
                     <td>Sueldo Neto:</td>
-                    <td> </td>
+                    <td colspan="12"> </td>
                 </tr>
                 <tr>
                     <td>Horario de Trabajo:</td>
-                    <td> </td>
+                    <td colspan="2"> </td>
                     <td>Hora:</td>
-                    <td>6:15 am a 15:15am - 11:00am a 15:00pm</td>
+                    <td colspan="12">6:15 am a 15:15am - 11:00am a 15:00pm</td>
                 </tr>
                 <tr>
                     <td>En caso de Emergencia, Comunicarse a:</td>
-                    <td> </td>
+                    <td colspan="2"> </td>
                     <td>Teléf./Celular:</td>
-                    <td> </td>
+                    <td colspan="12"> </td>
                 </tr>
                 <tr>
                     <td>Capacitaciones:</td>
-                    <td> </td>
+                    <td colspan="15">
+                        <b>Se realizó charla de Inducción de BPA, Seguridad y Salud Ocupacional, Bienestar Social y Remuneraciones</b>
+                    </td>
                 </tr>
                 <tr>
                     <td>Observaciones varias:</td>
-                    <td> </td>
+                    <td colspan="15"> </td>
                 </tr>
                 <br>
                 <small>Declaro Bajo Juramento que la información brindada es verdadera y que en caso se determine la falsedad de la misma, será causal de falta grave. </small>
@@ -1292,7 +1303,9 @@
                         <b>Recursos Humanos/Administración</b><br>
                         <small>Nombre del Instructor: </small>
                     </td>
-                    <td></td>
+                    <td>
+                        <img src="{{ public_path() . '/img/firma-olga-vilela.png'}}" width="200px" />
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -1305,7 +1318,9 @@
                         <b>Seguridad y Salud en el Trabajo</b><br>
                         <small>Nombre del Instructor: </small>
                     </td>
-                    <td></td>
+                    <td>
+                        <img src="{{ public_path() . '/img/firma-jose-reyes.png'}}" width="100px" />
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -1318,7 +1333,9 @@
                         <b>BPA</b><br>
                         <small>Nombre del Instructor: </small>
                     </td>
-                    <td></td>
+                    <td>
+                        <img src="{{ public_path() . '/img/firma-karla-salazar.png'}}" width="200px" />
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -1331,7 +1348,9 @@
                         <b>Jefe de Campo</b><br>
                         <small>Nombre del Instructor: </small>
                     </td>
-                    <td></td>
+                    <td>
+                        <img src="{{ public_path() . '/img/firma-remo-galindo.png'}}" width="100px" />
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -1486,4 +1505,357 @@
     </section>
 
     <div class="page-break"></div>
+
+    <div class="page-break"></div>
+
+    <section id="page23">
+        <h5 style="text-align: center">
+            Ficha de Sintomatología COVID-19 para Regreso al Trabajo<br/>
+            Declaración Jurada
+        </h5>
+        <div style="font-size: 11px; text-align: justify">
+            <p>He recibido explicación del objetivo de esta evaluación y me comprometo a responder con la verdad </p>
+            <p style="font-weight: bold">
+                Empresa: SOCIEDAD AGRÍCOL RAPEL S.A.C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RUC: 20451779711 <br /><br />
+                Apellidos y Nombres: {{ $trabajador->nombre_completo }}<br /><br />
+                Área de Trabajo: ___________________________ &nbsp;&nbsp;DNI: {{ $trabajador->rut }}<br /><br/>
+                Dirección: <span style="font-weight: normal">{{ $trabajador->direccion }}</span> &nbsp;&nbsp;Numero (celular): _____________
+            </p>
+            <div>
+                <p style="font-weight: bold">En los últimos 14 días calendario ha tenido algunos de los síntomas siguientes</p>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>SI</th>
+                        <th>NO</th>
+                    </tr>
+                    <tr>
+                        <td>1. sensación de alza térmica o fiebre</td>
+                        <td style="border: 1px solid black">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                        <td style="border: 1px solid black">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2. tos, estornudos o flema o dificultad para respirar</td>
+                        <td style="border: 1px solid black"></td>
+                        <td style="border: 1px solid black"></td>
+                    </tr>
+                    <tr>
+                        <td>3. expectoración de flema amarilla o verdosa</td>
+                        <td style="border: 1px solid black"></td>
+                        <td style="border: 1px solid black"></td>
+                    </tr>
+                    <tr>
+                        <td>4. contacto con persona(s) con un caso confirmado de COVID-19</td>
+                        <td style="border: 1px solid black"></td>
+                        <td style="border: 1px solid black"></td>
+                    </tr>
+                    <tr>
+                        <td>5. Estas tomando alguna medicación (detallar cual o cuales):</td>
+                        <td style="border: 1px solid black"></td>
+                        <td style="border: 1px solid black"></td>
+                    </tr>
+                </table>
+                <p>
+                    Todos los datos expresados en esta ficha constituyen declaración jurada de mi parte<br /><br />
+                    He sido informado que de omitir o falsear información puedo perjudicar la salud de mis compañeros, y la mía propia, lo cual de constituir una falta grave a la salud pública, asumo sus consecuencias
+                </p>
+            </div>
+            <div>
+                <p style="font-weight: bold;">Fecha: {{ $contrato->fecha_larga }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Firma: ___________________</p>
+                <p>Por favor lea detenidamente y marque con una X en el cajón correspondiente si tuvo la condición:</p>
+                <table>
+                    <tr>
+                        <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>Dolor de cabeza crónico</td>
+                        <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>Neumonía recurrente</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedades del cerebro</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Bronquitis crónica</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Desordenes del sistema nervioso central</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfisema</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Epilepsia (convulsiones)</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad pleural</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Parálisis o parecías (parálisis parcial</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Tos con rasgos de sangre o sangrado al toser (hemoptisis)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Mareos y/o vértigo</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Resfríos recurrentes (más de 1 ves a la semana)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Sincope o desmayo</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor de oído</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Pérdida de conciencia</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>sangrado por algún oído</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Depresión</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>supuración (salida de material purulento) por el oído</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Ansiedad</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>zumbido de oídos</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Transtorno bipolar (maniaco-depresivo)</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Disminución de la audición</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Intento de suicidio</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Sensación de oído tapado (más de una ves a la semana)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Tuberculosis pulmonar</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad cardiovascular</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Asma bronquial</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedades de la piel</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Tos persistente</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Ulcera persistente en la piel</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Palpitaciones</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Lunar que cambia de forma, tamaño y/o color</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Arritmia</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>sensibilidad a la luz solar</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor o disconfort en el tórax</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad de mamas (tumoraciones, cambios de color en la piel, etc.)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hipertensión arterial                        </td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad 1endocrinológica</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hinchazón de los miembros inferiores</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Diabetes</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor en piernas al caminar</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dislipidemia</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Episodio coronario de algún tipo</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad de tiroides</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dificultad para deglutir</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Gota</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Ardor en el estómago
+                        </td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad de las articulaciones</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Úlcera Gástrica o duodena</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Reumatismo</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Desordenes intestinales</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Artritis</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor abdominal recurrente</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Movilidad limitada de miembros superiores o inferiores</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hernias en la pared abdominal</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad ósea (de los huesos)</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Sangrado por el sistema digestivo (como
+                            vómitos o con deposiciones)</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedad de la columna</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedades del hígado</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Anemia</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Vómitos recurrentes</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Desorden de Coagulación o sangrado</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hepatitis tipo A, B o C</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hemolisis</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Cálculos en la vesícula</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Policitemia</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Síndrome con colon irritable</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hemofilia</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Síndrome con colon irritable</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor en la columna dorsal
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Enfermedades de trasmisión sexual</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Lumbalgia</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>SIDA, portador de VIH</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dolor en el cuello</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Disturbios visuales
+                        </td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Movilidad Limitada de la columna</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Alergias a medicinas, comidas u otros agentes</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Otras enfermedades o condiciones no mencionadas arriba
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Infección o enfermedad urinaria</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Cálculos renales</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Presencia de sangre en la orina,
+                            Proteínas o glucosa</td>
+                        <td style="border: 1px solid black"></td>
+                        <td>Hiperplasia de Próstata </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid black"></td>
+                        <td>Dificultad al orinar</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <p>Aquellas enfermedades o condiciones marcadas serán evaluadas con mayor detalle durante la entrevista médica ocupacional</p>
+                <p>TODA LA INFORMACION QUE HE PROPORCIONADO ES VERDADERA, NO HABIENDO OMITIDO NINGUN DATO EN FORMA VOLUNTARIA</p>
+                <br />
+                <table>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div style="height: 160px; width: 140px; border: 1px solid black;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">
+                            ___________________________________________<br />
+                            Apellidos y Nombres: {{ $trabajador->nombre_completo }}<br />
+                            DNI/CE: {{ $trabajador->rut }}
+                        </td>
+                        <td style="font-weight: bold">
+                            Fecha: {{ $contrato->fecha_larga }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br />
+            <div>
+                <p style="font-weight: bold;">Nota: proporcionar información falsa al empleador está tipificada como falta grave, según lo dispuesto en el inciso del articulo
+                    25 el TUO de la ley de productividad y competitividad laboral.</p>
+            </div>
+        </div>
+    </section>
 @endsection

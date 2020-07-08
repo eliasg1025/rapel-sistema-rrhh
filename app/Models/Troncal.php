@@ -8,6 +8,11 @@ class Troncal extends Model
 {
     protected $table = 'troncales';
 
+    public function ruta()
+    {
+        return $this->belongsTo('App\Models\Ruta');
+    }
+
     public static function findOrCreate(array $data=[])
     {
         try {
