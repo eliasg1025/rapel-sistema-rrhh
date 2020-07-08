@@ -69,7 +69,7 @@ class Contrato extends Model
 
     public function getFechaTerminoFormatAttribute($value)
     {
-        return Carbon::parse($this->fecha_inicio)->format('d/m/Y');
+        return Carbon::parse($this->fecha_termino_c)->format('d/m/Y');
     }
 
     /**
