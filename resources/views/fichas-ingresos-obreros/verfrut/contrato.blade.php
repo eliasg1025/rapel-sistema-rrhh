@@ -5,11 +5,6 @@
 @endsection
 
 <style>
-    @font-face {
-        font-family: 'TahomaRegular';
-        src: url("{{ public_path() . '/fonts/Tahoma.ttf' }}") format('truetype')
-    }
-
     * {
         font-family: Arial, Helvetica, sans-serif;
     }
