@@ -113,6 +113,6 @@ class ContratoController extends Controller
 
     public function test(Request $request)
     {
-        return (new ContratosExport(2))->download('test.xlsx');
+        //return (new ContratosExport(2))->download('test.xlsx');
     }
 }

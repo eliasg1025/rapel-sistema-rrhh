@@ -219,7 +219,7 @@ class Contrato extends Model
                 'MONEDASUELDO' => 4,
                 'Fecha de Inicio' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
                 'Fecha de Término' => Carbon::parse($contrato->fecha_termino_c)->format('d/m/Y'),
-                'TIPO DE CONTRATO' => 0
+                'TIPO DE CONTRATO' => $tipo_contrato->code,
             ];
         } catch (\Exception $e) {
             return $e->getMessage();

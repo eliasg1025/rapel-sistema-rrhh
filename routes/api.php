@@ -58,3 +58,4 @@ Route::group(['prefix' => 'contrato'], function() {
 });
 
 Route::get('/cargas-pdf', 'CargaPdfController@get');
+Route::get('/cargas-excel', 'CargaExcelController@get');
