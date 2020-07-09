@@ -8,5 +8,6 @@
 </head>
 <body>
     @yield('contenido')
+    <script src="js/app.js"></script>
 </body>
 </html>

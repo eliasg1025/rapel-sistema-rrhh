@@ -14,10 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Web\ViewController@index');
+Route::get('/login', 'Web\ViewController@login');
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
-
 Route::get('/test', 'ContratoController@test');
