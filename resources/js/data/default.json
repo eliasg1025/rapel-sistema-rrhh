@@ -22,11 +22,11 @@
     "estado_civil": [
         {
             "id": "S",
-            "name": "SOLTERO(A)"
+            "name": "SOLTERO"
         },
         {
             "id": "C",
-            "name": "CASADO(A)"
+            "name": "CASADO"
         },
         {
             "id": "O",
@@ -34,11 +34,11 @@
         },
         {
             "id": "V",
-            "name": "VUIDO(A)"
+            "name": "VUIDO"
         },
         {
             "id": "D",
-            "name": "DIVORCIADO(A)"
+            "name": "DIVORCIADO"
         }
     ],
     "tipos_trabajadores": [

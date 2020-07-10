@@ -60,7 +60,7 @@ const RegistroIndividual = props => {
         nombre_zona: '',
         nombre_via: '',
         sexo: '',
-        nacionalidad_id: '',
+        nacionalidad_id: 'PE',
         tipo_via_id: '',
         tipo_zona_id: '',
         estado_civil_id: '',
@@ -129,10 +129,10 @@ const RegistroIndividual = props => {
             nombre_zona: '',
             nombre_via: '',
             sexo: '',
-            nacionalidad_id: '',
+            nacionalidad_id: 'PE',
             tipo_via_id: '',
             tipo_zona_id: '',
-            estado_civil_id: '',
+            estado_civil_id: 'S',
             empresa_id: 9
         });
         setAlertas([]);
@@ -243,7 +243,7 @@ const RegistroIndividual = props => {
                 setContratoActivo={setContratoActivo}
             />
             <br />
-            <Collapse defaultActiveKey="2">
+            <Collapse defaultActiveKey={["1", "2"]}>
                 <Collapse.Panel header="Datos Contrato" key="1">
                     <DatosContrato
                         contrato={contrato}

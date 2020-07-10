@@ -9,8 +9,8 @@ import TablaTrabajadoresObservados from "../components/Trabajadores/TablaTrabaja
 const Trabajadores = props => {
     const usuario = props.data.usuario;
     const [filtro, setFiltro] = useState({
-        desde: moment().format('YYYY-MM-DD').toString(),
-        hasta: moment().format('YYYY-MM-DD').toString(),
+        desde: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
+        hasta: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
         empresa_id: 9, //TODO: Cambiar si es que la empresa es diferente
         dni: '',
         nombre: '',
