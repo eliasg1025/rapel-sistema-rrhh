@@ -10,7 +10,7 @@
     }
 
     .contrato {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     p, li {
@@ -114,7 +114,7 @@
             </li>
             <li>
                 <b><u>QUINTO:</u> Plazo del Contrato.-</b>
-                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) meses, y rige desde el  hasta el <b>{{ $contrato->fecha_termino_format }}</b>.
+                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) meses, y rige desde el <b>{{ $contrato->fecha_larga }}</b> hasta el <b>{{ $contrato->fecha_larga_termino }}</b>.
                 <br>5.2 <b>EL EMPLEADOR</b> no está obligado a dar aviso adicional alguno referente al término del presente contrato, operando su extinción en la fecha de su vencimiento, oportunidad en la cual se abonará a <b>EL TRABAJADOR</b> los beneficios sociales que le pudieran corresponder, de acuerdo a Ley.
                 <br>5.3	Si la naturaleza del trabajo así lo requiere se podrá prorrogar el tiempo de vigencia de <b>EL CONTRATO</b>, en común acuerdo de ambas partes, debiéndose de firmar en este caso la prórroga respectiva.
                 <br>5.4	La suspensión de <b>EL CONTRATO</b>, cualquiera que fuera el supuesto, no interrumpe ni suspende el plazo de extinción de la relación laboral sujeta a plazo fijo. Por ende, si por alguna circunstancia <b>EL TRABAJADOR</b> estuviera percibiendo prestaciones por enfermedad o accidente de trabajo al vencimiento calendario del presente contrato, ello no significa en forma alguna la prolongación del plazo fijo contratado, ni la conversión de éste en indeterminado.
@@ -1554,4 +1554,19 @@
             </div>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /><br /><br /><br /><br />
+        <div style="text-align: center">
+            _______________________________<br />
+            <b>{{ $trabajador->nombre_completo }}</b><br />
+            <b>DNI: {{ $trabajador->rut }}</b>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
 @endsection
