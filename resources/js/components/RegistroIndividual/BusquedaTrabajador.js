@@ -33,7 +33,7 @@ const BusquedaTrabajador = props => {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
 
                 notification['error']({
                     message:

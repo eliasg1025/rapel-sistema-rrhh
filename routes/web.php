@@ -22,6 +22,7 @@ Route::get('/login', 'Web\ViewController@login');
 Route::get('/usuarios', 'Web\ViewController@usuarios');
 Route::get('/trabajadores', 'Web\ViewController@trabajadores');
 Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
+Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
 Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
 
 

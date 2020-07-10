@@ -239,9 +239,6 @@ class Trabajador extends Model
     {
         try {
             $trabajador = Trabajador::whereRut($data['rut'])->first();
-            if ($trabajador) {
-                return $trabajador->id;
-            }
 
             $empresa_id = $data['empresa_id'];
             $distrito_id = Distrito::firstWhere('code', $data['distrito_id'])->id;
@@ -250,7 +247,10 @@ class Trabajador extends Model
             $nacionalidad_id = Nacionalidad::firstWhere(['code' => $data['nacionalidad_id'],'empresa_id' => $empresa_id])->id;
             $estado_civil_id = EstadoCivil::firstWhere('code', $data['estado_civil_id'])->id;
 
-            $trabajador = new Trabajador();
+            if (!$trabajador) {
+                $trabajador = new Trabajador();
+            }
+
             $trabajador->nombre = $data['nombre'];
             $trabajador->rut = $data['rut'];
             $trabajador->apellido_paterno = $data['apellido_paterno'];

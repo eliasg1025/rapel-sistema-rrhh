@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contrato;
 use Illuminate\Http\Request;
 
 class ViewController extends Controller
@@ -70,5 +71,20 @@ class ViewController extends Controller
             'usuario' => $usuario
         ];
         return view('pages.registro-masivo', compact('data'));
+    }
+
+    public function editarRegistroIndividual($id, Request $request)
+    {
+        if (!$request->session()->has('usuario'))
+            return redirect('/login');
+        $usuario = $request->session()->get('usuario');
+        $contrato = Contrato::_show($id);
+        $data = [
+            'usuario' => $usuario,
+            'contrato' => $contrato['contrato'],
+            'trabajador' => $contrato['trabajador'],
+        ];
+
+        return view('pages.registro-individual', compact('data'));
     }
 }

@@ -9,6 +9,26 @@ import DatosTrabajador from "../components/RegistroIndividual/DatosTrabajador";
 import DatosContrato from "../components/RegistroIndividual/DatosContrato";
 
 const RegistroIndividual = props => {
+    const _trabajador = props.trabajador;
+    const _contrato = props.contrato;
+
+    useEffect(() => {
+        if (_contrato && _trabajador) {
+
+            setTrabajador({
+                ...trabajador,
+                ..._trabajador,
+            });
+
+            setContrato({
+                ...contrato,
+                ..._contrato,
+            });
+            setContratoId(_contrato.id);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const [contrato, setContrato] = useState({
         empresa_id: 9,
         zona_labor_id: '',
@@ -18,7 +38,7 @@ const RegistroIndividual = props => {
         fecha_termino: moment().add(91, 'days').format('YYYY-MM-DD').toString(),
         oficio_id: '',
         cuartel_id: '',
-        agrupacion: '',
+        agrupacion_id: '',
         actividad_id: '',
         labor_id: '',
         tipo_contrato_id: '',
@@ -54,8 +74,8 @@ const RegistroIndividual = props => {
     const [nacionalidades, setNacionalidades] = useState([]);
     const [tiposZonas, setTiposZonas] = useState([]);
     const [tiposVias, setTiposVias] = useState([]);
-    const [zonasLabor, setZonasLabor] = useState([]);
 
+    const [zonasLabor, setZonasLabor] = useState([]);
     const [regimenes, setRegimenes] = useState([]);
     const [oficios, setOficios] = useState([]);
     const [actividades, setActividades] = useState([]);
@@ -97,7 +117,6 @@ const RegistroIndividual = props => {
     const clearFormTrabajador = () => {
         setTrabajador({
             ...trabajador,
-            rut: '',
             departamento_id: '20',
             provincia_id: '2001',
             distrito_id: '',
@@ -181,6 +200,8 @@ const RegistroIndividual = props => {
                            message: `El trabajador fue grabado con unA observación`,
                        });
                    }
+
+                   clearFormTrabajador();
                } else {
                     notification['error']({
                         message: res.response.error,
