@@ -13,3 +13,9 @@ require('./bootstrap');
  */
 
 require('./components/Example');
+require('./components/Login');
+require('./layouts/MainLayout');
+require('./layouts/TrabajadoresLayout');
+require('./layouts/UsuariosLayout');
+require('./layouts/RegistroIndividualLayout');
+require('./layouts/RegistroMasivoLayout');

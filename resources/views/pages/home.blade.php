@@ -1,9 +1,9 @@
-@extends('layout')
+@extends('home-layout')
 
 @section('titulo')
     Grupo Verfrut
 @endsection
 
 @section('contenido')
-    Home
+    <div id="main-layout" data-props="{{ json_encode($data) }}"></div>
 @endsection

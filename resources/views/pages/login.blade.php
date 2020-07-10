@@ -5,5 +5,5 @@
 @endsection
 
 @section('contenido')
-    login
+    <div id="login"></div>
 @endsection

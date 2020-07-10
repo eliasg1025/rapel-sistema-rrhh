@@ -19,17 +19,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'auth'], function() {
-    Route::post('register', 'AuthController@register')->middleware('api.auth', 'rol:admin');
+    Route::post('register', 'AuthController@register');
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
-    Route::post('me', 'AuthController@me')->middleware('api.auth');
+    Route::post('me', 'AuthController@me');
 });
 
 Route::group(['prefix' => 'usuario'], function() {
-    Route::get('/', 'UserController@get')->middleware('api.auth', 'rol:admin');
-    Route::post('/', 'UserController@store')->middleware('api.auth', 'rol:admin');
-    Route::put('/{usuario}/toggle-activate', 'UserController@toggleActivate')->middleware('api.auth', 'rol:admin');
-    Route::put('/{usuario}', 'UserController@update')->middleware('api.auth', 'rol:admin');
+    Route::get('/', 'UserController@get');
+    Route::post('/', 'UserController@store');
+    Route::put('/{usuario}/toggle-activate', 'UserController@toggleActivate');
+    Route::put('/{usuario}', 'UserController@update');
 });
 
 Route::group(['prefix' => 'actualizar-datos'], function() {
@@ -59,3 +59,37 @@ Route::group(['prefix' => 'contrato'], function() {
 
 Route::get('/cargas-pdf', 'CargaPdfController@get');
 Route::get('/cargas-excel', 'CargaExcelController@get');
+
+
+Route::group(['prefix' => 'sqlsrv'], function() {
+    Route::get('/data/por-empresa', 'DataController@porEmpresa');
+    Route::get('/data/localidades', 'DataController@localidades');
+    Route::get('/trabajador/{dni}', 'TrabajadoresController@show');
+    Route::get('/trabajador/{id_empresa}/{dni}/info', 'TrabajadoresController@info');
+    Route::post('/trabajador/revision', 'TrabajadoresController@revision');
+    Route::get('/departamento', 'DepartamentosController@get');
+    Route::get('/departamento/{codigo}', 'DepartamentosController@show');
+    Route::get('/departamento/{codigo}/provincias', 'DepartamentosController@provincias');
+    Route::get('/provincia/{codigo}', 'ProvinciasController@show');
+    Route::get('/provincia/{codigo}/distritos', 'ProvinciasController@distritos');
+    Route::get('/distrito/{codigo}', 'DistritosController@show');
+    Route::get('/tipo-zona/{id_empresa}', 'TipoZonaController@get');
+    Route::get('/tipo-via/{id_empresa}', 'TipoViaController@get');
+    Route::get('/nacionalidad/{id_empresa}', 'NacionalidadController@get');
+    Route::get('/nacionalidad/{id_empresa}/{id_nacionalidad}', 'NacionalidadController@show');
+    Route::get('/nivel_educativo/{id_empresa}', 'NivelEducativoController@get');
+    Route::get('/nivel_educativo/{id_empresa}/{id_nivel_educativo}', 'NivelEducativoController@show');
+    Route::get('/troncal/{id_empresa}', 'TroncalController@get');
+    Route::get('/troncal/{id_empresa}/{codigo}', 'TroncalController@show');
+    Route::get('/troncal/{id_empresa}/{codigo}/rutas', 'TroncalController@rutas');
+    Route::get('/ruta/{id_empresa}/{codigo}', 'RutaController@get');
+    Route::get('/ruta/{id_empresa}/{codigo_troncal}/{codigo_ruta}', 'RutaController@show');
+    Route::get('/zona-labor/{id_empresa}', 'ZonaLaborController@get');
+    Route::get('/oficio/{id_empresa}', 'OficioController@get');
+    Route::get('/agrupacion/{id_empresa}', 'AgrupacionController@get');
+    Route::get('/regimen', 'RegimenController@get');
+    Route::get('/actividad/{id_empresa}', 'ActividadController@get');
+    Route::get('/tipo-contrato/{id_empresa}', 'TipoContratoController@get');
+    Route::get('/cuartel/{id_empresa}/{id_zona_labor}', 'CuartelController@get');
+    Route::get('/labor/{id_empresa}/{id_actividad}', 'LaborController@get');
+});

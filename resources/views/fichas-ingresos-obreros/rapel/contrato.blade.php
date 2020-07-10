@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('pdf-layout')
 
 @section('titulo')
     FICHA PERSONAL contrato declaracion topico - Obrero de Campo

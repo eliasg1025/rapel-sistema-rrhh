@@ -346,7 +346,7 @@ class Contrato extends Model
             $contrato->fecha_termino_c = $contrato_data['fecha_termino'];
             $contrato->empresa_id = $contrato_data['empresa_id'];
             $contrato->group = $contrato_data['grupo'];
-            $contrato->codigo_bus = $contrato_data['codigo_bus'];
+            $contrato->codigo_bus = $contrato_data['codigo_bus'] ?? null;
             $contrato->tipo_trabajador = $contrato_data['tipo_trabajador'];
             $contrato->zona_labor_id = $zona_labor->id;
             $contrato->trabajador_id = $trabajador_id;

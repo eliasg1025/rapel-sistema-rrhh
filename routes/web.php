@@ -14,8 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * Pages
+ */
 Route::get('/', 'Web\ViewController@index');
 Route::get('/login', 'Web\ViewController@login');
+Route::get('/usuarios', 'Web\ViewController@usuarios');
+Route::get('/trabajadores', 'Web\ViewController@trabajadores');
+Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
+Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
+
+
+Route::post('/login', 'Web\AuthController@login');
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
 Route::get('/test', 'ContratoController@test');

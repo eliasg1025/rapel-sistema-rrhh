@@ -125,6 +125,30 @@ class Usuario extends Model
         ];
     }
 
+    public static function verifyWeb(array $data)
+    {
+        try {
+            $username = trim($data['username']);
+            $password = trim(strtolower($data['password']));
+
+            $usuario = Usuario::whereUsername($username)->first();
+            if ($usuario) {
+                if ($usuario->password == md5(sha1($password))) {
+                    $usuario->trabajador = Trabajador::where('id', $usuario->trabajador_id)
+                        ->select('id', 'rut', 'apellido_paterno', 'apellido_materno', 'nombre')
+                        ->first();
+                    return $usuario;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     private static function comparePassword($data)
     {
         $password = trim($data['password']);

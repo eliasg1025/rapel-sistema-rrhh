@@ -1,0 +1,64 @@
+{
+    "empresa": [
+        {
+            "id": 9,
+            "name": "RAPEL"
+        },
+        {
+            "id": 14,
+            "name": "VERFRUT"
+        }
+    ],
+    "sexo": [
+        {
+            "id": "M",
+            "name": "MASCULINO"
+        },
+        {
+            "id": "F",
+            "name": "FEMENINO"
+        }
+    ],
+    "estado_civil": [
+        {
+            "id": "S",
+            "name": "SOLTERO(A)"
+        },
+        {
+            "id": "C",
+            "name": "CASADO(A)"
+        },
+        {
+            "id": "O",
+            "name": "CONVIVIENTE"
+        },
+        {
+            "id": "V",
+            "name": "VUIDO(A)"
+        },
+        {
+            "id": "D",
+            "name": "DIVORCIADO(A)"
+        }
+    ],
+    "tipos_trabajadores": [
+        {
+            "id": "NUEVO",
+            "name": "NUEVO"
+        },
+        {
+            "id": "COMPLEMENTARIO",
+            "name": "COMPLEMENTARIO"
+        }
+    ],
+    "roles_usuarios": [
+        {
+            "id": "admin",
+            "name": "admin"
+        },
+        {
+            "id": "defecto",
+            "name": "defecto"
+        }
+    ]
+}

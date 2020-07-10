@@ -1,0 +1,287 @@
+import React, { useState, useEffect } from 'react';
+import TextLoop from 'react-text-loop';
+import {Alert, Collapse, Button, notification } from 'antd';
+import { UserAddOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+import BusquedaTrabajador from "../components/RegistroIndividual/BusquedaTrabajador";
+import DatosTrabajador from "../components/RegistroIndividual/DatosTrabajador";
+import DatosContrato from "../components/RegistroIndividual/DatosContrato";
+
+const RegistroIndividual = props => {
+    const [contrato, setContrato] = useState({
+        empresa_id: 9,
+        zona_labor_id: '',
+        grupo: '',
+        regimen_id: '',
+        fecha_ingreso: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
+        fecha_termino: moment().add(91, 'days').format('YYYY-MM-DD').toString(),
+        oficio_id: '',
+        cuartel_id: '',
+        agrupacion: '',
+        actividad_id: '',
+        labor_id: '',
+        tipo_contrato_id: '',
+        tipo_trabajador: '',
+        ruta_id: '',
+        troncal_id: '',
+    });
+    const [trabajador, setTrabajador] = useState({
+        rut: '',
+        departamento_id: '20',
+        provincia_id: '2001',
+        distrito_id: '',
+        nombre: '',
+        apellido_paterno: '',
+        apellido_materno: '',
+        direccion: '',
+        telefono: '',
+        fecha_nacimiento: moment().format('YYYY-MM-DD').toString(),
+        nombre_zona: '',
+        nombre_via: '',
+        sexo: '',
+        nacionalidad_id: '',
+        tipo_via_id: '',
+        tipo_zona_id: '',
+        estado_civil_id: '',
+        empresa_id: 9
+    });
+    const [contratoId, setContratoId] = useState(0);
+
+    const [departamentos, setDepartamentos] = useState([]);
+    const [provincias, setProvincias] = useState([]);
+    const [distritos, setDistritos] = useState([]);
+    const [nacionalidades, setNacionalidades] = useState([]);
+    const [tiposZonas, setTiposZonas] = useState([]);
+    const [tiposVias, setTiposVias] = useState([]);
+    const [zonasLabor, setZonasLabor] = useState([]);
+
+    const [regimenes, setRegimenes] = useState([]);
+    const [oficios, setOficios] = useState([]);
+    const [actividades, setActividades] = useState([]);
+    const [agrupaciones, setAgrupaciones] = useState([]);
+    const [tiposContratos, setTiposContratos] = useState([]);
+    const [cuarteles, setCuarteles] = useState([]);
+    const [labores, setLabores] = useState([]);
+    const [rutas, setRutas] = useState([]);
+    const [troncales, setTroncales] = useState([]);
+
+    const [alertas, setAlertas] = useState([]);
+    const [contratoActivo, setContratoActivo] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line no-unused-vars
+    const [dataLoading, setDataLoading] = useState(false);
+
+    const clearData = () => {
+        let _trabajador = { ...trabajador };
+        for (const key in _trabajador) {
+            if (_trabajador[key] == null) {
+                _trabajador[key] = '';
+            }
+        }
+
+        let _contrato = { ...contrato };
+        for (const key in _contrato) {
+            if (_contrato[key] == null) {
+                _contrato[key] = '';
+            }
+        }
+
+        return {
+            trabajador: _trabajador,
+            contrato: _contrato,
+        };
+    };
+
+    const clearFormTrabajador = () => {
+        setTrabajador({
+            ...trabajador,
+            rut: '',
+            departamento_id: '20',
+            provincia_id: '2001',
+            distrito_id: '',
+            nombre: '',
+            apellido_paterno: '',
+            apellido_materno: '',
+            direccion: '',
+            telefono: '',
+            fecha_nacimiento: moment().format('YYYY-MM-DD').toString(),
+            nombre_zona: '',
+            nombre_via: '',
+            sexo: '',
+            nacionalidad_id: '',
+            tipo_via_id: '',
+            tipo_zona_id: '',
+            estado_civil_id: '',
+            empresa_id: 9
+        });
+        setAlertas([]);
+        setContratoActivo([]);
+    }
+
+    const prepareDataContratos = contrato => {
+        const regimen = regimenes.filter(e => e.id == contrato.regimen_id)[0];
+        const cuartel = cuarteles.filter(e => e.id == contrato.cuartel_id)[0];
+        const agrupacion = agrupaciones.filter(
+            e => e.id == contrato.agrupacion_id
+        )[0];
+        const actividad = actividades.filter(
+            e => e.id == contrato.actividad_id
+        )[0];
+        const labor = labores.filter(e => e.id == contrato.labor_id)[0];
+        const tipo_contrato = tiposContratos.filter(
+            e => e.id == contrato.tipo_contrato_id
+        )[0];
+        const oficio = oficios.filter(e => e.id == contrato.oficio_id)[0];
+        const troncal = troncales.filter(e => e.id == contrato.troncal_id)[0];
+        const ruta = rutas.filter(e => e.id == contrato.ruta_id)[0];
+
+        return {
+            ...contrato,
+            regimen,
+            cuartel,
+            agrupacion,
+            actividad,
+            labor,
+            tipo_contrato,
+            oficio,
+            troncal,
+            ruta
+        };
+    };
+
+    const handleSubmit = () => {
+        let data = clearData();
+        const contrato = prepareDataContratos(data.contrato);
+        data = {
+            ...data,
+            contrato,
+            rut: data.trabajador.rut,
+            contrato_activo: contratoActivo,
+            alertas,
+        };
+        console.log('Datos del trabajador y el contrato: ', data);
+        registroContrato(data);
+    };
+
+    const registroContrato = async data => {
+        axios.post(`/api/contrato/registro`, data)
+            .then(res => {
+               if (res.status < 300) {
+                   const accion = contratoId !== 0 ? 'actualizado' : 'creado';
+                   console.log(res);
+
+                   notification['success']({
+                       message: `Contrato para trabajador ${res.data.rut} ${accion} correctamente`,
+                   });
+
+                   if (res.data.observado) {
+                       notification['warning']({
+                           message: `El trabajador fue grabado con unA observación`,
+                       });
+                   }
+               } else {
+                    notification['error']({
+                        message: res.response.error,
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err.response)
+                notification['error']({
+                    message: err.response.data.error
+                });
+            });
+    };
+
+    return (
+        <div className="consulta-trabajadores">
+            <h3>Registro / Consulta trabajador</h3>
+            <hr />
+            <Alert
+                banner
+                type="info"
+                message={
+                    <TextLoop mask interval={5000}>
+                        <div>
+                            Puede buscar trabajadores ya registrados en el
+                            sistema principal
+                        </div>
+                        <div>Si no encuentra uno, puede agregarlo</div>
+                    </TextLoop>
+                }
+            />
+            <BusquedaTrabajador
+                trabajador={trabajador}
+                loading={loading}
+                clearFormTrabajador={clearFormTrabajador}
+                setTrabajador={setTrabajador}
+                setLoading={setLoading}
+                setAlertas={setAlertas}
+                setContratoActivo={setContratoActivo}
+            />
+            <br />
+            <Collapse defaultActiveKey="2">
+                <Collapse.Panel header="Datos Contrato" key="1">
+                    <DatosContrato
+                        contrato={contrato}
+                        setContrato={setContrato}
+                        regimenes={regimenes}
+                        oficios={oficios}
+                        actividades={actividades}
+                        agrupaciones={agrupaciones}
+                        tiposContratos={tiposContratos}
+                        cuarteles={cuarteles}
+                        labores={labores}
+                        zonasLabor={zonasLabor}
+                        rutas={rutas}
+                        troncales={troncales}
+                        setRegimenes={setRegimenes}
+                        setOficios={setOficios}
+                        setActividades={setActividades}
+                        setAgrupaciones={setAgrupaciones}
+                        setTiposContratos={setTiposContratos}
+                        setCuarteles={setCuarteles}
+                        setLabores={setLabores}
+                        setZonasLabor={setZonasLabor}
+                        setRutas={setRutas}
+                        setTroncales={setTroncales}
+                    />
+                </Collapse.Panel>
+                <Collapse.Panel header="Datos Trabajador" key="2">
+                    <DatosTrabajador
+                        trabajador={trabajador}
+                        contrato={contrato}
+                        setTrabajador={setTrabajador}
+                        departamentos={departamentos}
+                        provincias={provincias}
+                        distritos={distritos}
+                        nacionalidades={nacionalidades}
+                        tiposZonas={tiposZonas}
+                        tiposVias={tiposVias}
+                        setDepartamentos={setDepartamentos}
+                        setProvincias={setProvincias}
+                        setDistritos={setDistritos}
+                        setNacionalidades={setNacionalidades}
+                        setTiposZonas={setTiposZonas}
+                        setTiposVias={setTiposVias}
+                    />
+                </Collapse.Panel>
+            </Collapse>
+            <br />
+            <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                onClick={handleSubmit}
+                block
+            >
+                {contratoId !== 0 ? 'Editar Registro' : 'Guardar Registro'}{' '}
+                <UserAddOutlined />
+            </Button>
+        </div>
+    );
+}
+
+export default RegistroIndividual;
