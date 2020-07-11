@@ -452,8 +452,11 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={8}>
-                        <Item label="Direccion">
+                    <Col span={2}>
+                        Dirección:
+                    </Col>
+                    <Col span={14}>
+                        <Item>
                             <Input
                                 autoComplete="off"
                                 name="direccion"

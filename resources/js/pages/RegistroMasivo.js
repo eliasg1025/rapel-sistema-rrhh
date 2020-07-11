@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Card, Modal, notification, Form, Row, Col, Button, message } from 'antd';
+import { Alert, Card, Modal, notification, Form, Row, Col, Button, message, Switch } from 'antd';
 import moment from 'moment';
 
 import AgregarTrabajador from "../components/RegistroMasivo/AgregarTrabajador";
@@ -7,6 +7,7 @@ import ListaTrabajadores from "../components/RegistroMasivo/ListaTrabajadores";
 import DatosContrato from "../components/RegistroIndividual/DatosContrato";
 
 const RegistroMasivo = props => {
+    const [registroReniec, setRegistroReniec] = useState(true);
     const [registrando, setRegistrando] = useState(false);
     const [contrato, setContrato] = useState({
         empresa_id: 9,
@@ -182,8 +183,7 @@ const RegistroMasivo = props => {
     };
 
     const validForm = () => {
-        if (
-            contrato.codigo_bus !== '' &&
+        return contrato.codigo_bus !== '' &&
             contrato.grupo !== '' &&
             contrato.empresa_id !== '' &&
             contrato.zona_labor_id !== '' &&
@@ -197,11 +197,8 @@ const RegistroMasivo = props => {
             contrato.oficio_id !== '' &&
             contrato.troncal_id !== '' &&
             contrato.ruta_id !== '' &&
-            contrato.tipo_trabajador !== ''
-        ) {
-            return true;
-        }
-        return false;
+            contrato.tipo_trabajador !== '';
+
     };
 
     const empezarRegistro = () => {
@@ -222,14 +219,20 @@ const RegistroMasivo = props => {
             okText: 'Aceptar',
             onOk() {
                 guardarTrabajadores();
-                //setRegistrando(false);
             },
         });
     };
 
     return (
         <div className="registro-masivo">
-            <h4>Registro Masivo</h4>
+            <Row>
+                <Col span={4}>
+                    <h4>Registro Masivo </h4>
+                </Col>
+                <Col span={20}>
+                    Datos de Reniec: <Switch defaultChecked onChange={checked => setRegistroReniec(checked)}/>
+                </Col>
+            </Row>
             <hr />
             <DatosContrato
                 contrato={contrato}

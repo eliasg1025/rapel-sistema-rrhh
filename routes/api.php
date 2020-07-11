@@ -44,7 +44,7 @@ Route::group(['prefix' => 'trabajador'], function() {
     Route::get('/observados', 'TrabajadorController@getObservados');
     Route::post('/revision', 'TrabajadorController@revision');
     Route::put('/{id}/habilitar', 'TrabajadorController@habilitar');
-    //Route::post('/test', 'TrabajadorController@test');
+    Route::get('/test/{rut}', 'TrabajadorController@test');
 });
 
 Route::group(['prefix' => 'contrato'], function() {
@@ -60,7 +60,7 @@ Route::group(['prefix' => 'contrato'], function() {
 Route::get('/cargas-pdf', 'CargaPdfController@get');
 Route::get('/cargas-excel', 'CargaExcelController@get');
 
-
+/*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');
     Route::get('/data/localidades', 'DataController@localidades');
@@ -92,4 +92,4 @@ Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/tipo-contrato/{id_empresa}', 'TipoContratoController@get');
     Route::get('/cuartel/{id_empresa}/{id_zona_labor}', 'CuartelController@get');
     Route::get('/labor/{id_empresa}/{id_actividad}', 'LaborController@get');
-});
+});*/

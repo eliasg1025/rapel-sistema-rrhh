@@ -117,6 +117,7 @@ const Trabajadores = props => {
             <br/>
             <TablaTrabajadoresObservados
                 usuario={usuario}
+                filtro={filtro}
                 trabajadoresObservados={trabajadoresObservados}
                 setTrabajadoresObservados={setTrabajadoresObservados}
                 reload={reload}

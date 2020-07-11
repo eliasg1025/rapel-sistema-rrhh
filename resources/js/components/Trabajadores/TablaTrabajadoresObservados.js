@@ -9,7 +9,8 @@ const TablaTrabajadoresObservados = ({
     setTrabajadoresObservados,
     reload,
     setReload,
-    usuario
+    usuario,
+    filtro
 }) => {
     const [showModal, setShowModal] = useState(false);
     const [observaciones, setObservaciones] = useState([]);

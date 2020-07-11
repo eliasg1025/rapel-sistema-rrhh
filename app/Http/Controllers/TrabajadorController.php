@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ReniecService;
 use App\Models\{Contrato, Empresa, Trabajador};
 use Illuminate\Http\Request;
 
@@ -49,9 +50,10 @@ class TrabajadorController extends Controller
         return response()->json($result);
     }
 
-    public function test(Request $request)
+    public function test($rut)
     {
-        $result = Trabajador::findOrCreate($request->all());
+        $result = (new ReniecService())->getPersona($rut);
+
         return response()->json($result);
     }
 
