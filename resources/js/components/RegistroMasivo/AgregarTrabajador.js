@@ -69,6 +69,13 @@ const FormularioTrabajador = ({
     const handleSubmit = e => {
         e.preventDefault();
         // eslint-disable-next-line eqeqeq
+        if (!form.rut) {
+            message['warn']({
+                content: 'Campo vacío',
+            });
+            return;
+        }
+
         const repetido = trabajadores.findIndex(t => t.rut == form.rut) > -1;
 
         if (repetido) {

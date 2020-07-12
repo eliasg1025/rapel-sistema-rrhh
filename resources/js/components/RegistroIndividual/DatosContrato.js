@@ -499,6 +499,34 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
+                        <Form.Item label="Tipo">
+                            <Select
+                                name="tipo_trabajador"
+                                showSearch
+                                placeholder="Tipo Trabajador"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e =>
+                                    setContrato({ ...contrato, tipo_trabajador: e })
+                                }
+                                value={contrato.tipo_trabajador}
+                            >
+                                {tipos_trabajadores.map(option => (
+                                    <Select.Option
+                                        value={option.id}
+                                        key={option.id}
+                                    >
+                                        {option.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
                         <Form.Item label="Troncal">
                             <Select
                                 name="troncal_id"
@@ -556,6 +584,8 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
+                </Row>
+                <Row gutter={16}>
                     <Col span={8}>
                         <Form.Item label="Codigo Bus">
                             <Input
@@ -563,36 +593,6 @@ const DatosContrato = props => {
                                 value={contrato.codigo_bus}
                                 onChange={handleChangeInput}
                             />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={8}>
-                        <Form.Item label="Tipo">
-                            <Select
-                                name="tipo_trabajador"
-                                showSearch
-                                placeholder="Tipo Trabajador"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, tipo_trabajador: e })
-                                }
-                                value={contrato.tipo_trabajador}
-                            >
-                                {tipos_trabajadores.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {option.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
                         </Form.Item>
                     </Col>
                 </Row>

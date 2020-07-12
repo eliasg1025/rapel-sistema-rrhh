@@ -69,59 +69,11 @@ const RegistroMasivo = props => {
         setLoading(true);
 
         if (trabajadores.length !== 0) {
-            axios.post('http://192.168.60.16/api/trabajador/revision', {trabajadores})
-                .then(res => {
-                    const registrados = res.data.registrados || [];
-                    const no_registrados = res.data.no_registrados || [];
-
-                    const trabajadores_enviar = {
-                        registrados: clearData([...registrados]),
-                        no_registrados: [...no_registrados],
-                    };
-
-                    console.log('Sended payload: ', trabajadores_enviar);
-
-                    Modal.confirm({
-                        title: 'Resultados',
-                        content: (
-                            <div>
-                                Se encontraton{' '}
-                                <b>
-                                    {trabajadores_enviar.registrados.length}{' '}
-                                    trabajadores
-                                </b>{' '}
-                                en el sistema, se realizarán{' '}
-                                <b>
-                                    <u>
-                                        {trabajadores_enviar.no_registrados.length}{' '}
-                                        consultas
-                                    </u>
-                                </b>{' '}
-                                a la RENIEC o se tiene que agregar manualmente:
-                                <br />
-                                <div style={{ background: '#eee', border: '1px solid black', padding: '5px' }}>
-                                    {trabajadores_enviar.no_registrados.length > 0 && (
-                                        <ListaNoRegistrados
-                                            no_registrados={trabajadores_enviar.no_registrados}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        ),
-                        okText: 'Aceptar',
-                        cancelText: 'Cancelar',
-                        onOk() {
-                            setLoading(true);
-                            registroMasivo(trabajadores_enviar);
-                        },
-                    });
-                })
-                .catch(err => {
-                    console.log(err.response);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            if (registroReniec) {
+                revisionConReniec();
+            } else {
+                revisionSinReniec();
+            }
         } else {
             setLoading(false);
             setRegistrando(false);
@@ -135,6 +87,95 @@ const RegistroMasivo = props => {
                 {no_registrados.no_registrados.map(e => <li key={e.key}>{e.rut}</li>)}
             </ul>
         );
+    };
+
+    const revisionConReniec = () => {
+        axios.post('http://192.168.60.16/api/trabajador/revision/sin-trabajadores', {trabajadores})
+            .then(res => {
+                setLoading(true);
+                axios.post('/api/trabajador/reniec/masiva', res.data)
+                    .then(res => {
+                        if (res.status >= 400)
+                            throw new Error();
+
+                        const trabajadores_enviar = {
+                            registrados: clearData(res.data),
+                        };
+                        setLoading(true);
+                        registroMasivo(trabajadores_enviar);
+                    })
+                    .catch(err => {
+                        console.log(err.response);
+                        notification['error']({
+                            message: 'Algo salió mal al tratar de obtener los datos de la RENIEC',
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    })
+            })
+            .catch(err => {
+                console.log(err.response);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+    const revisionSinReniec = () => {
+        axios.post('http://192.168.60.16/api/trabajador/revision', {trabajadores})
+            .then(res => {
+                const registrados = res.data.registrados || [];
+                const no_registrados = res.data.no_registrados || [];
+
+                const trabajadores_enviar = {
+                    registrados: clearData([...registrados]),
+                    no_registrados: [...no_registrados],
+                };
+
+                console.log('Sended payload: ', trabajadores_enviar);
+
+                Modal.confirm({
+                    title: 'Resultados',
+                    content: (
+                        <div>
+                            Se encontraton{' '}
+                            <b>
+                                {trabajadores_enviar.registrados.length}{' '}
+                                trabajadores
+                            </b>{' '}
+                            en el sistema, se realizarán{' '}
+                            <b>
+                                <u>
+                                    {trabajadores_enviar.no_registrados.length}{' '}
+                                    consultas
+                                </u>
+                            </b>{' '}
+                            a la RENIEC o se tiene que agregar manualmente:
+                            <br />
+                            <div style={{ background: '#eee', border: '1px solid black', padding: '5px' }}>
+                                {trabajadores_enviar.no_registrados.length > 0 && (
+                                    <ListaNoRegistrados
+                                        no_registrados={trabajadores_enviar.no_registrados}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    ),
+                    okText: 'Aceptar',
+                    cancelText: 'Cancelar',
+                    onOk() {
+                        setLoading(true);
+                        registroMasivo(trabajadores_enviar);
+                    },
+                });
+            })
+            .catch(err => {
+                console.log(err.response);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const registroMasivo = trabajadores_enviar => {

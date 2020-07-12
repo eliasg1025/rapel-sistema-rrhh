@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ReniecService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -269,8 +270,30 @@ class Trabajador extends Model
             if ( $trabajador->save() ) {
                 return $trabajador->id;
             }
+            return 0;
         } catch(\Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    public static function obtencionReniecMasiva(array $data=[])
+    {
+        $registrados = $data['registrados'] ?? [];
+        $no_registrados = $data['no_registrados'] ?? [];
+
+        $d = array_merge($registrados, $no_registrados);
+
+        try {
+            foreach ($d as &$a) {
+                $persona = (new ReniecService())->getPersona($a['rut']);
+                $a['trabajador'] = $persona;
+                $a['trabajador']['empresa_id'] = $a['contrato']['empresa_id'];
+            }
+            return $d;
+        } catch (\Exception $e) {
+            return [
+                'errores' => [$e->getMessage()]
+            ];
         }
     }
 }

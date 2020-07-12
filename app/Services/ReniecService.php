@@ -32,16 +32,16 @@ class ReniecService
 
     private function formatData($data)
     {
-        $estado_civil_id = DB::table('estado_civiles')->where('name', $data->estado_civil)->first()->id;
+        $estado_civil_code = DB::table('estado_civiles')->where('name', $data->estado_civil)->first()->code;
         $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
         $provincia_id = DB::table('provincias')->where([
             'name' => $data->provincia,
             'departamento_id' => $departamento_id
         ])->first()->id;
-        $distrito_id = DB::table('distritos')->where([
+        $distrito_code = DB::table('distritos')->where([
             'name' => $data->distrito,
             'provincia_id' => $provincia_id,
-        ])->first()->id;
+        ])->first()->code;
 
         return [
             'rut' => $data->dni,
@@ -51,11 +51,15 @@ class ReniecService
             'direccion' => strtoupper($data->direccion),
             'fecha_nacimiento' => Carbon::createFromFormat('d/m/Y', $data->fecha_nacimiento)->format('Y-m-d'),
             'sexo' => $data->sexo === '1' ? 'M' : 'F',
-            'nacionalidad_id' => 13, // PE
-            'email' => $data->email,
-            'telefono' => $data->telefono,
-            'estado_civil_id' => $estado_civil_id,
-            'distrito_id' => $distrito_id,
+            'nacionalidad_id' => 'PE',
+            'email' => $data->email ?? "",
+            'telefono' => $data->telefono ?? "",
+            'estado_civil_id' => $estado_civil_code,
+            'distrito_id' => $distrito_code,
+            'tipo_zona_id' => "",
+            'tipo_via_id' => "",
+            'nombre_zona' => "",
+            'nombre_via' => "",
             'reniec' => '1'
         ];
     }

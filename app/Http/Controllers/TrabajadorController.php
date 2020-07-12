@@ -50,6 +50,12 @@ class TrabajadorController extends Controller
         return response()->json($result);
     }
 
+    public function obtencionReniecMasiva(Request $request)
+    {
+        $result = Trabajador::obtencionReniecMasiva($request->all());
+        return response()->json($result);
+    }
+
     public function test($rut)
     {
         $result = (new ReniecService())->getPersona($rut);
