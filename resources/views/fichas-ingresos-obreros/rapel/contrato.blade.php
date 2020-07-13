@@ -1440,7 +1440,7 @@
                         </tr>
                         <tr>
                             <td>7.- DOMICILIO:</td>
-                            <td style="border-bottom: 0.5px solid black"><b>{{ $trabajador->direccion }}</b></td>
+                            <td style="border-bottom: 0.5px solid black; font-size: 9px"><b>{{ $trabajador->direccion }}</b></td>
                         </tr>
                         <table style="margin-left: 45px">
                             <tr>
