@@ -35,7 +35,7 @@ const RegistroIndividual = props => {
         grupo: '',
         regimen_id: '',
         fecha_ingreso: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
-        fecha_termino: moment().add(91, 'days').format('YYYY-MM-DD').toString(),
+        fecha_termino: moment().add(92, 'days').format('YYYY-MM-DD').toString(),
         oficio_id: '',
         cuartel_id: '',
         agrupacion_id: '',
