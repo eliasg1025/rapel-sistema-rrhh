@@ -36,9 +36,11 @@ class TrabajadorController extends Controller
         ], 200);
     }
 
-    public function getObservados()
+    public function getObservados(Request $request)
     {
-        $trabajadores = Trabajador::_getObservados();
+        $filtro = $request->all();
+
+        $trabajadores = Trabajador::_getObservados($filtro);
         return response()->json([
             'data' => $trabajadores
         ]);

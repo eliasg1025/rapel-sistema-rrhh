@@ -15,6 +15,7 @@ const MainLayout = props => {
     return (
         <Layout>
             <Sider
+                theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
                 onBreakpoint={broken => {
@@ -28,7 +29,7 @@ const MainLayout = props => {
                     <img src="/img/logo-grupo-verfrut.png" width="160"/>
                 </div>
                 <br />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['5']}>
+                <Menu mode="inline" defaultSelectedKeys={['5']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
                         <a href="/">
                             Inicio

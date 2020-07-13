@@ -1,39 +1,18 @@
 /* eslint-disable eqeqeq */
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Tag, Space, Tooltip, notification } from 'antd';
-import { WarningTwoTone } from '@ant-design/icons';
+import {DeleteOutlined, WarningTwoTone} from '@ant-design/icons';
 import moment from 'moment';
 
 const TablaTrabajadoresObservados = ({
     trabajadoresObservados,
-    setTrabajadoresObservados,
     reload,
     setReload,
     usuario,
-    filtro
+    eliminarContrato
 }) => {
     const [showModal, setShowModal] = useState(false);
     const [observaciones, setObservaciones] = useState([]);
-
-    useEffect(() => {
-        axios.get('/api/trabajador/observados')
-            .then(res => {
-                const trabajadores = res.data.data.map(t => {
-                    return {
-                        ...t,
-                        key: t.contrato_id,
-                        apellidos:
-                            t.apellido_paterno + ' ' + t.apellido_materno,
-                        empresa_name: t.empresa_id == 9 ? 'RAPEL' : 'VERFRUT'
-                    };
-                });
-                setTrabajadoresObservados(trabajadores);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, [reload]);
-
 
     const mostrarObservaciones = rut => {
         setShowModal(true);
@@ -103,6 +82,10 @@ const TablaTrabajadoresObservados = ({
             key: 'fecha_inicio'
         },
         {
+            title: 'Grupo',
+            dataIndex: 'grupo',
+        },
+        {
             title: 'Observación',
             dataIndex: 'observacion',
             render: (_, record) => {
@@ -141,15 +124,24 @@ const TablaTrabajadoresObservados = ({
             key: 'acciones',
             render: (_, record) => {
                 return (
-                    <Button
-                        type="primary"
-                        onClick={() =>
-                            habilitarTrabajador(record.rut, record.contrato_id)
-                        }
-                        disabled={usuario.rol !== 'admin'}
-                    >
-                        Habilitar
-                    </Button>
+                    <Button.Group>
+                        <Tooltip title="Habilitar trabajador">
+                            <Button
+                                type="primary"
+                                onClick={() =>
+                                    habilitarTrabajador(record.rut, record.contrato_id)
+                                }
+                                disabled={usuario.rol !== 'admin'}
+                            >
+                                Habilitar
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title="Borrar trabajador">
+                            <Button type="danger" onClick={() => eliminarContrato(record.contrato_id)}>
+                                <DeleteOutlined />
+                            </Button>
+                        </Tooltip>
+                    </Button.Group>
                 );
             },
         },

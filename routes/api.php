@@ -41,7 +41,7 @@ Route::group(['prefix' => 'actualizar-datos'], function() {
 Route::group(['prefix' => 'trabajador'], function() {
     Route::post('/', 'TrabajadorController@create');
     Route::put('/', 'TrabajadorController@get');
-    Route::get('/observados', 'TrabajadorController@getObservados');
+    Route::put('/observados', 'TrabajadorController@getObservados');
     Route::post('/revision', 'TrabajadorController@revision');
     Route::put('/{id}/habilitar', 'TrabajadorController@habilitar');
     Route::get('/test/{rut}', 'TrabajadorController@test');

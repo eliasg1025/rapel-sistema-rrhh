@@ -15,6 +15,7 @@ const TrabajadoresLayout = props => {
     return (
         <Layout>
             <Sider
+                theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
                 onBreakpoint={broken => {
@@ -28,7 +29,7 @@ const TrabajadoresLayout = props => {
                     <img src="/img/logo-grupo-verfrut.png" width="160"/>
                 </div>
                 <br />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']}>
+                <Menu mode="inline" defaultSelectedKeys={['3']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
                         <a href="/">
                             Inicio
@@ -57,7 +58,7 @@ const TrabajadoresLayout = props => {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
+                <Header theme="light" className="site-layout-sub-header-background" style={{ padding: 0 }} />
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         <Trabajadores

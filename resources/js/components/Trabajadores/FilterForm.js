@@ -21,7 +21,8 @@ const FilterForm = props => {
         const abortController = new AbortController();
         const signal = abortController.signal;
         props.setFiltro({ ...props.filtro, signal });
-        getTrabajadores();
+        props.getTrabajadores();
+        props.getTrabajadoresObservados();
 
         return function cleanup() {
             abortController.abort();
@@ -29,59 +30,11 @@ const FilterForm = props => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.reload]);
 
-    const buildTrabajadorDataSource = trabajadores => {
-        const result = [];
-
-        for (let i = 0; i < trabajadores.length; i++) {
-            const trabajador = trabajadores[i];
-
-            result.push({
-                key: i,
-                dni: trabajador.rut,
-                contrato_id: trabajador.contrato_id,
-                nombre: trabajador.nombre,
-                apellidos: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}`,
-                zona_labor: trabajador.zona_labor_name,
-                empresa: trabajador.empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
-                empresa_id: trabajador.empresa_id,
-                grupo: trabajador.grupo,
-                fecha_ingreso: moment(trabajador.fecha_inicio).format(
-                    'DD/MM/YYYY'
-                ),
-            });
-        }
-        return result;
-    };
-
-    const getTrabajadores = () => {
-        axios.put('/api/trabajador', {...props.filtro})
-            .then(res => {
-                console.log(res);
-                if (res.status < 400) {
-                    notification['success']({
-                        message: res.data.message,
-                    });
-                    const data = buildTrabajadorDataSource(res.data.data);
-                    props.setTrabajadores(data);
-                } else {
-                    notification['error']({
-                        message: res.data,
-                    });
-                    console.error(res);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error del servidor',
-                });
-            });
-    };
-
     const handleSubmit = e => {
         console.log('Filtros enviados: ', props.filtro);
         e.preventDefault();
-        getTrabajadores();
+        props.getTrabajadores();
+        props.getTrabajadoresObservados();
     };
 
     const handleChange = e => {

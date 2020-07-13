@@ -22,6 +22,65 @@ const Trabajadores = props => {
     const [loading, setLoading] = useState(false);
     const [reload, setReload] = useState(false);
 
+    const getTrabajadores = () => {
+        axios.put('/api/trabajador', filtro)
+            .then(res => {
+                console.log(res);
+                if (res.status < 400) {
+                    notification['success']({
+                        message: res.data.message,
+                    });
+                    const trabajadores = res.data.data.map((trabajador, i) => {
+                        return {
+                            key: i,
+                            dni: trabajador.rut,
+                            contrato_id: trabajador.contrato_id,
+                            nombre: trabajador.nombre,
+                            apellidos: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}`,
+                            zona_labor: trabajador.zona_labor_name,
+                            empresa: trabajador.empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
+                            empresa_id: trabajador.empresa_id,
+                            grupo: trabajador.grupo,
+                            fecha_ingreso: moment(trabajador.fecha_inicio).format(
+                                'DD/MM/YYYY'
+                            ),
+                        };
+                    });
+                    setTrabajadores(trabajadores);
+                } else {
+                    notification['error']({
+                        message: res.data,
+                    });
+                    console.error(res);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                notification['error']({
+                    message: 'Error del servidor',
+                });
+            });
+    };
+
+    const getTrabajadoresObservados = () => {
+        axios.put('/api/trabajador/observados', filtro)
+            .then(res => {
+                const trabajadores = res.data.data.map(t => {
+                    return {
+                        ...t,
+                        key: t.contrato_id,
+                        apellidos:
+                            t.apellido_paterno + ' ' + t.apellido_materno,
+                        empresa_name: t.empresa_id == 9 ? 'RAPEL' : 'VERFRUT'
+                    };
+                });
+                setTrabajadoresObservados(trabajadores);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
     const generarContrato = async (lista_contratos) => {
         setLoading(true);
         try {
@@ -99,7 +158,8 @@ const Trabajadores = props => {
             <FilterForm
                 filtro={filtro}
                 setFiltro={setFiltro}
-                setTrabajadores={setTrabajadores}
+                getTrabajadores={getTrabajadores}
+                getTrabajadoresObservados={getTrabajadoresObservados}
                 reload={reload}
             />
             <br />
@@ -117,11 +177,10 @@ const Trabajadores = props => {
             <br/>
             <TablaTrabajadoresObservados
                 usuario={usuario}
-                filtro={filtro}
                 trabajadoresObservados={trabajadoresObservados}
-                setTrabajadoresObservados={setTrabajadoresObservados}
                 reload={reload}
                 setReload={setReload}
+                eliminarContrato={eliminarContrato}
             />
         </div>
     );
