@@ -289,17 +289,16 @@ class Trabajador extends Model
 
         $d = array_merge($registrados, $no_registrados);
 
-        try {
-            foreach ($d as &$a) {
+        foreach ($d as &$a) {
+            try {
                 $persona = (new ReniecService())->getPersona($a['rut']);
                 $a['trabajador'] = $persona;
                 $a['trabajador']['empresa_id'] = $a['contrato']['empresa_id'];
+            } catch (\Exception $e) {
+                $a['error'] = $e->getMessage() . ' -- ' . $e->getLine();
             }
-            return $d;
-        } catch (\Exception $e) {
-            return [
-                'errores' => [$e->getMessage()]
-            ];
         }
+
+        return $d;
     }
 }
