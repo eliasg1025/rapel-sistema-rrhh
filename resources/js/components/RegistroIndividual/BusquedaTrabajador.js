@@ -4,7 +4,10 @@ import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 const BusquedaTrabajador = props => {
-    const { trabajador, setTrabajador, loading, setLoading, setAlertas, setContratoActivo, clearFormTrabajador } = props;
+    const {
+        trabajador, setTrabajador, loading, setLoading, setAlertas, setContratoActivo, clearFormTrabajador,
+        mostrarObservaciones
+    } = props;
     const [validForm, setValidForm] = useState(false);
 
     useEffect(() => {
@@ -25,6 +28,8 @@ const BusquedaTrabajador = props => {
                     formatBeforeInsert(res.data.data.trabajador);
                     setAlertas(res.data.data.alertas);
                     setContratoActivo(res.data.data.contrato_activo);
+
+                    mostrarObservaciones(res.data.data);
                 } else {
                     notification['warning']({
                         message: res.data.message,

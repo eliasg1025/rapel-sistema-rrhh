@@ -216,6 +216,20 @@ const RegistroIndividual = props => {
             });
     };
 
+    const mostrarObservaciones = data => {
+        if (data.alertas.length > 0) {
+            notification['warning']({
+                message: 'Este trabajador tiene alertas'
+            });
+        }
+
+        if (data.contrato_activo.length > 0) {
+            notification['warning']({
+                message: 'Este trabajador tiene contrato activo'
+            });
+        }
+    };
+
     return (
         <div className="consulta-trabajadores">
             <h3>Registro / Consulta trabajador</h3>
@@ -241,6 +255,7 @@ const RegistroIndividual = props => {
                 setLoading={setLoading}
                 setAlertas={setAlertas}
                 setContratoActivo={setContratoActivo}
+                mostrarObservaciones={mostrarObservaciones}
             />
             <br />
             <Collapse defaultActiveKey={["1", "2"]}>

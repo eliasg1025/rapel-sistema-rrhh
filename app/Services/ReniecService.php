@@ -48,7 +48,7 @@ class ReniecService
             'nombre' => $data->nombres,
             'apellido_paterno' => $data->paterno,
             'apellido_materno' => $data->materno,
-            'direccion' => strtoupper($data->direccion),
+            'direccion' => strtoupper($data->direccion) . " - " . $data->distrito,
             'fecha_nacimiento' => Carbon::createFromFormat('d/m/Y', $data->fecha_nacimiento)->format('Y-m-d'),
             'sexo' => $data->sexo === '1' ? 'M' : 'F',
             'nacionalidad_id' => 'PE',

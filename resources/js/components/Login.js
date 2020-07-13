@@ -22,18 +22,18 @@ const Login = () => {
                             <form method="POST" action="/login">
                                 <div className="form-group">
                                     <label className="col-sm-3">Usuario</label>
-                                    <div className="col-sm-9">
+                                    <div className="col-sm-12">
                                         <input className="form-control" name="username" />
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label className="col-sm-3">Contraseña</label>
-                                    <div className="col-sm-9">
+                                    <div className="col-sm-12">
                                         <input type="password" className="form-control" name="password" />
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-primary btn-block">
                                         Ingresar
                                     </button>
                                 </div>
