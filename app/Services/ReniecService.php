@@ -32,7 +32,7 @@ class ReniecService
 
     private function formatData($data)
     {
-        $estado = $data->estado_civil == "" ? "S" : $data->estado_civil;
+        $estado = $data->estado_civil == "" ? "SOLTERO" : $data->estado_civil;
         $estado_civil_code = DB::table('estado_civiles')->where('name', $estado)->first()->code;
         $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
         $provincia_id = DB::table('provincias')->where([
