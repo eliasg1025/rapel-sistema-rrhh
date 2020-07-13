@@ -71,6 +71,14 @@ class ContratosService
         try {
             $trabajador = $contrato->trabajador;
 
+            if ($contrato->empresa_id === 9) {
+                $view = 'fichas-ingresos-obreros.rapel.contrato';
+            } else if ($contrato->empresa_id === 14) {
+                $view = 'fichas-ingresos-obreros.verfrut.contrato';
+            } else {
+                throw new \Exception();
+            }
+
             $data = [
                 'trabajador' => $trabajador,
                 'contrato' => $contrato
@@ -78,7 +86,7 @@ class ContratosService
 
             $content = \PDF::setOptions([
                 'images' => true
-            ])->loadView('fichas-ingresos-obreros.rapel.contrato', $data)->output();
+            ])->loadView($view, $data)->output();
 
             $filename = $contrato->fecha_inicio . '/' . time() . '-' . $trabajador->nombre_archivo  .'-CONTRATO.pdf';
             \Storage::disk('public')->put($filename, $content);
