@@ -31,3 +31,6 @@ Route::post('/logout', 'Web\AuthController@logout');
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
 Route::get('/test', 'ContratoController@test');
+
+
+Route::post('/descargar/observados', 'Web\TrabajadorController@descargarObservado');

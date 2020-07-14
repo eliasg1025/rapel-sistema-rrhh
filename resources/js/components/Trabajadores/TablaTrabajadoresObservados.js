@@ -78,7 +78,7 @@ const TablaTrabajadoresObservados = ({
         },
         {
             title: 'Fecha Ingreso',
-            dataIndex: 'fecha_inicio',
+            dataIndex: 'c',
             key: 'fecha_inicio'
         },
         {

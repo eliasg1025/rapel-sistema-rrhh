@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TrabajadoresObservadosExport;
 use App\Services\ReniecService;
 use App\Models\{Contrato, Empresa, Trabajador};
 use Illuminate\Http\Request;

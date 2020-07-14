@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { notification, Modal, message } from 'antd';
+import { notification, Modal, message, Button, Space } from 'antd';
+import { FileExcelFilled } from '@ant-design/icons';
 import moment from 'moment';
 
 import FilterForm from "../components/Trabajadores/FilterForm";
@@ -151,6 +152,38 @@ const Trabajadores = props => {
             })
     };
 
+    const descargarObservados = () => {
+        const data = trabajadoresObservados.map(to => {
+            const contrato_activo = to.observaciones.filter(
+                o => o.contrato_activo === 1
+            );
+            return {
+                'empresa': to.empresa_name,
+                'rut': to.rut,
+                'apellidos': to.apellidos,
+                'nombre': to.nombre,
+                'fecha_ingreso': to.fecha_inicio,
+                'grupo': to.grupo,
+                'contrato_activo': contrato_activo[0].empresa_id === '9' ? 'RAPEL' : 'VERFRUT',
+            }
+        });
+
+        axios({
+            url: '/descargar/observados',
+            data: {data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = 'OBSERVADOS.xlsx'
+                link.click()
+            })
+    };
+
     return (
         <div>
             <h4>Trabajadores</h4>
@@ -173,7 +206,14 @@ const Trabajadores = props => {
             <br/>
             <hr />
             <br/>
-            <h5>Con observación</h5>
+            <div>
+                <Space>
+                    <h5>Con observación</h5>
+                    <button className="btn" onClick={() => descargarObservados()} style={{ color: "#87d068", padding: '0px', marginBottom: '15px ' }}>
+                        <FileExcelFilled />
+                    </button>
+                </Space>
+            </div>
             <br/>
             <TablaTrabajadoresObservados
                 usuario={usuario}
