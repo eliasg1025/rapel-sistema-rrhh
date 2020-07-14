@@ -26,8 +26,14 @@ class ReniecService
     {
         $path = $dni . '/' . $imagenes;
         $response = $this->sendRequest('GET', $path);
-        $result = json_decode($response['content'])->result;
-        return $this->formatData($result);
+
+        $content = json_decode($response['content']);
+        if ($content->success) {
+            $result = $content->result;
+            return $this->formatData($result);
+        }
+
+        return null;
     }
 
     private function formatData($data)

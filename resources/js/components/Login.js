@@ -5,7 +5,7 @@ import { Layout, Card, Form, Input, Button, Spin, notification } from "antd";
 const Login = () => {
     return (
         <Layout className="sign-in">
-            <Layout.Content className="sign-in__content">
+            <Layout.Content className="sign-in__content" style={{ height: "100vh" }}>
                 <h1
                     className="sign-in__content-logo"
                     style={{ padding: "60px 20px" }}
@@ -16,31 +16,31 @@ const Login = () => {
                         width={300}
                     />
                 </h1>
-                <div>
-                    <div className="card" style={{ width: "500px" }}>
-                        <div className="card-body">
-                            <form method="POST" action="/login">
-                                <div className="form-group">
-                                    <label className="col-sm-3">Usuario</label>
-                                    <div className="col-sm-12">
-                                        <input className="form-control" name="username" />
-                                    </div>
+
+                <div className="card" style={{ width: "70%" }}>
+                    <div className="card-body">
+                        <form method="POST" action="/login">
+                            <div className="form-group">
+                                <label className="col-sm-3">Usuario</label>
+                                <div className="col-sm-12">
+                                    <input className="form-control" name="username" />
                                 </div>
-                                <div className="form-group">
-                                    <label className="col-sm-3">Contraseña</label>
-                                    <div className="col-sm-12">
-                                        <input type="password" className="form-control" name="password" />
-                                    </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="col-sm-3">Contraseña</label>
+                                <div className="col-sm-12">
+                                    <input type="password" className="form-control" name="password" />
                                 </div>
-                                <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block">
-                                        Ingresar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div className="form-group">
+                                <button type="submit" className="btn btn-primary btn-block">
+                                    Ingresar
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
             </Layout.Content>
         </Layout>
     );
