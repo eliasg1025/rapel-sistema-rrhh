@@ -21,7 +21,10 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        $request->session()->forget('usuario');
+        $request->session()->regenerate();
+        return redirect('/');
     }
 }
