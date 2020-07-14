@@ -34,11 +34,17 @@ class ReniecService
     {
         $estado = $data->estado_civil == "" ? "SOLTERO" : $data->estado_civil;
         $estado_civil_code = DB::table('estado_civiles')->where('name', $estado)->first()->code;
-        $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
-        $provincia_id = DB::table('provincias')->where([
-            'name' => $data->provincia,
-            'departamento_id' => $departamento_id
-        ])->first()->id;
+
+        if ($data->departamento == "") {
+            $provincia_id = 67; // CALLAO
+        } else {
+            $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
+            $provincia_id = DB::table('provincias')->where([
+                'name' => $data->provincia,
+                'departamento_id' => $departamento_id
+            ])->first()->id;
+        }
+
         $distrito_code = DB::table('distritos')->where([
             'name' => $data->distrito,
             'provincia_id' => $provincia_id,

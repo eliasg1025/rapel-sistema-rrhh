@@ -241,7 +241,7 @@ class Contrato extends Model
                 'Nombre' => $trabajador->nombre,
                 'FechaNacimiento' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
                 'F. Nac. Letras' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
-                'Edad' => '',
+                'Edad' => $trabajador->age,
                 'Sexo' => $trabajador->sexo,
                 'Direccion' => $trabajador->direccion,
                 'DISTRITO' => $trabajador->distrito->name,
@@ -272,35 +272,42 @@ class Contrato extends Model
 
     public static function massiveRecord(array $data=[])
     {
-        try {
-            $registrados = $data['registrados'];
-            $guardados = [];
-            $errores = [];
+        $registrados = $data['registrados'];
+        $guardados = [];
+        $errores = [];
 
-            foreach($registrados as $registrado) {
-                $is_save = self::record($registrado);
-                if ( !$is_save['error'] ) {
-                    array_push($guardados, [
-                        'rut' => $is_save['rut'],
-                        'observado' => $is_save['observado']
-                    ]);
-                } else {
+        foreach($registrados as $registrado) {
+            if ( isset($registrado['error']) ) {
+                array_push($errores, [
+                    'rut' => $registrado['rut'],
+                    'error' => $registrado['error']
+                ]);
+            } else {
+                try {
+                    $is_save = self::record($registrado);
+                    if ( !$is_save['error'] ) {
+                        array_push($guardados, [
+                            'rut' => $is_save['rut'],
+                            'observado' => $is_save['observado']
+                        ]);
+                    } else {
+                        array_push($errores, [
+                            'rut' => $is_save['rut'],
+                            'error' => $is_save['error']
+                        ]);
+                    }
+                } catch (\Exception $e) {
                     array_push($errores, [
-                        'rut' => $is_save['rut'],
-                        'error' => $is_save['error']
+                        'error' => $e->getMessage()
                     ]);
                 }
             }
-
-            return [
-                'guardados' => $guardados,
-                'errores' => $errores
-            ];
-        } catch (\Exception $e) {
-            return [
-                'errores' => [$e->getMessage()]
-            ];
         }
+
+        return [
+            'guardados' => $guardados,
+            'errores' => $errores
+        ];
     }
 
     public static function record(array $data=[])

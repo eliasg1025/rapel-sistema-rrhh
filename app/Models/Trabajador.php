@@ -65,6 +65,11 @@ class Trabajador extends Model
         return $this->apellido_paterno . '-' . $this->apellido_materno . '-' . str_replace(' ', '-', $this->nombre);
     }
 
+    public function getAgeAttribute()
+    {
+        return Carbon::parse($this->fecha_nacimiento)->age;
+    }
+
     /**
      * CRUD static methods
      */

@@ -107,7 +107,7 @@ const DatosTrabajador = props => {
         console.log(date, dateString);
         setTrabajador({
             ...trabajador,
-            fecha_nacimiento: date
+            fecha_nacimiento: dateString
         });
     };
 
@@ -186,6 +186,7 @@ const DatosTrabajador = props => {
                                     trabajador.fecha_nacimiento,
                                     'YYYY-MM-DD'
                                 )}
+                                format={'DD/MM/YYYY'}
                                 onChange={handleChangeDate}
                             />
                             <small>
