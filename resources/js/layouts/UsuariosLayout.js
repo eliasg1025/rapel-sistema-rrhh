@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Layout, Menu } from "antd";
-import { UploadOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
+import {UploadOutlined, UserOutlined, HomeOutlined, LogoutOutlined} from '@ant-design/icons';
 import moment from 'moment';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -54,6 +54,12 @@ const MainLayout = props => {
                         <a href="/registro-masivo">
                             Registro Masivo
                         </a>
+                    </Menu.Item>
+                    <Menu.Item key="6" icon={<LogoutOutlined />} onClick={(e) => document.getElementById("logoutForm").submit()}>
+                        Salir
+                        <div style={{ display: 'hidden' }}>
+                            <form action="/logout" method="POST" id="logoutForm"/>
+                        </div>
                     </Menu.Item>
                 </Menu>
             </Sider>
