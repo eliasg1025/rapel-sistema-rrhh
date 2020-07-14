@@ -52,10 +52,14 @@ const BusquedaTrabajador = props => {
     };
 
     const formatBeforeInsert = _trabajador => {
+        let provincia_id = _trabajador.distrito_id.substring(0, 4);
+        let departamento_id = _trabajador.distrito_id.substring(0, 2);
         setTrabajador({
             ...trabajador,
             rut: _trabajador.rut,
             distrito_id: _trabajador.distrito_id,
+            provincia_id,
+            departamento_id,
             nombre: _trabajador.nombre,
             apellido_paterno:  _trabajador.apellido_paterno,
             apellido_materno:  _trabajador.apellido_materno,
@@ -91,7 +95,7 @@ const BusquedaTrabajador = props => {
                                 rut: e.target.value,
                             });
                         }}
-                    ></Input>
+                    />
                 </Form.Item>
                 <Form.Item>
                     {loading ? (

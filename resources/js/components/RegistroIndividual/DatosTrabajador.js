@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Form, Row, Col, Input, Select, DatePicker, notification } from 'antd'
 import moment from 'moment';
 
@@ -10,6 +10,32 @@ const DatosTrabajador = props => {
         setDepartamentos, setProvincias, setDistritos, setNacionalidades, setTiposVias, setTiposZonas, contrato
     } = props;
     const { Item } = Form;
+
+    const [edad, setEdad] = useState(0);
+    const [validacionEdad, setValidacionEdad] = useState({
+        validateStatus: "error",
+        help: "La edad debe estar en 18 y 55 años"
+    });
+
+    useEffect(() => {
+        const edad = moment().diff(trabajador.fecha_nacimiento, 'years');
+        setEdad(edad);
+    }, [trabajador.fecha_nacimiento]);
+
+    useEffect(() => {
+        if (edad < 18 || edad > 55) {
+            setValidacionEdad({
+                validateStatus: "error",
+                help: "La edad debe estar en 18 y 55 años"
+            });
+            return;
+        }
+
+        setValidacionEdad({
+            validateStatus: "success",
+            help: ""
+        });
+    }, [edad]);
 
     /**
      * Fetching data
@@ -104,7 +130,6 @@ const DatosTrabajador = props => {
     };
 
     const handleChangeDate = (date, dateString) => {
-        console.log(date, dateString);
         setTrabajador({
             ...trabajador,
             fecha_nacimiento: dateString
@@ -146,7 +171,7 @@ const DatosTrabajador = props => {
             <Form {...layout} className="data-form">
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Item label="A. Paterno">
+                        <Item label="A. Paterno" required={true}>
                             <Input
                                 autoComplete="off"
                                 name="apellido_paterno"
@@ -156,7 +181,7 @@ const DatosTrabajador = props => {
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="A. Materno">
+                        <Item label="A. Materno" required={true}>
                             <Input
                                 autoComplete="off"
                                 name="apellido_materno"
@@ -166,7 +191,7 @@ const DatosTrabajador = props => {
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="Nombre">
+                        <Item label="Nombre" required={true}>
                             <Input
                                 autoComplete="off"
                                 name="nombre"
@@ -179,28 +204,28 @@ const DatosTrabajador = props => {
 
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Item label="F. Nacimiento">
+                        <Item
+                            label="F. Nacimiento"
+                            validateStatus={validacionEdad.validateStatus}
+                            help={validacionEdad.help}
+                        >
                             <DatePicker
                                 name="fecha_nacimiento"
                                 value={moment(
                                     trabajador.fecha_nacimiento,
                                     'YYYY-MM-DD'
                                 )}
-                                format={'DD/MM/YYYY'}
                                 onChange={handleChangeDate}
                             />
                             <small>
                                 {trabajador.fecha_nacimiento !== ''
-                                    ? `  ${moment().diff(
-                                        trabajador.fecha_nacimiento,
-                                        'years'
-                                    )} años`
+                                    ? `  ${edad} años`
                                     : ''}
                             </small>
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="Sexo">
+                        <Item label="Sexo" required={true}>
                             <Select
                                 name="sexo"
                                 placeholder="Sexo"
@@ -208,6 +233,7 @@ const DatosTrabajador = props => {
                                     setTrabajador({ ...trabajador, sexo: e });
                                 }}
                                 value={trabajador.sexo}
+                                required={true}
                             >
                                 {sexo.map(option => (
                                     <Select.Option
@@ -221,7 +247,7 @@ const DatosTrabajador = props => {
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="E. Civil">
+                        <Item label="E. Civil" required={true}>
                             <Select
                                 name="estado_civil_id"
                                 placeholder="Estado Civil"
@@ -229,6 +255,7 @@ const DatosTrabajador = props => {
                                     setTrabajador({ ...trabajador, estado_civil_id: e });
                                 }}
                                 value={trabajador.estado_civil_id}
+
                             >
                                 {estado_civil.map(option => (
                                     <Select.Option
@@ -244,7 +271,7 @@ const DatosTrabajador = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Item label="Nacionalidad">
+                        <Item label="Nacionalidad" required={true}>
                             <Select
                                 name="nacionalidad_id"
                                 showSearch
@@ -259,6 +286,7 @@ const DatosTrabajador = props => {
                                     setTrabajador({ ...trabajador, nacionalidad_id: e });
                                 }}
                                 value={trabajador.nacionalidad_id}
+
                             >
                                 {nacionalidades.map(option => (
                                     <Select.Option
@@ -294,7 +322,7 @@ const DatosTrabajador = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Item label="Departamento">
+                        <Item label="Departamento" required={true}>
                             <Select
                                 name="departamento_id"
                                 showSearch
@@ -307,6 +335,7 @@ const DatosTrabajador = props => {
                                 }
                                 onChange={handleChangeDepartamento}
                                 value={trabajador.departamento_id}
+
                             >
                                 {departamentos.map(option => (
                                     <Select.Option
@@ -320,7 +349,7 @@ const DatosTrabajador = props => {
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="Provincia">
+                        <Item label="Provincia" required={true}>
                             <Select
                                 name="provincia_id"
                                 showSearch
@@ -333,6 +362,7 @@ const DatosTrabajador = props => {
                                 }
                                 onChange={handleChangeProvincia}
                                 value={trabajador.provincia_id}
+
                             >
                                 {provincias.map(option => (
                                     <Select.Option
@@ -346,7 +376,7 @@ const DatosTrabajador = props => {
                         </Item>
                     </Col>
                     <Col span={8}>
-                        <Item label="Distrito">
+                        <Item label="Distrito" required={true}>
                             <Select
                                 name="distrito_id"
                                 showSearch
@@ -359,6 +389,7 @@ const DatosTrabajador = props => {
                                 }
                                 onChange={handleChangeDistrito}
                                 value={trabajador.distrito_id}
+
                             >
                                 {distritos.map(option => (
                                     <Select.Option
@@ -454,7 +485,9 @@ const DatosTrabajador = props => {
                 </Row>
                 <Row>
                     <Col span={2}>
-                        Dirección:
+                        <Item required={true}>
+                            Dirección:
+                        </Item>
                     </Col>
                     <Col span={14}>
                         <Item>

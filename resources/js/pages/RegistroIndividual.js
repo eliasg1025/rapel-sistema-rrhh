@@ -171,17 +171,23 @@ const RegistroIndividual = props => {
     };
 
     const handleSubmit = () => {
-        let data = clearData();
-        const contrato = prepareDataContratos(data.contrato);
-        data = {
-            ...data,
-            contrato,
-            rut: data.trabajador.rut,
-            contrato_activo: contratoActivo,
-            alertas,
-        };
-        console.log('Datos del trabajador y el contrato: ', data);
-        registroContrato(data);
+        if (validacionDatosContrato() && validacionDatosTrabajador()) {
+            let data = clearData();
+            const contrato = prepareDataContratos(data.contrato);
+            data = {
+                ...data,
+                contrato,
+                rut: data.trabajador.rut,
+                contrato_activo: contratoActivo,
+                alertas,
+            };
+            console.log('Datos del trabajador y el contrato: ', data);
+            registroContrato(data);
+        } else {
+            notification['warning']({
+                message: 'Verifique los datos del trabajador'
+            });
+        }
     };
 
     const registroContrato = async data => {
@@ -197,7 +203,7 @@ const RegistroIndividual = props => {
 
                    if (res.data.observado) {
                        notification['warning']({
-                           message: `El trabajador fue grabado con unA observación`,
+                           message: `El trabajador fue grabado con una observación`,
                        });
                    }
 
@@ -216,6 +222,36 @@ const RegistroIndividual = props => {
             });
     };
 
+    const validacionDatosTrabajador = () => {
+        return trabajador.apellido_materno !== '' &&
+            trabajador.apellido_paterno !== '' &&
+            trabajador.nombre !== '' &&
+            trabajador.estado_civil_id !== '' &&
+            trabajador.sexo !== '' &&
+            trabajador.nacionalidad_id !== '' &&
+            trabajador.distrito_id !== '' &&
+            trabajador.direccion !== '' &&
+            trabajador.fecha_nacimiento !== moment().format('YYYY-MM-DD').toString()
+    };
+
+    const validacionDatosContrato = () => {
+        return contrato.codigo_bus !== '' &&
+            contrato.grupo !== '' &&
+            contrato.empresa_id !== '' &&
+            contrato.zona_labor_id !== '' &&
+            contrato.fecha_ingreso !== '' &&
+            contrato.cuartel_id !== '' &&
+            contrato.agrupacion_id !== '' &&
+            contrato.regimen_id !== '' &&
+            contrato.actividad_id !== '' &&
+            contrato.labor_id !== '' &&
+            contrato.tipo_contrato_id !== '' &&
+            contrato.oficio_id !== '' &&
+            contrato.troncal_id !== '' &&
+            contrato.ruta_id !== '' &&
+            contrato.tipo_trabajador !== '';
+    };
+
     const mostrarObservaciones = data => {
         if (data.alertas.length > 0) {
             notification['warning']({
@@ -224,8 +260,20 @@ const RegistroIndividual = props => {
         }
 
         if (data.contrato_activo.length > 0) {
+            let empresa_contrato_activo;
+            switch (data.contrato_activo[0].empresa_id) {
+                case '9':
+                    empresa_contrato_activo = 'RAPEL';
+                    break;
+                case '14':
+                    empresa_contrato_activo = 'VERFRUT';
+                    break;
+                default:
+                    empresa_contrato_activo = 'OTRO';
+                    break;
+            }
             notification['warning']({
-                message: 'Este trabajador tiene contrato activo'
+                message: `Este trabajador tiene contrato activo en ${empresa_contrato_activo}`
             });
         }
     };

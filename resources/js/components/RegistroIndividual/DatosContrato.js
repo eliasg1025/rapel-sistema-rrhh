@@ -198,7 +198,7 @@ const DatosContrato = props => {
             <Form {...layout}>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Empresa" initialValue={9}>
+                        <Form.Item label="Empresa" initialValue={9} required={true}>
                             <Select
                                 name="empresa_id"
                                 showSearch
@@ -226,7 +226,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Zona Labor">
+                        <Form.Item label="Zona Labor" required={true}>
                             <Select
                                 name="zona_labor_id"
                                 showSearch
@@ -255,7 +255,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Grupo">
+                        <Form.Item label="Grupo" required={true}>
                             <Input
                                 type="number"
                                 name="grupo"
@@ -267,7 +267,7 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Regimen">
+                        <Form.Item label="Regimen" required={true}>
                             <Select
                                 name="regimen_id"
                                 showSearch
@@ -296,7 +296,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Fecha Ingreso">
+                        <Form.Item label="F. Ingreso" required={true}>
                             <DatePicker
                                 placeholder="Fecha Ingreso"
                                 value={moment(contrato.fecha_ingreso)}
@@ -305,7 +305,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Fecha Termino">
+                        <Form.Item label="F. Termino" required={true}>
                             <DatePicker
                                 placeholder="Fecha Termino"
                                 value={moment(contrato.fecha_termino)}
@@ -321,7 +321,7 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Oficio">
+                        <Form.Item label="Oficio" required={true}>
                             <Select
                                 name="oficio_id"
                                 showSearch
@@ -350,7 +350,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Cuartel">
+                        <Form.Item label="Cuartel" required={true}>
                             <Select
                                 name="cuartel_id"
                                 showSearch
@@ -379,7 +379,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Agrupacion">
+                        <Form.Item label="Agrupación" required={true}>
                             <Select
                                 name="agrupacion_id"
                                 showSearch
@@ -410,7 +410,7 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Actividad">
+                        <Form.Item label="Actividad" required={true}>
                             <Select
                                 name="actividad_id"
                                 showSearch
@@ -439,7 +439,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Labor">
+                        <Form.Item label="Labor" required={true}>
                             <Select
                                 name="labor_id"
                                 showSearch
@@ -468,7 +468,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Tipo Contrato">
+                        <Form.Item label="Tipo Contrato" required={true}>
                             <Select
                                 name="tipo_contrato_id"
                                 showSearch
@@ -499,7 +499,7 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Tipo">
+                        <Form.Item label="Tipo" required={true}>
                             <Select
                                 name="tipo_trabajador"
                                 showSearch
@@ -527,7 +527,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Troncal">
+                        <Form.Item label="Troncal" required={true}>
                             <Select
                                 name="troncal_id"
                                 showSearch
@@ -556,7 +556,7 @@ const DatosContrato = props => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item label="Ruta">
+                        <Form.Item label="Ruta" required={true}>
                             <Select
                                 name="ruta_id"
                                 showSearch
@@ -587,7 +587,7 @@ const DatosContrato = props => {
                 </Row>
                 <Row gutter={16}>
                     <Col span={8}>
-                        <Form.Item label="Codigo Bus">
+                        <Form.Item label="Código Bus">
                             <Input
                                 name="codigo_bus"
                                 value={contrato.codigo_bus}
