@@ -226,6 +226,50 @@ class Contrato extends Model
         }
     }
 
+    public static function _showFichaTrabajador($id)
+    {
+        try {
+            $contrato = Contrato::findOrFail($id);
+            $trabajador = Trabajador::findOrFail($contrato->trabajador_id);
+
+            return [
+                '' => '',
+                'RutTrabajador' => $trabajador->rut,
+                'CodigoTrabajador' => '',
+                'Ap.Paterno' => $trabajador->apellido_paterno,
+                'Ap. Materno' => $trabajador->apellido_materno,
+                'Nombre' => $trabajador->nombre,
+                'FechaNacimiento' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
+                'F. Nac. Letras' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
+                'Edad' => '',
+                'Sexo' => $trabajador->sexo,
+                'Direccion' => $trabajador->direccion,
+                'DISTRITO' => $trabajador->distrito->name,
+                'PROVINCIA' => $trabajador->distrito->provincia->name,
+                'DEPARTAMENTO' => $trabajador->distrito->provincia->departamento->name,
+                'EstadoCivil' => $trabajador->estado_civil->code,
+                'F. Ingreso' => Carbon::parse($contrato->fecha_incio)->format('d/m/Y'),
+                'F. Ingreso Letras' => $contrato->fecha_larga,
+                'F. Término Letras' => $contrato->fecha_larga_termino,
+                'Activo' => '',
+                'Alerta' => '',
+                'GRUPO' => $contrato->group,
+                'CODIGO' => $contrato->codigo_bus,
+                'TRONCAL' => $contrato->troncal->name,
+                'RUTA' => $contrato->ruta->name,
+                'Mes de Desc. Antec. Polic.' => '',
+                'Mes Desc. Letras' => '',
+                'FUNDO' => $contrato->zona_labor->name,
+                'ESTADO CIVIL' => $trabajador->estado_civil->name,
+                'TELEFONO' => '',
+                'EMAIL' => '',
+                'EMPRESA' => $contrato->empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
+            ];
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public static function massiveRecord(array $data=[])
     {
         try {

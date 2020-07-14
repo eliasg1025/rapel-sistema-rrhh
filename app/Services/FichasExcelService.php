@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exports\CargaExcelExport;
 use App\Exports\ContratosExport;
 use App\Models\CargaExcel;
 use App\Models\Contrato;
@@ -14,9 +15,10 @@ class FichasExcelService
     {
         try {
             $exported_data = $this->ordernarDatos($data);
+            $exported_data2 = $this->obtenerDatosFicha($data);
             $fecha_actual = Carbon::parse(Carbon::now())->format('Y-m-d');
             $filename = 'cargas-excel/' . $fecha_actual . '/' . time() . '-INGRESOS.xlsx';
-            $generated = Excel::store(new ContratosExport($exported_data), $filename, 'public');
+            $generated = Excel::store(new CargaExcelExport($exported_data, $exported_data2), $filename, 'public');
 
             if ($generated) {
                 $carga_excel = new CargaExcel();
@@ -92,6 +94,55 @@ class FichasExcelService
         foreach ($data as $d) {
             $contrato_id = $d['contrato_id'];
             $data_contrato = Contrato::_showFila($contrato_id);
+            array_push($exported_data, $data_contrato);
+        }
+
+        return $exported_data;
+    }
+
+    public function obtenerDatosFicha(array $data=[])
+    {
+        $cabeceras = [
+            '',
+            'RutTrabajador',
+            'CodigoTrabajador',
+            'Ap.Paterno',
+            'Ap. Materno',
+            'Nombre',
+            'FechaNacimiento',
+            'F. Nac. Letras',
+            'Edad',
+            'Sexo',
+            'Direccion',
+            'DISTRITO',
+            'PROVINCIA',
+            'DEPARTAMENTO',
+            'EstadoCivil',
+            'F. Ingreso',
+            'F. Ingreso Letras',
+            'F. Término Letras',
+            'Activo',
+            'Alerta',
+            'GRUPO',
+            'CODIGO',
+            'TRONCAL',
+            'RUTA',
+            'Mes de Desc. Antec. Polic.',
+            'Mes Desc. Letras',
+            'FUNDO',
+            'ESTADO CIVIL',
+            'TELEFONO',
+            'EMAIL',
+            'EMPRESA'
+        ];
+
+        $exported_data = [
+            $cabeceras,
+        ];
+
+        foreach ($data as $d) {
+            $contrato_id = $d['contrato_id'];
+            $data_contrato = Contrato::_showFichaTrabajador($contrato_id);
             array_push($exported_data, $data_contrato);
         }
 

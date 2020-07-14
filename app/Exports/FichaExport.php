@@ -1,11 +1,13 @@
 <?php
 
+
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class ContratosExport implements FromArray, WithTitle
+
+class FichaExport implements FromArray, WithTitle
 {
     protected $data;
 
@@ -21,6 +23,6 @@ class ContratosExport implements FromArray, WithTitle
 
     public function title(): string
     {
-        return 'FICHA';
+        return 'Datos del Trabajador';
     }
 }
