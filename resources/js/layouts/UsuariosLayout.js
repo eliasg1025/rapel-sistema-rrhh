@@ -35,11 +35,15 @@ const MainLayout = props => {
                             Inicio
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined />}>
-                        <a href="/usuarios">
-                            Usuarios
-                        </a>
-                    </Menu.Item>
+                    {
+                        usuario.usuario.rol === 'admin' && (
+                            <Menu.Item key="2" icon={<UserOutlined />}>
+                                <a href="/usuarios">
+                                    Usuarios
+                                </a>
+                            </Menu.Item>
+                        )
+                    }
                     <Menu.Item key="3" icon={<UploadOutlined />}>
                         <a href="/trabajadores">
                             Trabajadores

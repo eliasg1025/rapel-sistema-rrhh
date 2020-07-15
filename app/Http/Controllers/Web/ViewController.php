@@ -34,6 +34,10 @@ class ViewController extends Controller
         if (!$request->session()->has('usuario'))
             return redirect('/login');
         $usuario = $request->session()->get('usuario');
+
+        if ($usuario->rol !== 'admin') {
+            return redirect('/');
+        }
         $data = [
             'usuario' => $usuario
         ];

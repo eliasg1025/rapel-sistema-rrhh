@@ -35,11 +35,15 @@ const TrabajadoresLayout = props => {
                             Inicio
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined />}>
-                        <a href="/usuarios">
-                            Usuarios
-                        </a>
-                    </Menu.Item>
+                    {
+                        data.usuario.rol === 'admin' && (
+                            <Menu.Item key="2" icon={<UserOutlined />}>
+                                <a href="/usuarios">
+                                    Usuarios
+                                </a>
+                            </Menu.Item>
+                        )
+                    }
                     <Menu.Item key="3" icon={<UploadOutlined />}>
                         <a href="/trabajadores">
                             Trabajadores
