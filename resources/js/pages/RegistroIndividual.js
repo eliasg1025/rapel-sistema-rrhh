@@ -91,7 +91,9 @@ const RegistroIndividual = props => {
 
     const [loading, setLoading] = useState(false);
     // eslint-disable-next-line no-unused-vars
-    const [dataLoading, setDataLoading] = useState(false);
+
+    const [datosContratoValido, setDatosContratoValido] = useState(false);
+    const [datosTrabajadorValido, setDatosTrabajadorValido] = useState(false);
 
     const clearData = () => {
         let _trabajador = { ...trabajador };
@@ -171,7 +173,7 @@ const RegistroIndividual = props => {
     };
 
     const handleSubmit = () => {
-        if (validacionDatosContrato() && validacionDatosTrabajador()) {
+        if (datosContratoValido && datosTrabajadorValido) {
             let data = clearData();
             const contrato = prepareDataContratos(data.contrato);
             data = {
@@ -222,36 +224,6 @@ const RegistroIndividual = props => {
             });
     };
 
-    const validacionDatosTrabajador = () => {
-        return trabajador.apellido_materno !== '' &&
-            trabajador.apellido_paterno !== '' &&
-            trabajador.nombre !== '' &&
-            trabajador.estado_civil_id !== '' &&
-            trabajador.sexo !== '' &&
-            trabajador.nacionalidad_id !== '' &&
-            trabajador.distrito_id !== '' &&
-            trabajador.direccion !== '' &&
-            trabajador.fecha_nacimiento !== moment().format('YYYY-MM-DD').toString()
-    };
-
-    const validacionDatosContrato = () => {
-        return contrato.codigo_bus !== '' &&
-            contrato.grupo !== '' &&
-            contrato.empresa_id !== '' &&
-            contrato.zona_labor_id !== '' &&
-            contrato.fecha_ingreso !== '' &&
-            contrato.cuartel_id !== '' &&
-            contrato.agrupacion_id !== '' &&
-            contrato.regimen_id !== '' &&
-            contrato.actividad_id !== '' &&
-            contrato.labor_id !== '' &&
-            contrato.tipo_contrato_id !== '' &&
-            contrato.oficio_id !== '' &&
-            contrato.troncal_id !== '' &&
-            contrato.ruta_id !== '' &&
-            contrato.tipo_trabajador !== '';
-    };
-
     const mostrarObservaciones = data => {
         if (data.alertas.length > 0) {
             notification['warning']({
@@ -295,21 +267,11 @@ const RegistroIndividual = props => {
                     </TextLoop>
                 }
             />
-            <BusquedaTrabajador
-                trabajador={trabajador}
-                loading={loading}
-                clearFormTrabajador={clearFormTrabajador}
-                setTrabajador={setTrabajador}
-                setLoading={setLoading}
-                setAlertas={setAlertas}
-                setContratoActivo={setContratoActivo}
-                mostrarObservaciones={mostrarObservaciones}
-            />
-            <br />
             <Collapse defaultActiveKey={["1", "2"]}>
                 <Collapse.Panel header="Datos Contrato" key="1">
                     <DatosContrato
                         contrato={contrato}
+                        setDatosContratoValido={setDatosContratoValido}
                         setContrato={setContrato}
                         regimenes={regimenes}
                         oficios={oficios}
@@ -334,8 +296,19 @@ const RegistroIndividual = props => {
                     />
                 </Collapse.Panel>
                 <Collapse.Panel header="Datos Trabajador" key="2">
+                    <BusquedaTrabajador
+                        trabajador={trabajador}
+                        loading={loading}
+                        clearFormTrabajador={clearFormTrabajador}
+                        setTrabajador={setTrabajador}
+                        setLoading={setLoading}
+                        setAlertas={setAlertas}
+                        setContratoActivo={setContratoActivo}
+                        mostrarObservaciones={mostrarObservaciones}
+                    />
                     <DatosTrabajador
                         trabajador={trabajador}
+                        setDatosTrabajadorValido={setDatosTrabajadorValido}
                         contrato={contrato}
                         setTrabajador={setTrabajador}
                         departamentos={departamentos}
@@ -360,6 +333,7 @@ const RegistroIndividual = props => {
                 size="large"
                 onClick={handleSubmit}
                 block
+                disabled={!(datosContratoValido  && datosTrabajadorValido)}
             >
                 {contratoId !== 0 ? 'Editar Registro' : 'Guardar Registro'}{' '}
                 <UserAddOutlined />

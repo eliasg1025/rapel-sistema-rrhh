@@ -44,7 +44,11 @@ class ReniecService
         if ($data->departamento == "") {
             $provincia_id = 67; // CALLAO
         } else {
-            $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
+            if ($data->departamento == "CUSCO") {
+                $departamento_id = 8;
+            } else {
+                $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
+            }
             $provincia_id = DB::table('provincias')->where([
                 'name' => $data->provincia,
                 'departamento_id' => $departamento_id
@@ -58,9 +62,9 @@ class ReniecService
 
         return [
             'rut' => $data->dni,
-            'nombre' => $data->nombres,
-            'apellido_paterno' => $data->paterno,
-            'apellido_materno' => $data->materno,
+            'nombre' => str_replace("Ãâ", "Ñ", $data->nombres),
+            'apellido_paterno' => str_replace("Ãâ", "Ñ", $data->paterno),
+            'apellido_materno' => str_replace("Ãâ", "Ñ", $data->materno),
             'direccion' => strtoupper($data->direccion) . " - " . $data->distrito,
             'fecha_nacimiento' => Carbon::createFromFormat('d/m/Y', $data->fecha_nacimiento)->format('Y-m-d'),
             'sexo' => $data->sexo === '1' ? 'M' : 'F',

@@ -9,6 +9,7 @@ import DatosContrato from "../components/RegistroIndividual/DatosContrato";
 const RegistroMasivo = props => {
     const [registroReniec, setRegistroReniec] = useState(true);
     const [registrando, setRegistrando] = useState(false);
+    const [datosContratoValido, setDatosContratoValido] = useState(false);
     const [contrato, setContrato] = useState({
         empresa_id: 9,
         zona_labor_id: '',
@@ -277,6 +278,7 @@ const RegistroMasivo = props => {
             <hr />
             <DatosContrato
                 contrato={contrato}
+                setDatosContratoValido={setDatosContratoValido}
                 setContrato={setContrato}
                 regimenes={regimenes}
                 oficios={oficios}

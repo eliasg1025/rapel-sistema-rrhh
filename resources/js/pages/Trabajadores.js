@@ -164,7 +164,7 @@ const Trabajadores = props => {
                 'nombre': to.nombre,
                 'fecha_ingreso': to.fecha_inicio,
                 'grupo': to.grupo,
-                'contrato_activo': contrato_activo[0].empresa_id === '9' ? 'RAPEL' : 'VERFRUT',
+                'contrato_activo': contrato_activo[0].empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
             }
         });
 

@@ -6,6 +6,7 @@ import { sexo, estado_civil } from '../../data/default.json';
 
 const DatosTrabajador = props => {
     const {
+        setDatosTrabajadorValido,
         trabajador, setTrabajador, departamentos, provincias,  distritos, nacionalidades, tiposZonas, tiposVias,
         setDepartamentos, setProvincias, setDistritos, setNacionalidades, setTiposVias, setTiposZonas, contrato
     } = props;
@@ -18,12 +19,10 @@ const DatosTrabajador = props => {
     });
 
     useEffect(() => {
-        const edad = moment().diff(trabajador.fecha_nacimiento, 'years');
+        const edad = moment ().diff(trabajador.fecha_nacimiento, 'years');
         setEdad(edad);
-    }, [trabajador.fecha_nacimiento]);
 
-    useEffect(() => {
-        if (edad < 18 || edad > 55) {
+        if (edad <= 18 || edad >= 55) {
             setValidacionEdad({
                 validateStatus: "error",
                 help: "La edad debe estar en 18 y 55 años"
@@ -35,7 +34,26 @@ const DatosTrabajador = props => {
             validateStatus: "success",
             help: ""
         });
-    }, [edad]);
+    }, [trabajador.fecha_nacimiento]);
+
+    const validacionDatosTrabajador = () => {
+        return trabajador.apellido_materno !== '' &&
+            trabajador.apellido_paterno !== '' &&
+            trabajador.nombre !== '' &&
+            trabajador.estado_civil_id !== '' &&
+            trabajador.sexo !== '' &&
+            trabajador.nacionalidad_id !== '' &&
+            trabajador.distrito_id !== '' &&
+            trabajador.direccion !== ''
+    };
+
+    useEffect(() => {
+        if (validacionDatosTrabajador()) {
+            setDatosTrabajadorValido(true);
+            return;
+        }
+        setDatosTrabajadorValido(false);
+    }, [trabajador]);
 
     /**
      * Fetching data
@@ -176,7 +194,7 @@ const DatosTrabajador = props => {
                                 autoComplete="off"
                                 name="apellido_paterno"
                                 value={trabajador.apellido_paterno}
-                                onChange={handleChangeInput}
+                                onChange={e => setTrabajador({ ...trabajador, apellido_paterno: e.target.value })}
                             />
                         </Item>
                     </Col>
@@ -186,7 +204,7 @@ const DatosTrabajador = props => {
                                 autoComplete="off"
                                 name="apellido_materno"
                                 value={trabajador.apellido_materno}
-                                onChange={handleChangeInput}
+                                onChange={e => setTrabajador({ ...trabajador, apellido_materno: e.target.value })}
                             />
                         </Item>
                     </Col>
@@ -196,7 +214,7 @@ const DatosTrabajador = props => {
                                 autoComplete="off"
                                 name="nombre"
                                 value={trabajador.nombre}
-                                onChange={handleChangeInput}
+                                onChange={e => setTrabajador({ ...trabajador, nombre: e.target.value })}
                             />
                         </Item>
                     </Col>
@@ -495,7 +513,7 @@ const DatosTrabajador = props => {
                                 autoComplete="off"
                                 name="direccion"
                                 value={trabajador.direccion}
-                                onChange={handleChangeInput}
+                                onChange={e => setTrabajador({ ...trabajador, direccion: e.target.value })}
                             />
                         </Item>
                     </Col>

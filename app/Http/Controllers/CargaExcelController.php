@@ -9,7 +9,7 @@ class CargaExcelController extends Controller
 {
     public function get()
     {
-        $cargas = CargaExcel::orderBy('fecha_hora', 'DESC')->get();
+        $cargas = CargaExcel::orderBy('fecha_hora', 'DESC')->limit(30)->get();
         return response()->json($cargas);
     }
 }

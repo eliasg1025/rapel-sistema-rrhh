@@ -6,6 +6,7 @@ import { empresa, tipos_trabajadores } from '../../data/default.json';
 
 const DatosContrato = props => {
     const {
+        setDatosContratoValido,
         contrato, setContrato, regimenes, oficios, actividades, agrupaciones, tiposContratos, cuarteles, labores, zonasLabor,
         rutas, troncales, setRegimenes, setOficios, setActividades, setAgrupaciones, setTiposContratos, setCuarteles, setLabores,
         setZonasLabor, setRutas, setTroncales
@@ -35,6 +36,32 @@ const DatosContrato = props => {
             [name]: value,
         });
     };
+
+    const validacionDatosContrato = () => {
+        return contrato.codigo_bus !== '' &&
+            contrato.grupo !== '' &&
+            contrato.empresa_id !== '' &&
+            contrato.zona_labor_id !== '' &&
+            contrato.fecha_ingreso !== '' &&
+            contrato.cuartel_id !== '' &&
+            contrato.agrupacion_id !== '' &&
+            contrato.regimen_id !== '' &&
+            contrato.actividad_id !== '' &&
+            contrato.labor_id !== '' &&
+            contrato.tipo_contrato_id !== '' &&
+            contrato.oficio_id !== '' &&
+            contrato.troncal_id !== '' &&
+            contrato.ruta_id !== '' &&
+            contrato.tipo_trabajador !== '';
+    };
+
+    useEffect(() => {
+        if (validacionDatosContrato()) {
+            setDatosContratoValido(true);
+        } else {
+            setDatosContratoValido(false);
+        }
+    }, [contrato]);
 
     const setChangeFechaIngreso = (date, dateString) => {
         setContrato({
