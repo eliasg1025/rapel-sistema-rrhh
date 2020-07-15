@@ -98,7 +98,9 @@ const RegistroIndividual = props => {
 
     const clearData = () => {
         let _trabajador = { ...trabajador };
-        _trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento.toString()).format('YYYY-MM-DD').toString();
+        console.log('antes', _trabajador.fecha_nacimiento);
+        _trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
+        console.log('despues', _trabajador.fecha_nacimiento);
         for (const key in _trabajador) {
             if (_trabajador[key] == null) {
                 _trabajador[key] = '';
