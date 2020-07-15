@@ -19,7 +19,7 @@ const DatosTrabajador = props => {
     });
 
     useEffect(() => {
-        const edad = moment ().diff(trabajador.fecha_nacimiento, 'years');
+        const edad = moment().diff(moment(trabajador.fecha_nacimiento, 'DD/MM/YYYY'), 'years');
         setEdad(edad);
 
         if (edad <= 18 || edad >= 55) {
@@ -66,13 +66,11 @@ const DatosTrabajador = props => {
                 setDepartamentos(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 notification['warning']({
                     message: 'Error al obtener los departamentos, vuelva a cargar la página',
                 });
             });
-
-        axios.get
     }, []);
 
     useEffect(() => {
@@ -83,7 +81,7 @@ const DatosTrabajador = props => {
                     setProvincias(res.data.data.provincias);
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log(err.response);
                     notification['warning']({
                         message: 'Error al obtener las provincias, vuelva a cargar la página',
                     });
@@ -99,7 +97,7 @@ const DatosTrabajador = props => {
                     setDistritos(res.data.data.distritos);
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log(err.response);
                     notification['warning']({
                         message: 'Error al obtener las distritos, vuelva a cargar la página',
                     });
@@ -111,7 +109,7 @@ const DatosTrabajador = props => {
         axios.get(`${url}/nacionalidad/${contrato.empresa_id}`)
             .then(res => setNacionalidades(res.data.data))
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 notification['warning']({
                     message: 'Error al obtener las provincias, vuelva a cargar la página',
                 });
@@ -120,7 +118,7 @@ const DatosTrabajador = props => {
         axios.get(`${url}/tipo-zona/${contrato.empresa_id}`)
             .then(res => setTiposZonas(res.data.data))
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 notification['warning']({
                     message: 'Error al obtener las provincias, vuelva a cargar la página',
                 });
@@ -129,7 +127,7 @@ const DatosTrabajador = props => {
         axios.get(`${url}/tipo-via/${contrato.empresa_id}`)
             .then(res => setTiposVias(res.data.data))
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 notification['warning']({
                     message: 'Error al obtener las provincias, vuelva a cargar la página',
                 });
@@ -144,13 +142,6 @@ const DatosTrabajador = props => {
         setTrabajador({
             ...trabajador,
             [e.target.name]: e.target.value
-        });
-    };
-
-    const handleChangeDate = (date, dateString) => {
-        setTrabajador({
-            ...trabajador,
-            fecha_nacimiento: dateString
         });
     };
 
@@ -229,11 +220,12 @@ const DatosTrabajador = props => {
                         >
                             <DatePicker
                                 name="fecha_nacimiento"
-                                value={moment(
+                                value={trabajador.fecha_nacimiento && moment(
                                     trabajador.fecha_nacimiento,
-                                    'YYYY-MM-DD'
+                                    'DD/MM/YYYY'
                                 )}
-                                onChange={handleChangeDate}
+                                format={['DD/MM/YYYY']}
+                                onChange={(date, dateString) => setTrabajador({ ...trabajador, fecha_nacimiento: date })}
                             />
                             <small>
                                 {trabajador.fecha_nacimiento !== ''

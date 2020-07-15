@@ -18,6 +18,7 @@ const RegistroIndividual = props => {
             setTrabajador({
                 ...trabajador,
                 ..._trabajador,
+                fecha_nacimiento: moment(_trabajador.fecha_nacimiento).format('DD/MM/YYYY')
             });
 
             setContrato({
@@ -56,7 +57,7 @@ const RegistroIndividual = props => {
         apellido_materno: '',
         direccion: '',
         telefono: '',
-        fecha_nacimiento: moment().format('YYYY-MM-DD').toString(),
+        fecha_nacimiento: moment(),
         nombre_zona: '',
         nombre_via: '',
         sexo: '',
@@ -97,6 +98,7 @@ const RegistroIndividual = props => {
 
     const clearData = () => {
         let _trabajador = { ...trabajador };
+        _trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento.toString()).format('YYYY-MM-DD').toString();
         for (const key in _trabajador) {
             if (_trabajador[key] == null) {
                 _trabajador[key] = '';
@@ -119,6 +121,7 @@ const RegistroIndividual = props => {
     const clearFormTrabajador = () => {
         setTrabajador({
             ...trabajador,
+            rut: '',
             departamento_id: '20',
             provincia_id: '2001',
             distrito_id: '',
@@ -127,7 +130,7 @@ const RegistroIndividual = props => {
             apellido_materno: '',
             direccion: '',
             telefono: '',
-            fecha_nacimiento: moment().format('YYYY-MM-DD').toString(),
+            fecha_nacimiento: moment(),
             nombre_zona: '',
             nombre_via: '',
             sexo: '',
