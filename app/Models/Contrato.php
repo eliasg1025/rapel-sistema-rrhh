@@ -248,7 +248,7 @@ class Contrato extends Model
                 'PROVINCIA' => $trabajador->distrito->provincia->name,
                 'DEPARTAMENTO' => $trabajador->distrito->provincia->departamento->name,
                 'EstadoCivil' => $trabajador->estado_civil->code,
-                'F. Ingreso' => $contrato->fecha_incio, // Cambiar formato
+                'F. Ingreso' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
                 'F. Ingreso Letras' => $contrato->fecha_larga,
                 'F. Término Letras' => $contrato->fecha_larga_termino,
                 'Activo' => '',
