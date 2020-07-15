@@ -85,7 +85,10 @@ const Trabajadores = props => {
     const generarContrato = async (lista_contratos) => {
         setLoading(true);
         try {
-            const res = await axios.post('/api/contrato/generar-pdf', lista_contratos);
+            const res = await axios.post('/api/contrato/generar-pdf', {
+                usuario,
+                data: lista_contratos
+            });
             console.log('Generar contrato response: ', res);
             if (res.status < 400) {
                 notification['success']({
@@ -106,7 +109,10 @@ const Trabajadores = props => {
     const generarFicha = async (lista_contratos) => {
         setLoading(true);
         try {
-            const res = await axios.post('/api/contrato/generar-ficha-excel', lista_contratos);
+            const res = await axios.post('/api/contrato/generar-ficha-excel', {
+                usuario,
+                data: lista_contratos
+            });
             console.log('Generar contrato response: ', res);
             if (res.status < 400) {
                 notification['success']({

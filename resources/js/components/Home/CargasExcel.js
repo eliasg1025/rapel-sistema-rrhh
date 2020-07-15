@@ -39,6 +39,11 @@ const CargasExcel = () => {
             key: 'name',
         },
         {
+            title: 'Usuario',
+            dataIndex: 'username',
+            key: 'username'
+        },
+        {
             title: 'Enlace',
             key: 'action',
             render: (_, record) => {

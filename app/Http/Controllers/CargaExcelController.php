@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\CargaExcel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CargaExcelController extends Controller
 {
     public function get()
     {
-        $cargas = CargaExcel::orderBy('fecha_hora', 'DESC')->limit(30)->get();
+        $cargas = DB::table('carga_excels as xls')
+            ->select('xls.id', 'xls.fecha_hora', 'xls.link', 'u.username')
+            ->join('usuarios as u', 'u.id', '=', 'xls.usuario_id')
+            ->orderBy('xls.fecha_hora', 'DESC')
+            ->limit(30)->get();
         return response()->json($cargas);
     }
 }

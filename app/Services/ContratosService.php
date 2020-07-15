@@ -13,7 +13,7 @@ use iio\libmergepdf\Merger;
 
 class ContratosService
 {
-    public function generarPdfMasivo(array $data=[])
+    public function generarPdfMasivo($usuario, array $data=[])
     {
         $generados = [];
         $errores = [];
@@ -46,6 +46,7 @@ class ContratosService
             $carga_pdf = new CargaPdf();
             $carga_pdf->fecha_hora = now()->toDateTimeString();
             $carga_pdf->link = $result['link'];
+            $carga_pdf->usuario_id = $usuario['id'];
             if ($carga_pdf->save()) {
                 return [
                     'generados' => $generados,

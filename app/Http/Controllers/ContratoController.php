@@ -62,13 +62,17 @@ class ContratoController extends Controller
 
     public function generarPdf(Request $request)
     {
-        $result = (new ContratosService())->generarPdfMasivo($request->all());
+        $data = $request->get('data');
+        $usuario = $request->get('usuario');
+        $result = (new ContratosService())->generarPdfMasivo($usuario, $data);
         return response()->json($result, 200);
     }
 
     public function generarFichaExcel(Request $request)
     {
-        $result = (new FichasExcelService())->generarExcel($request->all());
+        $data = $request->get('data');
+        $usuario = $request->get('usuario');
+        $result = (new FichasExcelService())->generarExcel($usuario, $data);
         return response()->json($result);
     }
 
