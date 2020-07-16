@@ -24,7 +24,7 @@ Route::get('/trabajadores', 'Web\ViewController@trabajadores');
 Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
 Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
 Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
-
+Route::get('/cuentas', 'Web\ViewController@cuentas');
 
 Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contrato;
+use App\Models\Empresa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ViewController extends Controller
 {
@@ -90,5 +92,20 @@ class ViewController extends Controller
         ];
 
         return view('pages.registro-individual', compact('data'));
+    }
+
+    public function cuentas(Request $request)
+    {
+        if (!$request->session()->has('usuario'))
+            return redirect('/login');
+        $usuario = $request->session()->get('usuario');
+
+        $empresas = DB::table('empresas')->get();
+
+        $data = [
+            'usuario' => $usuario,
+            'empresas' => $empresas
+        ];
+        return view('pages.cuentas', compact('data'));
     }
 }

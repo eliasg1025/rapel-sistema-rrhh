@@ -46,6 +46,8 @@ class ReniecService
         } else {
             if ($data->departamento == "CUSCO") {
                 $departamento_id = 8;
+            } else if ($data->departamento == "AMAZONAS") {
+                $departamento_id = 1;
             } else {
                 $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
             }
