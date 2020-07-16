@@ -96,14 +96,18 @@ const DatosContrato = props => {
 
     useEffect(() => {
         setLoadingRegimenes(true);
-        axios.get(`${url}/regimen`)
-            .then(res => setRegimenes(res.data.data))
-            .catch(err => {
-                console.log(err)
-            })
-            .finally(() => {
-                setLoadingRegimenes(false);
-            })
+        function fetchRegimenes() {
+            axios.get(`${url}/regimen`)
+                .then(res => setRegimenes(res.data.data))
+                .catch(err => {
+                    console.log(err)
+                    fetchRegimenes();
+                })
+                .finally(() => {
+                    setLoadingRegimenes(false);
+                })
+        }
+        fetchRegimenes();
     }, []);
 
     useEffect(() => {
