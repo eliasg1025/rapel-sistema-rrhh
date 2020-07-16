@@ -158,3 +158,13 @@
         }
     }
 }
+
+.login {
+    width: 90%;
+}
+
+@media (min-width: 700px) {
+    .login {
+        width: 500px;
+    }
+}

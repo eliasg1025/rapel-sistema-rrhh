@@ -198,6 +198,7 @@ const TablaTrabajadoresObservados = ({
                 columns={columns}
                 dataSource={trabajadoresObservados}
                 size="small"
+                scroll={{ x: 1300 }}
             />
         </div>
     );

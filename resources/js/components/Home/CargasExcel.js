@@ -57,7 +57,7 @@ const CargasExcel = () => {
         },
     ];
 
-    return <Table columns={columns} dataSource={cargasPdf} size="small"/>;
+    return <Table columns={columns} dataSource={cargasPdf} size="small" scroll={{ x: 1300 }}/>;
 };
 
 export default CargasExcel;

@@ -83,6 +83,7 @@ const BusquedaTrabajador = props => {
                     name="dni"
                     label="DNI"
                     rules={[{ required: true, message: 'Dato obligatorio' }]}
+                    initialValue={trabajador.rut}
                 >
                     <Input
                         autoComplete="off"

@@ -179,6 +179,7 @@ const TablaTrabajadores = props => {
                 rowSelection={rowSelection}
                 columns={getColumns(props.eliminarContrato)}
                 dataSource={props.trabajadores}
+                scroll={{ x: 1300 }}
             />
         </div>
     );

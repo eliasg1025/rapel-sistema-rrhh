@@ -61,20 +61,24 @@ const DatosTrabajador = props => {
     const url = 'http://192.168.60.16/api';
 
     useEffect(() => {
-        axios.get(`${url}/departamento`)
-            .then(res => {
-                setDepartamentos(res.data.data);
-            })
-            .catch(err => {
-                console.log(err.response);
-                notification['warning']({
-                    message: 'Error al obtener los departamentos, vuelva a cargar la página',
+        function fetchDepartamentos() {
+            axios.get(`${url}/departamento`)
+                .then(res => {
+                    setDepartamentos(res.data.data);
+                })
+                .catch(err => {
+                    console.log(err.response);
+                    notification['warning']({
+                        message: 'Error al obtener los departamentos, vuelva a cargar la página',
+                    });
+                    fetchDepartamentos();
                 });
-            });
+        }
+        fetchDepartamentos();
     }, []);
 
     useEffect(() => {
-        if (trabajador.departamento_id !== '') {
+        function fetchProvincias() {
             axios.get(`${url}/departamento/${trabajador.departamento_id}/provincias`)
                 .then(res => {
                     //console.log(res);
@@ -85,12 +89,16 @@ const DatosTrabajador = props => {
                     notification['warning']({
                         message: 'Error al obtener las provincias, vuelva a cargar la página',
                     });
+                    fetchProvincias();
                 });
+        }
+        if (trabajador.departamento_id !== '') {
+            fetchProvincias();
         }
     }, [trabajador.departamento_id]);
 
     useEffect(() => {
-        if (trabajador.provincia_id !== '') {
+        function fetchDistritos() {
             axios.get(`${url}/provincia/${trabajador.provincia_id}/distritos`)
                 .then(res => {
                     //console.log(res);
@@ -101,37 +109,53 @@ const DatosTrabajador = props => {
                     notification['warning']({
                         message: 'Error al obtener las distritos, vuelva a cargar la página',
                     });
+                    fetchDistritos();
                 });
+        }
+        if (trabajador.provincia_id !== '') {
+            fetchDistritos();
         }
     }, [trabajador.provincia_id]);
 
     useEffect(() => {
-        axios.get(`${url}/nacionalidad/${contrato.empresa_id}`)
-            .then(res => setNacionalidades(res.data.data))
-            .catch(err => {
-                console.log(err.response);
-                notification['warning']({
-                    message: 'Error al obtener las provincias, vuelva a cargar la página',
+        function fetchNacionalidades() {
+            axios.get(`${url}/nacionalidad/${contrato.empresa_id}`)
+                .then(res => setNacionalidades(res.data.data))
+                .catch(err => {
+                    console.log(err.response);
+                    notification['warning']({
+                        message: 'Error al obtener las nacionalidades, vuelva a cargar la página',
+                    });
+                    fetchNacionalidades();
                 });
-            });
+        }
+        function fetchTiposZonas() {
+            axios.get(`${url}/tipo-zona/${contrato.empresa_id}`)
+                .then(res => setTiposZonas(res.data.data))
+                .catch(err => {
+                    console.log(err.response);
+                    notification['warning']({
+                        message: 'Error al obtener las tipos zonas, vuelva a cargar la página',
+                    });
+                    fetchTiposZonas();
+                });
+        }
+        function fetchTiposVias() {
+            axios.get(`${url}/tipo-via/${contrato.empresa_id}`)
+                .then(res => setTiposVias(res.data.data))
+                .catch(err => {
+                    console.log(err.response);
+                    notification['warning']({
+                        message: 'Error al obtener las tipos vias, vuelva a cargar la página',
+                    });
+                    fetchTiposVias();
+                });
+        }
 
-        axios.get(`${url}/tipo-zona/${contrato.empresa_id}`)
-            .then(res => setTiposZonas(res.data.data))
-            .catch(err => {
-                console.log(err.response);
-                notification['warning']({
-                    message: 'Error al obtener las provincias, vuelva a cargar la página',
-                });
-            });
+        fetchNacionalidades();
+        fetchTiposZonas();
+        fetchTiposVias();
 
-        axios.get(`${url}/tipo-via/${contrato.empresa_id}`)
-            .then(res => setTiposVias(res.data.data))
-            .catch(err => {
-                console.log(err.response);
-                notification['warning']({
-                    message: 'Error al obtener las provincias, vuelva a cargar la página',
-                });
-            });
     }, [contrato.empresa_id]);
 
     /**
@@ -179,7 +203,7 @@ const DatosTrabajador = props => {
         <Card>
             <Form {...layout} className="data-form">
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="A. Paterno" required={true}>
                             <Input
                                 autoComplete="off"
@@ -189,7 +213,7 @@ const DatosTrabajador = props => {
                             />
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="A. Materno" required={true}>
                             <Input
                                 autoComplete="off"
@@ -199,7 +223,7 @@ const DatosTrabajador = props => {
                             />
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Nombre" required={true}>
                             <Input
                                 autoComplete="off"
@@ -212,7 +236,7 @@ const DatosTrabajador = props => {
                 </Row>
 
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item
                             label="F. Nacimiento"
                             validateStatus={validacionEdad.validateStatus}
@@ -234,7 +258,7 @@ const DatosTrabajador = props => {
                             </small>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Sexo" required={true}>
                             <Select
                                 name="sexo"
@@ -256,7 +280,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="E. Civil" required={true}>
                             <Select
                                 name="estado_civil_id"
@@ -280,7 +304,7 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Nacionalidad" required={true}>
                             <Select
                                 name="nacionalidad_id"
@@ -309,7 +333,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Telefono">
                             <Input
                                 autoComplete="off"
@@ -319,7 +343,7 @@ const DatosTrabajador = props => {
                             />
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Email">
                             <Input
                                 autoComplete="off"
@@ -331,7 +355,7 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Departamento" required={true}>
                             <Select
                                 name="departamento_id"
@@ -358,7 +382,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Provincia" required={true}>
                             <Select
                                 name="provincia_id"
@@ -385,7 +409,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Distrito" required={true}>
                             <Select
                                 name="distrito_id"
@@ -414,7 +438,7 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Zona">
                             <Select
                                 name="tipo_zonas_id"
@@ -442,7 +466,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Nombre">
                             <Input
                                 autoComplete="off"
@@ -454,7 +478,7 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Via">
                             <Select
                                 name="tipo_via_id"
@@ -482,7 +506,7 @@ const DatosTrabajador = props => {
                             </Select>
                         </Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Item label="Nombre">
                             <Input
                                 autoComplete="off"
@@ -494,12 +518,12 @@ const DatosTrabajador = props => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={2}>
+                    <Col md={2} sm={24} xs={24}>
                         <Item required={true}>
                             Dirección:
                         </Item>
                     </Col>
-                    <Col span={14}>
+                    <Col md={14} sm={24} xs={24}>
                         <Item>
                             <Input
                                 autoComplete="off"

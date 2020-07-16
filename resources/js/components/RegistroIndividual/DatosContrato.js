@@ -25,7 +25,7 @@ const DatosContrato = props => {
 
     const layout = {
         labelCol: {
-            span: 6,
+            md: 6,
         },
     };
 
@@ -114,70 +114,88 @@ const DatosContrato = props => {
         setLoadingTiposContratos(true);
         setLoadingTroncales(true);
 
-        axios.get(`${url}/zona-labor/${contrato.empresa_id}`)
-            .then(res => setZonasLabor(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener zonas de labor, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingZonaLabores(false));
-
-        axios.get(`${url}/oficio/${contrato.empresa_id}`)
-            .then(res => setOficios(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener oficios, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingOficios(false));
-
-        axios.get(`${url}/actividad/${contrato.empresa_id}`)
-            .then(res => setActividades(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener actividades, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingActividades(false));
-
-        axios.get(`${url}/agrupacion/${contrato.empresa_id}`)
-            .then(res => setAgrupaciones(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingAgrupaciones(false));
-
-        axios.get(`${url}/tipo-contrato/${contrato.empresa_id}`)
-            .then(res => setTiposContratos(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingTiposContratos(false));
-
-        axios.get(`${url}/troncal/${contrato.empresa_id}`)
-            .then(res => setTroncales(res.data.data))
-            .catch(err => {
-                console.log(err);
-                notification['error']({
-                    message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                });
-            })
-            .finally(() => setLoadingTroncales(false));
-
+        function fetchZonasLabores() {
+            axios.get(`${url}/zona-labor/${contrato.empresa_id}`)
+                .then(res => setZonasLabor(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener zonas de labor, vuelva a cargar la página',
+                    });
+                    fetchZonasLabores();
+                })
+                .finally(() => setLoadingZonaLabores(false));
+        }
+        function fetchOficios() {
+            axios.get(`${url}/oficio/${contrato.empresa_id}`)
+                .then(res => setOficios(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener oficios, vuelva a cargar la página',
+                    });
+                    fetchOficios();
+                })
+                .finally(() => setLoadingOficios(false));
+        }
+        function fetchActividades() {
+            axios.get(`${url}/actividad/${contrato.empresa_id}`)
+                .then(res => setActividades(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener actividades, vuelva a cargar la página',
+                    });
+                    fetchActividades();
+                })
+                .finally(() => setLoadingActividades(false));
+        }
+        function fetchAgrupaciones() {
+            axios.get(`${url}/agrupacion/${contrato.empresa_id}`)
+                .then(res => setAgrupaciones(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
+                    });
+                    fetchAgrupaciones();
+                })
+                .finally(() => setLoadingAgrupaciones(false));
+        }
+        function fetchTiposContratos() {
+            axios.get(`${url}/tipo-contrato/${contrato.empresa_id}`)
+                .then(res => setTiposContratos(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
+                    });
+                    fetchTiposContratos();
+                })
+                .finally(() => setLoadingTiposContratos(false));
+        }
+        function fetchTroncales() {
+            axios.get(`${url}/troncal/${contrato.empresa_id}`)
+                .then(res => setTroncales(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    notification['error']({
+                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
+                    });
+                    fetchTroncales();
+                })
+                .finally(() => setLoadingTroncales(false));
+        }
+        fetchZonasLabores();
+        fetchOficios();
+        fetchActividades();
+        fetchAgrupaciones();
+        fetchTiposContratos();
+        fetchTroncales();
     }, [contrato.empresa_id]);
 
     useEffect(() => {
-        if (contrato.troncal_id !== '') {
+        function fetchRutas() {
             axios.get(`${url}/ruta/${contrato.empresa_id}/${contrato.troncal_id}`)
                 .then(res => setRutas(res.data.data))
                 .catch(err => {
@@ -185,14 +203,18 @@ const DatosContrato = props => {
                     notification['error']({
                         message: 'Error al obtener rutas, vuelva a cargar la página',
                     });
+                    fetchRutas();
                 })
                 .finally(() => setLoadingRutas(false));
+        }
+        if (contrato.troncal_id !== '') {
+            setLoadingRutas(true);
+            fetchRutas();
         }
     }, [contrato.empresa_id, contrato.troncal_id]);
 
     useEffect(() => {
-        if (contrato.zona_labor_id !== '') {
-            setLoadingCuarteles(true);
+        function fetchCuarteles() {
             axios.get(`${url}/cuartel/${contrato.empresa_id}/${contrato.zona_labor_id}`)
                 .then(res => setCuarteles(res.data.data))
                 .catch(err => {
@@ -200,14 +222,18 @@ const DatosContrato = props => {
                     notification['error']({
                         message: 'Error al obtener cuarteles, vuelva a cargar la página',
                     });
+                    fetchCuarteles();
                 })
                 .finally(() => setLoadingCuarteles(false));
+        }
+        if (contrato.zona_labor_id !== '') {
+            setLoadingCuarteles(true);
+            fetchCuarteles();
         }
     }, [contrato.empresa_id, contrato.zona_labor_id]);
 
     useEffect(() => {
-        if (contrato.actividad_id !== '') {
-            setLoadingLabores(true);
+        function fetchActividades() {
             axios.get(`${url}/labor/${contrato.empresa_id}/${contrato.actividad_id}`)
                 .then(res => setLabores(res.data.data))
                 .catch(err => {
@@ -218,13 +244,17 @@ const DatosContrato = props => {
                 })
                 .finally(() => setLoadingLabores(false));
         }
+        if (contrato.actividad_id !== '') {
+            setLoadingLabores(true);
+            fetchActividades();
+        }
     }, [contrato.empresa_id, contrato.actividad_id]);
 
     return (
         <Card>
             <Form {...layout}>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Empresa" initialValue={9} required={true}>
                             <Select
                                 name="empresa_id"
@@ -252,7 +282,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Zona Labor" required={true}>
                             <Select
                                 name="zona_labor_id"
@@ -281,7 +311,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Grupo" required={true}>
                             <Input
                                 type="number"
@@ -293,7 +323,7 @@ const DatosContrato = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Regimen" required={true}>
                             <Select
                                 name="regimen_id"
@@ -322,7 +352,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="F. Ingreso" required={true}>
                             <DatePicker
                                 placeholder="Fecha Ingreso"
@@ -331,7 +361,7 @@ const DatosContrato = props => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="F. Termino" required={true}>
                             <DatePicker
                                 placeholder="Fecha Termino"
@@ -347,7 +377,7 @@ const DatosContrato = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Oficio" required={true}>
                             <Select
                                 name="oficio_id"
@@ -376,7 +406,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Cuartel" required={true}>
                             <Select
                                 name="cuartel_id"
@@ -405,7 +435,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Agrupación" required={true}>
                             <Select
                                 name="agrupacion_id"
@@ -436,7 +466,7 @@ const DatosContrato = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Actividad" required={true}>
                             <Select
                                 name="actividad_id"
@@ -465,7 +495,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Labor" required={true}>
                             <Select
                                 name="labor_id"
@@ -494,7 +524,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Tipo Contrato" required={true}>
                             <Select
                                 name="tipo_contrato_id"
@@ -525,7 +555,7 @@ const DatosContrato = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Tipo" required={true}>
                             <Select
                                 name="tipo_trabajador"
@@ -553,7 +583,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Troncal" required={true}>
                             <Select
                                 name="troncal_id"
@@ -582,7 +612,7 @@ const DatosContrato = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Ruta" required={true}>
                             <Select
                                 name="ruta_id"
@@ -613,7 +643,7 @@ const DatosContrato = props => {
                     </Col>
                 </Row>
                 <Row gutter={16}>
-                    <Col span={8}>
+                    <Col md={8} sm={24} xs={24}>
                         <Form.Item label="Código Bus">
                             <Input
                                 name="codigo_bus"

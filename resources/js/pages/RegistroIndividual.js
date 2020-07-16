@@ -123,7 +123,6 @@ const RegistroIndividual = props => {
     const clearFormTrabajador = () => {
         setTrabajador({
             ...trabajador,
-            rut: '',
             departamento_id: '20',
             provincia_id: '2001',
             distrito_id: '',

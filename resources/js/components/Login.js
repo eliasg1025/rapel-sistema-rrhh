@@ -17,7 +17,7 @@ const Login = () => {
                     />
                 </h1>
 
-                <div className="card" style={{ width: "70%" }}>
+                <div className="card login">
                     <div className="card-body">
                         <form method="POST" action="/login">
                             <div className="form-group">
