@@ -104,7 +104,8 @@ class ViewController extends Controller
 
         $data = [
             'usuario' => $usuario,
-            'empresas' => $empresas
+            'empresas' => $empresas,
+            'cuentas' => []
         ];
         return view('pages.cuentas', compact('data'));
     }

@@ -7,10 +7,10 @@
 @section('contenido')
     <div class="container p-5 text-center">
         <h3>Cuentas</h3>
-        <div class="pt-5">
+        <div class="py-5">
             <form id="form-buscar-trabajador">
                 <div class="row">
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3 col">
                         <input type="text" class="form-control" name="_rut" id="_rut" placeholder="Buscar por RUT">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit">Buscar</button>
@@ -54,7 +54,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-4">
-                        <input type="text" name="numero_cuenta" id="numero_cuenta" placeholder="Cuenta" class="form-control">
+                        <input type="text" name="numero_cuenta" id="numero_cuenta" placeholder="N° Cuenta" class="form-control">
                     </div>
                 </div>
                 <div class="row">
@@ -63,6 +63,35 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <hr />
+        <div class="pt-2">
+            <h4>Registrados del {{ date('d/m/Y') }}</h4>
+            <br />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha de solicitud</th>
+                        <th>DNI</th>
+                        <th>Trabajador</th>
+                        <th>Banco</th>
+                        <th>Cuenta</th>
+                        <th>Empresa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data['cuentas'] as $cuenta)
+                        <tr>
+                            <td>{{ $cuenta->fecha_solicitud }}</td>
+                            <td>{{ $cuenta->trabajador->rut }}</td>
+                            <td>{{ $cuenta->trabajador->name }}</td>
+                            <td>{{ $cuenta->banco->name }}</td>
+                            <td>{{ $cuenta->numero_cuenta }}</td>
+                            <td>{{ $cuentas->empresa->id === 9 ? 'RAPEL' : 'VERFRUT' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -85,7 +114,7 @@
 
             axios.get(`http://192.168.60.16/api/trabajador/${_rut}`)
                 .then(res => {
-                    const { trabajador } = res.data.data;
+                    const { trabajador, message } = res.data.data;
 
                     document.getElementById('rut').value = trabajador.rut;
                     document.getElementById('trabajador').value = `${trabajador.apellido_paterno} ${trabajador.apellido_materno}, ${trabajador.nombre}`;

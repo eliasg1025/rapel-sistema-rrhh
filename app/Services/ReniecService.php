@@ -44,9 +44,9 @@ class ReniecService
         if ($data->departamento == "") {
             $provincia_id = 67; // CALLAO
         } else {
-            if ($data->departamento == "CUSCO") {
+            if ($data->departamento == "CUSCO") { // CUZCO
                 $departamento_id = 8;
-            } elseif ($data->departamento == "AMAZONAS") {
+            } elseif ($data->departamento == "AMAZONAS") { // AMAMZONAS
                 $departamento_id = 1;
             } else {
                 $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
