@@ -49,7 +49,7 @@ const FilterForm = props => {
         <Card>
             <Form onSubmitCapture={handleSubmit}>
                 <Row gutter={24}>
-                    <Col sm={24} xs={24}>
+                    <Col>
                         <Form.Item
                             name="rango_fechas"
                             initialValue={[
@@ -70,7 +70,7 @@ const FilterForm = props => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col sm={24} xs={24}>
+                    <Col>
                         <Form.Item name="empresa" initialValue={9}>
                             <Select
                                 showSearch
@@ -100,7 +100,7 @@ const FilterForm = props => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col sm={24} xs={24}>
+                    <Col>
                         <Form.Item>
                             <Input
                                 type="number"
@@ -110,7 +110,7 @@ const FilterForm = props => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col sm={24} xs={24}>
+                    <Col>
                         <Form.Item>
                             <Input
                                 name="dni"
@@ -119,7 +119,7 @@ const FilterForm = props => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col sm={24} xs={24}>
+                    <Col>
                         <Form.Item>
                             <Input
                                 name="nombre"
@@ -131,7 +131,7 @@ const FilterForm = props => {
                 </Row>
 
                 <Row>
-                    <Col span={24} style={{ textAlign: 'left' }} sm={24} xs={24}>
+                    <Col span={24} style={{ textAlign: 'left' }}>
                         <Button type="primary" htmlType="submit">
                             Buscar
                         </Button>
