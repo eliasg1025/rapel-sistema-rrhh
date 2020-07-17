@@ -63,7 +63,9 @@ Route::group(['prefix' => 'contrato'], function() {
 
 Route::get('/cargas-pdf', 'CargaPdfController@get');
 Route::get('/cargas-excel', 'CargaExcelController@get');
-
+Route::group(['prefix' => 'cuenta'], function() {
+    Route::post('/', 'CuentasController@create');
+});
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');

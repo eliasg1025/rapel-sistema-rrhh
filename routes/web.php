@@ -30,6 +30,7 @@ Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
+Route::get('/ficha/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
 Route::get('/test', 'ContratoController@test');
 
 

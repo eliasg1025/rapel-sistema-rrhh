@@ -19,3 +19,4 @@ require('./layouts/TrabajadoresLayout');
 require('./layouts/UsuariosLayout');
 require('./layouts/RegistroIndividualLayout');
 require('./layouts/RegistroMasivoLayout');
+require('./components/AgregarCuenta');
