@@ -96,7 +96,7 @@ const AgregarCuenta = props => {
             <hr />
             <form id="form-agregar-cuenta" onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="fecha_solicitud" placeholder="Fecha solicitud" disabled
                             className="form-control"
@@ -104,7 +104,7 @@ const AgregarCuenta = props => {
                             onChange={e => setForm({ ...form, fecha_solicitud: e.target.value })}
                         />
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         <select
                             name="empresa_id" className="form-control" required
                             placeholder="Selecciona Empresa"
@@ -113,7 +113,7 @@ const AgregarCuenta = props => {
                             {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                         </select>
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="rut" placeholder="DNI / RUT"
                             className="form-control" disabled required
@@ -122,14 +122,14 @@ const AgregarCuenta = props => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="nombre_trabajador" placeholder="Trabajador"
                             className="form-control" disabled required
                             value={form.nombre_trabajador}
                         />
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         {loadingBancos ? (
                             <div className="spinner-grow text-info"></div>
                         ) : (
@@ -142,7 +142,7 @@ const AgregarCuenta = props => {
                             </select>
                         )}
                     </div>
-                    <div className="form-group col-md-4">
+                    <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="numero_cuenta" placeholder="N° Cuenta"
                             className="form-control"

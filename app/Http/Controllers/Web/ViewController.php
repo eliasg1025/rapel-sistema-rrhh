@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contrato;
 use App\Models\Cuenta;
 use App\Models\Empresa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -102,13 +103,38 @@ class ViewController extends Controller
         $usuario = $request->session()->get('usuario');
 
         $empresas = DB::table('empresas')->get();
-        $cuentas = Cuenta::all();
 
-        $data = [
-            'usuario' => $usuario,
-            'empresas' => $empresas,
-            'cuentas' => $cuentas,
-        ];
-        return view('pages.cuentas', compact('data'));
+        switch ($usuario->cuentas) {
+            case 1:
+                $cuentas = Cuenta::where([
+                    'fecha_solicitud' => Carbon::now()->format('Y-m-d'),
+                    'usuario_id' => $usuario->id
+                ])->get();
+
+                $data = [
+                    'usuario'  => $usuario,
+                    'empresas' => $empresas,
+                    'cuentas'  => $cuentas,
+                ];
+
+                return view('pages.cuentas.user', compact('data'));
+            case 2:
+                $data = [
+                    'usuario'  => $usuario,
+                    'empresas' => $empresas,
+                ];
+
+                return view('pages.cuentas.admin', compact('data'));
+            default:
+                $nombre_modulo = 'cuentas';
+                return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+
+    }
+
+    public function panel(Request $request)
+    {
+
     }
 }
