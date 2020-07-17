@@ -43,7 +43,7 @@ const RegistroMasivo = props => {
     const [troncales, setTroncales] = useState([]);
 
     const ListaErrores = errores => {
-        console.log('ListaErrores: ', errores);
+        //console.log('ListaErrores: ', errores);
         return (
             <ul>
                 {errores.errores.map((err, index) => (
@@ -93,34 +93,13 @@ const RegistroMasivo = props => {
     const revisionConReniec = () => {
         axios.post('http://192.168.60.16/api/trabajador/revision/sin-trabajadores', {trabajadores})
             .then(res => {
-                setLoading(true);
-                axios.post('/api/trabajador/reniec/masiva', res.data)
-                    .then(res => {
-                        if (res.status >= 400)
-                            throw new Error();
-
-                        const trabajadores_enviar = {
-                            registrados: clearData(res.data),
-                        };
-                        setLoading(true);
-                        registroMasivo(trabajadores_enviar);
-                    })
-                    .catch(err => {
-                        console.log(err.response);
-                        notification['error']({
-                            message: 'Algo salió mal al tratar de obtener los datos de la RENIEC',
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    })
+                console.log('Revision trabajadores', res.data);
+                consultaMasivaReniec(res.data);
             })
             .catch(err => {
                 console.log(err.response);
-            })
-            .finally(() => {
                 setLoading(false);
-            });
+            })
     };
 
     const revisionSinReniec = () => {
@@ -177,6 +156,27 @@ const RegistroMasivo = props => {
             .finally(() => {
                 setLoading(false);
             });
+    };
+
+    const consultaMasivaReniec = data => {
+        axios.post('/api/trabajador/reniec/masiva', data)
+            .then(res => {
+                console.log('Consulta masiva RENIEC:', res.data);
+                if (res.status >= 400)
+                    throw new Error();
+
+                const trabajadores_enviar = {
+                    registrados: clearData(res.data),
+                };
+                registroMasivo(trabajadores_enviar);
+            })
+            .catch(err => {
+                console.log(err.response);
+                notification['error']({
+                    message: 'Algo salió mal al tratar de obtener los datos de la RENIEC',
+                });
+                setLoading(false);
+            })
     };
 
     const registroMasivo = trabajadores_enviar => {
@@ -268,10 +268,10 @@ const RegistroMasivo = props => {
     return (
         <div className="registro-masivo">
             <Row>
-                <Col span={4}>
+                <Col span={4} sm={24} xs={24}>
                     <h4>Registro Masivo </h4>
                 </Col>
-                <Col span={20}>
+                <Col span={20} sm={24} xs={24}>
                     Datos de Reniec: <Switch defaultChecked onChange={checked => setRegistroReniec(checked)}/>
                 </Col>
             </Row>

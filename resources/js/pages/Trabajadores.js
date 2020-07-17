@@ -26,7 +26,7 @@ const Trabajadores = props => {
     const getTrabajadores = () => {
         axios.put('/api/trabajador', filtro)
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 if (res.status < 400) {
                     notification['success']({
                         message: res.data.message,

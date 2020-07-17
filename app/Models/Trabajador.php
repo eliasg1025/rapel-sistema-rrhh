@@ -297,8 +297,12 @@ class Trabajador extends Model
         foreach ($d as &$a) {
             try {
                 $persona = (new ReniecService())->getPersona($a['rut']);
-                $a['trabajador'] = $persona;
-                $a['trabajador']['empresa_id'] = $a['contrato']['empresa_id'];
+                if (!is_null($persona)) {
+                    $a['trabajador'] = $persona;
+                    $a['trabajador']['empresa_id'] = $a['contrato']['empresa_id'];
+                } else {
+                    $a['error'] = 'Persona no encontrada';
+                }
             } catch (\Exception $e) {
                 $a['error'] = $e->getMessage() . ' -- ' . $e->getLine();
             }

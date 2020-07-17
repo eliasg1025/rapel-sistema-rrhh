@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Row, Col, message } from 'antd';
 
 import Modal from "../Modal";
@@ -65,6 +65,16 @@ const FormularioTrabajador = ({
     const [form, setForm] = useState({
         rut: '',
     });
+
+    const [valid, setValid] = useState(false);
+
+    useEffect(() => {
+        if (form.rut.length === 8) {
+            setValid(true);
+            return;
+        }
+        setValid(false);
+    }, [form.rut]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -146,7 +156,7 @@ const FormularioTrabajador = ({
         <div>
             <Form onSubmitCapture={handleSubmit}>
                 <Row gutter={16}>
-                    <Col span={16}>
+                    <Col md={16} sm={24} xs={24}>
                         <Form.Item label="RUT:">
                             <Input
                                 autoComplete="off"
@@ -157,9 +167,9 @@ const FormularioTrabajador = ({
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col md={8} xs={24}>
                         <Form.Item>
-                            <Button htmlType="submit" type="primary" block>
+                            <Button htmlType="submit" type="primary" disabled={!valid} block>
                                 Agregar
                             </Button>
                         </Form.Item>
