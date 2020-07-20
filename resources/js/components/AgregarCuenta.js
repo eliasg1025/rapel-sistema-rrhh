@@ -29,7 +29,11 @@ const AgregarCuenta = props => {
             axios.get(`http://192.168.60.16/api/banco/${form.empresa_id}`)
                     .then(res => {
                         const { data, message } = res.data;
-                        setBancos(data);
+                        const bancos_permitidos = ['002', '003', '011', '038', '043'];
+                        const b = data.filter(item => {
+                            return bancos_permitidos.includes(item.cod_equ);
+                        });
+                        setBancos(b);
                         setLoadingBancos(false);
                         setForm({ ...form, banco_id: '59' });
                     })
