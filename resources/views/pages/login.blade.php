@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('home-layout')
 
 @section('titulo')
     Grupo Verfrut

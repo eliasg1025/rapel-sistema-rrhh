@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  * Pages
  */
 Route::get('/', 'Web\ViewController@index');
-Route::get('/panel', 'Web\Controller@panel');
+Route::get('/panel', 'Web\ViewController@panel');
 Route::get('/login', 'Web\ViewController@login');
 Route::get('/usuarios', 'Web\ViewController@usuarios');
 Route::get('/trabajadores', 'Web\ViewController@trabajadores');

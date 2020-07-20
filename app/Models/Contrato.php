@@ -159,7 +159,12 @@ class Contrato extends Model
         }
 
         $name = trim(explode('(', $contrato->zona_labor->name)[0]);
-        return ZonaLabor::where('name', 'like', '%'. $name .'%')->where('name', 'like', '%OBREROS%')->first();
+        $zona_labor = ZonaLabor::where('name', 'like', '%'. $name .'%')->where('name', 'like', '%OBREROS%')->first();
+        if ($zona_labor) {
+            return $zona_labor;
+        } else {
+            return $contrato->zona_labor;
+        }
     }
 
     public static function _showFila($id)

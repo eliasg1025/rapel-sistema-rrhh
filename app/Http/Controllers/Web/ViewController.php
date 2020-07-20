@@ -135,6 +135,13 @@ class ViewController extends Controller
 
     public function panel(Request $request)
     {
-        return $request;
+        if (!$request->session()->has('usuario'))
+            return redirect('/login');
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+        return view('pages.panel', $data);
     }
 }
