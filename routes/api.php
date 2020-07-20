@@ -59,6 +59,7 @@ Route::group(['prefix' => 'contrato'], function() {
     Route::post('/generar-pdf', 'ContratoController@generarPdf');
     Route::post('/generar-ficha-excel', 'ContratoController@generarFichaExcel');
     Route::delete('/{id}', 'ContratoController@delete');
+    Route::get('/test/{contrato}', 'ContratoController@test');
 });
 
 Route::get('/cargas-pdf', 'CargaPdfController@get');

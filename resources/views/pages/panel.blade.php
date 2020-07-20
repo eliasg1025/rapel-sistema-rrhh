@@ -6,4 +6,5 @@
 
 @section('contenido')
     <h1>Panel</h1>
+    <br />
 @endsection

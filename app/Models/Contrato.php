@@ -152,6 +152,16 @@ class Contrato extends Model
         }
     }
 
+    public static function getZonaLaborContrato(Contrato $contrato)
+    {
+        if ($contrato->regimen_id !== 3) {
+            return $contrato->zona_labor;
+        }
+
+        $name = trim(explode('(', $contrato->zona_labor->name)[0]);
+        return ZonaLabor::where('name', 'like', '%'. $name .'%')->where('name', 'like', '%OBREROS%')->first();
+    }
+
     public static function _showFila($id)
     {
         try {
@@ -165,6 +175,7 @@ class Contrato extends Model
             $tipo_via = $trabajador->tipo_via_id ? Via::findOrFail($trabajador->tipo_via_id) : false;
 
             $zona_labor = ZonaLabor::findOrFail($contrato->zona_labor_id);
+            $zona_labor_contrato = Contrato::getZonaLaborContrato($contrato);
             $oficio = Oficio::findOrFail($contrato->oficio_id);
             $cuartel = Cuartel::findOrFail($contrato->cuartel_id);
             $agrupacion = Agrupacion::findOrFail($contrato->agrupacion_id);
@@ -209,7 +220,7 @@ class Contrato extends Model
                 'MIXTA' => 'VALIDAR',
                 'F. AFILIACION' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
                 'REGIMEN' => $contrato->regimen_id,
-                'C. COSTO/ PREDIO' => $zona_labor->code,
+                'C. COSTO/ PREDIO' => $zona_labor_contrato->code,
                 'SC.COSTO/CUARTEL' => $cuartel->code,
                 'AGRUPACION' => $agrupacion->code,
                 'ACTIVIDAD' => $actividad->code,

@@ -135,6 +135,6 @@ class ViewController extends Controller
 
     public function panel(Request $request)
     {
-
+        return $request;
     }
 }

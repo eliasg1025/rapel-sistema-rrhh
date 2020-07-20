@@ -115,8 +115,8 @@ class ContratoController extends Controller
         }
     }
 
-    public function test(Request $request)
+    public function test(Contrato $contrato)
     {
-        //return (new ContratosExport(2))->download('test.xlsx');
+        return Contrato::getZonaLaborContrato($contrato);
     }
 }
