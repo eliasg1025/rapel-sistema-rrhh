@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import moment from 'moment';
 import Swal from 'sweetalert2';
+import {notification} from "antd";
 
 const AgregarCuenta = props => {
     const { usuario, empresas } = JSON.parse(props.props);
@@ -22,7 +23,9 @@ const AgregarCuenta = props => {
 
     useEffect(() => {
         setLoadingBancos(true);
+        let intentos = 0;
         function fetchBancos() {
+            intentos++;
             axios.get(`http://192.168.60.16/api/banco/${form.empresa_id}`)
                     .then(res => {
                         const { data, message } = res.data;
@@ -32,7 +35,13 @@ const AgregarCuenta = props => {
                     })
                     .catch(err => {
                         console.log(err);
-                        fetchBancos();
+                        if (intentos <= 5) {
+                            fetchBancos();
+                        } else {
+                            notification['error']({
+                                message: 'Fallo la conexión con la Base de datos SQL Server'
+                            });
+                        }
                     });
         }
         fetchBancos();
@@ -98,7 +107,7 @@ const AgregarCuenta = props => {
                 <div className="row">
                     <div className="form-group col-md-6 col-lg-4">
                         <input
-                            type="text" name="fecha_solicitud" placeholder="Fecha solicitud" disabled
+                            type="text" name="fecha_solicitud" placeholder="Fecha solicitud" readOnly={true}
                             className="form-control"
                             value={form.fecha_solicitud}
                             onChange={e => setForm({ ...form, fecha_solicitud: e.target.value })}
@@ -116,7 +125,7 @@ const AgregarCuenta = props => {
                     <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="rut" placeholder="DNI / RUT"
-                            className="form-control" disabled required
+                            className="form-control" readOnly={true} required
                             value={form.rut}
                         />
                     </div>
@@ -125,7 +134,7 @@ const AgregarCuenta = props => {
                     <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="nombre_trabajador" placeholder="Trabajador"
-                            className="form-control" disabled required
+                            className="form-control" readOnly={true} required
                             value={form.nombre_trabajador}
                         />
                     </div>

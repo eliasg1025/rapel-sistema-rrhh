@@ -59,12 +59,17 @@ const TrabajadoresLayout = props => {
                             Registro Masivo
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="6" icon={<LogoutOutlined />} onClick={(e) => document.getElementById("logoutForm").submit()}>
-                        Salir
-                        <div style={{ display: 'hidden' }}>
-                            <form action="/logout" method="POST" id="logoutForm"/>
-                        </div>
+                    <Menu.Item key="6" icon={<LogoutOutlined />}>
+                        <a href="/panel">
+                            Salir
+                        </a>
                     </Menu.Item>
+                    {/*
+                    <Menu.Item key="7" icon={<LogoutOutlined />} onClick={(e) => document.getElementById("logoutForm").submit()}>
+                        <a href="/panel">
+                            Regresar a
+                        </a>
+                    </Menu.Item>*/}
                 </Menu>
             </Sider>
             <Layout>

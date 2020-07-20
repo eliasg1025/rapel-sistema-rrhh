@@ -18,13 +18,13 @@ class AuthController extends Controller
         }
 
         $request->session()->put('usuario', $usuario);
-        return redirect('/');
+        return redirect('/panel');
     }
 
     public function logout(Request $request)
     {
         $request->session()->forget('usuario');
         $request->session()->regenerate();
-        return redirect('/');
+        return redirect('/panel');
     }
 }

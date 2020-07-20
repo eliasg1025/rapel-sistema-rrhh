@@ -21,15 +21,25 @@ class ViewController extends Controller
         $data = [
             'usuario' => $usuario
         ];
-        return view('pages.home', compact('data'));
+
+        switch ($usuario->ingresos) {
+            case 2:
+            case 1:
+                $data = [
+                    'usuario'  => $usuario
+                ];
+
+                return view('pages.home', compact('data'));
+            default:
+                $nombre_modulo = 'ingresos';
+                return view('pages.no-acceso', compact('nombre_modulo'));
+        }
     }
 
     public function login(Request $request)
     {
         if ($request->session()->has('usuario'))
             return redirect('/');
-
-        $usuario = $request->session()->get('usuario');
         return view('pages.login');
     }
 
@@ -129,8 +139,6 @@ class ViewController extends Controller
                 $nombre_modulo = 'cuentas';
                 return view('pages.no-acceso', compact('nombre_modulo'));
         }
-
-
     }
 
     public function panel(Request $request)
@@ -142,6 +150,6 @@ class ViewController extends Controller
         $data = [
             'usuario' => $usuario
         ];
-        return view('pages.panel', $data);
+        return view('pages.panel', compact('data'));
     }
 }
