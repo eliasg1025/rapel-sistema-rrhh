@@ -40,7 +40,7 @@ class CuentasExport implements FromArray, WithColumnFormatting
     {
         return [
             'B' => '@',
-            'E' => '@'
+            'E' => '#0'
         ];
     }
 }

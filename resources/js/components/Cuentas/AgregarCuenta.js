@@ -231,7 +231,8 @@ const BuscarTrabajador = props => {
                     setForm({
                         ...form,
                         rut: '',
-                        nombre_trabajador: ''
+                        nombre_trabajador: '',
+                        numero_cuenta: ''
                     });
                     Swal.fire({
                         title: 'No encontrado en el sistema',
