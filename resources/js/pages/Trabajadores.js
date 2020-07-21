@@ -187,7 +187,7 @@ const Trabajadores = props => {
                 link.href = window.URL.createObjectURL(blob)
                 link.download = 'OBSERVADOS.xlsx'
                 link.click()
-            })
+            });
     };
 
     return (

@@ -10,25 +10,33 @@
         <div class="py-5">
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="/" {{ $data['usuario']->ingresos === 0 ? 'disabled' : '' }}>Ingresos</a>
+                    <a class="btn btn-block" href="/" {{ $data['usuario']->ingresos === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-arrow-up"></i> Ingresos
+                    </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="/cuentas" {{ $data['usuario']->cuentas === 0 ? 'disabled' : '' }}>Cuentas</a>
+                    <a class="btn btn-block" href="/cuentas" {{ $data['usuario']->cuentas === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-money-check"></i> Cuentas
+                    </a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="#" {{ $data['usuario']->permisos === 0 ? 'disabled' : '' }}>Formularios de Permisos</a>
+                    <a class="btn btn-block" href="#" {{ $data['usuario']->permisos === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-file-powerpoint"></i> Formularios de Permisos
+                    </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="#" {{ $data['usuario']->afp === 0 ? 'disabled' : '' }}>AFP</a>
+                    <a class="btn btn-block" href="#" {{ $data['usuario']->afp === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-file-alt"></i> AFP
+                    </a>
                 </div>
             </div>
         </div>
         <br />
-        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+        <form class="form-inline m-auto" method="POST" action="/logout">
             @csrf
-            <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Cerrar Sesión</button>
+            <button class="btn btn-outline-danger m-auto" type="submit">Cerrar Sesión</button>
         </form>
         <script>
             console.log(@json($data['usuario']));

@@ -11,6 +11,34 @@ const TablaCuentasAdmin = props => {
         desde: moment().format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString()
     });
+    const [cuentas, setCuentas] = useState([]);
+
+    const handleExportar = () => {
+        const data = cuentas.map(item => {
+            return {
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.rut,
+                trabajador: item.nombre_completo,
+                banco: item.banco_name,
+                cuenta:  item.numero_cuenta.toString(),
+                empresa: item.empresa
+            }
+        });
+        Axios({
+            url: '/descargar/cuentas',
+            data: {data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `CUENTAS-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click()
+            });
+    };
 
     return (
         <>
@@ -29,19 +57,19 @@ const TablaCuentasAdmin = props => {
                     />
                 </div>
                 <div className="col-md-2">
-                    <button className="btn btn-success btn-sm">
-                        <i class="fas fa-file-excel"></i> Exportar
+                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
+                        <i className="fas fa-file-excel"></i> Exportar
                     </button>
                 </div>
             </div>
             <br />
-            <Tabla {...data} {...filtro} />
+            <Tabla {...data} {...filtro} setCuentas={setCuentas} />
         </>
     );
 };
 
 const Tabla = props => {
-    const { usuario, cuentas, desde, hasta } = props;
+    const { usuario, desde, hasta, setCuentas } = props;
 
     const eliminarCuenta = id => {
         Swal.fire({
@@ -160,7 +188,8 @@ const Tabla = props => {
                     setDatatable({
                         ...datatable,
                         rows: cuentas
-                    })
+                    });
+                    setCuentas(cuentas);
                 })
                 .catch(err => {
                     console.log(err);

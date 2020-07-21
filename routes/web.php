@@ -34,4 +34,7 @@ Route::get('/ficha/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
 Route::get('/test', 'ContratoController@test');
 
 
-Route::post('/descargar/observados', 'Web\TrabajadorController@descargarObservado');
+Route::group(['prefix' => 'descargar'], function() {
+    Route::post('/observados', 'Web\TrabajadorController@descargarObservado');
+    Route::post('/cuentas', 'Web\CuentasController@descargarCuentas');
+});

@@ -20,13 +20,19 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/panel">Regresar a Panel <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">{{ $data['usuario']->trabajador->nombre_completo ?? '' }}</span></a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
-                @csrf
-                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Cerrar Sesión</button>
-            </form>
+            @if (Request::path() === 'panel')
+                <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+                    @csrf
+                    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Cerrar Sesión</button>
+                </form>
+            @else
+                <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+                    <a class="btn btn-outline-danger my-2 my-sm-0" href="/panel">Salir</a>
+                </form>
+            @endif
         </div>
     </nav>
     @yield('contenido')

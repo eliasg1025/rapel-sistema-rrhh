@@ -75,11 +75,11 @@ class Cuenta extends Model
                 'c.numero_cuenta',
                 'usuario.username as usuario',
                 'usuario.nombre_completo_usuario as nombre_completo_usuario',
-                'c.empresa_id as empresa'
+                'e.shortname as empresa'
             )
             ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
             ->join('bancos as b', 'b.id', '=', 'c.banco_id')
-            //->join('usuarios as u', 'u.id', '=', 'c.usuario_id')
+            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
             ->joinSub($usuarios, 'usuario', function($join) {
                 $join->on('usuario.id', '=', 'c.usuario_id');
             })
@@ -99,10 +99,11 @@ class Cuenta extends Model
                 DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                 'b.name as banco_name',
                 'c.numero_cuenta',
-                'c.empresa_id as empresa'
+                'e.shortname as empresa'
             )
             ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
             ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
             ->where([
                 'c.fecha_solicitud' => Carbon::now()->format('Y-m-d'),
                 'c.usuario_id' => $usuario_id
