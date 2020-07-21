@@ -67,6 +67,7 @@ Route::get('/cargas-excel', 'CargaExcelController@get');
 Route::group(['prefix' => 'cuenta'], function() {
     Route::post('/', 'CuentasController@create');
     Route::delete('/{id}', 'CuentasController@delete');
+    Route::post('/get-all', 'CuentasController@getAll');
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

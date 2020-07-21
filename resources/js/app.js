@@ -21,3 +21,4 @@ require('./layouts/RegistroIndividualLayout');
 require('./layouts/RegistroMasivoLayout');
 require('./components/Cuentas/AgregarCuenta');
 require('./components/Cuentas/TablaCuentas');
+require('./components/Cuentas/TablaCuentasAdmin');

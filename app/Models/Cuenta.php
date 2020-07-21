@@ -39,6 +39,77 @@ class Cuenta extends Model
         return $this->belongsTo('App\Models\Usuario');
     }
 
+    public static function _getAll(int $usuario_id, array $fechas)
+    {
+        $usuario = Usuario::find($usuario_id);
+
+        if (!$usuario) {
+            return [
+                'error' => true,
+                'message' => 'No se encontró el usuario mencionado'
+            ];
+        }
+
+        if ($usuario->cuentas !== 2) {
+            return [
+                'error' => true,
+                'message' => 'No tiene acceso a esta información'
+            ];
+        }
+
+        $usuarios = DB::table('usuarios as u')
+            ->select(
+                'u.id',
+                'u.username',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+            )
+            ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+        $cuentas = DB::table('cuentas as c')
+            ->select(
+                'c.id as id',
+                'c.fecha_solicitud',
+                't.rut',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                'b.name as banco_name',
+                'c.numero_cuenta',
+                'usuario.username as usuario',
+                'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                'c.empresa_id as empresa'
+            )
+            ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
+            ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+            //->join('usuarios as u', 'u.id', '=', 'c.usuario_id')
+            ->joinSub($usuarios, 'usuario', function($join) {
+                $join->on('usuario.id', '=', 'c.usuario_id');
+            })
+            ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+            ->get();
+
+        return $cuentas;
+    }
+
+    public static function _getByUsuario(int $usuario_id)
+    {
+        return DB::table('cuentas as c')
+            ->select(
+                'c.id as id',
+                'c.fecha_solicitud',
+                't.rut',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                'b.name as banco_name',
+                'c.numero_cuenta',
+                'c.empresa_id as empresa'
+            )
+            ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
+            ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+            ->where([
+                'c.fecha_solicitud' => Carbon::now()->format('Y-m-d'),
+                'c.usuario_id' => $usuario_id
+            ])
+            ->get();
+    }
+
     public static function _create(array $data)
     {
         DB::beginTransaction();

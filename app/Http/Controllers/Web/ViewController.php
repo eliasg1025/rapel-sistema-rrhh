@@ -116,23 +116,7 @@ class ViewController extends Controller
 
         switch ($usuario->cuentas) {
             case 1:
-                $cuentas = DB::table('cuentas as c')
-                    ->select(
-                        'c.id as id',
-                        'c.fecha_solicitud',
-                        't.rut',
-                        DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
-                        'b.name as banco_name',
-                        'c.numero_cuenta',
-                        'c.empresa_id as empresa'
-                    )
-                    ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
-                    ->join('bancos as b', 'b.id', '=', 'c.banco_id')
-                    ->where([
-                        'c.fecha_solicitud' => Carbon::now()->format('Y-m-d'),
-                        'c.usuario_id' => $usuario->id
-                    ])
-                    ->get();
+                $cuentas = Cuenta::_getByUsuario($usuario->id);
 
                 $data = [
                     'usuario'  => $usuario,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuenta;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class CuentasController extends Controller
@@ -10,6 +11,25 @@ class CuentasController extends Controller
     public function create(Request $request)
     {
         $result = Cuenta::_create($request->all());
+        return response()->json($result);
+    }
+
+    public function getAll(Request $request)
+    {
+        $usuario_id = $request->usuario_id;
+        $fechas = [
+            'desde' => $request->desde,
+            'hasta' => $request->hasta,
+        ];
+
+        $result = Cuenta::_getAll($usuario_id, $fechas);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ]);
+        }
+
         return response()->json($result);
     }
 

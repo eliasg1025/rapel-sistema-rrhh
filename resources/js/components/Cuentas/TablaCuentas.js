@@ -4,7 +4,7 @@ import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 
 const TablaCuentas = props => {
-    const { cuentas } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario, cuentas } = JSON.parse(sessionStorage.getItem('data'));
 
     const eliminarCuenta = id => {
         Swal.fire({
