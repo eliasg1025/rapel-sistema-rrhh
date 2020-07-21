@@ -228,7 +228,7 @@ const BuscarTrabajador = props => {
                         nombre_trabajador: ''
                     });
                     Swal.fire({
-                        title: 'No encontrado',
+                        title: 'No encontrado en el sistema',
                         icon: 'warning'
                     });
                 });

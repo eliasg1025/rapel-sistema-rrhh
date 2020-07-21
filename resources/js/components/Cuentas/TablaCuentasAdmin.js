@@ -14,20 +14,28 @@ const TablaCuentasAdmin = props => {
 
     return (
         <>
-            <div>
-                <DatePicker.RangePicker
-                    placeholder={['Desde', 'Hasta']}
-                    onChange={(date, dateString) => {
-                        setFiltro({
-                            ...filtro,
-                            desde: dateString[0],
-                            hasta: dateString[1],
-                        });
-                    }}
-                    //value={[filtro.desde, filtro.hasta]}
-                />
+            <div className="row">
+                <div className="col-md-4">
+                    <DatePicker.RangePicker
+                        placeholder={['Desde', 'Hasta']}
+                        onChange={(date, dateString) => {
+                            setFiltro({
+                                ...filtro,
+                                desde: dateString[0],
+                                hasta: dateString[1],
+                            });
+                        }}
+                        value={[moment(filtro.desde), moment(filtro.hasta)]}
+                    />
+                </div>
+                <div className="col-md-2">
+                    <button className="btn btn-success btn-sm">
+                        <i class="fas fa-file-excel"></i> Exportar
+                    </button>
+                </div>
             </div>
-            <Tabla {...data} {...filtro}/>
+            <br />
+            <Tabla {...data} {...filtro} />
         </>
     );
 };
