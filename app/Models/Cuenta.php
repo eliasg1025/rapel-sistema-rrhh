@@ -34,6 +34,11 @@ class Cuenta extends Model
         return $this->belongsTo('App\Models\Empresa');
     }
 
+    public function usuario()
+    {
+        return $this->belongsTo('App\Models\Usuario');
+    }
+
     public static function _create(array $data)
     {
         DB::beginTransaction();

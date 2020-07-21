@@ -13,6 +13,20 @@ class CuentasController extends Controller
         return response()->json($result);
     }
 
+    public function delete($id)
+    {
+        $cuenta = Cuenta::find($id);
+        if ($cuenta->delete()) {
+            return response()->json([
+                'message' => 'Cuenta borrada correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Error al borrar la cuenta'
+        ], 400);
+    }
+
     public function verFichaCuenta(Cuenta $cuenta)
     {
         try {
