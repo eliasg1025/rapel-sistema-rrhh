@@ -21,6 +21,8 @@ const AgregarCuenta = props => {
         banco_id: '',
     });
 
+    console.log(form);
+
     useEffect(() => {
         setLoadingBancos(true);
         let intentos = 0;
@@ -35,7 +37,7 @@ const AgregarCuenta = props => {
                         });
                         setBancos(b);
                         setLoadingBancos(false);
-                        setForm({ ...form, banco_id: '59' });
+                        setForm({ ...form });
                     })
                     .catch(err => {
                         console.log(err);
@@ -122,6 +124,7 @@ const AgregarCuenta = props => {
                             name="empresa_id" className="form-control" required
                             placeholder="Selecciona Empresa"
                             onChange={e => setForm({ ...form, empresa_id: e.target.value })}
+                            value={form.empresa_id}
                         >
                             {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                         </select>
@@ -209,16 +212,19 @@ const BuscarTrabajador = props => {
                 .then(res => {
                     const { trabajador } = res.data.data;
 
+                    Swal.fire({
+                        title: 'Trabajador encontrado' + (trabajador.banco_id ? ', ya tiene cuenta' : ''),
+                        icon: 'success'
+                    });
                     setForm({
                         ...form,
                         rut: trabajador.rut,
-                        nombre_trabajador: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}, ${trabajador.nombre}`
+                        nombre_trabajador: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}, ${trabajador.nombre}`,
+                        numero_cuenta: trabajador.numero_cuenta,
+                        empresa_id: trabajador.empresa_id,
+                        banco_id: trabajador.banco_id || 59
                     });
                     setTrabajador({ ...clearData(trabajador) });
-                    Swal.fire({
-                        title: 'Trabajador encontrado',
-                        icon: 'success'
-                    });
                 })
                 .catch(err => {
                     console.log(err);
