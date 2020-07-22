@@ -112,6 +112,8 @@ const AgregarCuenta = props => {
                 return numero_cuenta.length === 13 && (
                     parseInt(numero_cuenta.substring(3, numero_cuenta.length - 1)) >= 100000000
                 );
+            case '38':
+                return numero_cuenta.length === 10;
             default:
                 return true;
         }
