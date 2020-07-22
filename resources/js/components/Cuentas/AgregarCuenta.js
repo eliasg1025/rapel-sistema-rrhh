@@ -12,6 +12,7 @@ const AgregarCuenta = props => {
     const [loadingBancos, setLoadingBancos] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [validForm, setValidForm] = useState(false);
+    const [validNumeroCuenta, setValidNumeroCuenta] = useState(false);
     const [form, setForm] = useState({
         rut: '',
         nombre_trabajador: '',
@@ -21,7 +22,6 @@ const AgregarCuenta = props => {
         banco_id: '',
     });
 
-    console.log(form);
 
     useEffect(() => {
         setLoadingBancos(true);
@@ -101,6 +101,28 @@ const AgregarCuenta = props => {
             });
     }
 
+    const validarNumeroCuenta = (numero_cuenta, banco_id) => {
+        switch (banco_id) {
+            case '59':
+                return numero_cuenta.length === 14 && (
+                    numero_cuenta.charAt(numero_cuenta.length - 3) == 0 ||
+                    numero_cuenta.charAt(numero_cuenta.length - 3) == 1
+                );
+            case '03':
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    useEffect(() => {
+        if (form.numero_cuenta) {
+            const valido = validarNumeroCuenta(form.numero_cuenta, form.banco_id);
+            setValidNumeroCuenta(valido);
+            console.log('Banco:', form.banco_id, ', Numero cuenta:', form.numero_cuenta, 'Valido:', valido);
+        }
+    }, [form.numero_cuenta, form.banco_id]);
+
     return (
         <div>
             <BuscarTrabajador
@@ -161,7 +183,7 @@ const AgregarCuenta = props => {
                     <div className="form-group col-md-6 col-lg-4">
                         <input
                             type="text" name="numero_cuenta" placeholder="N° Cuenta"
-                            className="form-control"
+                            className={validNumeroCuenta ? "form-control is-valid" : "form-control is-invalid"}
                             value={form.numero_cuenta}
                             onChange={e => setForm({ ...form, numero_cuenta: e.target.value })}
                         />
@@ -174,7 +196,7 @@ const AgregarCuenta = props => {
                         ) : (
                             <button
                                 type="submit" className="btn btn-primary btn-block"
-                                disabled={!validForm}
+                                disabled={!(validForm && validNumeroCuenta)}
                             >
                                 Registrar
                             </button>
