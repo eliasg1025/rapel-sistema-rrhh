@@ -128,11 +128,9 @@ const AgregarCuenta = props => {
             ...form,
             numero_cuenta: formatNumeroCuenta(form.numero_cuenta)
         });
-        if (form.numero_cuenta) {
-            const valido = validarNumeroCuenta(form.numero_cuenta, form.banco_id);
-            setValidNumeroCuenta(valido);
-            //console.log('Banco:', form.banco_id, ', Numero cuenta:', form.numero_cuenta, 'Valido:', valido);
-        }
+        const valido = validarNumeroCuenta(form.numero_cuenta, form.banco_id);
+        setValidNumeroCuenta(valido);
+        //console.log('Banco:', form.banco_id, ', Numero cuenta:', form.numero_cuenta, 'Valido:', valido);
     }, [form.numero_cuenta, form.banco_id]);
 
     return (
