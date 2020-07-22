@@ -45,9 +45,9 @@ const TablaCuentas = props => {
                         <a className="btn btn-primary btn-sm" href={`/ficha/cambio-cuenta/${item.id}`} target="_blank">
                             <i className="fas fa-search"/>
                         </a>
-                        <button className="btn btn-primary btn-sm">
+                        <a className="btn btn-primary btn-sm" href={`/cuentas/editar/${item.id}`} target="_blank">
                             <i className="far fa-edit" />
-                        </button>
+                        </a>
                         <button className="btn btn-danger btn-sm" onClick={() => eliminarCuenta(item.id)}>
                             <i className="fas fa-trash-alt" />
                         </button>

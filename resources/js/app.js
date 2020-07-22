@@ -4,6 +4,10 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
+import ReactDOM from "react-dom";
+import React from "react";
+import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
+
 require('./bootstrap');
 
 /**
@@ -22,3 +26,10 @@ require('./layouts/RegistroMasivoLayout');
 require('./components/Cuentas/AgregarCuenta');
 require('./components/Cuentas/TablaCuentas');
 require('./components/Cuentas/TablaCuentasAdmin');
+
+
+if (document.getElementById("agregar-cuenta")) {
+    const element = document.getElementById("agregar-cuenta");
+    const props = Object.assign({}, element.dataset)
+    ReactDOM.render(<AgregarCuenta {...props} />, document.getElementById("agregar-cuenta"));
+}

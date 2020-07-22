@@ -108,8 +108,6 @@ class ViewController extends Controller
 
     public function cuentas(Request $request)
     {
-        if (!$request->session()->has('usuario'))
-            return redirect('/login');
         $usuario = $request->session()->get('usuario');
 
         $empresas = DB::table('empresas')->get();
@@ -138,10 +136,56 @@ class ViewController extends Controller
         }
     }
 
+    public function editarCuenta(Request $request, int $id)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $empresas = DB::table('empresas')->get();
+
+        $cuenta = Cuenta::_get($id);
+        switch ($usuario->cuentas) {
+            case 1:
+                $cuentas = Cuenta::_getByUsuario($usuario->id);
+
+                $data = [
+                    'usuario'  => $usuario,
+                    'empresas' => $empresas,
+                    'cuentas'  => $cuentas,
+                    'cuenta'   => $cuenta,
+                ];
+
+                return view('pages.cuentas.user', compact('data'));
+            case 2:
+                $data = [
+                    'usuario'  => $usuario,
+                    'empresas' => $empresas,
+                    'cuenta'   => $cuenta
+                ];
+
+                return view('pages.cuentas.admin', compact('data'));
+            default:
+                return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+    }
+
+    public function afp(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.afp', compact('data'));
+    }
+
+    public function permisos(Request $request)
+    {
+        return view('pages.permisos');
+    }
+
     public function panel(Request $request)
     {
-        if (!$request->session()->has('usuario'))
-            return redirect('/login');
         $usuario = $request->session()->get('usuario');
 
         $data = [

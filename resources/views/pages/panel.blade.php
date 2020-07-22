@@ -22,12 +22,12 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="#" {{ $data['usuario']->permisos === 0 ? 'disabled' : '' }}>
+                    <a class="btn btn-block" href="/formularios-permisos" {{ $data['usuario']->permisos === 0 ? 'disabled' : '' }}>
                         <i class="fas fa-file-powerpoint"></i> Formularios de Permisos
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-block" href="#" {{ $data['usuario']->afp === 0 ? 'disabled' : '' }}>
+                    <a class="btn btn-block" href="/eleccion-afp" {{ $data['usuario']->afp === 0 ? 'disabled' : '' }}>
                         <i class="fas fa-file-alt"></i> AFP
                     </a>
                 </div>

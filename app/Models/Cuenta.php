@@ -116,15 +116,21 @@ class Cuenta extends Model
         DB::beginTransaction();
         try {
             $banco_id = Banco::findOrCreate($data['banco']);
-            $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
 
-            $cuenta = new Cuenta();
-            $cuenta->numero_cuenta = $data['numero_cuenta'];
-            $cuenta->fecha_solicitud = $data['fecha_solicitud'];
-            $cuenta->empresa_id = $data['empresa_id'];
-            $cuenta->usuario_id = $data['usuario_id'];
-            $cuenta->banco_id = $banco_id;
-            $cuenta->trabajador_id = $trabajador_id;
+            if (!isset($data['id'])) {
+                $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
+                $cuenta = new Cuenta();
+                $cuenta->numero_cuenta = $data['numero_cuenta'];
+                $cuenta->fecha_solicitud = $data['fecha_solicitud'];
+                $cuenta->empresa_id = $data['empresa_id'];
+                $cuenta->usuario_id = $data['usuario_id'];
+                $cuenta->banco_id = $banco_id;
+                $cuenta->trabajador_id = $trabajador_id;
+            } else {
+                $cuenta = Cuenta::find($data['id']);
+                $cuenta->banco_id = $banco_id;
+                $cuenta->numero_cuenta = $data['numero_cuenta'];
+            }
 
             if ($cuenta->save()) {
                 DB::commit();
@@ -143,5 +149,23 @@ class Cuenta extends Model
                 'message' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
+    }
+
+    public static function _get($id)
+    {
+        return DB::table('cuentas as c')
+            ->select(
+                'c.id',
+                'c.fecha_solicitud',
+                'c.empresa_id',
+                't.rut',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_trabajador'),
+                'b.code as banco_id',
+                'c.numero_cuenta'
+            )
+            ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
+            ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+            ->where('c.id', $id)
+            ->first();
     }
 }

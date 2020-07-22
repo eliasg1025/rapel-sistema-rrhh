@@ -16,15 +16,21 @@ use Illuminate\Support\Facades\Route;
 /**
  * Pages
  */
-Route::get('/', 'Web\ViewController@index');
-Route::get('/panel', 'Web\ViewController@panel');
 Route::get('/login', 'Web\ViewController@login');
-Route::get('/usuarios', 'Web\ViewController@usuarios');
-Route::get('/trabajadores', 'Web\ViewController@trabajadores');
-Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
-Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
-Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
-Route::get('/cuentas', 'Web\ViewController@cuentas');
+
+Route::group(['middleware' => 'web.auth'], function() {
+    Route::get('/panel', 'Web\ViewController@panel');
+    Route::get('/', 'Web\ViewController@index');
+    Route::get('/usuarios', 'Web\ViewController@usuarios');
+    Route::get('/trabajadores', 'Web\ViewController@trabajadores');
+    Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
+    Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
+    Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
+    Route::get('/cuentas', 'Web\ViewController@cuentas');
+    Route::get('/cuentas/editar/{id}', 'Web\ViewController@editarCuenta');
+    Route::get('/eleccion-afp', 'Web\ViewController@afp');
+    Route::get('/formularios-permisos', 'Web\ViewController@permisos');
+});
 
 Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');
