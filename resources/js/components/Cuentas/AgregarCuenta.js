@@ -109,17 +109,29 @@ const AgregarCuenta = props => {
                     numero_cuenta.charAt(numero_cuenta.length - 3) == 1
                 );
             case '03':
-                return true;
+                return numero_cuenta.length === 13 && (
+                    parseInt(numero_cuenta.substring(3, numero_cuenta.length - 1)) >= 100000000
+                );
             default:
                 return true;
         }
     }
 
+    const formatNumeroCuenta = numero_cuenta => {
+        let result = numero_cuenta.trim();
+        result = result.replace(/[^\d]/g, "");
+        return result;
+    };
+
     useEffect(() => {
+        setForm({
+            ...form,
+            numero_cuenta: formatNumeroCuenta(form.numero_cuenta)
+        });
         if (form.numero_cuenta) {
             const valido = validarNumeroCuenta(form.numero_cuenta, form.banco_id);
             setValidNumeroCuenta(valido);
-            console.log('Banco:', form.banco_id, ', Numero cuenta:', form.numero_cuenta, 'Valido:', valido);
+            //console.log('Banco:', form.banco_id, ', Numero cuenta:', form.numero_cuenta, 'Valido:', valido);
         }
     }, [form.numero_cuenta, form.banco_id]);
 
