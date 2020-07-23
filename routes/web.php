@@ -37,6 +37,7 @@ Route::post('/logout', 'Web\AuthController@logout');
 
 Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
 Route::get('/ficha/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
+Route::get('/ficha/eleccion-afp/{eleccion_afp}', 'EleccionAfpController@verFicha');
 Route::get('/test', 'ContratoController@test');
 
 

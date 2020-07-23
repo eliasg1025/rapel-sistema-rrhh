@@ -7,6 +7,8 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
+import AgregarAfp from "./components/Afp/AgregarAfp";
+import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 
 require('./bootstrap');
 
@@ -16,7 +18,6 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Example');
 require('./components/Login');
 require('./layouts/MainLayout');
 require('./layouts/TrabajadoresLayout');
@@ -26,10 +27,24 @@ require('./layouts/RegistroMasivoLayout');
 require('./components/Cuentas/AgregarCuenta');
 require('./components/Cuentas/TablaCuentas');
 require('./components/Cuentas/TablaCuentasAdmin');
+require('./components/Afp/AgregarAfp');
+require('./components/Permisos/AgregarPermiso');
 
 
 if (document.getElementById("agregar-cuenta")) {
     const element = document.getElementById("agregar-cuenta");
     const props = Object.assign({}, element.dataset)
     ReactDOM.render(<AgregarCuenta {...props} />, document.getElementById("agregar-cuenta"));
+}
+
+if (document.getElementById("agregar-afp")) {
+    const element = document.getElementById("agregar-afp");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<AgregarAfp {...props} />, document.getElementById("agregar-afp"));
+}
+
+if (document.getElementById("agregar-permiso")) {
+    const element = document.getElementById("agregar-permiso");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<AgregarPermiso {...props} />, document.getElementById("agregar-permiso"));
 }

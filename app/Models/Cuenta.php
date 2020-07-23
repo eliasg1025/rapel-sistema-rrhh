@@ -128,6 +128,7 @@ class Cuenta extends Model
                 $cuenta->trabajador_id = $trabajador_id;
             } else {
                 $cuenta = Cuenta::find($data['id']);
+                $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->banco_id = $banco_id;
                 $cuenta->numero_cuenta = $data['numero_cuenta'];
             }

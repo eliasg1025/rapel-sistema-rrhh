@@ -32,6 +32,8 @@ Route::group(['prefix' => 'usuario'], function() {
     Route::put('/{usuario}', 'UserController@update');
 });
 
+Route::get('/empresa', 'EmpresasController@all');
+
 Route::group(['prefix' => 'actualizar-datos'], function() {
     Route::post('/por-empresa', 'ActualizarController@porEmpresa');
     Route::post('/por-empresa-2', 'ActualizarController@porEmpresa2');
@@ -64,10 +66,15 @@ Route::group(['prefix' => 'contrato'], function() {
 
 Route::get('/cargas-pdf', 'CargaPdfController@get');
 Route::get('/cargas-excel', 'CargaExcelController@get');
+
 Route::group(['prefix' => 'cuenta'], function() {
     Route::post('/', 'CuentasController@create');
     Route::delete('/{id}', 'CuentasController@delete');
     Route::post('/get-all', 'CuentasController@getAll');
+});
+
+Route::group(['prefix' => 'eleccion-afp'], function() {
+    Route::post('/', 'EleccionAfpController@create');
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

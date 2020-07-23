@@ -8,10 +8,9 @@
     <div class="container p-5 text-center">
         <h3>Elección de Sistema Pensionario</h3>
         <div class="py-5">
+            <div id="agregar-afp"></div>
             <script>
-                const data = @json($data);
-                console.log(data);
-                sessionStorage.setItem('data', JSON.stringify(data) );
+                sessionStorage.setItem('data', JSON.stringify(@json($data)) );
             </script>
         </div>
     </div>

@@ -181,7 +181,13 @@ class ViewController extends Controller
 
     public function permisos(Request $request)
     {
-        return view('pages.permisos');
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.permisos', compact('data'));
     }
 
     public function panel(Request $request)
