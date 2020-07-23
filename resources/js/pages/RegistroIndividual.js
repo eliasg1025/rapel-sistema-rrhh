@@ -161,9 +161,11 @@ const RegistroIndividual = props => {
         const oficio = oficios.filter(e => e.id == contrato.oficio_id)[0];
         const troncal = troncales.filter(e => e.id == contrato.troncal_id)[0];
         const ruta = rutas.filter(e => e.id == contrato.ruta_id)[0];
+        const zona_labor = zonasLabor.filter(e => e.id == contrato.zona_labor_id)[0];
 
         return {
             ...contrato,
+            zona_labor,
             regimen,
             cuartel,
             agrupacion,

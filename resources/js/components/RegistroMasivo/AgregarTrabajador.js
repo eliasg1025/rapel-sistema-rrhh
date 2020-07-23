@@ -6,7 +6,7 @@ import Modal from "../Modal";
 const AgregarTrabajador = props => {
     const {
         form, registrando, trabajadores, setTrabajadores, regimenes, oficios, actividades, agrupaciones, tiposContratos,
-        cuarteles, labores, rutas, troncales
+        cuarteles, labores, rutas, troncales, zonasLabor
     } = props;
     const [isVisibleModal, setIsVisibleModal] = useState(false);
 
@@ -42,6 +42,7 @@ const AgregarTrabajador = props => {
                     labores={labores}
                     rutas={rutas}
                     troncales={troncales}
+                    zonasLabor={zonasLabor}
                 />
             </Modal>
         </div>
@@ -60,7 +61,8 @@ const FormularioTrabajador = ({
     cuarteles,
     labores,
     rutas,
-    troncales
+    troncales,
+    zonasLabor
 }) => {
     const [form, setForm] = useState({
         rut: '',
@@ -120,6 +122,7 @@ const FormularioTrabajador = ({
         let oficio = oficios.filter(e => e.id == formRegistroMasivo.oficio_id)[0];
         let ruta = rutas.filter(e => e.id === formRegistroMasivo.ruta_id)[0];
         let troncal = troncales.filter(e => e.id == formRegistroMasivo.troncal_id)[0];
+        let zona_labor = zonasLabor.filter(e => e.id == formRegistroMasivo.zona_labor_id)[0];
 
         _trabajadores.push({
             key: form.rut,
@@ -130,6 +133,7 @@ const FormularioTrabajador = ({
             grupo: formRegistroMasivo.grupo,
             fecha_ingreso: formRegistroMasivo.fecha_ingreso,
             fecha_termino: formRegistroMasivo.fecha_termino,
+            zona_labor,
             regimen,
             cuartel,
             agrupacion,

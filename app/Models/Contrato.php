@@ -332,17 +332,19 @@ class Contrato extends Model
         try {
             $contrato_data = $data['contrato'];
 
+            /*
             $zona_labor = ZonaLabor::where([
                 'code' => $contrato_data['zona_labor_id'],
                 'empresa_id' => $contrato_data['empresa_id']
-            ])->first();
+            ])->first();*/
 
             $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
+            $zona_labor_id = ZonaLabor::findOrCreate($contrato_data['zona_labor']);
             $oficio_id = Oficio::findOrCreate($contrato_data['oficio']);
             $regimen_id = Regimen::findOrCreate($contrato_data['regimen']);
             $actividad_id = Actividad::findOrCreate($contrato_data['actividad']);
             $agrupacion_id = Agrupacion::findOrCreate($contrato_data['agrupacion']);
-            $cuartel_id = Cuartel::findOrCreate($contrato_data['cuartel'], $zona_labor->id);
+            $cuartel_id = Cuartel::findOrCreate($contrato_data['cuartel'], $zona_labor_id);
             $tipo_contrato_id = TipoContrato::findOrCreate($contrato_data['tipo_contrato']);
             $labor_id = Labor::findOrCreate($contrato_data['labor'], $actividad_id);
             $troncal_id = Troncal::findOrCreate($contrato_data['troncal']);
@@ -415,7 +417,7 @@ class Contrato extends Model
             $contrato->group = $contrato_data['grupo'];
             $contrato->codigo_bus = $contrato_data['codigo_bus'] ?? null;
             $contrato->tipo_trabajador = $contrato_data['tipo_trabajador'];
-            $contrato->zona_labor_id = $zona_labor->id;
+            $contrato->zona_labor_id = $zona_labor_id;
             $contrato->trabajador_id = $trabajador_id;
             $contrato->oficio_id = $oficio_id;
             $contrato->regimen_id = $regimen_id;

@@ -343,6 +343,7 @@ const RegistroMasivo = props => {
                 labores={labores}
                 rutas={rutas}
                 troncales={troncales}
+                zonasLabor={zonasLabor}
             />
             <br />
             {errores.length > 0 ? (
