@@ -62,27 +62,15 @@ const DatosFormularioPermiso = ({
                 </div>
             </div>
             <div className="row">
-                <div className="form-group col-xs-6 col-sm-6 col-md-3 col-lg-2">
+                <div className="form-group col-md-6 col-lg-4">
                     <input
-                        type="date" name="fecha_salida" placeholder="Fecha Salida"
+                        type="datetime-local" name="fecha_hora_salida" placeholder="Fecha Salida"
                         className="form-control"
                     />
                 </div>
-                <div className="form-group col-xs-6 col-sm-6 col-md-3 col-lg-2">
+                <div className="form-group col-md-6 col-lg-4">
                     <input
-                        type="date" name="fecha_salida" placeholder="Fecha Salida"
-                        className="form-control"
-                    />
-                </div>
-                <div className="form-group col-xs-6 col-sm-6 col-md-3 col-lg-2">
-                    <input
-                        type="time" name="hora_salida" placeholder="Hora Salida"
-                        className="form-control"
-                    />
-                </div>
-                <div className="form-group col-xs-6 col-sm-6 col-md-3 col-lg-2">
-                    <input
-                        type="time" name="hora_salida" placeholder="Hora Salida"
+                        type="datetime-local" name="fecha_hora_regreso" placeholder="Fecha Regreso"
                         className="form-control"
                     />
                 </div>
@@ -109,6 +97,20 @@ const DatosFormularioPermiso = ({
                     >
                         {[].map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                     </select>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    {loading ? (
+                        <div className="spinner-grow text-info"></div>
+                    ) : (
+                        <button
+                            type="submit" className="btn btn-primary btn-block"
+                            disabled={validForm}
+                        >
+                            Registrar
+                        </button>
+                    )}
                 </div>
             </div>
         </form>

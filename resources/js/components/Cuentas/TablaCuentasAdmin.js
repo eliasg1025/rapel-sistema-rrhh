@@ -21,7 +21,8 @@ const TablaCuentasAdmin = props => {
                 trabajador: item.nombre_completo,
                 banco: item.banco_name,
                 cuenta:  item.numero_cuenta.toString(),
-                empresa: item.empresa
+                empresa: item.empresa,
+                usuario: item.nombre_completo_usuario
             }
         });
         Axios({

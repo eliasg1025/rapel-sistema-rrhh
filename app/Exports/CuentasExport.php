@@ -28,7 +28,8 @@ class CuentasExport implements FromArray, WithColumnFormatting
             'TRABAJADOR',
             'BANCO',
             'CUENTA',
-            'EMPRESA'
+            'EMPRESA',
+            'SUBIDO POR'
         ];
         return [
             $cabeceras,
@@ -39,7 +40,7 @@ class CuentasExport implements FromArray, WithColumnFormatting
     public function columnFormats(): array
     {
         return [
-            'B' => '@',
+            'B' => '#0',
             'E' => '#0'
         ];
     }
