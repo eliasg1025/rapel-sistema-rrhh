@@ -13,7 +13,7 @@ const BuscarTrabajador = ({
         e.preventDefault();
 
         function fetchTrabajador(cb) {
-            Axios.get(`http://192.168.60.16/api/trabajador/${rut}`)
+            Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info`)
                 .then(res => {
                     const { contrato_activo, trabajador } = res.data.data;
                     //console.log(trabajador, contrato_activo);
