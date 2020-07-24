@@ -12,8 +12,6 @@ const TablaCuentasAdmin = props => {
         hasta: moment().format('YYYY-MM-DD').toString()
     });
     const [cuentas, setCuentas] = useState([]);
-    const [cuentaEditar, setCuentaEditar] = useState({});
-    const [isVisible, setIsVisible] = useState(false);
 
     const handleExportar = () => {
         const data = cuentas.map(item => {

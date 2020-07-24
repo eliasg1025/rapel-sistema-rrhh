@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Contrato;
 use App\Models\Cuenta;
+use App\Models\EleccionAfp;
 use App\Models\Empresa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -164,6 +165,7 @@ class ViewController extends Controller
 
                 return view('pages.cuentas.admin', compact('data'));
             default:
+                $nombre_modulo = 'cuentas';
                 return view('pages.no-acceso', compact('nombre_modulo'));
         }
     }
@@ -175,6 +177,15 @@ class ViewController extends Controller
         $data = [
             'usuario' => $usuario
         ];
+
+        switch ($usuario->afp) {
+            case 1:
+            case 2:
+                return view('pages.afp', compact('data'));
+            default:
+                $nombre_modulo = 'elección de afp';
+                return view('pages.no-acceso', compact('nombre_modulo'));
+        }
 
         return view('pages.afp', compact('data'));
     }

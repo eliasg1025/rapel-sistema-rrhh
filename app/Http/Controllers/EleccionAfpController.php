@@ -13,6 +13,30 @@ class EleccionAfpController extends Controller
         return response()->json($result);
     }
 
+    public function get(Request $request)
+    {
+        return response()->json([]);
+    }
+
+    public function getAll(Request $request)
+    {
+        $usuario_id = $request->usuario_id;
+        $fechas = [
+            'desde' => $request->desde,
+            'hasta' => $request->hasta,
+        ];
+
+        $result = EleccionAfp::_getAll($usuario_id, $fechas);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ]);
+        }
+
+        return response()->json($result);
+    }
+
     public function verFicha(EleccionAfp $eleccion_afp)
     {
         try {

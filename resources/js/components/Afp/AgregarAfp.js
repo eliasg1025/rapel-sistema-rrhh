@@ -4,6 +4,7 @@ import moment from 'moment';
 import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosAfp from './DatosAfp';
 import Axios from 'axios';
+import TablaAfps from './TablaAfps';
 
 const AgregarAfp = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -80,6 +81,10 @@ const AgregarAfp = () => {
                 setForm={setForm}
                 afps={afps}
                 setAfps={setAfps}
+            />
+            <hr />
+            <TablaAfps
+                usuario={usuario}
             />
         </>
     );

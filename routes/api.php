@@ -75,6 +75,8 @@ Route::group(['prefix' => 'cuenta'], function() {
 
 Route::group(['prefix' => 'eleccion-afp'], function() {
     Route::post('/', 'EleccionAfpController@create');
+    Route::post('/get', 'EleccionAfpController@get');
+    Route::post('/get-all', 'EleccionAfpController@getAll');
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

@@ -82,4 +82,36 @@ class EleccionAfp extends Model
             ];
         }
     }
+
+    public static function _getAll(int $usuario_id, array $fechas)
+    {
+        $usuario = Usuario::find($usuario_id);
+
+        if (!$usuario) {
+            return [
+                'error' => true,
+                'message' => 'No se encontró el usuario mencionado'
+            ];
+        }
+
+        $data = DB::table('elecciones_afp as ea')
+            ->select(
+                'ea.id',
+                'ea.fecha_solicitud',
+                't.rut',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                'e.shortname as empresa'
+            )
+            ->join('trabajadores as t', 't.id', '=', 'ea.trabajador_id')
+            ->join('empresas as e', 'e.id', '=', 'ea.empresa_id')
+            ->whereBetween('ea.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+            ->get();
+
+        return $data;
+    }
+
+    public static function _getByUser(Usuario $id)
+    {
+
+    }
 }

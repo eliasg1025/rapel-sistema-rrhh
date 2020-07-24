@@ -11,6 +11,7 @@ const DatosAfp = ({
 
     const [empresas, setEmpresas] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [validForm, setValidForm] = useState(false);
 
     useEffect(() => {
         let intento = 0;
@@ -43,7 +44,15 @@ const DatosAfp = ({
         if (form.empresa_id !== '') {
             fetchAfps();
         }
-    }, [form.empresa_id])
+    }, [form.empresa_id]);
+
+    useEffect(() => {
+        if (form.nombre_completo !== '' & form.fecha_inicio !== '') {
+            setValidForm(false);
+        } else {
+            setValidForm(true);
+        }
+    }, [form])
 
     return (
         <form onSubmit={handleSubmit}>
@@ -92,10 +101,10 @@ const DatosAfp = ({
                     ) : (
                         <button
                             type="submit" className="btn btn-primary btn-block"
+                            disabled={validForm}
                         >
                             Registrar
                         </button>
-
                     )}
                 </div>
             </div>
