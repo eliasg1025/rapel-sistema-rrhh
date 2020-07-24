@@ -58,7 +58,14 @@ const AgregarCuenta = props => {
                     });
             })
             .catch(err => {
-                console.log(err);
+                console.log(err, err.response);
+                if (err.response.status < 500) {
+                    Swal.fire({
+                        title: err.response.data.error,
+                        icon: 'error'
+                    });
+                    return;
+                }
             })
             .finally(() => {
                 setLoadingSubmit(false);

@@ -11,7 +11,12 @@ class CuentasController extends Controller
     public function create(Request $request)
     {
         $result = Cuenta::_create($request->all());
-        return response()->json($result);
+
+        if (!$result['error']) {
+            return response()->json($result);
+        }
+
+        return response()->json($result, 400);
     }
 
     public function getAll(Request $request)

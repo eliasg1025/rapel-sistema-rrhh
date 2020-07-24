@@ -332,12 +332,6 @@ class Contrato extends Model
         try {
             $contrato_data = $data['contrato'];
 
-            /*
-            $zona_labor = ZonaLabor::where([
-                'code' => $contrato_data['zona_labor_id'],
-                'empresa_id' => $contrato_data['empresa_id']
-            ])->first();*/
-
             $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
             $zona_labor_id = ZonaLabor::findOrCreate($contrato_data['zona_labor']);
             $oficio_id = Oficio::findOrCreate($contrato_data['oficio']);

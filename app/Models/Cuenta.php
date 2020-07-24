@@ -117,8 +117,21 @@ class Cuenta extends Model
         try {
             $banco_id = Banco::findOrCreate($data['banco']);
 
-            if (!isset($data['id'])) {
+            if (!isset($data['id'])) { // Si es que no viene el parametro id (actualizar registro), se crea uno nuevo
                 $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
+
+                $existe_cuenta = Cuenta::where([
+                    'trabajador_id' => $trabajador_id,
+                    'fecha_solicitud' => $data['fecha_solicitud']
+                ])->first();
+
+                if ($existe_cuenta) {
+                    DB::rollBack();
+                    return [
+                        'error' => 'Ya existe un cambio de cuenta para el ' . $data['fecha_solicitud'] . '<br /> CUENTA: ' . $existe_cuenta->numero_cuenta . '<br /> BANCO: ' . $existe_cuenta->banco->name
+                    ];
+                }
+
                 $cuenta = new Cuenta();
                 $cuenta->numero_cuenta = $data['numero_cuenta'];
                 $cuenta->fecha_solicitud = $data['fecha_solicitud'];
