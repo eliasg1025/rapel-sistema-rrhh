@@ -18,6 +18,20 @@ class EleccionAfpController extends Controller
         return response()->json([]);
     }
 
+    public function delete($id)
+    {
+        $afp = EleccionAfp::find($id);
+        if ($afp->delete()) {
+            return response()->json([
+                'message' => 'Registro borrado correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Error al borrar el registro'
+        ], 400);
+    }
+
     public function getAll(Request $request)
     {
         $usuario_id = $request->usuario_id;

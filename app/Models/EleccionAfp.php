@@ -94,20 +94,49 @@ class EleccionAfp extends Model
             ];
         }
 
-        $data = DB::table('elecciones_afp as ea')
-            ->select(
-                'ea.id',
-                'ea.fecha_solicitud',
-                't.rut',
-                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
-                'e.shortname as empresa'
-            )
-            ->join('trabajadores as t', 't.id', '=', 'ea.trabajador_id')
-            ->join('empresas as e', 'e.id', '=', 'ea.empresa_id')
-            ->whereBetween('ea.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
-            ->get();
+        if ($usuario->afp === 2) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
-        return $data;
+            return DB::table('elecciones_afp as ea')
+                ->select(
+                    'ea.id',
+                    'ea.fecha_solicitud',
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'e.shortname as empresa',
+                    'usuario.username as usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                )
+                ->join('trabajadores as t', 't.id', '=', 'ea.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'ea.empresa_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'ea.usuario_id');
+                })
+                ->whereBetween('ea.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->get();
+        } else if ($usuario->afp === 1) {
+            return DB::table('elecciones_afp as ea')
+                ->select(
+                    'ea.id',
+                    'ea.fecha_solicitud',
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'e.shortname as empresa'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'ea.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'ea.empresa_id')
+                ->where('ea.usuario_id', '=', $usuario->id)
+                ->whereBetween('ea.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->get();
+        } else {
+            return [];
+        }
     }
 
     public static function _getByUser(Usuario $id)

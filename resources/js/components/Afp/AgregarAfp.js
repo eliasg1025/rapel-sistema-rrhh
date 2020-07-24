@@ -6,27 +6,41 @@ import DatosAfp from './DatosAfp';
 import Axios from 'axios';
 import TablaAfps from './TablaAfps';
 
+const initialFormState = {
+    nombre_completo: '',
+    fecha_inicio: '',
+    empresa_id: 9,
+    afp_id: '2'
+};
+
 const AgregarAfp = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
     const [afps, setAfps] = useState([]);
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
-    const [form, setForm] = useState({
-        nombre_completo: '',
-        fecha_inicio: '',
-        empresa_id: 9,
-        afp_id: '2'
-    });
+    const [form, setForm] = useState({...initialFormState});
 
     useEffect(() => {
         setForm({
             ...form,
-            nombre_completo: trabajador ? `${trabajador.nombre} ${trabajador.apellido_paterno} ${trabajador.apellido_materno}` : ''
+            nombre_completo: trabajador?.nombre ? `${trabajador.nombre} ${trabajador.apellido_paterno} ${trabajador.apellido_materno}` : ''
         });
     }, [trabajador]);
 
     useEffect(() => {
+        if (contratoActivo !== null && contratoActivo.afp_id !== '30') {
+            Swal.fire({
+                title: 'El trabajador ya esta afiliado a una afp',
+                icon: 'warning'
+            })
+                .then(() => {
+                    setTrabajador(initialFormState);
+                    setContratoActivo(null);
+                });
+            return;
+        }
+
         setForm({
             ...form,
             fecha_inicio: contratoActivo ? moment(contratoActivo.fecha_inicio).format('YYYY-MM-DD').toString() : '',
