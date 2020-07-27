@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import moment from 'moment';
+import { trim } from 'jquery';
 
 const DatosFormularioPermiso = ({
     handleSubmit,
     form,
     setForm,
+    hp,
+    motivosPermiso,
+    setMotivosPermiso,
+    jefes,
+    setJefes,
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -25,16 +32,40 @@ const DatosFormularioPermiso = ({
                 .finally(cb);
         }
 
+        let intento1 = 0;
+        function fetchMotivosPermiso(cb) {
+            intento1++;
+            Axios.get(`http://192.168.60.16/api/motivo-permiso/${trim(form.empresa_id)}`)
+                .then(res => setMotivosPermiso(res.data.data))
+                .catch(err => {
+                    console.log(err);
+                    if (intento1 < 5) {
+                        fetchMotivosPermiso();
+                    }
+                })
+                .finally(cb);
+        }
+
         setLoading(true);
         fetchEmpresas(() => {
             setLoading(false);
         });
+        fetchMotivosPermiso();
     }, []);
+
+    useEffect(() => {
+        if (form.nombre_completo_jefe.length >= 4) {
+            Axios.get(`http://rapel-remun-central.test/api/trabajador/buscar?t=${form.nombre_completo_jefe}`)
+                .then(response => setJefes(response.data))
+                .catch(error => console.log(error));
+        }
+    }, [form.nombre_completo_jefe]);
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="row">
+            <div className="form-row">
                 <div className="form-group col-md-6 col-lg-4">
+                    Empresa: <br />
                     <select
                         type="text" name="empresa_id" placeholder="Empresa"
                         className="form-control"
@@ -45,6 +76,7 @@ const DatosFormularioPermiso = ({
                     </select>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
+                    Fecha solicitud: <br />
                     <input
                         type="text" name="fecha_solicitud" placeholder="Fecha Solicitud" readOnly={true}
                         className="form-control"
@@ -53,6 +85,7 @@ const DatosFormularioPermiso = ({
                     />
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
+                    Trabajador: <br/>
                     <input
                         type="text" name="nombre_completo" placeholder="Trabajador" readOnly={true}
                         className="form-control"
@@ -63,39 +96,99 @@ const DatosFormularioPermiso = ({
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
-                    <input
-                        type="datetime-local" name="fecha_hora_salida" placeholder="Fecha Salida"
-                        className="form-control"
-                    />
+                    <div className="row">
+                        <div className="col">
+                            <div className="form-check mt-3">
+                                <input type="checkbox" className="form-check-input" />
+                                <label className="form-check-label">
+                                    Considerar refrigerio
+                                </label>
+                            </div>
+                        </div>
+                        <div className="col">
+                            Hora de entrada:
+                            <input
+                                type="time" name="horario" placeholder="Hora de entrada"
+                                className="form-control"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row">
+                <div className="form-group col-md-6 col-lg-4">
+                    Fecha y hora salida:<br />
+                    <div className="row">
+                        <div className="col">
+                            <input
+                                type="date" name="fecha_salida" placeholder="Fecha Salida"
+                                className="form-control" min="2020-01-01" max="2500-01-01"
+                                value={form.fecha_salida}
+                                onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                        <div className="col">
+                            <input
+                                type="time" name="hora_salida" placeholder="Hora Salida"
+                                className="form-control"
+                                value={form.hora_salida}
+                                onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
-                    <input
-                        type="datetime-local" name="fecha_hora_regreso" placeholder="Fecha Regreso"
-                        className="form-control"
-                    />
+                    Fecha y hora regreso:<br />
+                    <div className="row">
+                        <div className="col">
+                            <input
+                                type="date" name="fecha_regreso" placeholder="Fecha Regreso"
+                                className="form-control" min="2020-01-01" max="2500-01-01"
+                                value={form.fecha_regreso}
+                                onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                        <div className="col">
+                            <input
+                                type="time" name="hora_regreso" placeholder="Hora Regreso"
+                                className="form-control"
+                                value={form.hora_regreso}
+                                onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
+                    Cantidad horas:<br />
                     <input
                         type="number" name="hp" placeholder="H-P" readOnly={true}
-                        className="form-control" min={0}
+                        className="form-control"
+                        value={hp || 0}
                     />
                 </div>
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-6">
+                    Jefe de Zona/Campo:<br />
                     <input
                         type="text" name="jefe" placeholder="Jefe de Zona/Campo"
                         className="form-control"
+                        value={form.nombre_completo_jefe}
+                        onChange={e => setForm({ ...form, nombre_completo_jefe: e.target.value })}
                     />
+                    <div>
+                        {jefes.map(item => <div key={item.id}>{item.nombre_completo}</div>)}
+                    </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-6">
+                    Motivo de Permiso:<br />
                     <select
                         type="text" name="motivo_permiso_id" placeholder="Motivo Permiso"
                         className="form-control"
                         value={form.motivo_permiso_id}
                         onChange={e => setForm({ ...form, motivo_permiso_id: e.target.value })}
                     >
-                        {[].map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
+                        {motivosPermiso.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                     </select>
                 </div>
             </div>

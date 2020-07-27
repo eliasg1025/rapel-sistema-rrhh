@@ -27,7 +27,7 @@ const BuscarTrabajador = ({
 
                     Swal.fire('Trabajador encontrado', '', 'success');
                     setTrabajador(trabajador);
-                    console.log(contrato_activo[0]);
+                    // console.log(contrato_activo[0]);
                     setContratoActivo(contrato_activo[0]);
                     return;
                 })
