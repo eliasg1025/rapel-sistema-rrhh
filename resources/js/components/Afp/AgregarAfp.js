@@ -31,7 +31,7 @@ const AgregarAfp = () => {
     useEffect(() => {
         if (contratoActivo !== null && contratoActivo.afp_id !== '30') {
             Swal.fire({
-                title: 'El trabajador ya esta afiliado a una afp',
+                title: `El trabajador ya esta afiliado a una AFP: ${contratoActivo.afp.name}`,
                 icon: 'warning'
             })
                 .then(() => {
