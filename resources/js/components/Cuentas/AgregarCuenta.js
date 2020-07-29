@@ -121,7 +121,7 @@ const BuscarTrabajador = props => {
 
         axios.get(`http://192.168.60.16/api/trabajador/${rut}`)
                 .then(res => {
-                    const { trabajador } = res.data.data;
+                    const { trabajador, contrato_activo } = res.data.data;
 
                     Swal.fire({
                         title: 'Trabajador encontrado' + (trabajador.banco_id ? ', ya tiene cuenta' : ''),
@@ -132,7 +132,7 @@ const BuscarTrabajador = props => {
                         rut: trabajador.rut,
                         nombre_trabajador: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}, ${trabajador.nombre}`,
                         numero_cuenta: trabajador.numero_cuenta,
-                        empresa_id: trabajador.empresa_id,
+                        empresa_id: contrato_activo[0].empresa_id,
                         banco_id: trabajador.banco_id || 59
                     });
                     setTrabajador({ ...clearData(trabajador) });
