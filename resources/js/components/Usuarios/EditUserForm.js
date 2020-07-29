@@ -35,7 +35,6 @@ export default function EditUserForm(props) {
                 });
                 return;
             } else {
-                delete userUpdate.confirm_password;
                 console.log(userUpdate);
             }
         }

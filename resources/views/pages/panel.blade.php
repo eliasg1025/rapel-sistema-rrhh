@@ -11,12 +11,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <a class="btn btn-block" href="/" {{ $data['usuario']->ingresos === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-arrow-up"></i> Ingresos
+                        <i class="fas fa-arrow-up"></i> Ingresos Personal
                     </a>
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-block" href="/cuentas" {{ $data['usuario']->cuentas === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-money-check"></i> Cuentas
+                        <i class="fas fa-money-check"></i> Cambios/Aperturas Cuentas
                     </a>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-block" href="/eleccion-afp" {{ $data['usuario']->afp === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-file-alt"></i> AFP
+                        <i class="fas fa-file-alt"></i> Elección AFP
                     </a>
                 </div>
             </div>

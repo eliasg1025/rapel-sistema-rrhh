@@ -3,6 +3,8 @@ import Axios from 'axios';
 import moment from 'moment';
 import { trim } from 'jquery';
 
+import AutocompletarTrabajador from '../shared/AutocompletarTrabajador';
+
 const DatosFormularioPermiso = ({
     handleSubmit,
     form,
@@ -10,8 +12,7 @@ const DatosFormularioPermiso = ({
     hp,
     motivosPermiso,
     setMotivosPermiso,
-    jefes,
-    setJefes,
+    setTrabajadorJefe
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -52,14 +53,6 @@ const DatosFormularioPermiso = ({
         });
         fetchMotivosPermiso();
     }, []);
-
-    useEffect(() => {
-        if (form.nombre_completo_jefe.length >= 4) {
-            Axios.get(`http://rapel-remun-central.test/api/trabajador/buscar?t=${form.nombre_completo_jefe}`)
-                .then(response => setJefes(response.data))
-                .catch(error => console.log(error));
-        }
-    }, [form.nombre_completo_jefe]);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -170,15 +163,20 @@ const DatosFormularioPermiso = ({
             <div className="row">
                 <div className="form-group col-md-6 col-lg-6">
                     Jefe de Zona/Campo:<br />
-                    <input
-                        type="text" name="jefe" placeholder="Jefe de Zona/Campo"
-                        className="form-control"
-                        value={form.nombre_completo_jefe}
-                        onChange={e => setForm({ ...form, nombre_completo_jefe: e.target.value })}
+                    {/*
+                        <input
+                            type="text" name="jefe" placeholder="Escribe nombre o apellido"
+                            className="form-control"
+                            value={form.nombre_completo_jefe}
+                            onChange={e => setForm({ ...form, nombre_completo_jefe: e.target.value })}
+                        />
+                        <div className="list-group">
+                            {jefes.map(item => <button className="btn" key={item.id}>{item.nombre_completo}</button>)}
+                        </div>
+                    */}
+                    <AutocompletarTrabajador
+                        setTrabajador={setTrabajadorJefe}
                     />
-                    <div>
-                        {jefes.map(item => <div key={item.id}>{item.nombre_completo}</div>)}
-                    </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-6">
                     Motivo de Permiso:<br />

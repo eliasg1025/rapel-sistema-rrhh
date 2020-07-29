@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosFormularioPermiso from './DatosFormularioPermiso';
-import Axios from 'axios';
 
 
 const AgregarPermiso = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
     const [trabajador, setTrabajador] = useState(null);
+    const [trabajadorJefe, setTrabajadorJefe] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
     const [motivosPermiso, setMotivosPermiso] = useState([]);
-    const [jefes, setJefes] = useState([]);
     const [form, setForm] = useState({
         nombre_completo: '',
         nombre_completo_jefe: '',
@@ -74,8 +73,7 @@ const AgregarPermiso = () => {
                 hp={hp}
                 motivosPermiso={motivosPermiso}
                 setMotivosPermiso={setMotivosPermiso}
-                jefes={jefes}
-                setJefes={setJefes}
+                setTrabajadorJefe={setTrabajadorJefe}
             />
         </>
     );
