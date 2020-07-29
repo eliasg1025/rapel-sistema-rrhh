@@ -71,7 +71,7 @@ const DatosCuenta = props => {
                     });
                     setBancos(b);
                     setLoadingBancos(false);
-                    setForm({ ...form });
+                    setForm({ ...form, banco_id: '59' });
                 })
                 .catch(err => {
                     console.log(err);
