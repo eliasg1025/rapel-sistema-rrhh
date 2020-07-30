@@ -10,7 +10,7 @@ const DatosCuenta = props => {
 
     useEffect(() => {
         for (const key in form) {
-            if (form[key] === '') {
+            if (form[key] === '' && (form.apertura ? key !== 'numero_cuenta' : true)) {
                 setValidForm(false);
                 return;
             }
@@ -65,7 +65,12 @@ const DatosCuenta = props => {
             axios.get(`http://192.168.60.16/api/banco/${form.empresa_id}`)
                 .then(res => {
                     const { data, message } = res.data;
-                    const bancos_permitidos = ['002', '003', '011', '038', '043'];
+                    let bancos_permitidos = [];
+                    if (form.empresa_id == 14) {
+                        bancos_permitidos = ['002', '003', '011'];
+                    } else {
+                        bancos_permitidos = ['002', '003', '011', '038', '043'];
+                    }
                     const b = data.filter(item => {
                         return bancos_permitidos.includes(item.cod_equ);
                     });
@@ -110,19 +115,29 @@ const DatosCuenta = props => {
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     <input
-                        type="text" name="rut" placeholder="DNI / RUT"
+                        type="text" name="nombre_trabajador" placeholder="Trabajador"
                         className="form-control" readOnly={true} required
+                        value={form.nombre_trabajador}
+                    />
+                    <input
+                        type="text" name="rut" placeholder="DNI / RUT"
+                        className="form-control d-none" readOnly={true} required
                         value={form.rut}
                     />
                 </div>
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
-                    <input
-                        type="text" name="nombre_trabajador" placeholder="Trabajador"
-                        className="form-control" readOnly={true} required
-                        value={form.nombre_trabajador}
-                    />
+                    <div className="form-check mt-3">
+                        <input
+                            type="checkbox" name="nombre_trabajador" className="form-check-input"
+                            checked={form.apertura}
+                            onChange={e => setForm({ ...form, apertura: e.target.checked })}
+                        />
+                        <label className="form-check-label">
+                            Apertura de cuenta
+                        </label>
+                    </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     {loadingBancos ? (
@@ -138,13 +153,15 @@ const DatosCuenta = props => {
                     )}
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
-                    <input
-                        type="text" name="numero_cuenta" placeholder="N° Cuenta"
-                        autoComplete="off"
-                        className={validNumeroCuenta ? "form-control is-valid" : "form-control is-invalid"}
-                        value={form.numero_cuenta}
-                        onChange={e => setForm({ ...form, numero_cuenta: e.target.value })}
-                    />
+                    {!form.apertura && (
+                        <input
+                            type="text" name="numero_cuenta" placeholder="N° Cuenta"
+                            autoComplete="off"
+                            className={validNumeroCuenta ? "form-control is-valid" : "form-control is-invalid"}
+                            value={form.numero_cuenta}
+                            onChange={e => setForm({ ...form, numero_cuenta: e.target.value })}
+                        />
+                    ) }
                 </div>
             </div>
             <div className="row">
@@ -154,7 +171,7 @@ const DatosCuenta = props => {
                     ) : (
                         <button
                             type="submit" className="btn btn-primary btn-block"
-                            disabled={!(validForm && validNumeroCuenta)}
+                            disabled={!(validForm && (!form.apertura ? validNumeroCuenta : true))}
                         >
                             Registrar
                         </button>

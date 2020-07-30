@@ -29,7 +29,8 @@ class CuentasExport implements FromArray, WithColumnFormatting
             'BANCO',
             'CUENTA',
             'EMPRESA',
-            'SUBIDO POR'
+            'SUBIDO POR',
+            'APERTURA'
         ];
         return [
             $cabeceras,

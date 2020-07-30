@@ -21,6 +21,7 @@ const AgregarCuenta = props => {
             empresa_id: '9',
             numero_cuenta: '',
             banco_id: '',
+            apertura: false
         };
     } else {
         initialState = {...cuenta}

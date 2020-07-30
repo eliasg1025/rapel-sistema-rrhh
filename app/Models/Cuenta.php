@@ -75,6 +75,7 @@ class Cuenta extends Model
                 'c.numero_cuenta',
                 'usuario.username as usuario',
                 'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                'c.apertura',
                 'e.shortname as empresa'
             )
             ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
@@ -137,6 +138,7 @@ class Cuenta extends Model
                 $cuenta->fecha_solicitud = $data['fecha_solicitud'];
                 $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->usuario_id = $data['usuario_id'];
+                $cuenta->apertura = $data['apertura'];
                 $cuenta->banco_id = $banco_id;
                 $cuenta->trabajador_id = $trabajador_id;
             } else {

@@ -20,9 +20,10 @@ const TablaCuentasAdmin = props => {
                 dni: item.rut,
                 trabajador: item.nombre_completo,
                 banco: item.banco_name,
-                cuenta:  item.numero_cuenta.toString(),
+                cuenta:  item.numero_cuenta?.toString() || '',
                 empresa: item.empresa,
-                usuario: item.nombre_completo_usuario
+                usuario: item.nombre_completo_usuario,
+                apertura: item.apertura ? 'SI' : ''
             }
         });
         Axios({
