@@ -100,7 +100,8 @@ class Cuenta extends Model
                 DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                 'b.name as banco_name',
                 'c.numero_cuenta',
-                'e.shortname as empresa'
+                'e.shortname as empresa',
+                'c.apertura'
             )
             ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
             ->join('bancos as b', 'b.id', '=', 'c.banco_id')

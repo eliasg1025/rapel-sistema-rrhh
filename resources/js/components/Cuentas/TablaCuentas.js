@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
+import moment from 'moment';
 
 const TablaCuentas = props => {
     const { usuario, cuentas } = JSON.parse(sessionStorage.getItem('data'));
+    const [filtro, setFiltro] = useState({
+        desde: moment().format('YYYY-MM-DD').toString(),
+        hasta: moment().format('YYYY-MM-DD').toString()
+    });
 
     const eliminarCuenta = id => {
         Swal.fire({
@@ -105,19 +110,62 @@ const TablaCuentas = props => {
         rows: [
         ],
     });
+
+    const handleExportar = () => {
+        const data = cuentas.map(item => {
+            return {
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.rut,
+                trabajador: item.nombre_completo,
+                banco: item.banco_name,
+                cuenta:  item.numero_cuenta?.toString() || '',
+                empresa: item.empresa,
+                usuario: item.nombre_completo_usuario,
+                apertura: item.apertura ? 'SI' : ''
+            }
+        });
+        Axios({
+            url: '/descargar/cuentas',
+            data: {data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/pdf' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `CUENTAS-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click()
+            });
+    };
     return (
-        <MDBDataTableV5
-            hover
-            responsive
-            entriesOptions={[10, 20, 25]}
-            entries={10}
-            pagesAmount={10}
-            data={datatable}
-            searchTop
-            searchBottom={false}
-        />
+        <>
+            <div className="row">
+                <div className="col-md-2">
+                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
+                        <i className="fas fa-file-excel"></i> Exportar
+                    </button>
+                </div>
+            </div>
+            <br />
+            <MDBDataTableV5
+                hover
+                responsive
+                entriesOptions={[10, 20, 25]}
+                entries={10}
+                pagesAmount={10}
+                data={datatable}
+                searchTop
+                searchBottom={false}
+            />
+        </>
     );
-};
+}
+
+const Tabla = props => {
+
+}
 
 export default TablaCuentas;
 
