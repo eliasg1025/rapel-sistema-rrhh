@@ -120,7 +120,7 @@ const TablaCuentas = props => {
                 banco: item.banco_name,
                 cuenta:  item.numero_cuenta?.toString() || '',
                 empresa: item.empresa,
-                usuario: item.nombre_completo_usuario,
+                usuario: item.nombre_completo_usuario || '',
                 apertura: item.apertura ? 'SI' : ''
             }
         });
