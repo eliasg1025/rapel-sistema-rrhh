@@ -3,6 +3,7 @@ import {notification} from "antd";
 
 const DatosCuenta = props => {
     const { handleSubmit, form, setForm, bancos, setBancos, empresas, loadingSubmit } = props;
+    const { cuenta } = JSON.parse(sessionStorage.getItem('data'));
 
     const [loadingBancos, setLoadingBancos] = useState(false);
     const [validForm, setValidForm] = useState(false);
@@ -76,7 +77,7 @@ const DatosCuenta = props => {
                     });
                     setBancos(b);
                     setLoadingBancos(false);
-                    setForm({ ...form, banco_id: '59' });
+                    setForm({ ...form, banco_id: cuenta.banco_id || '59' });
                 })
                 .catch(err => {
                     console.log(err);

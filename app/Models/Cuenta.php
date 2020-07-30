@@ -130,7 +130,7 @@ class Cuenta extends Model
                 if ($existe_cuenta) {
                     DB::rollBack();
                     return [
-                        'error' => 'Ya existe un cambio de cuenta para el ' . $data['fecha_solicitud'] . '<br /> CUENTA: ' . $existe_cuenta->numero_cuenta . '<br /> BANCO: ' . $existe_cuenta->banco->name
+                        'error' => 'Ya existe un cambio de cuenta para el ' . $data['fecha_solicitud'] . '<br /> CUENTA: ' . $existe_cuenta->numero_cuenta . '<br /> BANCO: ' . $existe_cuenta->banco->name . '<br />USUARIO: ' . $existe_cuenta->usuario->trabajador->nombre_completo
                     ];
                 }
 
@@ -178,7 +178,8 @@ class Cuenta extends Model
                 't.rut',
                 DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_trabajador'),
                 'b.code as banco_id',
-                'c.numero_cuenta'
+                'c.numero_cuenta',
+                'c.apertura'
             )
             ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
             ->join('bancos as b', 'b.id', '=', 'c.banco_id')

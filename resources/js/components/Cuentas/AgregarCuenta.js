@@ -24,7 +24,7 @@ const AgregarCuenta = props => {
             apertura: false
         };
     } else {
-        initialState = {...cuenta}
+        initialState = {...cuenta, numero_cuenta: cuenta.numero_cuenta || ''}
     }
     const [form, setForm] = useState(initialState);
 
