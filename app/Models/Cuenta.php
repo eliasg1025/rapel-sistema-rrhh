@@ -134,11 +134,11 @@ class Cuenta extends Model
                 }
 
                 $cuenta = new Cuenta();
-                $cuenta->numero_cuenta = $data['numero_cuenta'];
+                $cuenta->apertura = $data['apertura'];
+                $cuenta->numero_cuenta = !$data['apertura'] ? $data['numero_cuenta'] : null;
                 $cuenta->fecha_solicitud = $data['fecha_solicitud'];
                 $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->usuario_id = $data['usuario_id'];
-                $cuenta->apertura = $data['apertura'];
                 $cuenta->banco_id = $banco_id;
                 $cuenta->trabajador_id = $trabajador_id;
             } else {

@@ -30,7 +30,7 @@ const AgregarCuenta = props => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const banco = bancos.find(e => e.id === form.banco_id);
+        const banco = bancos.find(e => e.id == form.banco_id);
         form.banco = banco;
         form.trabajador = trabajador;
         form.usuario_id = usuario.id;

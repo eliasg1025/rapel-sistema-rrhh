@@ -69,7 +69,7 @@ const DatosCuenta = props => {
                     if (form.empresa_id == 14) {
                         bancos_permitidos = ['002', '003', '011'];
                     } else {
-                        bancos_permitidos = ['002', '003', '011', '038', '043'];
+                        bancos_permitidos = ['002', '003', '011', '038', '009'];
                     }
                     const b = data.filter(item => {
                         return bancos_permitidos.includes(item.cod_equ);
