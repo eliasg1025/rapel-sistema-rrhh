@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import moment from 'moment';
 import Swal from 'sweetalert2';
-import {notification} from "antd";
+import { notification } from "antd";
 import DatosCuenta from "./DatosCuenta";
 
 const AgregarCuenta = props => {

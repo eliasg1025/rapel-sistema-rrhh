@@ -3,13 +3,15 @@ import ReactDOM from "react-dom";
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 import moment from 'moment';
+import { DatePicker, message } from 'antd';
 
 const TablaCuentas = props => {
-    const { usuario, cuentas } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
     const [filtro, setFiltro] = useState({
         desde: moment().format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString()
     });
+    const [cuentas, setCuentas] = useState([]);
 
     const eliminarCuenta = id => {
         Swal.fire({
@@ -42,29 +44,60 @@ const TablaCuentas = props => {
     };
 
     useEffect(() => {
-        const c = cuentas.map(item => {
-            return {
-                ...item,
-                acciones: (
-                    <div className="btn-group">
-                        <a className="btn btn-primary btn-sm" href={`/ficha/cambio-cuenta/${item.id}`} target="_blank">
-                            <i className="fas fa-search"/>
-                        </a>
-                        <a className="btn btn-primary btn-sm" href={`/cuentas/editar/${item.id}`} target="_blank">
-                            <i className="far fa-edit" />
-                        </a>
-                        <button className="btn btn-danger btn-sm" onClick={() => eliminarCuenta(item.id)}>
-                            <i className="fas fa-trash-alt" />
-                        </button>
-                    </div>
-                )
-            }
-        });
-        setDatatable({
-            ...datatable,
-            rows: c
-        });
-    }, []);
+        let intentos = 0;
+        function fetchCuentas() {
+            intentos++;
+            Axios.post('/api/cuenta/get-all', {
+                usuario_id: usuario.id,
+                desde: filtro.desde,
+                hasta: filtro.hasta
+            })
+                .then(res => {
+                    console.log(res.data);
+
+                    message['success']({
+                        content: `Se encontraron ${res.data.length} registros`
+                    });
+
+                    const cuentas = res.data.map(item => {
+                        return {
+                            ...item,
+                            acciones: (
+                                <div className="btn-group">
+                                    <a className="btn btn-primary btn-sm" href={`/ficha/cambio-cuenta/${item.id}`} target="_blank">
+                                        <i className="fas fa-search"/>
+                                    </a>
+                                    {item.fecha_solicitud === moment().format('YYYY-MM-DD') && (
+                                        <>
+                                            <a className="btn btn-primary btn-sm" href={`/cuentas/editar/${item.id}`} target="_blank">
+                                                <i className="far fa-edit" />
+                                            </a>
+                                            <button className="btn btn-danger btn-sm" onClick={() => eliminarCuenta(item.id)}>
+                                                <i className="fas fa-trash-alt" />
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            )
+                        }
+                    });
+
+                    setDatatable({
+                        ...datatable,
+                        rows: cuentas
+                    });
+                    setCuentas(cuentas);
+                })
+                .catch(err => {
+                    console.log(err);
+                    if (intentos < 5) {
+                        fetchCuentas();
+                    }
+                })
+        }
+        fetchCuentas();
+    }, [filtro.desde, filtro.hasta]);
+
     const [datatable, setDatatable] = useState({
         columns: [
             {
@@ -107,8 +140,7 @@ const TablaCuentas = props => {
                 sort: 'disabled'
             }
         ],
-        rows: [
-        ],
+        rows: [],
     });
 
     const handleExportar = () => {
@@ -142,6 +174,19 @@ const TablaCuentas = props => {
     return (
         <>
             <div className="row">
+                <div className="col-md-4">
+                    <DatePicker.RangePicker
+                        placeholder={['Desde', 'Hasta']}
+                        onChange={(date, dateString) => {
+                            setFiltro({
+                                ...filtro,
+                                desde: dateString[0],
+                                hasta: dateString[1],
+                            });
+                        }}
+                        value={[moment(filtro.desde), moment(filtro.hasta)]}
+                    />
+                </div>
                 <div className="col-md-2">
                     <button className="btn btn-success btn-sm" onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar

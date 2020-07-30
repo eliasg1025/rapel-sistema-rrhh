@@ -50,44 +50,58 @@ class Cuenta extends Model
             ];
         }
 
-        if ($usuario->cuentas !== 2) {
-            return [
-                'error' => true,
-                'message' => 'No tiene acceso a esta información'
-            ];
+        if ($usuario->cuentas == 2) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+            $cuentas = DB::table('cuentas as c')
+                ->select(
+                    'c.id as id',
+                    'c.fecha_solicitud',
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'b.name as banco_name',
+                    'c.numero_cuenta',
+                    'usuario.username as usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'c.apertura',
+                    'e.shortname as empresa'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
+                ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+                ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'c.usuario_id');
+                })
+                ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->get();
+            return $cuentas;
+        } else if ($usuario->cuentas == 1) {
+            return DB::table('cuentas as c')
+                ->select(
+                    'c.id as id',
+                    'c.fecha_solicitud',
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'b.name as banco_name',
+                    'c.numero_cuenta',
+                    'e.shortname as empresa',
+                    'c.apertura'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
+                ->join('bancos as b', 'b.id', '=', 'c.banco_id')
+                ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
+                ->where('c.usuario_id', $usuario->id)
+                ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->get();
+        } else {
+            return [];
         }
-
-        $usuarios = DB::table('usuarios as u')
-            ->select(
-                'u.id',
-                'u.username',
-                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
-            )
-            ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
-
-        $cuentas = DB::table('cuentas as c')
-            ->select(
-                'c.id as id',
-                'c.fecha_solicitud',
-                't.rut',
-                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
-                'b.name as banco_name',
-                'c.numero_cuenta',
-                'usuario.username as usuario',
-                'usuario.nombre_completo_usuario as nombre_completo_usuario',
-                'c.apertura',
-                'e.shortname as empresa'
-            )
-            ->join('trabajadores as t', 't.id', '=', 'c.trabajador_id')
-            ->join('bancos as b', 'b.id', '=', 'c.banco_id')
-            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
-            ->joinSub($usuarios, 'usuario', function($join) {
-                $join->on('usuario.id', '=', 'c.usuario_id');
-            })
-            ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
-            ->get();
-
-        return $cuentas;
     }
 
     public static function _getByUsuario(int $usuario_id)

@@ -146,12 +146,9 @@ class ViewController extends Controller
         $cuenta = Cuenta::_get($id);
         switch ($usuario->cuentas) {
             case 1:
-                $cuentas = Cuenta::_getByUsuario($usuario->id);
-
                 $data = [
                     'usuario'  => $usuario,
                     'empresas' => $empresas,
-                    'cuentas'  => $cuentas,
                     'cuenta'   => $cuenta,
                 ];
 
