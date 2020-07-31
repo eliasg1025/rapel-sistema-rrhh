@@ -5,6 +5,8 @@ import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 
+import Modal from '../Modal';
+
 const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
     const [filtro, setFiltro] = useState({
@@ -12,9 +14,11 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
     });
+    const [isVisible, setIsVisible] = useState(false);
+    const [modalContent, setModalContent] = useState(null);
 
     let _columns = [];
-    if (filtro.estado == 1) {
+    if (usuario.reseteo_clave == 1) {
         _columns = [
             {
                 label: 'Fecha Solicitud',
@@ -66,13 +70,16 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 label: 'Trabajador',
                 field: 'nombre_completo',
                 sort: 'disabled',
-                width: 270,
             },
             {
                 label: 'Empresa',
                 field: 'empresa',
                 sort: 'disabled',
                 width: 150,
+            },
+            {
+                label: 'Cargado por',
+                field: 'nombre_completo_usuario',
             },
             {
                 label: 'Acciones',
@@ -138,6 +145,16 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
             });
     }
 
+    const handleVerCambio = item => {
+        console.log(item);
+        setIsVisible(true);
+        setModalContent(
+            <div>
+                Nueva clave: <b>{item.clave}</b>
+            </div>
+        );
+    }
+
     useEffect(() => {
         Axios.post('/api/atencion-reseteo-clave/get-all', {
             usuario_id: usuario.id,
@@ -156,17 +173,22 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 const atenciones = data.map(item => {
                     return {
                         ...item,
-                        estado_name: item.estado == 0 ? 'PENDIENTE' : 'RESUELTO',
                         acciones: (
                             <div className="btn-group">
-                                {usuario.reseteo_clave == 2 && (
-                                    <button className="btn btn-primary btn-sm" onClick={() => handleResolver(item.id)}>
-                                        <i className="fas fa-check"/>
-                                    </button>
-                                )}
-                                {item.fecha_solicitud === moment().format('YYYY-MM-DD') && (
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
-                                        <i className="fas fa-trash-alt" />
+                                {item.estado == 0 ? (
+                                    <>
+                                        {usuario.reseteo_clave == 2 && (
+                                            <button className="btn btn-primary btn-sm" onClick={() => handleResolver(item.id)}>
+                                                <i className="fas fa-check"/>
+                                            </button>
+                                        )}
+                                        <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
+                                            <i className="fas fa-trash-alt" />
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button className="btn btn-light btn-sm" onClick={() => handleVerCambio(item)}>
+                                        <i className="fas fa-eye" /> Ver
                                     </button>
                                 )}
                             </div>
@@ -225,6 +247,13 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 searchTop
                 searchBottom={false}
             />
+            <Modal
+                title="Cambio de clave"
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+            >
+                {modalContent}
+            </Modal>
         </>
     );
 }

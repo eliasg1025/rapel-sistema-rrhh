@@ -70,6 +70,14 @@ class AtencionReseteoClave extends Model
         }
 
         if ( $usuario->reseteo_clave == 1 ) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
             return DB::table('atenciones_reseteo_clave as a')
                 ->select(
                     'a.id',
@@ -77,7 +85,10 @@ class AtencionReseteoClave extends Model
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',
-                    'a.estado'
+                    'a.estado',
+                    'a.clave',
+                    //'usuario2.username as usuario2',
+                    //'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
@@ -86,6 +97,14 @@ class AtencionReseteoClave extends Model
                 ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
         } else if ( $usuario->reseteo_clave == 2 ) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
             return DB::table('atenciones_reseteo_clave as a')
                 ->select(
                     'a.id',
@@ -93,10 +112,18 @@ class AtencionReseteoClave extends Model
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',
-                    'a.estado'
+                    'a.estado',
+                    'a.clave',
+                    'usuario.username as usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    //'usuario2.username as usuario2',
+                    //'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'a.usuario_id');
+                })
                 ->where('a.estado', $estado)
                 ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
