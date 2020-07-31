@@ -5,6 +5,7 @@ import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosReseteoClave from './DatosReseteoClave';
 import Axios from 'axios';
 import TablaPendientes from './TablaPendientes';
+import Swal from 'sweetalert2';
 
 const intitalState = {
     nombre_completo: '',
@@ -18,6 +19,7 @@ const AgregarReseteoClave = () => {
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
     const [form, setForm] = useState({...intitalState});
+    const [reloadDatos, setReloadDatos] = useState(false);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -27,8 +29,30 @@ const AgregarReseteoClave = () => {
         console.log(form);
 
         Axios.post('/api/atencion-reseteo-clave', {...form})
-            .then(res => console.log(res.data))
-            .catch(err => console.error(err));
+            .then(res => {
+                if (res.status >= 400) {
+                    Swal.fire({
+                        title: 'Algo salió mal',
+                        icon: 'error'
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Registro guardado correctamente',
+                    icon: 'success'
+                })
+                    .then(() => {
+                        setReloadDatos(!reloadDatos);
+                    });
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    title: err.response.data.message,
+                    icon: 'error'
+                });
+            });
     }
 
     useEffect(() => {
@@ -57,7 +81,10 @@ const AgregarReseteoClave = () => {
                 setForm={setForm}
             />
             <hr />
-            <TablaPendientes />
+            <TablaPendientes
+                reloadDatos={reloadDatos}
+                setReloadDatos={setReloadDatos}
+            />
         </>
     );
 }

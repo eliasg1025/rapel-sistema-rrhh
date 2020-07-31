@@ -24,15 +24,44 @@ class AtencionReseteoClaveController extends Controller
             'desde' => $request->desde,
             'hasta' => $request->hasta
         ];
+        $estado = $request->estado;
 
-        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas);
+        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas, $estado);
 
         if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['message']
-            ]);
+            ], 400);
         }
 
         return response()->json($result);
+    }
+
+    public function resolver(Request $request, $id)
+    {
+        $usuario_id = $request->usuario_id;
+        $result = AtencionReseteoClave::resolver($usuario_id, $id);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
+    public function delete($id)
+    {
+        $atencion = AtencionReseteoClave::find($id);
+        if ($atencion->delete()) {
+            return response()->json([
+                'message' => 'Registro borrado correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Error al borrar el registro'
+        ], 400);
     }
 }

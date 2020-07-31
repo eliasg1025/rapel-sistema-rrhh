@@ -55,7 +55,7 @@ const DatosReseteoClave = ({ handleSubmit, form, setForm }) => {
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     <select
-                        type="text" name="empresa_id" placeholder="Empresa"
+                        name="empresa_id" placeholder="Empresa"
                         className="form-control"
                         value={form.empresa_id}
                         onChange={e => setForm({ ...form, empresa_id: e.target.value })}

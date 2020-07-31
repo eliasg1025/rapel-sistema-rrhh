@@ -9,6 +9,11 @@ class AtencionReseteoClave extends Model
 {
     protected $table = 'atenciones_reseteo_clave';
 
+    public function empresa()
+    {
+        return $this->belongsTo('App\Models\Empresa');
+    }
+
     public static function _create(array $data)
     {
         DB::beginTransaction();
@@ -23,7 +28,8 @@ class AtencionReseteoClave extends Model
             if ($existe_atencion_pendiente) {
                 DB::rollBack();
                 return [
-                    'error' => 'Ya existe un cambio de clave pendiente generado el ' . $existe_atencion_pendiente->fecha_solicitud
+                    'error' => true,
+                    'message' => 'Ya existe un cambio de clave pendiente generado el ' . $existe_atencion_pendiente->fecha_solicitud
                 ];
             }
 
@@ -52,7 +58,7 @@ class AtencionReseteoClave extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -76,6 +82,7 @@ class AtencionReseteoClave extends Model
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->where('a.usuario_id', '=', $usuario->id)
+                ->where('a.estado', $estado)
                 ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
         } else if ( $usuario->reseteo_clave == 2 ) {
@@ -90,20 +97,40 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->where('a.estado', $estado)
                 ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
+        } else {
+            return [];
         }
     }
 
-    public static function _getPendientes(int $usuario_id, array $data)
+    public static function resolver(int $usuario_id, int $id)
     {
+        $atencion = AtencionReseteoClave::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ( !$usuario ) {
+        if ( $usuario->reseteo_clave != 2 ) {
             return [
                 'error'   => true,
-                'message' => 'No se encontro el usuario'
+                'message' => 'No tiene autorización para realizar esta operación'
             ];
         }
+
+        $atencion->estado = 1;
+        $atencion->usuario2_id = $usuario->id;
+        $exploded = explode("-", $atencion->fecha_solicitud);
+        $exploded = array_reverse($exploded);
+        $atencion->clave = strtolower($atencion->empresa->shortname) . implode("", $exploded);
+        if ( $atencion->save() ) {
+            return [
+                'message' => 'Registro actualizado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
     }
 }

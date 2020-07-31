@@ -82,6 +82,8 @@ Route::group(['prefix' => 'eleccion-afp'], function() {
 Route::group(['prefix' => 'atencion-reseteo-clave'], function() {
     Route::post('/', 'AtencionReseteoClaveController@create');
     Route::post('/get-all', 'AtencionReseteoClaveController@getAll');
+    Route::put('/resolver/{id}', 'AtencionReseteoClaveController@resolver');
+    Route::delete('/{id}', 'AtencionReseteoClaveController@delete');
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
