@@ -10,7 +10,11 @@ class EleccionAfpController extends Controller
     public function create(Request $request)
     {
         $result = EleccionAfp::_create($request->all());
-        return response()->json($result);
+        if (!$result['error']) {
+            return response()->json($result);
+        }
+
+        return response()->json($result, 400);
     }
 
     public function get(Request $request)

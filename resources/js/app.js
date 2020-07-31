@@ -9,6 +9,7 @@ import React from "react";
 import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
+import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
 
 require('./bootstrap');
 
@@ -47,4 +48,10 @@ if (document.getElementById("agregar-permiso")) {
     const element = document.getElementById("agregar-permiso");
     const props = Object.assign({}, element.dataset);
     ReactDOM.render(<AgregarPermiso {...props} />, document.getElementById("agregar-permiso"));
+}
+
+if (document.getElementById("agregar-reseteo-clave")) {
+    const element = document.getElementById("agregar-reseteo-clave");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<AgregarReseteoClave {...props} />, document.getElementById("agregar-reseteo-clave"));
 }

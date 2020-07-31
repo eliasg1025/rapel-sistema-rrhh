@@ -198,6 +198,17 @@ class ViewController extends Controller
         return view('pages.permisos', compact('data'));
     }
 
+    public function atencionReseteoClave(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.atencion-reseteo-clave', compact('data'));
+    }
+
     public function panel(Request $request)
     {
         $usuario = $request->session()->get('usuario');
