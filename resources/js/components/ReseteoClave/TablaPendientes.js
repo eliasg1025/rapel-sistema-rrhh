@@ -231,7 +231,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                     </select>
                 </div>
                 <div>
-                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
+                    <button className="btn btn-success btn-sm" disabled onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar
                     </button>
                 </div>
