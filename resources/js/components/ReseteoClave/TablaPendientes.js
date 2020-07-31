@@ -27,10 +27,6 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 width: 150
             },
             {
-                label: 'Estado',
-                field: 'estado_name',
-            },
-            {
                 label: 'RUT',
                 field: 'rut',
                 sort: 'disabled',
