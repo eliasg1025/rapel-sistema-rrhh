@@ -38,6 +38,9 @@ class AtencionReseteoClave extends Model
             $atencion->trabajador_id = $trabajador_id;
             $atencion->empresa_id = $data['empresa_id'];
             $atencion->usuario_id = $data['usuario_id'];
+            $exploded = explode("-", $atencion->fecha_solicitud);
+            $exploded = array_reverse($exploded);
+            $atencion->clave = strtolower($atencion->empresa->shortname) . $exploded[0] . $exploded[1];
 
             if ( $atencion->save() ) {
                 DB::commit();
@@ -58,7 +61,7 @@ class AtencionReseteoClave extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $usuario_carga_id)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -105,7 +108,19 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
-            return DB::table('atenciones_reseteo_clave as a')
+            $atenciones_query = DB::table('atenciones_reseteo_clave as a')
+                ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'a.usuario_id');
+                })
+                ->where('a.estado', $estado)
+                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+
+            return $atenciones_query
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
+                })
                 ->select(
                     'a.id',
                     'a.fecha_solicitud',
@@ -119,17 +134,35 @@ class AtencionReseteoClave extends Model
                     //'usuario2.username as usuario2',
                     //'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
                 )
-                ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
-                ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
-                ->joinSub($usuarios, 'usuario', function($join) {
-                    $join->on('usuario.id', '=', 'a.usuario_id');
-                })
-                ->where('a.estado', $estado)
-                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
         } else {
             return [];
         }
+    }
+
+    public static function _getUsuariosCarga(array $fechas, int $estado=0)
+    {
+        $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+        return DB::table('atenciones_reseteo_clave as a')
+            ->select(
+                DB::raw('MIN(usuario_id) as id'),
+                'usuario.username as usuario',
+                'usuario.nombre_completo_usuario as nombre_completo'
+            )
+            ->joinSub($usuarios, 'usuario', function($join) {
+                $join->on('usuario.id', '=', 'a.usuario_id');
+            })
+            ->where('a.estado', $estado)
+            ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+            ->groupBy('usuario')
+            ->get();
     }
 
     public static function resolver(int $usuario_id, int $id)
@@ -146,9 +179,6 @@ class AtencionReseteoClave extends Model
 
         $atencion->estado = 1;
         $atencion->usuario2_id = $usuario->id;
-        $exploded = explode("-", $atencion->fecha_solicitud);
-        $exploded = array_reverse($exploded);
-        $atencion->clave = strtolower($atencion->empresa->shortname) . implode("", $exploded);
         if ( $atencion->save() ) {
             return [
                 'message' => 'Registro actualizado correctamente'

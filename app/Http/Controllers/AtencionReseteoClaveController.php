@@ -25,14 +25,28 @@ class AtencionReseteoClaveController extends Controller
             'hasta' => $request->hasta
         ];
         $estado = $request->estado;
+        $usuario_carga_id = $request->usuario_carga_id;
 
-        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas, $estado);
+        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas, $estado, $usuario_carga_id);
 
         if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['message']
             ], 400);
         }
+
+        return response()->json($result);
+    }
+
+    public function getUsuariosCarga(Request $request)
+    {
+        $fechas = [
+            'desde' => $request->desde,
+            'hasta' => $request->hasta
+        ];
+        $estado = $request->estado;
+
+        $result = AtencionReseteoClave::_getUsuariosCarga($fechas, $estado);
 
         return response()->json($result);
     }

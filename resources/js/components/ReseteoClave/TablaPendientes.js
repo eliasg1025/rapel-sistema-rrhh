@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Select } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
@@ -13,9 +13,11 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         desde: moment().format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
+        usuario_carga_id: 0
     });
     const [isVisible, setIsVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
+    const [usuariosCarga, setUsuariosCarga] = useState([]);
 
     let _columns = [];
     if (usuario.reseteo_clave == 1) {
@@ -154,13 +156,13 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
     useEffect(() => {
         Axios.post('/api/atencion-reseteo-clave/get-all', {
             usuario_id: usuario.id,
+            usuario_carga_id: filtro.usuario_carga_id,
             desde: filtro.desde,
             hasta: filtro.hasta,
             estado: filtro.estado
         })
             .then(res => {
                 const { data } = res;
-                console.log(data);
 
                 message['success']({
                     content: `Se encontraron ${data.length} registros`
@@ -198,7 +200,29 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 });
             })
             .catch(err => console.error(err));
-    }, [filtro.desde, filtro.hasta, filtro.estado, reloadDatos]);
+    }, [filtro.desde, filtro.hasta, filtro.estado, filtro.usuario_carga_id, reloadDatos]);
+
+    useEffect(() => {
+        setFiltro({ ...filtro, usuario_carga_id: 0 });
+        let intentos = 0;
+        function fetchUsuariosCarga() {
+            intentos++;
+            Axios.post('/api/atencion-reseteo-clave/get-usuarios-carga', {
+                desde: filtro.desde,
+                hasta: filtro.hasta,
+                estado: filtro.estado
+            })
+                .then(res => setUsuariosCarga(res.data))
+                .catch(err => {
+                    if (intentos < 5) {
+                        fetchUsuariosCarga();
+                    }
+                    console.error(err)
+                });
+        }
+
+        fetchUsuariosCarga();
+    }, [filtro.desde, filtro.hasta, filtro.estado]);
 
     return (
         <>
@@ -226,6 +250,18 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         <option value="1">ATENDIDO</option>
                     </select>
                 </div>
+                {usuario.reseteo_clave == 2 && (
+                    <div>
+                        <select
+                            className="form-control"
+                            value={filtro.usuario_carga_id}
+                            onChange={e => setFiltro({ ...filtro, usuario_carga_id: e.target.value})}
+                        >
+                            <option value={0} key={0}>TODOS</option>
+                            {usuariosCarga.map(option => <option value={option.id} key={option.id}>{ `${option.nombre_completo}` }</option>)}
+                        </select>
+                    </div>
+                )}
                 <div>
                     <button className="btn btn-success btn-sm" disabled onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar

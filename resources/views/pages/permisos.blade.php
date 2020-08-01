@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('titutlo')
+@section('titulo')
     Formularios de permisos | Grupo Verfrut
 @endsection
 

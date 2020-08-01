@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('titutlo')
+@section('titulo')
     Cuentas | Grupo Verfrut
 @endsection
 

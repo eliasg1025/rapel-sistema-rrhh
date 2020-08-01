@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Atención Reseteo Clave
+    Atención Reseteo Clave | Grupo Verfrut
 @endsection
 
 @section('contenido')

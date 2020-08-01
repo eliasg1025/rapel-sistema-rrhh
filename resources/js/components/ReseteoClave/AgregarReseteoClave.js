@@ -7,7 +7,7 @@ import Axios from 'axios';
 import TablaPendientes from './TablaPendientes';
 import Swal from 'sweetalert2';
 
-const intitalState = {
+const initialState = {
     nombre_completo: '',
     fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
     empresa_id: 9
@@ -18,7 +18,7 @@ const AgregarReseteoClave = () => {
 
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
-    const [form, setForm] = useState({...intitalState});
+    const [form, setForm] = useState({...initialState});
     const [reloadDatos, setReloadDatos] = useState(false);
 
     const handleSubmit = e => {
@@ -44,6 +44,7 @@ const AgregarReseteoClave = () => {
                 })
                     .then(() => {
                         setReloadDatos(!reloadDatos);
+                        setForm({...initialState});
                     });
             })
             .catch(err => {
