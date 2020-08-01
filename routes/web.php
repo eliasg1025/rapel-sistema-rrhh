@@ -43,6 +43,7 @@ Route::get('/test', 'ContratoController@test');
 
 
 Route::group(['prefix' => 'descargar'], function() {
+    Route::post('/', 'Web\ExportController@descargar');
     Route::post('/observados', 'Web\TrabajadorController@descargarObservado');
     Route::post('/cuentas', 'Web\CuentasController@descargarCuentas');
     Route::post('/elecciones-afp', 'Web\EleccionAfpController@descargarEleccionesAfp');

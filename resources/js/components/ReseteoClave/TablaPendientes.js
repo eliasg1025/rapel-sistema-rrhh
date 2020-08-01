@@ -80,6 +80,10 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 field: 'nombre_completo_usuario',
             },
             {
+                label: 'Clave sugerida',
+                field: 'clave'
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
@@ -93,7 +97,41 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
     });
 
     const handleExportar = () => {
-        console.log('exportar');
+        const headings = [
+            'FECHA SOLICITUD',
+            'RUT',
+            'TRABAJADOR',
+            'EMPRESA',
+            'CARGADO POR',
+            'CLAVE SUGERIDA',
+            'ATENDIDO POR',
+        ];
+        const data = datatable.rows.map(item => {
+            return {
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.rut,
+                trabajador: item.nombre_completo,
+                empresa: item.empresa,
+                cargado_por: item?.nombre_completo_usuario || '',
+                clave: (filtro.estado == 0 && usuario.reseteo_clave == 1) ? '' : item.clave,
+                atendido_por: item?.nombre_completo_usuario2 || '',
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `RESETEO-CLAVE-${filtro.estado == 0 ? "PENDIENTES" : "ATENDIDOS"}-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click();
+            })
     }
 
     const handleEliminar = id => {
@@ -147,8 +185,9 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         console.log(item);
         setIsVisible(true);
         setModalContent(
-            <div>
-                Nueva clave: <b>{item.clave}</b>
+            <div className="container">
+                Nueva clave: <b>{item.clave}</b><br />
+                Atendido por: <b>{item.nombre_completo_usuario2}</b>
             </div>
         );
     }
@@ -186,7 +225,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                                     </>
                                 ) : (
                                     <button className="btn btn-light btn-sm" onClick={() => handleVerCambio(item)}>
-                                        <i className="fas fa-eye" /> Ver
+                                        <i className="fas fa-eye" /> Clave
                                     </button>
                                 )}
                             </div>
@@ -246,8 +285,8 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         value={filtro.estado}
                         onChange={e => setFiltro({ ...filtro, estado: e.target.value })}
                     >
-                        <option value="0">PENDIENTE</option>
-                        <option value="1">ATENDIDO</option>
+                        <option value="0">PENDIENTES</option>
+                        <option value="1">ATENDIDOS</option>
                     </select>
                 </div>
                 {usuario.reseteo_clave == 2 && (
@@ -263,7 +302,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                     </div>
                 )}
                 <div>
-                    <button className="btn btn-success btn-sm" disabled onClick={handleExportar}>
+                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar
                     </button>
                 </div>

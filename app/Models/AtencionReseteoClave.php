@@ -90,9 +90,15 @@ class AtencionReseteoClave extends Model
                     'e.shortname as empresa',
                     'a.estado',
                     'a.clave',
-                    //'usuario2.username as usuario2',
-                    //'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
                 )
+                ->when($estado == 1, function($query) use ($usuarios) {
+                    $query->joinSub($usuarios, 'usuario2', function($join) {
+                        $join->on('usuario2.id', '=', 'a.usuario2_id');
+                    })->addSelect(
+                        'usuario2.username as usuario2',
+                        'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
+                    );
+                })
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->where('a.usuario_id', '=', $usuario->id)
@@ -108,19 +114,7 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
-            $atenciones_query = DB::table('atenciones_reseteo_clave as a')
-                ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
-                ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
-                ->joinSub($usuarios, 'usuario', function($join) {
-                    $join->on('usuario.id', '=', 'a.usuario_id');
-                })
-                ->where('a.estado', $estado)
-                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
-
-            return $atenciones_query
-                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
-                    $query->where('usuario.id', $usuario_carga_id);
-                })
+            return DB::table('atenciones_reseteo_clave as a')
                 ->select(
                     'a.id',
                     'a.fecha_solicitud',
@@ -131,9 +125,25 @@ class AtencionReseteoClave extends Model
                     'a.clave',
                     'usuario.username as usuario',
                     'usuario.nombre_completo_usuario as nombre_completo_usuario',
-                    //'usuario2.username as usuario2',
-                    //'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
                 )
+                ->when($estado == 1, function($query) use ($usuarios) {
+                    $query->joinSub($usuarios, 'usuario2', function($join) {
+                        $join->on('usuario2.id', '=', 'a.usuario2_id');
+                    })->addSelect(
+                        'usuario2.username as usuario2',
+                        'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
+                    );
+                })
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'a.usuario_id');
+                })
+                ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->where('a.estado', $estado)
+                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
+                })
                 ->get();
         } else {
             return [];
