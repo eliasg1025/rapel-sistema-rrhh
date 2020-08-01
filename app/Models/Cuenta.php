@@ -55,7 +55,7 @@ class Cuenta extends Model
                 ->select(
                     'u.id',
                     'u.username',
-                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo_usuario')
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
@@ -64,7 +64,7 @@ class Cuenta extends Model
                     'c.id as id',
                     'c.fecha_solicitud',
                     't.rut',
-                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     'b.name as banco_name',
                     'c.numero_cuenta',
                     'usuario.username as usuario',
@@ -87,7 +87,7 @@ class Cuenta extends Model
                     'c.id as id',
                     'c.fecha_solicitud',
                     't.rut',
-                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     'b.name as banco_name',
                     'c.numero_cuenta',
                     'e.shortname as empresa',
@@ -111,7 +111,7 @@ class Cuenta extends Model
                 'c.id as id',
                 'c.fecha_solicitud',
                 't.rut',
-                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                 'b.name as banco_name',
                 'c.numero_cuenta',
                 'e.shortname as empresa',
@@ -190,7 +190,7 @@ class Cuenta extends Model
                 'c.fecha_solicitud',
                 'c.empresa_id',
                 't.rut',
-                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_trabajador'),
+                DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_trabajador'),
                 'b.code as banco_id',
                 'c.numero_cuenta',
                 'c.apertura'

@@ -136,7 +136,7 @@ const DatosFormularioPermiso = ({
                         <div className="col">
                             <input
                                 type="date" name="fecha_regreso" placeholder="Fecha Regreso"
-                                className="form-control" min="2020-01-01" max="2500-01-01"
+                                className="form-control" min="2020-06-25" max="2500-01-01"
                                 value={form.fecha_regreso}
                                 onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
                             />

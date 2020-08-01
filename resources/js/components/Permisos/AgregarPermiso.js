@@ -41,7 +41,6 @@ const AgregarPermiso = () => {
     useEffect(() => {
         const start = moment(`${form.fecha_salida} ${form.hora_salida}`);
         const end = moment(`${form.fecha_regreso} ${form.hora_regreso}`);
-        /*
 
         const diff = moment.duration(end.diff(start));
 
@@ -50,8 +49,8 @@ const AgregarPermiso = () => {
         const hours = Math.ceil(( diff.asDays() - days ) * 24);
 
         const differenceOnHours = (days * 8) + hours;
-
-        setHp(differenceOnHours);*/
+        console.log({days, hours});
+        setHp(differenceOnHours);
 
     }, [form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida]);
 
