@@ -261,7 +261,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         }
 
         fetchUsuariosCarga();
-    }, [filtro.desde, filtro.hasta, filtro.estado]);
+    }, [filtro.desde, filtro.hasta, filtro.estado, reloadDatos]);
 
     return (
         <>

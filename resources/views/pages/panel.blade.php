@@ -34,8 +34,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block btn-light" href="/atencion-reseteo-clave" {{ $data['usuario']->reseteo_clave === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-lock"></i> Reseteo Clave TU RECIBO
+                    <a class="btn btn-block btn-light" href="/atencion-cambio-clave" {{ $data['usuario']->reseteo_clave === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-lock"></i> Cambio Clave TU RECIBO
                     </a>
                 </div>
             </div>
