@@ -104,6 +104,7 @@ class AtencionReseteoClave extends Model
                 ->where('a.usuario_id', '=', $usuario->id)
                 ->where('a.estado', $estado)
                 ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->orderBy('a.id', 'ASC')
                 ->get();
         } else if ( $usuario->reseteo_clave == 2 ) {
             $usuarios = DB::table('usuarios as u')
@@ -144,6 +145,7 @@ class AtencionReseteoClave extends Model
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
                 })
+                ->orderBy('a.id', 'ASC')
                 ->get();
         } else {
             return [];
