@@ -85,6 +85,7 @@ class AtencionReseteoClave extends Model
                 ->select(
                     'a.id',
                     'a.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(a.created_at, "%H:%i:%s") hora'),
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',
@@ -119,6 +120,7 @@ class AtencionReseteoClave extends Model
                 ->select(
                     'a.id',
                     'a.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(a.created_at, "%H:%i:%s") hora'),
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',

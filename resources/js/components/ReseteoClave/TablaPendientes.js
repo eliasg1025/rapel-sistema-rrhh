@@ -29,6 +29,10 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 width: 150
             },
             {
+                label: 'Hora',
+                field: 'hora'
+            },
+            {
                 label: 'RUT',
                 field: 'rut',
                 sort: 'disabled',
@@ -58,6 +62,10 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 field: 'fecha_solicitud',
                 sort: 'disabled',
                 width: 150
+            },
+            {
+                label: 'Hora',
+                field: 'hora'
             },
             {
                 label: 'RUT',
@@ -99,6 +107,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
     const handleExportar = () => {
         const headings = [
             'FECHA SOLICITUD',
+            'HORA',
             'RUT',
             'TRABAJADOR',
             'EMPRESA',
@@ -109,6 +118,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         const data = datatable.rows.map(item => {
             return {
                 fecha_solicitud: item.fecha_solicitud,
+                hora: item.hora,
                 dni: item.rut,
                 trabajador: item.nombre_completo,
                 empresa: item.empresa,
