@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosFormularioPermiso from './DatosFormularioPermiso';
+import Axios from 'axios';
+import { message } from 'antd';
 
 
 const AgregarPermiso = () => {
@@ -41,20 +43,52 @@ const AgregarPermiso = () => {
     }, [contratoActivo]);
 
     useEffect(() => {
+        setForm({
+            ...form,
+            fecha_regreso: form.fecha_salida
+        })
+    }, [form.fecha_salida]);
+
+    useEffect(() => {
         if (
             form.fecha_salida !== '' &&
             form.fecha_regreso !== '' &&
             form.hora_salida !== '' &&
             form.hora_regreso !== '' &&
-            form.horario_entrada !== ''
+            form.horario_entrada !== '' &&
+            moment(form.fecha_salida).year() >= moment().year() - 1 &&
+            moment(form.fecha_regreso).year() >= moment().year() - 1 &&
+            contratoActivo
         ) {
             const start = moment(`${form.fecha_salida} ${form.hora_salida}`).format('YYYY-MM-DD HH:mm:ss').toString();
             const end = moment(`${form.fecha_regreso} ${form.hora_regreso}`).format('YYYY-MM-DD HH:mm:ss').toString();
 
-            console.log(start, end);
+            Axios.post('/api/formulario-permiso/calcular-horas', {
+                fecha_hora_salida: start,
+                fecha_hora_regreso: end,
+                horario_entrada: form.horario_entrada,
+                refrigerio: form.refrigerio,
+                contrato: contratoActivo
+            })
+                .then(res => {
+                    console.log(res.data);
+
+                    message['success']({
+                        content: res.data.message
+                    })
+                })
+                .catch(err => {
+                    console.error(err.response);
+
+                    if (err.response.data) {
+                        message['error']({
+                            content: err.response.data.message
+                        });
+                    }
+                });
         }
 
-    }, [trabajador, contratoActivo, form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida, form.considerar_refrigerio, form.horario_entrada ]);
+    }, [trabajador, contratoActivo, form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida, form.refrigerio, form.horario_entrada ]);
 
     const handleSubmit = e => {
         e.preventDefault();

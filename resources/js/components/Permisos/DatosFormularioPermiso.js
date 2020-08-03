@@ -105,17 +105,16 @@ const DatosFormularioPermiso = ({
                 <div className="form-group col-md-6 col-lg-4">
                     <div className="row">
                         <div className="col">
-                            <div className="form-check mt-3">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    checked={form.considerar_refrigerio}
-                                    onChange={e => setForm({ ...form, considerar_refrigerio: e.target.checked })}
-                                />
-                                <label className="form-check-label">
-                                    Considerar refrigerio
-                                </label>
-                            </div>
+                            Refrigerio<br />
+                            <select
+                                className="form-control"
+                                value={form.refrigerio}
+                                onChange={e => setForm({ ...form, refrigerio: e.target.value })}
+                            >
+                                <option value={0} key={0}>NO CONSIDERAR</option>
+                                <option value={1} key={1}>1 HORA</option>
+                                <option value={0.75} key={2}>45 MIN</option>
+                            </select>
                         </div>
                         <div className="col">
                             Horario de entrada:
@@ -155,7 +154,7 @@ const DatosFormularioPermiso = ({
                         <div className="col">
                             <input
                                 type="date" name="fecha_regreso" placeholder="Fecha Regreso"
-                                className="form-control" min="2020-06-25" max="2500-01-01"
+                                className="form-control" min={form.fecha_salida} max="2500-01-01"
                                 value={form.fecha_regreso}
                                 onChange={e => setForm({ ...form, [e.target.name]: e.target.value })}
                             />

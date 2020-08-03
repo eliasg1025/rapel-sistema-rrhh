@@ -86,6 +86,10 @@ Route::group(['prefix' => 'atencion-reseteo-clave'], function() {
     Route::put('/resolver/{id}', 'AtencionReseteoClaveController@resolver');
     Route::delete('/{id}', 'AtencionReseteoClaveController@delete');
 });
+
+Route::group(['prefix' => 'formulario-permiso'], function() {
+    Route::post('/calcular-horas', 'FormularioPermisoController@calcularHoras');
+});
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');
