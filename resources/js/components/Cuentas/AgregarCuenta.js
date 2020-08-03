@@ -120,7 +120,7 @@ const BuscarTrabajador = props => {
             }
         })
 
-        axios.get(`http://192.168.60.16/api/trabajador/${rut}`)
+        axios.get(`http://192.168.60.16/api/trabajador/${rut}?activo=${false}`)
                 .then(res => {
                     const { trabajador, contrato_activo } = res.data.data;
 

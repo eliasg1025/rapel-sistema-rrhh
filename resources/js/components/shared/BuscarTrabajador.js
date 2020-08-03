@@ -4,7 +4,8 @@ import Swal from 'sweetalert2';
 
 const BuscarTrabajador = ({
     setTrabajador,
-    setContratoActivo
+    setContratoActivo,
+    activo=true
 }) => {
     const [rut, setRut] = useState('');
     const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ const BuscarTrabajador = ({
         e.preventDefault();
 
         function fetchTrabajador(cb) {
-            Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info`)
+            Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info?activo=${activo}`)
                 .then(res => {
                     const { contrato_activo, trabajador } = res.data.data;
                     //console.log(trabajador, contrato_activo);

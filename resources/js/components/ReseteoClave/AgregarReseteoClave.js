@@ -75,6 +75,7 @@ const AgregarReseteoClave = () => {
             <BuscarTrabajador
                 setTrabajador={setTrabajador}
                 setContratoActivo={setContratoActivo}
+                activo={false}
             />
             <DatosReseteoClave
                 handleSubmit={handleSubmit}
