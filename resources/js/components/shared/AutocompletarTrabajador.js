@@ -14,14 +14,14 @@ const AutocompletarTrabajador = props => {
     const [options, setOptions] = useState([]);
 
     const handleSearch = searchText => {
-        if (searchText.length > 3) {
+        if (searchText.length >= 3) {
             Axios.get(`http://192.168.60.16/api/trabajador/buscar?t=${searchText}`)
                 .then(res => {
+                    console.log(res.data);
                     const x = res.data.map((item, index) => {
-                        return item.nombre_completo
+                        return { value: item.nombre_completo }
                     });
-                    console.log(x);
-                    // setOptions(x);
+                    setOptions(x);
                 });
         } else {
             setOptions([]);
@@ -46,7 +46,6 @@ const AutocompletarTrabajador = props => {
             placeholder="Buscar por nombre o apellido"
             style={{
                 width: '100%',
-                marginTop: '15px'
             }}
         />
     );

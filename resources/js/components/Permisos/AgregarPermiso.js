@@ -14,15 +14,17 @@ const AgregarPermiso = () => {
         nombre_completo: '',
         nombre_completo_jefe: '',
         fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
-        empresa_id: 9,
+        empresa_id: '',
+        horario_entrada: '06:15',
+        considerar_refrigerio: false,
         fecha_salida: '',
-        fecha_regreso: '',
         hora_salida: '00:00',
+        fecha_regreso: '',
         hora_regreso: '00:00',
         motivo_permiso_id: '',
+        total_horas: 0,
         observacion: '',
     });
-    const [hp, setHp] = useState(0);
 
     useEffect(() => {
         setForm({
@@ -39,20 +41,20 @@ const AgregarPermiso = () => {
     }, [contratoActivo]);
 
     useEffect(() => {
-        const start = moment(`${form.fecha_salida} ${form.hora_salida}`);
-        const end = moment(`${form.fecha_regreso} ${form.hora_regreso}`);
+        if (
+            form.fecha_salida !== '' &&
+            form.fecha_regreso !== '' &&
+            form.hora_salida !== '' &&
+            form.hora_regreso !== '' &&
+            form.horario_entrada !== ''
+        ) {
+            const start = moment(`${form.fecha_salida} ${form.hora_salida}`).format('YYYY-MM-DD HH:mm:ss').toString();
+            const end = moment(`${form.fecha_regreso} ${form.hora_regreso}`).format('YYYY-MM-DD HH:mm:ss').toString();
 
-        const diff = moment.duration(end.diff(start));
+            console.log(start, end);
+        }
 
-        const days = Math.floor(diff.asDays());
-
-        const hours = Math.ceil(( diff.asDays() - days ) * 24);
-
-        const differenceOnHours = (days * 8) + hours;
-        console.log({days, hours});
-        setHp(differenceOnHours);
-
-    }, [form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida]);
+    }, [trabajador, contratoActivo, form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida, form.considerar_refrigerio, form.horario_entrada ]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -69,7 +71,6 @@ const AgregarPermiso = () => {
                 handleSubmit={handleSubmit}
                 form={form}
                 setForm={setForm}
-                hp={hp}
                 motivosPermiso={motivosPermiso}
                 setMotivosPermiso={setMotivosPermiso}
                 setTrabajadorJefe={setTrabajadorJefe}

@@ -134,7 +134,7 @@ const BuscarTrabajador = props => {
                         nombre_trabajador: `${trabajador.apellido_paterno} ${trabajador.apellido_materno}, ${trabajador.nombre}`,
                         numero_cuenta: trabajador.numero_cuenta,
                         empresa_id: contrato_activo[0].empresa_id,
-                        banco_id: trabajador.banco_id || 59
+                        banco_id: trabajador.banco_id || '59'
                     });
                     setTrabajador({ ...clearData(trabajador) });
                 })

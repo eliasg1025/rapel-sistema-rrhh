@@ -31,10 +31,10 @@ const DatosCuenta = props => {
                     parseInt(numero_cuenta.substring(3, numero_cuenta.length - 1)) >= 100000000
                 );
             case '38':
-            case '43':
+            case '09':
                 return numero_cuenta.length === 10;
             case '11':
-                return (numero_cuenta.length === 18 || numero_cuenta.length === 20) & (
+                return (numero_cuenta.length === 18 || numero_cuenta.length === 20 || numero_cuenta.length === 19) & (
                     numero_cuenta.substring(0, 4) === '0011'
                 );
             default:

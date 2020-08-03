@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
-import { trim } from 'jquery';
 
 import AutocompletarTrabajador from '../shared/AutocompletarTrabajador';
+import { Select } from 'antd';
 
 const DatosFormularioPermiso = ({
     handleSubmit,
     form,
     setForm,
-    hp,
     motivosPermiso,
     setMotivosPermiso,
     setTrabajadorJefe
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState({
+        empresas: false,
+        motivos: false,
+    });
+    const [loadingRegistro, setLoadingRegistro] = useState(false);
     const [validForm, setValidForm] = useState(false);
 
     useEffect(() => {
@@ -32,41 +35,52 @@ const DatosFormularioPermiso = ({
                 })
                 .finally(cb);
         }
-
-        let intento1 = 0;
-        function fetchMotivosPermiso(cb) {
-            intento1++;
-            Axios.get(`http://192.168.60.16/api/motivo-permiso/${trim(form.empresa_id)}`)
-                .then(res => setMotivosPermiso(res.data.data))
-                .catch(err => {
-                    console.log(err);
-                    if (intento1 < 5) {
-                        fetchMotivosPermiso();
-                    }
-                })
-                .finally(cb);
-        }
-
-        setLoading(true);
-        fetchEmpresas(() => {
-            setLoading(false);
-        });
-        fetchMotivosPermiso();
+        setLoading({ ...loading, empresas: true });
+        fetchEmpresas(() => setLoading({ ...loading, empresas: false }));
     }, []);
+
+    useEffect(() => {
+        if (form.empresa_id !== '') {
+            let intento1 = 0;
+            function fetchMotivosPermiso(cb) {
+                intento1++;
+                Axios.get(`http://192.168.60.16/api/motivo-permiso/${form.empresa_id}`)
+                    .then(res => setMotivosPermiso(res.data.data))
+                    .catch(err => {
+                        console.log(err);
+                        if (intento1 < 5) {
+                            fetchMotivosPermiso();
+                        }
+                    })
+                    .finally(cb);
+            }
+            setLoading({ ...loading, motivos: true });
+            fetchMotivosPermiso(() => {
+                setLoading({ ...loading, motivos: false });
+            });
+        }
+    }, [form.empresa_id])
 
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-row">
                 <div className="form-group col-md-6 col-lg-4">
-                    Empresa: <br />
-                    <select
-                        type="text" name="empresa_id" placeholder="Empresa"
-                        className="form-control"
-                        value={form.empresa_id}
-                        onChange={e => setForm({ ...form, empresa_id: e.target.value })}
-                    >
-                        {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
-                    </select>
+                    {loading.empresas ? (
+                        <div className="spinner-grow text-info"></div>
+                    ) : (
+                        <>
+                            Empresa: <br />
+                            <select
+                                type="text" name="empresa_id" placeholder="Empresa"
+                                className="form-control"
+                                value={form.empresa_id}
+                                onChange={e => setForm({ ...form, empresa_id: e.target.value })}
+                            >
+                                <option value="" key="0" disabled></option>
+                                {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
+                            </select>
+                        </>
+                    )}
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     Fecha solicitud: <br />
@@ -92,23 +106,28 @@ const DatosFormularioPermiso = ({
                     <div className="row">
                         <div className="col">
                             <div className="form-check mt-3">
-                                <input type="checkbox" className="form-check-input" />
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={form.considerar_refrigerio}
+                                    onChange={e => setForm({ ...form, considerar_refrigerio: e.target.checked })}
+                                />
                                 <label className="form-check-label">
                                     Considerar refrigerio
                                 </label>
                             </div>
                         </div>
                         <div className="col">
-                            Hora de entrada:
+                            Horario de entrada:
                             <input
                                 type="time" name="horario" placeholder="Hora de entrada"
                                 className="form-control"
+                                value={form.horario_entrada}
+                                onChange={e => setForm({ ...form, horario_entrada: e.target.value })}
                             />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
                     Fecha y hora salida:<br />
                     <div className="row">
@@ -151,48 +170,60 @@ const DatosFormularioPermiso = ({
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
-                    Cantidad horas:<br />
+                    Total horas:<br />
                     <input
                         type="number" name="hp" placeholder="H-P" readOnly={true}
                         className="form-control"
-                        value={hp || 0}
+                        value={form.total_horas}
                     />
                 </div>
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-6">
                     Jefe de Zona/Campo:<br />
-                    {/*
-                        <input
-                            type="text" name="jefe" placeholder="Escribe nombre o apellido"
-                            className="form-control"
-                            value={form.nombre_completo_jefe}
-                            onChange={e => setForm({ ...form, nombre_completo_jefe: e.target.value })}
-                        />
-                        <div className="list-group">
-                            {jefes.map(item => <button className="btn" key={item.id}>{item.nombre_completo}</button>)}
-                        </div>
-                    */}
                     <AutocompletarTrabajador
                         setTrabajador={setTrabajadorJefe}
                     />
                 </div>
                 <div className="form-group col-md-6 col-lg-6">
-                    Motivo de Permiso:<br />
-                    <select
-                        type="text" name="motivo_permiso_id" placeholder="Motivo Permiso"
+                    {loading.motivos ? (
+                        <div className="spinner-grow text-info"></div>
+                    ) : (
+                        <>
+                            Motivo de Permiso:<br />
+                            <Select
+                                value={form.motivo_permiso_id}
+                                onChange={e => setForm({ ...form, motivo_permiso_id: e })}
+                                style={{
+                                    width: '100%',
+                                }}
+                            >
+                                {motivosPermiso.map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id} - ${e.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </>
+                    )}
+                </div>
+            </div>
+            <div className="row">
+                <div className="form-group col">
+                    Observación:<br />
+                    <textarea
                         className="form-control"
-                        value={form.motivo_permiso_id}
-                        onChange={e => setForm({ ...form, motivo_permiso_id: e.target.value })}
-                    >
-                        {motivosPermiso.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
-                    </select>
+                        value={form.observacion}
+                        onChange={e => setForm({ ...form, observacion: e.target.value })}
+                    ></textarea>
                 </div>
             </div>
             <div className="row">
                 <div className="col">
-                    {loading ? (
+                    {loadingRegistro ? (
                         <div className="spinner-grow text-info"></div>
                     ) : (
                         <button

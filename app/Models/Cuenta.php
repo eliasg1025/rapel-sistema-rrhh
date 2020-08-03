@@ -129,6 +129,19 @@ class Cuenta extends Model
 
     public static function _create(array $data)
     {
+        if (!$data['apertura']) {
+            if ($data['banco']['id'] == '59') {
+                if (
+                    strlen($data['numero_cuenta']) !== 14 ||
+                    substr($data['numero_cuenta'], -3, 1) > 1
+                ) {
+                    return [
+                        'error' => 'BCP: Número de cuenta debe tener 14 dígitos o formato de cuenta incorrecto'
+                    ];
+                }
+            }
+        }
+
         DB::beginTransaction();
         try {
             $banco_id = Banco::findOrCreate($data['banco']);
@@ -160,7 +173,7 @@ class Cuenta extends Model
                 $cuenta = Cuenta::find($data['id']);
                 $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->banco_id = $banco_id;
-                $cuenta->numero_cuenta = $data['numero_cuenta'];
+                $cuenta->numero_cuenta = !$data['apertura'] ? $data['numero_cuenta'] : null;
             }
 
             if ($cuenta->save()) {
