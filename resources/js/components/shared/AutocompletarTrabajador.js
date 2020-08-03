@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AutoComplete } from 'antd';
 import Axios from 'axios';
+
+import { clearObject } from '../../helpers';
 
 const mockVal = (str, repeat = 1) => ({
     value: str.repeat(repeat),
@@ -9,7 +11,6 @@ const mockVal = (str, repeat = 1) => ({
 const AutocompletarTrabajador = props => {
     const { setTrabajador } = props;
 
-    const [trabajadores, settrabajadores] = useState([]);
     const [value, setValue] = useState('');
     const [options, setOptions] = useState([]);
 
@@ -17,11 +18,9 @@ const AutocompletarTrabajador = props => {
         if (searchText.length >= 3) {
             Axios.get(`http://192.168.60.16/api/trabajador/buscar?t=${searchText}`)
                 .then(res => {
-                    console.log(res.data);
-                    const x = res.data.map((item, index) => {
-                        return { value: item.nombre_completo }
-                    });
-                    setOptions(x);
+                    setOptions(res.data.map(item => {
+                        return { value: item.nombre_completo, rut: item.rut }
+                    }));
                 });
         } else {
             setOptions([]);
@@ -29,7 +28,11 @@ const AutocompletarTrabajador = props => {
     }
 
     const handleSelect = data => {
-        console.log(data);
+        let t = options.find(item => item.value = data);
+
+        Axios.get(`http://192.168.60.16/api/trabajador/${t.rut}`)
+            .then(res => setTrabajador(clearObject(res.data.data.trabajador)))
+            .catch(err => console.error(err));
     }
 
     const handleChange = data => {
