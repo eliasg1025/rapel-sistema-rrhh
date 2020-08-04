@@ -14,19 +14,20 @@ const AgregarPermiso = () => {
     const [motivosPermiso, setMotivosPermiso] = useState([]);
     const [form, setForm] = useState({
         nombre_completo: '',
-        nombre_completo_jefe: '',
         fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
         empresa_id: '',
         horario_entrada: '06:15',
-        considerar_refrigerio: false,
+        horario_salida: '',
+        refrigerio: 0,
         fecha_salida: '',
         hora_salida: '00:00',
         fecha_regreso: '',
         hora_regreso: '00:00',
         motivo_permiso_id: '',
-        total_horas: 0,
         observacion: '',
     });
+
+    const [totalHoras, setTotalHoras] = useState(0);
 
     useEffect(() => {
         setForm({
@@ -45,37 +46,34 @@ const AgregarPermiso = () => {
     useEffect(() => {
         setForm({
             ...form,
+            hora_regreso: form.horario_salida
+        });
+    }, [form.horario_salida]);
+
+    useEffect(() => {
+        setForm({
+            ...form,
             fecha_regreso: form.fecha_salida
-        })
+        });
     }, [form.fecha_salida]);
 
     useEffect(() => {
-        if (
-            form.fecha_salida !== '' &&
-            form.fecha_regreso !== '' &&
-            form.hora_salida !== '' &&
-            form.hora_regreso !== '' &&
-            form.horario_entrada !== '' &&
-            moment(form.fecha_salida).year() >= moment().year() - 1 &&
-            moment(form.fecha_regreso).year() >= moment().year() - 1 &&
-            contratoActivo
-        ) {
-            const start = moment(`${form.fecha_salida} ${form.hora_salida}`).format('YYYY-MM-DD HH:mm:ss').toString();
-            const end = moment(`${form.fecha_regreso} ${form.hora_regreso}`).format('YYYY-MM-DD HH:mm:ss').toString();
-
+        function fetchHorasTotales() {
             Axios.post('/api/formulario-permiso/calcular-horas', {
-                fecha_hora_salida: start,
-                fecha_hora_regreso: end,
+                fecha_hora_salida: moment(`${form.fecha_salida} ${form.hora_salida}`).format('YYYY-MM-DD HH:mm:ss').toString(),
+                fecha_hora_regreso: moment(`${form.fecha_regreso} ${form.hora_regreso}`).format('YYYY-MM-DD HH:mm:ss').toString(),
                 horario_entrada: form.horario_entrada,
+                horario_salida: form.horario_salida,
                 refrigerio: form.refrigerio,
-                contrato: contratoActivo
             })
                 .then(res => {
                     console.log(res.data);
 
                     message['success']({
                         content: res.data.message
-                    })
+                    });
+
+                    setTotalHoras(res.data.total_horas);
                 })
                 .catch(err => {
                     console.error(err.response);
@@ -85,13 +83,32 @@ const AgregarPermiso = () => {
                             content: err.response.data.message
                         });
                     }
+
+                    setTotalHoras(0);
                 });
         }
 
-    }, [trabajador, contratoActivo, form.fecha_salida, form.fecha_regreso, form.hora_regreso, form.hora_salida, form.refrigerio, form.horario_entrada ]);
+        if (
+            form.fecha_salida !== '' &&
+            form.fecha_regreso !== '' &&
+            form.hora_salida !== '' &&
+            form.hora_regreso !== '' &&
+            form.horario_entrada !== '' &&
+            form.horario_salida !== '' &&
+            moment(form.fecha_salida).year() >= moment().year() - 1 &&
+            moment(form.fecha_regreso).year() >= moment().year() - 1
+        ) {
+            console.log('effect')
+            fetchHorasTotales();
+        }
+
+    }, [form.fecha_salida, form.fecha_regreso, form.hora_salida, form.hora_regreso, form.horario_entrada, form.horario_salida, form.refrigerio]);
 
     const handleSubmit = e => {
         e.preventDefault();
+        form.trabajador = trabajador;
+        form.jefe = trabajadorJefe;
+        form.contratoActivo = contratoActivo;
         console.log(form);
     };
 
@@ -105,6 +122,7 @@ const AgregarPermiso = () => {
                 handleSubmit={handleSubmit}
                 form={form}
                 setForm={setForm}
+                totalHoras={totalHoras}
                 motivosPermiso={motivosPermiso}
                 setMotivosPermiso={setMotivosPermiso}
                 setTrabajadorJefe={setTrabajadorJefe}

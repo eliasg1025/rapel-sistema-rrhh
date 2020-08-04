@@ -11,10 +11,18 @@ class FormularioPermiso extends Model
 
     public static function calcularHoras(DatosHoras $datosHoras)
     {
-        if ( !$datosHoras->isValid() ) {
+        if ( !$datosHoras->esValido() ) {
             return [
                 'error'   => true,
                 'message' => 'La fecha y hora de salida es mayor o igual a la fecha de regreso',
+                'horas'   => 0
+            ];
+        }
+
+        if ( !$datosHoras->verificarHoras() ) {
+            return [
+                'error'   => true,
+                'message' => 'Las horas de del permiso no esta en el horario de entrada y salida',
                 'horas'   => 0
             ];
         }

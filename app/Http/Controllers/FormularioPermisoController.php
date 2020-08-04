@@ -14,6 +14,7 @@ class FormularioPermisoController extends Controller
             $request->fecha_hora_salida,
             $request->fecha_hora_regreso,
             $request->horario_entrada,
+            $request->horario_salida,
             $request->refrigerio
         );
 

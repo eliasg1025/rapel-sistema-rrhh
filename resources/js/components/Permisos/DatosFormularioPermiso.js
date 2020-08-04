@@ -11,7 +11,8 @@ const DatosFormularioPermiso = ({
     setForm,
     motivosPermiso,
     setMotivosPermiso,
-    setTrabajadorJefe
+    setTrabajadorJefe,
+    totalHoras
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -104,25 +105,23 @@ const DatosFormularioPermiso = ({
             <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
                     <div className="row">
+
                         <div className="col">
-                            Refrigerio<br />
-                            <select
-                                className="form-control"
-                                value={form.refrigerio}
-                                onChange={e => setForm({ ...form, refrigerio: e.target.value })}
-                            >
-                                <option value={0} key={0}>NO CONSIDERAR</option>
-                                <option value={1} key={1}>1 HORA</option>
-                                <option value={0.75} key={2}>45 MIN</option>
-                            </select>
-                        </div>
-                        <div className="col">
-                            Horario de entrada:
+                            Entrada:
                             <input
-                                type="time" name="horario" placeholder="Hora de entrada"
+                                type="time" name="horario"
                                 className="form-control"
                                 value={form.horario_entrada}
                                 onChange={e => setForm({ ...form, horario_entrada: e.target.value })}
+                            />
+                        </div>
+                        <div className="col">
+                            Salida:
+                            <input
+                                type="time" name="horario"
+                                className="form-control"
+                                value={form.horario_salida}
+                                onChange={e => setForm({ ...form, horario_salida: e.target.value })}
                             />
                         </div>
                     </div>
@@ -171,12 +170,24 @@ const DatosFormularioPermiso = ({
                 </div>
             </div>
             <div className="row">
-                <div className="form-group col-md-6 col-lg-4">
+                <div className="form-group col-md-6 col-lg-6">
+                    Refrigerio<br />
+                    <select
+                        className="form-control"
+                        value={form.refrigerio}
+                        onChange={e => setForm({ ...form, refrigerio: e.target.value })}
+                    >
+                        <option value={0} key={0}>NO CONSIDERAR</option>
+                        <option value={1} key={1}>1 HORA</option>
+                        <option value={0.75} key={2}>45 MIN</option>
+                    </select>
+                </div>
+                <div className="form-group col-md-6 col-lg-6">
                     Total horas:<br />
                     <input
                         type="number" name="hp" placeholder="H-P" readOnly={true}
                         className="form-control"
-                        value={form.total_horas}
+                        value={totalHoras}
                     />
                 </div>
             </div>

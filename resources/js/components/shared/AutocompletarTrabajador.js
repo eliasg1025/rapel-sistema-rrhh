@@ -4,10 +4,6 @@ import Axios from 'axios';
 
 import { clearObject } from '../../helpers';
 
-const mockVal = (str, repeat = 1) => ({
-    value: str.repeat(repeat),
-});
-
 const AutocompletarTrabajador = props => {
     const { setTrabajador } = props;
 
@@ -18,9 +14,7 @@ const AutocompletarTrabajador = props => {
         if (searchText.length >= 3) {
             Axios.get(`http://192.168.60.16/api/trabajador/buscar?t=${searchText}`)
                 .then(res => {
-                    setOptions(res.data.map(item => {
-                        return { value: item.nombre_completo, rut: item.rut }
-                    }));
+                    setOptions(res.data.map(item => ({ value: item.nombre_completo, rut: item.rut }) ));
                 });
         } else {
             setOptions([]);
