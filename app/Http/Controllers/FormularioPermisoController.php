@@ -36,4 +36,26 @@ class FormularioPermisoController extends Controller
 
         return response()->json($result, 400);
     }
+
+    public function verFicha(FormularioPermiso $formularioPermiso)
+    {
+        try {
+            $data = [
+                'formulario' => $formularioPermiso,
+                'trabajador' => $formularioPermiso->trabajador,
+            ];
+
+            $pdf = \PDF::setOptions([
+                'images' => true
+            ])->loadView('documents.formulario-permiso.index', $data);
+
+            $filename = $formularioPermiso->trabajador->apellido_paterno . '-' . $formularioPermiso->trabajador->apellido_materno . '-' . $formularioPermiso->trabajador->rut . '-' . $formularioPermiso->empresa->nombre_corto . '-FORMULARIO-PERMISO.pdf';
+
+            return $pdf->stream($filename);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ]);
+        }
+    }
 }

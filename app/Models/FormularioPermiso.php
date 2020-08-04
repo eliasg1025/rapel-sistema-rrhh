@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\DatosHoras;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -10,10 +11,109 @@ class FormularioPermiso extends Model
 {
     protected $table = 'formularios_permisos';
 
+    /**
+     * Eloquent Relationships
+     */
     public function usuario()
     {
         return $this->belongsTo('App\Models\Usuario');
     }
+
+    public function trabajador()
+    {
+        return $this->belongsTo('App\Models\Trabajador');
+    }
+
+    public function jefe()
+    {
+        return $this->belongsTo('App\Models\Trabajador');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo('App\Models\Empresa');
+    }
+
+    public function oficio()
+    {
+        return $this->belongsTo('App\Models\Oficio');
+    }
+
+    public function zona_labor()
+    {
+        return $this->belongsTo('App\Models\ZonaLabor');
+    }
+
+    public function cuartel()
+    {
+        return $this->belongsTo('App\Models\Cuartel');
+    }
+
+    public function motivo_permiso()
+    {
+        return $this->belongsTo('App\Models\MotivoPermiso');
+    }
+
+    public function regimen()
+    {
+        return $this->belongsTo('App\Models\Regimen');
+    }
+
+    /**
+     * Attributes
+     */
+    public function getDiaSalidaAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_salida)->format('d');
+    }
+
+    public function getMesSalidaAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_hora_salida);
+        return strtoupper($meses[($fecha->format('n')) - 1]);
+    }
+
+    public function getAnioSalidaAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_salida)->format('Y');
+    }
+
+    public function getDiaRegresoAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_regreso)->format('d');
+    }
+
+    public function getMesRegresoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_hora_regreso);
+        return strtoupper($meses[($fecha->format('n')) - 1]);
+    }
+
+    public function getAnioRegresoAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_regreso)->format('Y');
+    }
+
+    public function getHoraSalidaAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_salida)->format('H:i');
+    }
+
+    public function getHoraRegresoAttribute($value)
+    {
+        return Carbon::parse($this->fecha_hora_regreso)->format('H:i');
+    }
+
+    public function getFechaSolicitudFormatAttribute($value)
+    {
+        return Carbon::parse($this->fecha_solicitud)->format('d/m/Y');
+    }
+
+    /**
+     * Static methods
+     */
 
     public static function calcularHoras(DatosHoras $datosHoras)
     {
@@ -54,6 +154,7 @@ class FormularioPermiso extends Model
 
             if ( !isset($data['id']) ) {
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
+                $regimen_id        = Regimen::findOrCreate($data['regimen']);
                 $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
                 $ofico_id          = Oficio::findOrCreate($data['oficio']);
                 $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
@@ -71,8 +172,9 @@ class FormularioPermiso extends Model
                 }
 
                 $form = new FormularioPermiso();
-                $form->usuario_id = $data['usuario_id'];
+                $form->usuario_id    = $data['usuario_id'];
                 $form->trabajador_id = $trabajador_id;
+                $form->regimen_id    = $regimen_id;
                 $form->zona_labor_id = $zona_labor_id;
                 $form->oficio_id     = $ofico_id;
                 $form->cuartel_id    = $cuartel_id;
@@ -101,9 +203,9 @@ class FormularioPermiso extends Model
             if ( $form->save() ) {
                 DB::commit();
                 return [
-                    'error'                 => false,
-                    'message'               => 'Registro creado correctamente',
-                    'formulario_permiso_id' => $form->id
+                    'error'   => false,
+                    'message' => 'Formulario creado correctamente',
+                    'id'      => $form->id
                 ];
             }
 

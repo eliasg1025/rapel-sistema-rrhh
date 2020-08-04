@@ -113,6 +113,7 @@ const AgregarPermiso = () => {
         e.preventDefault();
         form.trabajador = trabajador;
         form.jefe = trabajadorJefe;
+        form.regimen = contratoActivo.regimen;
         form.cuartel = contratoActivo.cuartel;
         form.oficio = contratoActivo.oficio;
         form.zona_labor = contratoActivo.zona_labor;
@@ -127,9 +128,28 @@ const AgregarPermiso = () => {
 
         Axios.post('/api/formulario-permiso', {...form})
             .then(res => {
+                const { id, message, error } = res.data;
+                const url = `/ficha/formulario-permiso/${id}`;
 
+                Swal.fire({
+                    title: message,
+                    icon: error ? 'error' : 'success'
+                })
+                    .then(res => {
+                        window.open(url, '_blank');
+                        location.reload();
+                    });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err, err.response);
+                if (err.response.status < 500) {
+                    Swal.fire({
+                        title: err.response.data.error,
+                        icon: 'error'
+                    });
+                    return;
+                }
+            });
     };
 
     return (
