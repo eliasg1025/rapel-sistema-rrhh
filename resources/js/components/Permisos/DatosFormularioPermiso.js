@@ -21,7 +21,6 @@ const DatosFormularioPermiso = ({
         motivos: false,
     });
     const [loadingRegistro, setLoadingRegistro] = useState(false);
-    const [validForm, setValidForm] = useState(false);
 
     useEffect(() => {
         let intento = 0;
@@ -238,7 +237,7 @@ const DatosFormularioPermiso = ({
                     ) : (
                         <button
                             type="submit" className="btn btn-primary btn-block"
-                            disabled={validForm}
+                            disabled={form.motivo_permiso_id == '' || form.empresa_id == '' || totalHoras <= 0 || form.nombre_completo == ''}
                         >
                             Registrar
                         </button>

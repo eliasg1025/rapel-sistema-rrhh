@@ -157,7 +157,7 @@ class FormularioPermiso extends Model
         }
 
         if ( $usuario->permisos == 1 ) {
-
+            return [];
         } else if ( $usuario->permisos == 2 ) {
             return [];
         } else {
