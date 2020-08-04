@@ -159,6 +159,8 @@ class FormularioPermiso extends Model
                 $ofico_id          = Oficio::findOrCreate($data['oficio']);
                 $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
+                // TODO: Comentado temporalmente para pruebas
+                /*
                 $existe_registro_mismo_dia = FormularioPermiso::where([
                     'fecha_solicitud' => $data['fecha_solicitud'],
                     'trabajador_id'   => $trabajador_id,
@@ -169,7 +171,7 @@ class FormularioPermiso extends Model
                     return [
                         'error' => 'Ya existe un formulario para el ' . $data['fecha_solicitud'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
-                }
+                }*/
 
                 $form = new FormularioPermiso();
                 $form->usuario_id    = $data['usuario_id'];

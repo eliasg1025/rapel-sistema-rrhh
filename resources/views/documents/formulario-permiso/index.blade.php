@@ -11,6 +11,7 @@
 
     .table {
         border-collapse: collapse;
+        width: 100%;
     }
 
     .table th, .table td {
@@ -18,8 +19,23 @@
         padding: 5px;
     }
 
+    .text-center {
+        text-align: center;
+    }
+
     .bold {
         font-weight: bold;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .box {
+        border: 1px black solid;
+        height: 15px;
+        width: 15px;
+        margin: auto;
     }
 </style>
 
@@ -36,16 +52,16 @@
                     </div>
                 </td>
                 <td>
-                    <h2 style="text-align: center">FORMULARIO PERMISO</h2>
+                    <h2 style="text-align: center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORMULARIO DE PERMISO</h2>
                 </td>
             </tr>
         </table>
-        <br /><br />
+        <br />
         <div style="font-size: 13px">
-            <table class="table">
+            <table class="table" style="font-size: 12px;">
                 <tr>
                     <td class="bold">NOMBRE TRABAJADOR:</td>
-                    <td>{{ $formulario->trabajador->nombre_completo }}</td>
+                    <td colspan="3">{{ $formulario->trabajador->nombre_completo }}</td>
                 </tr>
                 <tr>
                     <td class="bold">DNI:</td>
@@ -55,7 +71,7 @@
                 </tr>
                 <tr>
                     <td class="bold">CARGO:</td>
-                    <td>{{ $formulario->oficio->name }}<td>
+                    <td colspan="3">{{ $formulario->oficio->name }}</td>
                 </tr>
                 <tr>
                     <td class="bold">NOMBRE JEFE ZONA/CAMPO:</td>
@@ -71,25 +87,25 @@
                 </tr>
                 <tr>
                     <td class="bold">MOTIVO PERMISO:</td>
-                    <td>{{ $formulario->motivo_permiso->name }}</td>
+                    <td colspan="2">{{ $formulario->motivo_permiso->name }}</td>
                     <td>{{ $formulario->motivo_permiso->code }}</td>
                 </tr>
             </table>
             <br />
-            <span class="bold">* Solo debe ser llenado por el TOPICO</span>
+            <span class="bold" style="font-size: 11px">* Solo debe ser llenado por el TOPICO</span>
             <br />
-            <table class="table">
+            <table class="table" style="font-size: 11px">
                 <tr>
-                    <td class="bold">Nombre del Jefe Inmediato (Supervisor, Jefe de Faena, y/o Área):</td>
-                    <td></td>
+                    <td class="bold">Nombre del Jefe Inmediato<br/>(Supervisor, Jefe de Faena, y/o Área):</td>
+                    <td style="width: 70%"></td>
                 </tr>
                 <tr>
                     <td class="bold">Labor que realizaba</td>
-                    <td></td>
+                    <td style="width: 70%; height: 40px;"></td>
                 </tr>
             </table>
-            <br />
-            <table class="table">
+            <br /><br />
+            <table class="table text-center">
                 <tr>
                     <td>DESDE</td>
                     <td>{{ $formulario->dia_salida }}</td>
@@ -108,36 +124,42 @@
                 </tr>
             </table>
             <br />
-            <table>
+            <table style="width: 80%">
                 <tr>
                     <td>HORA SALIDA:</td>
-                    <td>{{ $formulario->hora_salida }}</td>
+                    <td style="border: 1px solid black; text-align: center">{{ $formulario->hora_salida }}</td>
                     <td>HORA REGRESO:</td>
-                    <td>{{ $formulario->hora_regreso }}</td>
+                    <td style="border: 1px solid black; text-align: center">{{ $formulario->hora_regreso }}</td>
+                </tr>
+                <tr>
                     <td>HORAS DE PERMISO:</td>
-                    <td>{{ $formulario->total_horas }}</td>
+                    <td style="border: 1px solid black; text-align: center">
+                        <b>{{ $formulario->total_horas }}</b>
+                    </td>
                 </tr>
             </table>
             <br />
             <span class="bold">TIPO DE TRABAJADOR:</span>
-            <table>
+            <table style="width: 80%;">
                 <tr>
                     <td>EMPLEADO:</td>
-                    <td>{{ $formulario->regimen->id === 1 || $formulario->regimen->id === 2 ? 'X' : '' }}</td>
+                    <td class="box">{{ $formulario->regimen->id === 1 || $formulario->regimen->id === 2 ? 'X' : ' ' }}</td>
+                    <td></td>
                     <td>OBRERO:</td>
-                    <td>{{ $formulario->regimen->id === 3 ? 'X' : ''  }}</td>
+                    <td class="box">{{ $formulario->regimen->id === 3 ? 'X' : ' '  }}</td>
                 </tr>
                 <tr>
                     <td>CON GOCE DE SUELDO</td>
-                    <td>{{ $formulario->goce === 1 ? 'X' : '' }}</td>
+                    <td class="box">{{ $formulario->goce === 1 ? 'X' : ' ' }}</td>
+                    <td></td>
                     <td>SIN GOCE DE SUELDO</td>
-                    <td>{{ $formulario->goce === 0 ? 'X' : '' }}</td>
+                    <td class="box">{{ $formulario->goce === 0 ? 'X' : ' ' }}</td>
                 </tr>
             </table>
             <br />
             <table>
                 <tr>
-                    <td class="bold">FECHA DE LA PRESENTACION:</td>
+                    <td class="bold">FECHA DE LA PRESENTACIÓN:</td>
                     <td>{{ $formulario->fecha_solicitud_format }}</td>
                 </tr>
                 <tr>
@@ -160,6 +182,5 @@
                 </tr>
             </table>
         </div>
-        <br />
     </section>
 @endsection

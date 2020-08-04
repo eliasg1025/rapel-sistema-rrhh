@@ -99,7 +99,6 @@ const AgregarPermiso = () => {
             moment(form.fecha_salida).year() >= moment().year() - 1 &&
             moment(form.fecha_regreso).year() >= moment().year() - 1
         ) {
-            console.log('effect')
             fetchHorasTotales();
         }
 
