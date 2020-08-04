@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message, Select } from 'antd';
+import { DatePicker, message } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 import Swal from 'sweetalert2';

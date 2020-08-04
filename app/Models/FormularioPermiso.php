@@ -145,6 +145,26 @@ class FormularioPermiso extends Model
         ];
     }
 
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
+    {
+        $usuario = Usuario::find($usuario_id);
+
+        if ( !$usuario ) {
+            return [
+                'error' => true,
+                'message' => 'No se encontro el usuario'
+            ];
+        }
+
+        if ( $usuario->permisos == 1 ) {
+
+        } else if ( $usuario->permisos == 2 ) {
+            return [];
+        } else {
+            return [];
+        }
+    }
+
     public static function _create(array $data)
     {
         DB::beginTransaction();

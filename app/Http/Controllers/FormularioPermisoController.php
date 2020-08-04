@@ -37,6 +37,26 @@ class FormularioPermisoController extends Controller
         return response()->json($result, 400);
     }
 
+    public function getAll(Request $request)
+    {
+        $usuario_id = $request->usuario_id;
+        $fechas = [
+            'desde' => $request->desde,
+            'hasta' => $request->hasta
+        ];
+        $estado = $request->estado;
+
+        $result = FormularioPermiso::_getAll($usuario_id, $fechas, $estado);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function verFicha(FormularioPermiso $formularioPermiso)
     {
         try {

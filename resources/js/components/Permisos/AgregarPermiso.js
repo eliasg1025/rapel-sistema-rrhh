@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosFormularioPermiso from './DatosFormularioPermiso';
+import { TablaFormulariosPermisos } from './TablaFormulariosPermisos';
 import Axios from 'axios';
 import { message } from 'antd';
 import Swal from 'sweetalert2';
@@ -29,6 +30,7 @@ const AgregarPermiso = () => {
     });
 
     const [totalHoras, setTotalHoras] = useState(0);
+    const [reloadDatos, setReloadDatos] = useState(false);
 
     useEffect(() => {
         setForm({
@@ -165,6 +167,11 @@ const AgregarPermiso = () => {
                 motivosPermiso={motivosPermiso}
                 setMotivosPermiso={setMotivosPermiso}
                 setTrabajadorJefe={setTrabajadorJefe}
+            />
+            <hr />
+            <TablaFormulariosPermisos
+                reloadDatos={reloadDatos}
+                setReloadDatos={setReloadDatos}
             />
         </>
     );
