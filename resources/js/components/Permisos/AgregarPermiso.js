@@ -4,6 +4,7 @@ import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosFormularioPermiso from './DatosFormularioPermiso';
 import Axios from 'axios';
 import { message } from 'antd';
+import Swal from 'sweetalert2';
 
 
 const AgregarPermiso = () => {
@@ -60,8 +61,8 @@ const AgregarPermiso = () => {
     useEffect(() => {
         function fetchHorasTotales() {
             Axios.post('/api/formulario-permiso/calcular-horas', {
-                fecha_hora_salida: moment(`${form.fecha_salida} ${form.hora_salida}`).format('YYYY-MM-DD HH:mm:ss').toString(),
-                fecha_hora_regreso: moment(`${form.fecha_regreso} ${form.hora_regreso}`).format('YYYY-MM-DD HH:mm:ss').toString(),
+                fecha_hora_salida: `${form.fecha_salida} ${form.hora_salida}`,
+                fecha_hora_regreso: `${form.fecha_regreso} ${form.hora_regreso}`,
                 horario_entrada: form.horario_entrada,
                 horario_salida: form.horario_salida,
                 refrigerio: form.refrigerio,
@@ -104,12 +105,31 @@ const AgregarPermiso = () => {
 
     }, [form.fecha_salida, form.fecha_regreso, form.hora_salida, form.hora_regreso, form.horario_entrada, form.horario_salida, form.refrigerio]);
 
+    useEffect(() => {
+        console.log(motivosPermiso);
+    }, [motivosPermiso])
+
     const handleSubmit = e => {
         e.preventDefault();
         form.trabajador = trabajador;
         form.jefe = trabajadorJefe;
-        form.contratoActivo = contratoActivo;
+        form.cuartel = contratoActivo.cuartel;
+        form.oficio = contratoActivo.oficio;
+        form.zona_labor = contratoActivo.zona_labor;
+        form.total_horas = totalHoras;
+        form.usuario_id = usuario.id;
+
+        const m = motivosPermiso.find(e => e.id == form.motivo_permiso_id);
+
+        form.motivo_permiso = m;
+
         console.log(form);
+
+        Axios.post('/api/formulario-permiso', {...form})
+            .then(res => {
+
+            })
+            .catch(err => console.log(err));
     };
 
     return (

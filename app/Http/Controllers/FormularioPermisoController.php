@@ -26,4 +26,14 @@ class FormularioPermisoController extends Controller
 
         return response()->json($result);
     }
+
+    public function create(Request $request)
+    {
+        $result = FormularioPermiso::_create($request->all());
+        if (!$result['error']) {
+            return response()->json($result);
+        }
+
+        return response()->json($result, 400);
+    }
 }
