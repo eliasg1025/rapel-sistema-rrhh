@@ -264,6 +264,7 @@ class Trabajador extends Model
             }
 
             $trabajador->nombre = $data['nombre'];
+            $trabajador->code = isset($data['code']) ? $data['code'] : null;
             $trabajador->rut = $data['rut'];
             $trabajador->apellido_paterno = $data['apellido_paterno'];
             $trabajador->apellido_materno = $data['apellido_materno'];

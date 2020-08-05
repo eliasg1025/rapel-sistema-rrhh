@@ -67,7 +67,7 @@
                     <td class="bold">DNI:</td>
                     <td>{{ $formulario->trabajador->rut }}</td>
                     <td class="bold">COD:</td>
-                    <td></td>
+                    <td>{{ $formulario->trabajador->code }}</td>
                 </tr>
                 <tr>
                     <td class="bold">CARGO:</td>
