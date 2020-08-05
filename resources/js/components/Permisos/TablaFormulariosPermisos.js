@@ -119,7 +119,36 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         console.log('exportar');
     }
 
-
+    const handleEliminar = id => {
+        Swal.fire({
+            title: '¿Deseas eliminar este registro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borrarlo',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.delete(`/api/formulario-permiso/${id}`)
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            Swal.fire({
+                                title: 'Error al borrar el registro',
+                                icon: 'error'
+                            });
+                        });
+                }
+            });
+    }
 
     useEffect(() => {
         Axios.post('/api/formulario-permiso/get-all', {...filtro, usuario_id: usuario.id})
@@ -135,12 +164,19 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         ...item,
                         desde: `${item.fecha_salida} ${item.hora_salida}`,
                         hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
-                        goce: <CheckboxGoce item={item} />,
+                        goce: item.estado == 0 ? (
+                            <CheckboxGoce item={item} />
+                        ) : (item.goce == 0 ? 'NO' : 'SI'),
                         acciones: (
                             <div className="btn-group">
                                 <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${item.id}`} target="_blank">
                                     <i className="fas fa-search"/>
                                 </a>
+                                {item.estado == 0 && (
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
+                                        <i className="fas fa-trash-alt" />
+                                    </button>
+                                )}
                             </div>
                         )
                     }
@@ -225,7 +261,7 @@ const CheckboxGoce = ({ item }) => {
 
     return (
         <>
-            <input type="checkbox" checked={checked} onChange={e => handleCheckGoce(item.id)} />
+            <input type="checkbox" disabled={item.estado !== 0} checked={checked} onChange={e => handleCheckGoce(item.id)} />
         </>
     );
 }

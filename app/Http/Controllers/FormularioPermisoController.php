@@ -73,6 +73,20 @@ class FormularioPermisoController extends Controller
         ], 400);
     }
 
+    public function delete($id)
+    {
+        $form = FormularioPermiso::find($id);
+
+        if ( $form->delete() ) {
+            return response()->json([
+                'message' => 'Registro borrado correctamente'
+            ]);
+        }
+        return response()->json([
+            'message' => 'Error al borrar el registro'
+        ], 400);
+    }
+
     public function verFicha(FormularioPermiso $formularioPermiso)
     {
         try {
