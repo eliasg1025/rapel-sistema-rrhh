@@ -89,7 +89,9 @@ Route::group(['prefix' => 'atencion-reseteo-clave'], function() {
 
 Route::group(['prefix' => 'formulario-permiso'], function() {
     Route::post('/', 'FormularioPermisoController@create');
+    Route::post('/get-all', 'FormularioPermisoController@getAll');
     Route::post('/calcular-horas', 'FormularioPermisoController@calcularHoras');
+    Route::put('/toggle-goce/{id}', 'FormularioPermisoController@toggleGoce');
 });
 
 /*

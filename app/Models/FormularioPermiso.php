@@ -157,9 +157,52 @@ class FormularioPermiso extends Model
         }
 
         if ( $usuario->permisos == 1 ) {
-            return [];
+            return DB::table('formularios_permisos as f')
+                ->select(
+                    'f.id',
+                    'f.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%d/%m/%Y") fecha_salida'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%d/%m/%Y") fecha_regreso'),
+                    'm.code as motivo_permiso_id',
+                    'm.name as motivo_permiso',
+                    'z.code as zona_labor_id',
+                    'z.name as zona_labor',
+                    'f.total_horas as horas',
+                    'f.goce',
+                    DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%H:%i") hora_regreso'),
+                    'e.shortname as empresa',
+                    DB::raw('CONCAT(j.nombre, " ", j.apellido_paterno, " ", j.apellido_materno) as nombre_completo_jefe'),
+                    'f.estado'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('trabajadores as j', 'j.id', '=', 'f.jefe_id')
+                ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
+                ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+                ->where('f.usuario_id', $usuario->id)
+                ->where('f.estado', $estado)
+                ->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->orderBy('f.id', 'ASC')
+                ->get();
         } else if ( $usuario->permisos == 2 ) {
-            return [];
+            return DB::table('formularios_permisos as f')
+                ->select(
+                    'f.id',
+                    'f.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
+                    'e.shortname as empresa',
+                    'f.estado'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->where('f.estado', $estado)
+                ->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->orderBy('f.id', 'ASC')
+                ->get();
         } else {
             return [];
         }
@@ -192,6 +235,13 @@ class FormularioPermiso extends Model
                         'error' => 'Ya existe un formulario para el ' . $data['fecha_solicitud'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
                 }*/
+
+                if ( $data['total_horas'] <= 0 ) {
+                    DB::rollBack();
+                    return [
+                        'error' => 'La cantidad de horas de permiso debe ser mayor a 0'
+                    ];
+                }
 
                 $form = new FormularioPermiso();
                 $form->usuario_id    = $data['usuario_id'];

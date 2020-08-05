@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { DatePicker, message } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
+import Axios from 'axios';
 
-export const TablaFormulariosPermisos = ({
-    reloadDatos,
-    setReloadDatos
-}) => {
+export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
     const [filtro, setFiltro] = useState({
         desde: moment().format('YYYY-MM-DD').toString(),
@@ -15,9 +13,9 @@ export const TablaFormulariosPermisos = ({
         // usuario_carga_id: 0
     });
 
-    let columns = [];
+    let _columns = [];
     if (usuario.permisos == 1) {
-        columns = [
+        _columns = [
             {
                 label: 'Fecha Solicitud',
                 field: 'fecha_solicitud'
@@ -44,13 +42,41 @@ export const TablaFormulariosPermisos = ({
                 width: 150,
             },
             {
+                label: 'Responsable',
+                field: 'nombre_completo_jefe',
+            },
+            {
+                label: 'Desde',
+                field: 'desde'
+            },
+            {
+                label: 'Hasta',
+                field: 'hasta'
+            },
+            {
+                label: 'Horas',
+                field: 'horas'
+            },
+            {
+                label: 'Motivo',
+                field: 'motivo_permiso'
+            },
+            {
+                label: 'Predio',
+                field: 'zona_labor'
+            },
+            {
+                label: 'Con Goce',
+                field: 'goce',
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
             }
         ]
     } else {
-        columns = [
+        _columns = [
             {
                 label: 'Fecha Solicitud',
                 field: 'fecha_solicitud'
@@ -85,7 +111,7 @@ export const TablaFormulariosPermisos = ({
     }
 
     const [datatable, setDatatable] = useState({
-        columns: columns,
+        columns: _columns,
         rows: []
     });
 
@@ -93,9 +119,42 @@ export const TablaFormulariosPermisos = ({
         console.log('exportar');
     }
 
+
+
     useEffect(() => {
-        console.log(filtro);
-    }), [filtro];
+        Axios.post('/api/formulario-permiso/get-all', {...filtro, usuario_id: usuario.id})
+            .then(res => {
+                const { data } = res;
+
+                message['success']({
+                    content: `Se encontraron ${data.length} registros`
+                });
+
+                const formularios = data.map(item => {
+                    return {
+                        ...item,
+                        desde: `${item.fecha_salida} ${item.hora_salida}`,
+                        hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
+                        goce: <CheckboxGoce item={item} />,
+                        acciones: (
+                            <div className="btn-group">
+                                <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${item.id}`} target="_blank">
+                                    <i className="fas fa-search"/>
+                                </a>
+                            </div>
+                        )
+                    }
+                });
+
+                setDatatable({
+                    ...datatable,
+                    rows: formularios
+                });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }, [ filtro, reloadDatos ]);
 
     return (
         <>
@@ -112,6 +171,11 @@ export const TablaFormulariosPermisos = ({
                         }}
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
                     />
+                </div>
+                <div>
+                    <button className="btn btn-secondary" onClick={() => setReloadDatos(!reloadDatos)}>
+                        <i className="fas fa-sync-alt"></i>
+                    </button>
                 </div>
                 <div>
                     <select
@@ -136,12 +200,32 @@ export const TablaFormulariosPermisos = ({
                 hover
                 responsive
                 entriesOptions={[10, 20, 25]}
+                small
                 entries={10}
                 pagesAmount={10}
                 data={datatable}
                 searchTop
                 searchBottom={false}
+                className="text-small"
             />
+        </>
+    );
+}
+
+const CheckboxGoce = ({ item }) => {
+
+    const [checked, setChecked] = useState(item.goce);
+
+    const handleCheckGoce = id => {
+
+        setChecked(!checked);
+        Axios.put(`/api/formulario-permiso/toggle-goce/${id}`)
+            .then(res => setChecked(res.data.goce));
+    }
+
+    return (
+        <>
+            <input type="checkbox" checked={checked} onChange={e => handleCheckGoce(item.id)} />
         </>
     );
 }

@@ -53,7 +53,7 @@ class DatosHoras
 
     public function getHoras()
     {
-        return $this->fecha_hora_regreso->diffInHours($this->fecha_hora_salida) - ($this->getDias() * 24);
+        return $this->fecha_hora_regreso->floatDiffInHours($this->fecha_hora_salida) - ($this->getDias() * 24);
     }
 
     public function getTotalHoras()

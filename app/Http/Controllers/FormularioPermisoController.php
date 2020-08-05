@@ -57,6 +57,22 @@ class FormularioPermisoController extends Controller
         return response()->json($result);
     }
 
+    public function toggleGoce(int $id)
+    {
+        $form = FormularioPermiso::find($id);
+        $form->goce = !$form->goce;
+        if ($form->save()) {
+            return response()->json([
+                'goce' => $form->goce
+            ]);
+
+        }
+
+        return response()->json([
+            'goce' => $form->goce
+        ], 400);
+    }
+
     public function verFicha(FormularioPermiso $formularioPermiso)
     {
         try {
