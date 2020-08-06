@@ -235,7 +235,7 @@ class FormularioPermiso extends Model
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
-                    'f.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     't.rut',
                     't.code',

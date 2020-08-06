@@ -338,7 +338,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                                     <i className="fas fa-check" />
                                                 </button>
                                             </Tooltip>
-                                            {item.fecha_solicitud === moment().format('YYYY-MM-DD') && (
+                                            {item.fecha_solicitud === moment().format('DD/MM/YYYY') && (
                                                 <Tooltip title="Eliminar">
                                                     <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
                                                         <i className="fas fa-trash-alt" />
