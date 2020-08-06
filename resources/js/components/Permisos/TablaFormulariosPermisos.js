@@ -266,6 +266,39 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             })
     }
 
+    const handleMarcarCargado = id => {
+        Swal.fire({
+            title: '¿Se cargó este formulario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/formulario-permiso/marcar-cargado/${id}`, {
+                        usuario_id: usuario.id
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                title: err.response.data.message,
+                                icon: 'error'
+                            })
+                        });
+                }
+            })
+    }
+
     useEffect(() => {
         let intentos = 0;
         function fetchFormulariosPermisos() {
@@ -305,13 +338,24 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                                     <i className="fas fa-check" />
                                                 </button>
                                             </Tooltip>
-                                            <Tooltip title="Eliminar">
-                                                <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
-                                                    <i className="fas fa-trash-alt" />
+                                            {item.fecha_solicitud === moment().format('DD/MM/YYYY') && (
+                                                <Tooltip title="Eliminar">
+                                                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
+                                                        <i className="fas fa-trash-alt" />
+                                                    </button>
+                                                </Tooltip>
+                                            )}
+                                        </>
+                                    )}
+                                    {(item.estado == 1 & usuario.permisos == 2) ? (
+                                        <>
+                                            <Tooltip title="Marca como CARGADO EN EL SISTEMA">
+                                                <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(item.id)}>
+                                                    <i className="fas fa-check" />
                                                 </button>
                                             </Tooltip>
                                         </>
-                                    )}
+                                    ) : ''}
                                 </div>
                             )
                         }
@@ -365,7 +409,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         <option value="0">GENERADOS</option>
                         <option value="1">FIRMADOS</option>
                         <option value="2">CARGADOS</option>
-                        <option value="3">ARCHIVADOS</option>
                     </select>
                 </div>
                 <div>

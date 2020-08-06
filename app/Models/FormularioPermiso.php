@@ -360,4 +360,29 @@ class FormularioPermiso extends Model
             'message' => 'No se pudo resolver esta operación'
         ];
     }
+
+    public static function marcarCargado(int $usuario_id, int $id)
+    {
+        $formularioPermiso = FormularioPermiso::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->permisos < 2 ) {
+            return [
+                'error'   => true,
+                'message' => 'Solo un usuario administrador puede marcar este formulario como CARGADO'
+            ];
+        }
+
+        $formularioPermiso->estado = 2;
+        if ( $formularioPermiso->save() ) {
+            return [
+                'message' => 'Formulario actualizado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
+    }
 }
