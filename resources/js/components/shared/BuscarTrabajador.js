@@ -14,6 +14,12 @@ const BuscarTrabajador = ({
         e.preventDefault();
 
         function fetchTrabajador(cb) {
+            Swal.fire({
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info?activo=${activo}`)
                 .then(res => {
                     const { contrato_activo, trabajador } = res.data.data;

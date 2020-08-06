@@ -30,22 +30,24 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/cuentas/editar/{id}', 'Web\ViewController@editarCuenta');
     Route::get('/eleccion-afp', 'Web\ViewController@afp');
     Route::get('/formularios-permisos', 'Web\ViewController@permisos');
+    Route::get('/formularios-permisos/editar/{id}', 'Web\Controller@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
+
+    Route::group(['prefix' => 'ficha'], function() {
+        Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
+        Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
+        Route::get('/eleccion-afp/{eleccion_afp}', 'EleccionAfpController@verFicha');
+        Route::get('/formulario-permiso/{formularioPermiso}', 'FormularioPermisoController@verFicha');
+    });
+
+    Route::group(['prefix' => 'descargar'], function() {
+        Route::post('/', 'Web\ExportController@descargar');
+        Route::post('/observados', 'Web\TrabajadorController@descargarObservado');
+        Route::post('/cuentas', 'Web\CuentasController@descargarCuentas');
+        Route::post('/elecciones-afp', 'Web\EleccionAfpController@descargarEleccionesAfp');
+    });
 });
 
 Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');
 
-Route::get('/ficha/{contrato}', 'ContratoController@verFichaIngreso');
-Route::get('/ficha/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
-Route::get('/ficha/eleccion-afp/{eleccion_afp}', 'EleccionAfpController@verFicha');
-Route::get('/ficha/formulario-permiso/{formularioPermiso}', 'FormularioPermisoController@verFicha');
-Route::get('/test', 'ContratoController@test');
-
-
-Route::group(['prefix' => 'descargar'], function() {
-    Route::post('/', 'Web\ExportController@descargar');
-    Route::post('/observados', 'Web\TrabajadorController@descargarObservado');
-    Route::post('/cuentas', 'Web\CuentasController@descargarCuentas');
-    Route::post('/elecciones-afp', 'Web\EleccionAfpController@descargarEleccionesAfp');
-});

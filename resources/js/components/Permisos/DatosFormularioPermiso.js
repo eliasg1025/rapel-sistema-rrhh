@@ -12,7 +12,8 @@ const DatosFormularioPermiso = ({
     motivosPermiso,
     setMotivosPermiso,
     setTrabajadorJefe,
-    totalHoras
+    totalHoras,
+    errorTotalHoras
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -103,10 +104,9 @@ const DatosFormularioPermiso = ({
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
+                    Horario del trabajador:<br />
                     <div className="row">
-
                         <div className="col">
-                            Entrada:
                             <input
                                 type="time" name="horario"
                                 className="form-control"
@@ -115,7 +115,6 @@ const DatosFormularioPermiso = ({
                             />
                         </div>
                         <div className="col">
-                            Salida:
                             <input
                                 type="time" name="horario"
                                 className="form-control"
@@ -185,9 +184,12 @@ const DatosFormularioPermiso = ({
                     Total horas:<br />
                     <input
                         type="number" name="hp" placeholder="H-P" readOnly={true}
-                        className="form-control"
+                        className={errorTotalHoras ? "form-control is-invalid" : "form-control is-valid"}
                         value={totalHoras}
                     />
+                    {errorTotalHoras && (
+                        <div className="invalid-feedback">{ errorTotalHoras }</div>
+                    )}
                 </div>
             </div>
             <div className="row">

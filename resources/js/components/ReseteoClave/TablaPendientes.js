@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Tooltip } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
@@ -225,9 +225,11 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                                 {item.estado == 0 ? (
                                     <>
                                         {usuario.reseteo_clave == 2 && (
-                                            <button className="btn btn-primary btn-sm" onClick={() => handleResolver(item.id)}>
-                                                <i className="fas fa-check"/>
-                                            </button>
+                                            <Tooltip title="Marca como ATENDIDO">
+                                                <button className="btn btn-primary btn-sm" onClick={() => handleResolver(item.id)}>
+                                                    <i className="fas fa-check"/>
+                                                </button>
+                                            </Tooltip>
                                         )}
                                         <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
                                             <i className="fas fa-trash-alt" />

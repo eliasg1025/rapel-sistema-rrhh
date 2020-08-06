@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Tooltip } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
 import Axios from 'axios';
+import Swal from 'sweetalert2';
 
 export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -67,7 +68,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             },
             {
                 label: 'Con Goce',
-                field: 'goce',
+                field: 'goce_checkbox',
             },
             {
                 label: 'Acciones',
@@ -103,6 +104,38 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 width: 150,
             },
             {
+                label: 'Responsable',
+                field: 'nombre_completo_jefe',
+            },
+            {
+                label: 'Desde',
+                field: 'desde'
+            },
+            {
+                label: 'Hasta',
+                field: 'hasta'
+            },
+            {
+                label: 'Horas',
+                field: 'horas'
+            },
+            {
+                label: 'Motivo',
+                field: 'motivo_permiso'
+            },
+            {
+                label: 'Predio',
+                field: 'zona_labor'
+            },
+            {
+                label: 'Con Goce',
+                field: 'goce_checkbox',
+            },
+            {
+                label: 'Cargado por',
+                field: 'nombre_completo_usuario'
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
@@ -116,7 +149,57 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     });
 
     const handleExportar = () => {
-        console.log('exportar');
+        console.log(datatable.rows);
+        const headings = [
+            'COD.',
+            'APELLIDOS Y NOMBRES',
+            'RESPONSABLE',
+            'DNI',
+            'DESDE',
+            'HASTA',
+            'MOTIVO DEL PERMISO',
+            'PREDIO',
+            'HORAS',
+            'HORA SALIDA',
+            'HORA REGRESO',
+            'CON GOCE',
+            'CARGADO POR',
+            'FECHA SOLICITUD'
+        ];
+
+        const data = datatable.rows.map(item => {
+            return {
+                cod: item.code,
+                apellidos_nombres: item.nombre_completo,
+                responsable: item.nombre_completo_jefe,
+                dni: item.rut,
+                desde: item.fecha_regreso,
+                hasta: item.fecha_salida,
+                motivo_permiso: item.motivo_permiso_id,
+                predio: item.zona_labor_id,
+                horas: item.horas,
+                hora_salida: item.hora_salida,
+                hora_regreso: item.hora_regreso,
+                con_goce: item.goce == 0 ? 'NO' : 'SI',
+                cargado_por: item.nombre_completo_usuario,
+                fecha_solicitud: item.fecha_solicitud
+            };
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `FORMULARIOS_PERMISO-${filtro.estado == 0 ? "NO_FIRMADOS" : "FIRMADOS"}-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click();
+            });
     }
 
     const handleEliminar = id => {
@@ -150,46 +233,104 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             });
     }
 
+    const handleMarcarFirmado = id => {
+        Swal.fire({
+            title: '¿Se firmó este formulario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/formulario-permiso/marcar-firmado/${id}`, {
+                        usuario_id: usuario.id
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                title: err.response.data.message,
+                                icon: 'error'
+                            })
+                        });
+                }
+            })
+    }
+
     useEffect(() => {
-        Axios.post('/api/formulario-permiso/get-all', {...filtro, usuario_id: usuario.id})
-            .then(res => {
-                const { data } = res;
+        let intentos = 0;
+        function fetchFormulariosPermisos() {
+            intentos++;
+            Axios.post('/api/formulario-permiso/get-all', {...filtro, usuario_id: usuario.id})
+                .then(res => {
+                    const { data } = res;
 
-                message['success']({
-                    content: `Se encontraron ${data.length} registros`
-                });
+                    message['success']({
+                        content: `Se encontraron ${data.length} registros`
+                    });
 
-                const formularios = data.map(item => {
-                    return {
-                        ...item,
-                        desde: `${item.fecha_salida} ${item.hora_salida}`,
-                        hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
-                        goce: item.estado == 0 ? (
-                            <CheckboxGoce item={item} />
-                        ) : (item.goce == 0 ? 'NO' : 'SI'),
-                        acciones: (
-                            <div className="btn-group">
-                                <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${item.id}`} target="_blank">
-                                    <i className="fas fa-search"/>
-                                </a>
-                                {item.estado == 0 && (
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
-                                        <i className="fas fa-trash-alt" />
-                                    </button>
-                                )}
-                            </div>
-                        )
+                    const formularios = data.map(item => {
+                        return {
+                            ...item,
+                            desde: `${item.fecha_salida} ${item.hora_salida}`,
+                            hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
+                            goce_checkbox: item.estado == 0 ? (
+                                <CheckboxGoce item={item} />
+                            ) : (item.goce == 0 ? 'NO' : 'SI'),
+                            acciones: (
+                                <div className="btn-group">
+                                    <Tooltip title="Ver documento">
+                                        <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${item.id}`} target="_blank">
+                                            <i className="fas fa-search"/>
+                                        </a>
+                                    </Tooltip>
+                                    {item.estado == 0 && (
+                                        <>
+                                            <Tooltip title="Editar Formulario">
+                                                <a className="btn btn-primary btn-sm" href={`/formulario-permiso/editar/${item.id}`} target="_blank">
+                                                    <i className="far fa-edit" />
+                                                </a>
+                                            </Tooltip>
+                                            <Tooltip title="Marcar como FIRMADO">
+                                                <button className="btn btn-outline-primary btn-sm" onClick={() => handleMarcarFirmado(item.id)}>
+                                                    <i className="fas fa-check" />
+                                                </button>
+                                            </Tooltip>
+                                            <Tooltip title="Eliminar">
+                                                <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
+                                                    <i className="fas fa-trash-alt" />
+                                                </button>
+                                            </Tooltip>
+                                        </>
+                                    )}
+                                </div>
+                            )
+                        }
+                    });
+
+                    setDatatable({
+                        ...datatable,
+                        rows: formularios
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    if (intentos < 3) {
+                        fetchFormulariosPermisos();
                     }
                 });
+        }
 
-                setDatatable({
-                    ...datatable,
-                    rows: formularios
-                });
-            })
-            .catch(err => {
-                console.error(err);
-            });
+        fetchFormulariosPermisos();
     }, [ filtro, reloadDatos ]);
 
     return (
@@ -209,9 +350,11 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     />
                 </div>
                 <div>
-                    <button className="btn btn-secondary" onClick={() => setReloadDatos(!reloadDatos)}>
-                        <i className="fas fa-sync-alt"></i>
-                    </button>
+                    <Tooltip title="Recargar lista">
+                        <button className="btn btn-secondary" onClick={() => setReloadDatos(!reloadDatos)}>
+                            <i className="fas fa-sync-alt"></i>
+                        </button>
+                    </Tooltip>
                 </div>
                 <div>
                     <select
@@ -219,10 +362,10 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         value={filtro.estado}
                         onChange={e => setFiltro({ ...filtro, estado: e.target.value })}
                     >
-                        <option value="0">GENERADO</option>
-                        <option value="1">FIRMADO</option>
-                        <option value="2">CARGADO</option>
-                        <option value="3">ARCHIVADO</option>
+                        <option value="0">GENERADOS</option>
+                        <option value="1">FIRMADOS</option>
+                        <option value="2">CARGADOS</option>
+                        <option value="3">ARCHIVADOS</option>
                     </select>
                 </div>
                 <div>

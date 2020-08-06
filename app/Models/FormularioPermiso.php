@@ -115,12 +115,26 @@ class FormularioPermiso extends Model
      * Static methods
      */
 
+    public static function _show()
+    {
+        return DB::table('formularios_permisos as f')
+            ->select(
+                'f.id',
+                'f.fecha_solicitud',
+                'c.empresa_id',
+                DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_trabajador'),
+
+            )
+            ->join('trabajadores as t ', 't.id', '=', 'f.trabajador_id')
+            ->get();
+    }
+
     public static function calcularHoras(DatosHoras $datosHoras)
     {
         if ( !$datosHoras->esValido() ) {
             return [
                 'error'   => true,
-                'message' => 'La fecha y hora de salida es mayor o igual a la fecha de regreso',
+                'message' => 'La fecha y hora de salida es mayor a la fecha de regreso',
                 'horas'   => 0
             ];
         }
@@ -128,7 +142,7 @@ class FormularioPermiso extends Model
         if ( !$datosHoras->verificarHoras() ) {
             return [
                 'error'   => true,
-                'message' => 'Las horas de del permiso no esta en el horario de entrada y salida',
+                'message' => 'Las horas del permiso no están dentro horario asignado',
                 'horas'   => 0
             ];
         }
@@ -160,9 +174,10 @@ class FormularioPermiso extends Model
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
-                    'f.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     't.rut',
+                    't.code',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%d/%m/%Y") fecha_salida'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%d/%m/%Y") fecha_regreso'),
@@ -189,16 +204,46 @@ class FormularioPermiso extends Model
                 ->orderBy('f.id', 'ASC')
                 ->get();
         } else if ( $usuario->permisos == 2 ) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
                     'f.fecha_solicitud',
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
+                    't.rut',
+                    't.code',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%d/%m/%Y") fecha_salida'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%d/%m/%Y") fecha_regreso'),
+                    'm.code as motivo_permiso_id',
+                    'm.name as motivo_permiso',
+                    'z.code as zona_labor_id',
+                    'z.name as zona_labor',
+                    'f.total_horas as horas',
+                    'f.goce',
+                    DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%H:%i") hora_regreso'),
                     'e.shortname as empresa',
-                    'f.estado'
+                    DB::raw('CONCAT(j.nombre, " ", j.apellido_paterno, " ", j.apellido_materno) as nombre_completo_jefe'),
+                    'f.estado',
+                    'usuario.username as usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('trabajadores as j', 'j.id', '=', 'f.jefe_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
+                ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'f.usuario_id');
+                })
                 ->where('f.estado', $estado)
                 ->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->orderBy('f.id', 'ASC')
@@ -223,7 +268,6 @@ class FormularioPermiso extends Model
                 $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
                 // TODO: Comentado temporalmente para pruebas
-                /*
                 $existe_registro_mismo_dia = FormularioPermiso::where([
                     'fecha_solicitud' => $data['fecha_solicitud'],
                     'trabajador_id'   => $trabajador_id,
@@ -234,7 +278,7 @@ class FormularioPermiso extends Model
                     return [
                         'error' => 'Ya existe un formulario para el ' . $data['fecha_solicitud'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
-                }*/
+                }
 
                 if ( $data['total_horas'] <= 0 ) {
                     DB::rollBack();
@@ -290,5 +334,30 @@ class FormularioPermiso extends Model
                 'message' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
+    }
+
+    public static function marcarFirmado(int $usuario_id, int $id)
+    {
+        $formularioPermiso = FormularioPermiso::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->id !== $formularioPermiso->usuario_id ) {
+            return [
+                'error'   => true,
+                'message' => 'La misma persona que cargó este formulario debe marcarlo como firmado'
+            ];
+        }
+
+        $formularioPermiso->estado = 1;
+        if ( $formularioPermiso->save() ) {
+            return [
+                'message' => 'Formulario enviado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
     }
 }

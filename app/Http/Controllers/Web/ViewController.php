@@ -7,6 +7,7 @@ use App\Models\Contrato;
 use App\Models\Cuenta;
 use App\Models\EleccionAfp;
 use App\Models\Empresa;
+use App\Models\FormularioPermiso;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -196,6 +197,15 @@ class ViewController extends Controller
         ];
 
         return view('pages.permisos', compact('data'));
+    }
+
+    public function editarPermiso(Request $request, int $id)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $formularioPermiso = FormularioPermiso::_show($id);
+
+
     }
 
     public function atencionReseteoClave(Request $request)

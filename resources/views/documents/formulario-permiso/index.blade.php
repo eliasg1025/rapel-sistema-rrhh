@@ -150,10 +150,10 @@
                 </tr>
                 <tr>
                     <td>CON GOCE DE SUELDO</td>
-                    <td class="box">{{ $formulario->goce === 1 ? 'X' : ' ' }}</td>
+                    <td class="box">{{ ' ' }}</td>
                     <td></td>
                     <td>SIN GOCE DE SUELDO</td>
-                    <td class="box">{{ $formulario->goce === 0 ? 'X' : ' ' }}</td>
+                    <td class="box">{{ ' ' }}</td>
                 </tr>
             </table>
             <br />

@@ -58,6 +58,8 @@ class DatosHoras
 
     public function getTotalHoras()
     {
-        return ($this->getDias() * 8) + $this->getHoras() - $this->refrigerio;
+        $horas_sin_redondear = ($this->getDias() * 8) + $this->getHoras() - $this->refrigerio;
+
+        return ceil($horas_sin_redondear / 0.25) * 0.25;
     }
 }

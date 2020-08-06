@@ -73,6 +73,20 @@ class FormularioPermisoController extends Controller
         ], 400);
     }
 
+    public function marcarFirmado(Request $request, $id)
+    {
+        $usuario_id = $request->usuario_id;
+        $result = FormularioPermiso::marcarFirmado($usuario_id, $id);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function delete($id)
     {
         $form = FormularioPermiso::find($id);
