@@ -349,7 +349,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                     )}
                                     {(item.estado == 1 & usuario.permisos == 2) ? (
                                         <>
-                                            <Tooltip title="Marca como CARGADO EN EL SISTEMA">
+                                            <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(item.id)}>
                                                     <i className="fas fa-check" />
                                                 </button>
@@ -408,7 +408,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     >
                         <option value="0">GENERADOS</option>
                         <option value="1">FIRMADOS</option>
-                        <option value="2">CARGADOS</option>
+                        <option value="2">SUBIDO</option>
                     </select>
                 </div>
                 <div>
