@@ -5,10 +5,8 @@ import Axios from 'axios';
 
 import { clearObject } from '../../helpers';
 
-const AutocompletarTrabajador = props => {
-    const { setTrabajador } = props;
+const AutocompletarTrabajador = ({ setTrabajador, form, setForm }) => {
 
-    const [value, setValue] = useState('');
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -25,7 +23,7 @@ const AutocompletarTrabajador = props => {
     }
 
     const handleSelect = data => {
-        const t = options.find(item => item.value = data);
+        const t = options.find(item => item.value == data);
 
         let intentos = 0;
         setLoading(true);
@@ -48,7 +46,10 @@ const AutocompletarTrabajador = props => {
     }
 
     const handleChange = data => {
-        setValue(data);
+        setForm({
+            ...form,
+            nombre_completo_jefe: data
+        });
         setOptions([]);
     }
 
@@ -58,7 +59,7 @@ const AutocompletarTrabajador = props => {
                 <div className="spinner-grow text-info"></div>
             ) : (
                 <AutoComplete
-                    value={value}
+                    value={form.nombre_completo_jefe}
                     options={options}
                     onSelect={handleSelect}
                     onSearch={handleSearch}

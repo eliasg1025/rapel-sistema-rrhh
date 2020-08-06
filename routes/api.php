@@ -46,7 +46,7 @@ Route::group(['prefix' => 'trabajador'], function() {
     Route::put('/observados', 'TrabajadorController@getObservados');
     Route::post('/revision', 'TrabajadorController@revision');
     Route::put('/{id}/habilitar', 'TrabajadorController@habilitar');
-    Route::get('/test/{rut}', 'TrabajadorController@test');
+    Route::get('/{rut}/horarios', 'TrabajadorController@getHorarios');
     Route::group(['prefix' => 'reniec'], function() {
         Route::get('/{rut}', 'TrabajadorController@obtencionReniecIndividual');
         Route::post('/masiva', 'TrabajadorController@obtencionReniecMasiva');
@@ -88,6 +88,7 @@ Route::group(['prefix' => 'atencion-reseteo-clave'], function() {
 });
 
 Route::group(['prefix' => 'formulario-permiso'], function() {
+    Route::get('/{id}', 'FormularioPermisoController@show');
     Route::post('/', 'FormularioPermisoController@create');
     Route::post('/get-all', 'FormularioPermisoController@getAll');
     Route::post('/calcular-horas', 'FormularioPermisoController@calcularHoras');

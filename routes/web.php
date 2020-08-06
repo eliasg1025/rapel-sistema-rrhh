@@ -30,7 +30,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/cuentas/editar/{id}', 'Web\ViewController@editarCuenta');
     Route::get('/eleccion-afp', 'Web\ViewController@afp');
     Route::get('/formularios-permisos', 'Web\ViewController@permisos');
-    Route::get('/formularios-permisos/editar/{id}', 'Web\Controller@editarPermiso');
+    Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
 
     Route::group(['prefix' => 'ficha'], function() {

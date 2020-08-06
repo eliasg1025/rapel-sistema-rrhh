@@ -4,22 +4,48 @@ import BuscarTrabajador from '../shared/BuscarTrabajador';
 import DatosFormularioPermiso from './DatosFormularioPermiso';
 import { TablaFormulariosPermisos } from './TablaFormulariosPermisos';
 import Axios from 'axios';
-import { message } from 'antd';
 import Swal from 'sweetalert2';
 
-
 const AgregarPermiso = () => {
-    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario, editar } = JSON.parse(sessionStorage.getItem('data'));
     const [trabajador, setTrabajador] = useState(null);
     const [trabajadorJefe, setTrabajadorJefe] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
     const [motivosPermiso, setMotivosPermiso] = useState([]);
+
+    useEffect(() => {
+        if (editar) {
+            let intentos = 0;
+            function fetchFormularioPermiso() {
+                intentos++;
+                Axios.get(`/api/formulario-permiso/${editar}`)
+                    .then(res => {
+                        console.log(res.data);
+
+                        const { data } = res;
+
+                        setForm({ ...data, observacion: data.observacion || '' });
+                        setHorario({
+                            entrada: data.entrada || '',
+                            salida: data.salida || ''
+                        });
+                    })
+                    .catch(err => {
+                        if (intentos < 3) {
+                            fetchFormularioPermiso();
+                        }
+                    })
+            }
+
+            fetchFormularioPermiso();
+        }
+    }, []);
+
     const [form, setForm] = useState({
         nombre_completo: '',
+        nombre_completo_jefe: '',
         fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
         empresa_id: '',
-        horario_entrada: '',
-        horario_salida: '',
         refrigerio: 0,
         fecha_salida: moment().format('YYYY-MM-DD').toString(),
         hora_salida: '00:00',
@@ -29,6 +55,11 @@ const AgregarPermiso = () => {
         observacion: '',
     });
 
+    const [horario, setHorario] = useState({
+        entrada: '',
+        salida: ''
+    });
+
     const [totalHoras, setTotalHoras] = useState(0);
     const [errorTotalHoras, setErrorTotalHoras] = useState(null);
     const [reloadDatos, setReloadDatos] = useState(false);
@@ -36,8 +67,22 @@ const AgregarPermiso = () => {
     useEffect(() => {
         setForm({
             ...form,
-            nombre_completo: trabajador?.nombre ? `${trabajador.nombre} ${trabajador.apellido_paterno} ${trabajador.apellido_materno}` : ''
+            nombre_completo: trabajador?.nombre ? `${trabajador.nombre} ${trabajador.apellido_paterno} ${trabajador.apellido_materno}` : '',
         });
+
+        /*
+        if (trabajador) {
+            Axios.get(`/api/trabajador/${trabajador.rut}/horarios`)
+                .then(res => {
+                    setHorario({
+                        entrada: res.data.horario_entrada || '',
+                        salida: res.data.horario_salida
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }*/
     }, [trabajador]);
 
     useEffect(() => {
@@ -50,16 +95,16 @@ const AgregarPermiso = () => {
     useEffect(() => {
         setForm({
             ...form,
-            hora_salida: form.horario_entrada
+            hora_salida: horario.entrada
         });
-    }, [form.horario_entrada]);
+    }, [horario.entrada]);
 
     useEffect(() => {
         setForm({
             ...form,
-            hora_regreso: form.horario_salida
+            hora_regreso: horario.salida
         });
-    }, [form.horario_salida]);
+    }, [horario.salida]);
 
     useEffect(() => {
         setForm({
@@ -69,18 +114,16 @@ const AgregarPermiso = () => {
     }, [form.fecha_salida]);
 
     useEffect(() => {
-        let intentos = 0;
-
         function fetchHorasTotales() {
             Axios.post('/api/formulario-permiso/calcular-horas', {
                 fecha_hora_salida: `${form.fecha_salida} ${form.hora_salida}`,
                 fecha_hora_regreso: `${form.fecha_regreso} ${form.hora_regreso}`,
-                horario_entrada: form.horario_entrada,
-                horario_salida: form.horario_salida,
+                horario_entrada: horario.entrada,
+                horario_salida: horario.salida,
                 refrigerio: form.refrigerio,
             })
                 .then(res => {
-                    console.log(res.data);
+                    // console.log(res.data);
 
                     setTotalHoras(res.data.total_horas);
                     setErrorTotalHoras(null);
@@ -102,8 +145,8 @@ const AgregarPermiso = () => {
             form.fecha_regreso !== '' &&
             form.hora_salida !== '' &&
             form.hora_regreso !== '' &&
-            form.horario_entrada !== '' &&
-            form.horario_salida !== '' &&
+            horario.entrada !== '' &&
+            horario.salida !== '' &&
             moment(form.fecha_salida).year() >= moment().year() - 1 &&
             moment(form.fecha_regreso).year() >= moment().year() - 1
         ) {
@@ -114,21 +157,23 @@ const AgregarPermiso = () => {
 
     useEffect(() => {
         console.log(motivosPermiso);
-    }, [motivosPermiso])
+    }, [motivosPermiso]);
 
     const handleSubmit = e => {
         e.preventDefault();
         form.trabajador = trabajador;
+        form.regimen = contratoActivo?.regimen || null;
+        form.cuartel = contratoActivo?.cuartel || null;
+        form.oficio = contratoActivo?.oficio || null;
+        form.zona_labor = contratoActivo?.zona_labor || null;
+
         form.jefe = trabajadorJefe;
-        form.regimen = contratoActivo.regimen;
-        form.cuartel = contratoActivo.cuartel;
-        form.oficio = contratoActivo.oficio;
-        form.zona_labor = contratoActivo.zona_labor;
+        form.horario_entrada = horario.entrada,
+        form.horario_salida = horario.salida,
         form.total_horas = totalHoras;
         form.usuario_id = usuario.id;
 
         const m = motivosPermiso.find(e => e.id == form.motivo_permiso_id);
-
         form.motivo_permiso = m;
 
         console.log(form);
@@ -161,25 +206,32 @@ const AgregarPermiso = () => {
 
     return (
         <>
-            <BuscarTrabajador
-                setTrabajador={setTrabajador}
-                setContratoActivo={setContratoActivo}
-            />
+            {!editar && (
+                <BuscarTrabajador
+                    setTrabajador={setTrabajador}
+                    setContratoActivo={setContratoActivo}
+                />
+            )}
             <DatosFormularioPermiso
                 handleSubmit={handleSubmit}
                 form={form}
                 setForm={setForm}
+                horario={horario}
+                setHorario={setHorario}
                 totalHoras={totalHoras}
                 errorTotalHoras={errorTotalHoras}
                 motivosPermiso={motivosPermiso}
                 setMotivosPermiso={setMotivosPermiso}
+                trabajadorJefe={trabajadorJefe}
                 setTrabajadorJefe={setTrabajadorJefe}
             />
             <hr />
-            <TablaFormulariosPermisos
-                reloadDatos={reloadDatos}
-                setReloadDatos={setReloadDatos}
-            />
+            {!editar && (
+                <TablaFormulariosPermisos
+                    reloadDatos={reloadDatos}
+                    setReloadDatos={setReloadDatos}
+                />
+            )}
         </>
     );
 };

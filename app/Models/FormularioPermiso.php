@@ -115,18 +115,38 @@ class FormularioPermiso extends Model
      * Static methods
      */
 
-    public static function _show()
+    public static function _show($id)
     {
+        $trabajadores = DB::table('trabajadores as t')
+            ->select('t.id', 't.rut', DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'));
+
         return DB::table('formularios_permisos as f')
             ->select(
                 'f.id',
+                'trabajador.rut',
                 'f.fecha_solicitud',
-                'c.empresa_id',
-                DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_trabajador'),
-
+                'f.empresa_id',
+                'trabajador.nombre_completo as nombre_completo',
+                'jefe.nombre_completo as nombre_completo_jefe',
+                'f.refrigerio',
+                'f.observacion',
+                'm.code as motivo_permiso_id',
+                'f.horario_entrada as entrada',
+                'f.horario_salida as salida',
+                DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%Y-%m-%d") fecha_regreso'),
+                DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%Y-%m-%d") fecha_salida'),
+                DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
+                DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%H:%i") hora_regreso')
             )
-            ->join('trabajadores as t ', 't.id', '=', 'f.trabajador_id')
-            ->get();
+            ->joinSub($trabajadores, 'trabajador', function($join) {
+                $join->on('trabajador.id', 'f.trabajador_id');
+            })
+            ->joinSub($trabajadores, 'jefe', function($join) {
+                $join->on('jefe.id', 'f.jefe_id');
+            })
+            ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
+            ->where('f.id', $id)
+            ->first();
     }
 
     public static function calcularHoras(DatosHoras $datosHoras)
@@ -258,9 +278,9 @@ class FormularioPermiso extends Model
         DB::beginTransaction();
         try {
             $motivo_permiso_id = MotivoPermiso::findOrCreate($data['motivo_permiso']);
-            $jefe_id           = Trabajador::findOrCreate($data['jefe']);
 
             if ( !isset($data['id']) ) {
+                $jefe_id           = Trabajador::findOrCreate($data['jefe']);
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
                 $regimen_id        = Regimen::findOrCreate($data['regimen']);
                 $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
@@ -298,6 +318,8 @@ class FormularioPermiso extends Model
 
                 $form->fecha_hora_salida = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
                 $form->fecha_hora_regreso = date($data['fecha_regreso'] . ' ' . $data['hora_regreso']);
+                $form->horario_entrada = $data['horario_entrada'];
+                $form->horario_salida = $data['horario_salida'];
                 $form->refrigerio = $data['refrigerio'];
                 $form->total_horas = $data['total_horas'];
                 $form->observacion = $data['observacion'];
@@ -311,9 +333,13 @@ class FormularioPermiso extends Model
                 $form->refrigerio         = $data['refrigerio'];
                 $form->total_horas        = $data['total_horas'];
                 $form->observacion        = $data['observacion'];
-                $form->jefe_id            = $jefe_id;
                 $form->empresa_id         = $data['empresa_id'];
                 $form->motivo_permiso_id  = $motivo_permiso_id;
+
+                if ( isset($data['jefe']) ) {
+                    $jefe_id = Trabajador::findOrCreate($data['jefe']);
+                    $form->jefe_id = $jefe_id;
+                }
             }
 
             if ( $form->save() ) {

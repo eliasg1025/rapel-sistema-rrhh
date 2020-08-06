@@ -47,6 +47,23 @@ class TrabajadorController extends Controller
         ]);
     }
 
+    public function getHorarios($rut)
+    {
+        $trabajador = Trabajador::where('rut', $rut)->first();
+
+        if ($trabajador) {
+            return response()->json([
+                'horario_entrada' => $trabajador->horario_entrada,
+                'horario_salida'  => $trabajador->horario_salida
+            ]);
+        } else {
+            return response()->json([
+                'horario_entrada' => '',
+                'horario_salida'  => ''
+            ]);
+        }
+    }
+
     public function revision(Request $request)
     {
         $result = Trabajador::revision($request->trabajadores);
@@ -59,12 +76,13 @@ class TrabajadorController extends Controller
         return response()->json($result);
     }
 
+    /*
     public function test($rut)
     {
         $result = (new ReniecService())->getPersona($rut);
 
         return response()->json($result);
-    }
+    }*/
 
     public function habilitar($id)
     {

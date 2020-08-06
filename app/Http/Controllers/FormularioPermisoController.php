@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class FormularioPermisoController extends Controller
 {
+    public function show($id)
+    {
+        $result = FormularioPermiso::_show($id);
+        /*
+        if (!$result) {
+            return response()->json(['message' => 'Formulario no existe'], 404);
+        }*/
+        return response()->json($result);
+    }
+
     public function calcularHoras(Request $request)
     {
         $datos_horas = new DatosHoras(

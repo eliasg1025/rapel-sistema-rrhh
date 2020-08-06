@@ -193,7 +193,8 @@ class ViewController extends Controller
         $usuario = $request->session()->get('usuario');
 
         $data = [
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'editar' => 0
         ];
 
         return view('pages.permisos', compact('data'));
@@ -203,9 +204,12 @@ class ViewController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
-        $formularioPermiso = FormularioPermiso::_show($id);
+        $data = [
+            'usuario' => $usuario,
+            'editar' => $id
+        ];
 
-
+        return view('pages.permisos', compact('data'));
     }
 
     public function atencionReseteoClave(Request $request)

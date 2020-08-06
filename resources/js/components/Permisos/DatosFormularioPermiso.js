@@ -9,8 +9,11 @@ const DatosFormularioPermiso = ({
     handleSubmit,
     form,
     setForm,
+    horario,
+    setHorario,
     motivosPermiso,
     setMotivosPermiso,
+    trabajadorJefe,
     setTrabajadorJefe,
     totalHoras,
     errorTotalHoras
@@ -25,19 +28,21 @@ const DatosFormularioPermiso = ({
 
     useEffect(() => {
         let intento = 0;
-        function fetchEmpresas(cb) {
+        function fetchEmpresas() {
             intento++;
             Axios.get('/api/empresa')
-                .then(res => setEmpresas(res.data))
+                .then(res => {
+                    setEmpresas(res.data);
+                    setLoading({ ...loading, empresas: false });
+                })
                 .catch(err => {
                     if (intento < 5) {
                         fetchEmpresas();
                     }
-                })
-                .finally(cb);
+                });
         }
-        setLoading({ ...loading, empresas: true });
-        fetchEmpresas(() => setLoading({ ...loading, empresas: false }));
+
+        fetchEmpresas();
     }, []);
 
     useEffect(() => {
@@ -46,19 +51,19 @@ const DatosFormularioPermiso = ({
             function fetchMotivosPermiso(cb) {
                 intento1++;
                 Axios.get(`http://192.168.60.16/api/motivo-permiso/${form.empresa_id}`)
-                    .then(res => setMotivosPermiso(res.data.data))
+                    .then(res => {
+                        setMotivosPermiso(res.data.data);
+                        setLoading({ ...loading, motivos: false });
+                    })
                     .catch(err => {
                         console.log(err);
                         if (intento1 < 5) {
                             fetchMotivosPermiso();
                         }
-                    })
-                    .finally(cb);
+                    });
             }
             setLoading({ ...loading, motivos: true });
-            fetchMotivosPermiso(() => {
-                setLoading({ ...loading, motivos: false });
-            });
+            fetchMotivosPermiso();;
         }
     }, [form.empresa_id])
 
@@ -66,22 +71,16 @@ const DatosFormularioPermiso = ({
         <form onSubmit={handleSubmit}>
             <div className="form-row">
                 <div className="form-group col-md-6 col-lg-4">
-                    {loading.empresas ? (
-                        <div className="spinner-grow text-info"></div>
-                    ) : (
-                        <>
-                            Empresa: <br />
-                            <select
-                                type="text" name="empresa_id" placeholder="Empresa"
-                                className="form-control"
-                                value={form.empresa_id}
-                                onChange={e => setForm({ ...form, empresa_id: e.target.value })}
-                            >
-                                <option value="" key="0" disabled></option>
-                                {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
-                            </select>
-                        </>
-                    )}
+                    Empresa: <br />
+                    <select
+                        type="text" name="empresa_id" placeholder="Empresa"
+                        className="form-control"
+                        value={form.empresa_id}
+                        onChange={e => setForm({ ...form, empresa_id: e.target.value })}
+                    >
+                        <option value="" key="0" disabled></option>
+                        {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
+                    </select>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     Fecha solicitud: <br />
@@ -110,16 +109,16 @@ const DatosFormularioPermiso = ({
                             <input
                                 type="time" name="horario"
                                 className="form-control"
-                                value={form.horario_entrada}
-                                onChange={e => setForm({ ...form, horario_entrada: e.target.value })}
+                                value={horario.entrada}
+                                onChange={e => setHorario({ ...horario, entrada: e.target.value })}
                             />
                         </div>
                         <div className="col">
                             <input
                                 type="time" name="horario"
                                 className="form-control"
-                                value={form.horario_salida}
-                                onChange={e => setForm({ ...form, horario_salida: e.target.value })}
+                                value={horario.salida}
+                                onChange={e => setHorario({ ...horario, salida: e.target.value })}
                             />
                         </div>
                     </div>
@@ -197,6 +196,8 @@ const DatosFormularioPermiso = ({
                     Jefe de Zona/Campo:<br />
                     <AutocompletarTrabajador
                         setTrabajador={setTrabajadorJefe}
+                        form={form}
+                        setForm={setForm}
                     />
                 </div>
                 <div className="form-group col-md-6 col-lg-6">
