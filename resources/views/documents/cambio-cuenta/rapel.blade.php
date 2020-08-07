@@ -28,7 +28,7 @@
         <div style="text-align: center; font-weight: bold">
             SEÑORES<br/><br />
             SOCIEDAD AGRICOLA RAPEL S.A.C.<br /><br />
-            AGREDECERIA A USTEDES EFECTUAR EL PAGO DE MIS<br /><br />
+            AGREDECERÉ A USTEDES EFECTUAR EL PAGO DE MIS<br /><br />
             REMUNERACIONES A TRAVES DE DÉPOSITO EN:<br /><br />
         </div>
         <div style="padding: 10px; padding-left: 25px">
