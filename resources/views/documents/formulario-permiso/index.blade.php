@@ -61,7 +61,7 @@
             <table class="table" style="font-size: 12px;">
                 <tr>
                     <td class="bold">NOMBRE TRABAJADOR:</td>
-                    <td colspan="3">{{ $formulario->trabajador->nombre_completo }}</td>
+                    <td colspan="3">{{ $formulario->trabajador->apellido_paterno }} {{ $formulario->trabajador->apellido_materno }} {{ $formulario->trabajador->nombre }}</td>
                 </tr>
                 <tr>
                     <td class="bold">DNI:</td>

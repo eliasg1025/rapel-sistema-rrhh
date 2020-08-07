@@ -198,7 +198,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     't.rut',
                     't.code',
-                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%d/%m/%Y") fecha_salida'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%d/%m/%Y") fecha_regreso'),
                     'm.code as motivo_permiso_id',
@@ -288,15 +288,14 @@ class FormularioPermiso extends Model
                 $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
                 // TODO: Comentado temporalmente para pruebas
-                $existe_registro_mismo_dia = FormularioPermiso::where([
-                    'fecha_solicitud' => $data['fecha_solicitud'],
-                    'trabajador_id'   => $trabajador_id,
-                ])->first();
+                $existe_registro_mismo_dia = FormularioPermiso::where('trabajador_id', $trabajador_id)
+                    ->whereDate('fecha_hora_salida', $data['fecha_salida'])
+                    ->first();
 
                 if ( $existe_registro_mismo_dia ) {
                     DB::rollBack();
                     return [
-                        'error' => 'Ya existe un formulario para el ' . $data['fecha_solicitud'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
+                        'error' => 'Ya existe un formulario para el ' . $data['fecha_salida'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
                 }
 
@@ -356,8 +355,7 @@ class FormularioPermiso extends Model
         } catch(\Exception $e) {
             DB::rollBack();
             return [
-                'error'   => true,
-                'message' => $e->getMessage() . ' -- ' . $e->getLine()
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
     }
@@ -377,7 +375,32 @@ class FormularioPermiso extends Model
         $formularioPermiso->estado = 1;
         if ( $formularioPermiso->save() ) {
             return [
-                'message' => 'Formulario enviado correctamente'
+                'message' => 'Estado actualizado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
+    }
+
+    public static function marcarEnviado(int $usuario_id, int $id)
+    {
+        $formularioPermiso = FormularioPermiso::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->id !== $formularioPermiso->usuario_id ) {
+            return [
+                'error'   => true,
+                'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
+            ];
+        }
+
+        $formularioPermiso->estado = 2;
+        if ( $formularioPermiso->save() ) {
+            return [
+                'message' => 'Estado actualizado correctamente'
             ];
         }
 

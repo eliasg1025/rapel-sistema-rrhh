@@ -23,7 +23,6 @@ const AgregarPermiso = () => {
                         console.log(res.data);
 
                         const { data } = res;
-
                         setForm({ ...data, observacion: data.observacion || '' });
                         setHorario({
                             entrada: data.entrada || '',
@@ -69,20 +68,6 @@ const AgregarPermiso = () => {
             ...form,
             nombre_completo: trabajador?.nombre ? `${trabajador.nombre} ${trabajador.apellido_paterno} ${trabajador.apellido_materno}` : '',
         });
-
-        /*
-        if (trabajador) {
-            Axios.get(`/api/trabajador/${trabajador.rut}/horarios`)
-                .then(res => {
-                    setHorario({
-                        entrada: res.data.horario_entrada || '',
-                        salida: res.data.horario_salida
-                    })
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }*/
     }, [trabajador]);
 
     useEffect(() => {
@@ -93,17 +78,21 @@ const AgregarPermiso = () => {
     }, [contratoActivo]);
 
     useEffect(() => {
-        setForm({
-            ...form,
-            hora_salida: horario.entrada
-        });
+        if (!editar) {
+            setForm({
+                ...form,
+                hora_salida: horario.entrada
+            });
+        }
     }, [horario.entrada]);
 
     useEffect(() => {
-        setForm({
-            ...form,
-            hora_regreso: horario.salida
-        });
+        if (!editar) {
+            setForm({
+                ...form,
+                hora_regreso: horario.salida
+            });
+        }
     }, [horario.salida]);
 
     useEffect(() => {
@@ -113,33 +102,33 @@ const AgregarPermiso = () => {
         });
     }, [form.fecha_salida]);
 
-    useEffect(() => {
-        function fetchHorasTotales() {
-            Axios.post('/api/formulario-permiso/calcular-horas', {
-                fecha_hora_salida: `${form.fecha_salida} ${form.hora_salida}`,
-                fecha_hora_regreso: `${form.fecha_regreso} ${form.hora_regreso}`,
-                horario_entrada: horario.entrada,
-                horario_salida: horario.salida,
-                refrigerio: form.refrigerio,
+    const fetchHorasTotales = () => {
+        Axios.post('/api/formulario-permiso/calcular-horas', {
+            fecha_hora_salida: `${form.fecha_salida} ${form.hora_salida}`,
+            fecha_hora_regreso: `${form.fecha_regreso} ${form.hora_regreso}`,
+            horario_entrada: horario.entrada,
+            horario_salida: horario.salida,
+            refrigerio: form.refrigerio,
+        })
+            .then(res => {
+                // console.log(res.data);
+
+                setTotalHoras(res.data.total_horas);
+                setErrorTotalHoras(null);
+                return;
             })
-                .then(res => {
-                    // console.log(res.data);
+            .catch(err => {
+                console.error(err.response);
 
-                    setTotalHoras(res.data.total_horas);
-                    setErrorTotalHoras(null);
-                    return;
-                })
-                .catch(err => {
-                    console.error(err.response);
+                if (err.response.data) {
+                    setErrorTotalHoras(err.response.data.message);
+                }
 
-                    if (err.response.data) {
-                        setErrorTotalHoras(err.response.data.message);
-                    }
+                setTotalHoras(0);
+            });
+    }
 
-                    setTotalHoras(0);
-                });
-        }
-
+    useEffect(() => {
         if (
             form.fecha_salida !== '' &&
             form.fecha_regreso !== '' &&

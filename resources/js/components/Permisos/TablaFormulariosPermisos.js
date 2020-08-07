@@ -181,7 +181,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 hora_salida: item.hora_salida,
                 hora_regreso: item.hora_regreso,
                 con_goce: item.goce == 0 ? 'NO' : 'SI',
-                cargado_por: item.nombre_completo_usuario,
+                cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud
             };
         });
@@ -246,6 +246,39 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             .then(result => {
                 if (result.value) {
                     Axios.put(`/api/formulario-permiso/marcar-firmado/${id}`, {
+                        usuario_id: usuario.id
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                title: err.response.data.message,
+                                icon: 'error'
+                            })
+                        });
+                }
+            })
+    }
+
+    const handleMarcarEnviado = id => {
+        Swal.fire({
+            title: '¿Se envió este formulario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/formulario-permiso/marcar-enviado/${id}`, {
                         usuario_id: usuario.id
                     })
                         .then(res => {
@@ -347,7 +380,16 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                             )}
                                         </>
                                     )}
-                                    {(item.estado == 1 & usuario.permisos == 2) ? (
+                                    {(item.estado == 1) ? (
+                                        <>
+                                            <Tooltip title="Marca como ENVIADO">
+                                                <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarEnviado(item.id)}>
+                                                    <i className="fas fa-check" />
+                                                </button>
+                                            </Tooltip>
+                                        </>
+                                    ) : ''}
+                                    {(item.estado == 2 & usuario.permisos == 2) ? (
                                         <>
                                             <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(item.id)}>
@@ -408,7 +450,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     >
                         <option value="0">GENERADOS</option>
                         <option value="1">FIRMADOS</option>
-                        <option value="2">SUBIDO</option>
+                        <option value="2">ENVIADO</option>
+                        <option value="3">SUBIDO</option>
                     </select>
                 </div>
                 <div>

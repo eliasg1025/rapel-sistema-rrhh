@@ -208,6 +208,13 @@ const DatosFormularioPermiso = ({
                             Motivo de Permiso:<br />
                             <Select
                                 value={form.motivo_permiso_id}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
                                 onChange={e => setForm({ ...form, motivo_permiso_id: e })}
                                 style={{
                                     width: '100%',
