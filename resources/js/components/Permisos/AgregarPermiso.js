@@ -210,6 +210,7 @@ const AgregarPermiso = () => {
                 <BuscarTrabajador
                     setTrabajador={setTrabajador}
                     setContratoActivo={setContratoActivo}
+                    jornal={true}
                 />
             )}
             <DatosFormularioPermiso
