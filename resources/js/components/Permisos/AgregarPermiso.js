@@ -23,6 +23,7 @@ const AgregarPermiso = () => {
                         console.log(res.data);
 
                         const { data } = res;
+
                         setForm({ ...data, observacion: data.observacion || '' });
                         setHorario({
                             entrada: data.entrada || '',
@@ -47,16 +48,16 @@ const AgregarPermiso = () => {
         empresa_id: '',
         refrigerio: 0,
         fecha_salida: moment().format('YYYY-MM-DD').toString(),
-        hora_salida: '00:00',
+        hora_salida: '',
         fecha_regreso: '',
-        hora_regreso: '00:00',
+        hora_regreso: '',
         motivo_permiso_id: '',
         observacion: '',
     });
 
     const [horario, setHorario] = useState({
-        entrada: '',
-        salida: ''
+        entrada: '06:15',
+        salida: '15:00'
     });
 
     const [totalHoras, setTotalHoras] = useState(0);
@@ -165,7 +166,12 @@ const AgregarPermiso = () => {
         const m = motivosPermiso.find(e => e.id == form.motivo_permiso_id);
         form.motivo_permiso = m;
 
-        console.log(form);
+        Swal.fire({
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            },
+            title: 'Guardando ...'
+        });
 
         Axios.post('/api/formulario-permiso', {...form})
             .then(res => {

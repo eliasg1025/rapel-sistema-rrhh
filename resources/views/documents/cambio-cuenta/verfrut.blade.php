@@ -19,7 +19,7 @@
         <h3 style="text-align: center">INFORMACION PARA DEPOSITOS DE REMUNERACIONES</h3>
         <br />
         <div style="padding: 10px; padding-left: 25px">
-            <p>NOMBRE: {{ $cuenta->trabajador->nombre_completo }}</p>
+            <p>NOMBRE: {{ $cuenta->trabajador->nombre_completo_doc }}</p>
             <p>DNI: {{ $cuenta->trabajador->rut }}</p>
             <p>FECHA SOLICITUD: {{ $cuenta->fecha_format }}</p>
         </div>

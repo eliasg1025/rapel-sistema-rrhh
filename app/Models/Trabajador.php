@@ -55,6 +55,11 @@ class Trabajador extends Model
         return $this->nombre . ' ' . $this->apellidos;
     }
 
+    public function getNombreCompletoDocAttribute($value)
+    {
+        return $this->apellidos . ' ' . $this->nombre;
+    }
+
     public function getFechaFormatAttribute($value)
     {
         return  Carbon::parse($this->fecha_nacimiento)->format('d/m/Y');

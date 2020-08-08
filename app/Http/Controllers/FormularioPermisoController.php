@@ -70,12 +70,17 @@ class FormularioPermisoController extends Controller
     public function toggleGoce(int $id)
     {
         $form = FormularioPermiso::find($id);
-        $form->goce = !$form->goce;
+
+        if ( !in_array($form->motivo_permiso->code, [3, 4]) ) {
+            $form->goce = '1';
+        } else {
+            $form->goce = !$form->goce;
+        }
+
         if ($form->save()) {
             return response()->json([
                 'goce' => $form->goce
             ]);
-
         }
 
         return response()->json([

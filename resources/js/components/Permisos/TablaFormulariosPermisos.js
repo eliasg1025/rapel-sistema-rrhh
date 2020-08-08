@@ -136,6 +136,14 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 field: 'nombre_completo_usuario'
             },
             {
+                label: 'Fecha Firmado',
+                field: 'fecha_hora_firmado'
+            },
+            {
+                label: 'Fecha Envio',
+                field: 'fecha_hora_enviado',
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
@@ -164,7 +172,10 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             'HORA REGRESO',
             'CON GOCE',
             'CARGADO POR',
-            'FECHA SOLICITUD'
+            'FECHA SOLICITUD',
+            'HORA SOLICITUD',
+            'FECHA HORA FIRMADO',
+            'FECHA HORA ENVIADO'
         ];
 
         const data = datatable.rows.map(item => {
@@ -182,7 +193,10 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 hora_regreso: item.hora_regreso,
                 con_goce: item.goce == 0 ? 'NO' : 'SI',
                 cargado_por: item.nombre_completo_usuario || '',
-                fecha_solicitud: item.fecha_solicitud
+                fecha_solicitud: item.fecha_solicitud,
+                hora_solicitud: item.hora,
+                fecha_hora_firmado: item.fecha_hora_firmado,
+                fecha_hora_enviado: item.fecha_hora_enviado
             };
         });
 

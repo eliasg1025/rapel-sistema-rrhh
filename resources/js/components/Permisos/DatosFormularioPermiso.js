@@ -3,7 +3,7 @@ import Axios from 'axios';
 import moment from 'moment';
 
 import AutocompletarTrabajador from '../shared/AutocompletarTrabajador';
-import { Select } from 'antd';
+import { Select, Tooltip } from 'antd';
 
 const DatosFormularioPermiso = ({
     handleSubmit,
@@ -103,7 +103,10 @@ const DatosFormularioPermiso = ({
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-4">
-                    Horario del trabajador:<br />
+                    Horario del trabajador&nbsp;
+                    <Tooltip title="Ingrese la hora de entrada y salida que tiene el trabajador">
+                        <span><i className="far fa-question-circle"></i></span>
+                    </Tooltip>: <br />
                     <div className="row">
                         <div className="col">
                             <input
@@ -124,7 +127,11 @@ const DatosFormularioPermiso = ({
                     </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
-                    Fecha y hora salida:<br />
+                    Fecha y hora salida&nbsp;
+                    <Tooltip title="DESDE que fecha y hora se considerará en el formulario">
+                        <span><i className="far fa-question-circle"></i></span>
+                    </Tooltip>
+                    :<br />
                     <div className="row">
                         <div className="col">
                             <input
@@ -145,7 +152,11 @@ const DatosFormularioPermiso = ({
                     </div>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
-                    Fecha y hora regreso:<br />
+                    Fecha y hora regreso&nbsp;
+                    <Tooltip title="HASTA que fecha y hora se considerará en el formulario">
+                        <span><i className="far fa-question-circle"></i></span>
+                    </Tooltip>
+                    :<br />
                     <div className="row">
                         <div className="col">
                             <input
@@ -205,7 +216,11 @@ const DatosFormularioPermiso = ({
                         <div className="spinner-grow text-info"></div>
                     ) : (
                         <>
-                            Motivo de Permiso:<br />
+                            Motivo de Permiso&nbsp;
+                            <Tooltip title="Todos los motivos de permiso exceptuando el 3 y el 4 cuentan con goce de sueldo">
+                                <span><i class="fas fa-info-circle"></i></span>
+                            </Tooltip>
+                            :<br />
                             <Select
                                 value={form.motivo_permiso_id}
                                 showSearch

@@ -196,6 +196,8 @@ class FormularioPermiso extends Model
                     'f.id',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_enviado, "%d/%m/%Y %H:%i:%s") fecha_hora_enviado'),
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
@@ -237,6 +239,8 @@ class FormularioPermiso extends Model
                     'f.id',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_enviado, "%d/%m/%Y %H:%i:%s") fecha_hora_enviado'),
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
@@ -299,6 +303,13 @@ class FormularioPermiso extends Model
                     ];
                 }
 
+                if ( $jefe_id === $trabajador_id ) {
+                    DB::rollBack();
+                    return [
+                        'error' => 'La misma persona no puede generarse formularios'
+                    ];
+                }
+
                 if ( $data['total_horas'] <= 0 ) {
                     DB::rollBack();
                     return [
@@ -306,25 +317,29 @@ class FormularioPermiso extends Model
                     ];
                 }
 
-                $form = new FormularioPermiso();
-                $form->usuario_id    = $data['usuario_id'];
-                $form->trabajador_id = $trabajador_id;
-                $form->regimen_id    = $regimen_id;
-                $form->zona_labor_id = $zona_labor_id;
-                $form->oficio_id     = $ofico_id;
-                $form->cuartel_id    = $cuartel_id;
+                $form                  = new FormularioPermiso();
+                $form->usuario_id      = $data['usuario_id'];
+                $form->trabajador_id   = $trabajador_id;
+                $form->regimen_id      = $regimen_id;
+                $form->zona_labor_id   = $zona_labor_id;
+                $form->oficio_id       = $ofico_id;
+                $form->cuartel_id      = $cuartel_id;
                 $form->fecha_solicitud = $data['fecha_solicitud'];
 
-                $form->fecha_hora_salida = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
+                $form->fecha_hora_salida  = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
                 $form->fecha_hora_regreso = date($data['fecha_regreso'] . ' ' . $data['hora_regreso']);
-                $form->horario_entrada = $data['horario_entrada'];
-                $form->horario_salida = $data['horario_salida'];
-                $form->refrigerio = $data['refrigerio'];
-                $form->total_horas = $data['total_horas'];
-                $form->observacion = $data['observacion'];
-                $form->jefe_id = $jefe_id;
-                $form->empresa_id = $data['empresa_id'];
-                $form->motivo_permiso_id = $motivo_permiso_id;
+                $form->horario_entrada    = $data['horario_entrada'];
+                $form->horario_salida     = $data['horario_salida'];
+                $form->refrigerio         = $data['refrigerio'];
+                $form->total_horas        = $data['total_horas'];
+                $form->observacion        = $data['observacion'];
+                $form->jefe_id            = $jefe_id;
+                $form->empresa_id         = $data['empresa_id'];
+                $form->motivo_permiso_id  = $motivo_permiso_id;
+
+                if (!in_array($data['motivo_permiso']['id'], [3, 4])) {
+                    $form->goce = '1';
+                }
             } else {
                 $form                     = FormularioPermiso::find($data['id']);
                 $form->fecha_hora_salida  = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
@@ -334,6 +349,10 @@ class FormularioPermiso extends Model
                 $form->observacion        = $data['observacion'];
                 $form->empresa_id         = $data['empresa_id'];
                 $form->motivo_permiso_id  = $motivo_permiso_id;
+
+                if (!in_array($data['motivo_permiso']['id'], [3, 4])) {
+                    $form->goce = '1';
+                }
 
                 if ( isset($data['jefe']) ) {
                     $jefe_id = Trabajador::findOrCreate($data['jefe']);
@@ -345,7 +364,7 @@ class FormularioPermiso extends Model
                 DB::commit();
                 return [
                     'error'   => false,
-                    'message' => 'Formulario creado correctamente',
+                    'message' => 'Formulario ' . (isset($data['id']) ? 'actualizado' : 'creado') . ' correctamente',
                     'id'      => $form->id
                 ];
             }
@@ -373,6 +392,8 @@ class FormularioPermiso extends Model
         }
 
         $formularioPermiso->estado = 1;
+        $formularioPermiso->fecha_hora_firmado = now()->toDateTimeString();
+
         if ( $formularioPermiso->save() ) {
             return [
                 'message' => 'Estado actualizado correctamente'
@@ -398,6 +419,8 @@ class FormularioPermiso extends Model
         }
 
         $formularioPermiso->estado = 2;
+        $formularioPermiso->fecha_hora_enviado = now()->toDateTimeString();
+
         if ( $formularioPermiso->save() ) {
             return [
                 'message' => 'Estado actualizado correctamente'
@@ -422,7 +445,9 @@ class FormularioPermiso extends Model
             ];
         }
 
-        $formularioPermiso->estado = 2;
+        $formularioPermiso->estado = 3;
+        $formularioPermiso->fecha_hora_subido = now()->toDateTimeString();
+
         if ( $formularioPermiso->save() ) {
             return [
                 'message' => 'Formulario actualizado correctamente'

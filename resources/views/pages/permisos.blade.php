@@ -8,6 +8,7 @@
     <div class="container p-5">
         <div class="text-center">
             <h3>Formularios de Permisos</h3>
+            <span>{{ $data['usuario']['permisos'] == 2 ? '(Administrador)' : '' }}</span>
         </div>
         <div class="py-5">
             <div id="agregar-permiso"></div>

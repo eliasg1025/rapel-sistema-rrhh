@@ -148,6 +148,15 @@
                     <td>OBRERO:</td>
                     <td class="box">{{ $formulario->regimen->id === 3 ? 'X' : ' '  }}</td>
                 </tr>
+                @if (!in_array($formulario->motivo_permiso->code, [3, 4]))
+                    <tr>
+                        <td>CON GOCE DE SUELDO</td>
+                        <td class="box">{{ 'X' }}</td>
+                        <td></td>
+                        <td>SIN GOCE DE SUELDO</td>
+                        <td class="box">{{ ' ' }}</td>
+                    </tr>
+                @else
                 <tr>
                     <td>CON GOCE DE SUELDO</td>
                     <td class="box">{{ ' ' }}</td>
@@ -155,6 +164,7 @@
                     <td>SIN GOCE DE SUELDO</td>
                     <td class="box">{{ ' ' }}</td>
                 </tr>
+                @endif
             </table>
             <br />
             <table>
