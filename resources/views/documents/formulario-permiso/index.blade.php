@@ -54,9 +54,11 @@
                 <td>
                     <h2 style="text-align: center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORMULARIO DE PERMISO</h2>
                 </td>
+                <td>
+                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+                </td>
             </tr>
         </table>
-        <br />
         <div style="font-size: 13px">
             <table class="table" style="font-size: 12px;">
                 <tr>

@@ -148,8 +148,9 @@ class FormularioPermisoController extends Controller
     {
         try {
             $data = [
-                'formulario' => $formularioPermiso,
-                'trabajador' => $formularioPermiso->trabajador,
+                'formulario'     => $formularioPermiso,
+                'trabajador'     => $formularioPermiso->trabajador,
+                'codigo'         => 3 . '@' . $formularioPermiso->id,
             ];
 
             $pdf = \PDF::setOptions([

@@ -64,7 +64,8 @@ class CuentasController extends Controller
             }
 
             $data = [
-                'cuenta' => $cuenta
+                'cuenta' => $cuenta,
+                'codigo' => 1 . '@' . $cuenta->id
             ];
 
             $pdf = \PDF::setOptions([

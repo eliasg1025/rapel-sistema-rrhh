@@ -68,7 +68,8 @@ class EleccionAfpController extends Controller
 
             $data = [
                 'eleccion_afp' => $eleccion_afp,
-                'trabajador' => $eleccion_afp->trabajador
+                'trabajador'   => $eleccion_afp->trabajador,
+                'codigo'       => 2 . '@' . $eleccion_afp->id,
             ];
 
             $pdf = \PDF::setOptions([

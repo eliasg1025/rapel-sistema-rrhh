@@ -16,6 +16,9 @@
         <tr>
             <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
             <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DE SISTEMA PENSIONARIO</h4></td>
+            <td>
+                <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+            </td>
         </tr>
     </table>
     <div style="font-size: 11px; text-align: justify">

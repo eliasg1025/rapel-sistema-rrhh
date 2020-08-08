@@ -12,9 +12,16 @@
 
 @section('contenido')
     <section style="border: 2px solid black; padding: 15px">
-        <div style="text-align: center">
-            <img src="{{ public_path() . '/img/Logo Documentos1.jpg' }}" alt="" width="300px">
-        </div>
+        <table style="width: 100%">
+            <tr>
+                <td style="text-align: right">
+                    <img src="{{ public_path() . '/img/Logo Documentos1.jpg' }}" alt="" width="300px">
+                </td>
+                <td style="text-align: right; margin-bottom: -5px">
+                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+                </td>
+            </tr>
+        </table>
         <br />
         <h3 style="text-align: center">INFORMACION PARA DEPOSITOS DE REMUNERACIONES</h3>
         <br />
