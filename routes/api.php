@@ -33,6 +33,7 @@ Route::group(['prefix' => 'usuario'], function() {
 });
 
 Route::get('/empresa', 'EmpresasController@all');
+Route::get('/incidencia', 'IncidenciaController@all');
 
 Route::group(['prefix' => 'actualizar-datos'], function() {
     Route::post('/por-empresa', 'ActualizarController@porEmpresa');
@@ -97,6 +98,10 @@ Route::group(['prefix' => 'formulario-permiso'], function() {
     Route::put('/marcar-enviado/{id}', 'FormularioPermisoController@marcarEnviado');
     Route::put('/marcar-cargado/{id}', 'FormularioPermisoController@marcarCargado');
     Route::delete('/{id}', 'FormularioPermisoController@delete');
+});
+
+Route::group(['prefix' => 'sancion'], function() {
+    Route::post('/', 'SancionesController@create');
 });
 
 /*

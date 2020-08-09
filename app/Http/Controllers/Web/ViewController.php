@@ -223,6 +223,17 @@ class ViewController extends Controller
         return view('pages.atencion-reseteo-clave', compact('data'));
     }
 
+    public function sanciones(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.sanciones', compact('data'));
+    }
+
     public function panel(Request $request)
     {
         $usuario = $request->session()->get('usuario');

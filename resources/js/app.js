@@ -10,6 +10,7 @@ import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
+import AgregarSancion from "./components/Sanciones/AgregarSancion";
 
 require('./bootstrap');
 
@@ -30,6 +31,7 @@ require('./components/Cuentas/TablaCuentas');
 require('./components/Cuentas/TablaCuentasAdmin');
 require('./components/Afp/AgregarAfp');
 require('./components/Permisos/AgregarPermiso');
+require('./components/Sanciones/AgregarSancion');
 
 
 if (document.getElementById("agregar-cuenta")) {
@@ -54,4 +56,10 @@ if (document.getElementById("agregar-reseteo-clave")) {
     const element = document.getElementById("agregar-reseteo-clave");
     const props = Object.assign({}, element.dataset);
     ReactDOM.render(<AgregarReseteoClave {...props} />, document.getElementById("agregar-reseteo-clave"));
+}
+
+if (document.getElementById("agregar-sancion")) {
+    const element = document.getElementById("agregar-sancion");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<AgregarSancion {...props} />, document.getElementById("agregar-sancion"));
 }

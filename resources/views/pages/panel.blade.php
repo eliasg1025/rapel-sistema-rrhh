@@ -38,6 +38,11 @@
                         <i class="fas fa-lock"></i> Cambio Clave TU RECIBO
                     </a>
                 </div>
+                <div class="col-md-6">
+                    <a class="btn btn-block btn-light" href="/sanciones" {{ $data['usuario']->sanciones === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-ban"></i> Sanciones
+                    </a>
+                </div>
             </div>
         </div>
         <br />
