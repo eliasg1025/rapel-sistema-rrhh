@@ -82,7 +82,7 @@
             </ol>
             <p class="justify">
                 El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, en {{ $sancion->zona_labor->name }}, según informe alcanzado por el supervisor de Recursos Humanos
-                , el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad (Careta Facial)
+                , el cual indica que al {{ $texto[0] }}, se detectó que no usaba su implemento de bioseguridad ({{ $texto[1] }})
                 para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
             </p>
             <p class="justify">
@@ -103,9 +103,9 @@
             </div>
             <p class="justify">
                 Que, ante este acto de indisciplina, se considera una acción como falta grave, la cual nos faculta a tomar otras decisiones le
-                comunicamos que hemos decidido sancionarlo con una suspensión por <b>DOS DIA(S)</b> hábiles sin goce de haber, hecho que se hará efectivo
-                el día {{ $sancion->fecha_salida_largo }}  hasta el {{ $sancion->fecha_regreso_largo }} reincorporándose a sus labores el
-                día {{ $sancion->fecha_rei_largo }}, el
+                comunicamos que hemos decidido <b>SANCIONARLO CON UNA SUSPENCIÓN POR DOS DIA(S)</b> hábiles sin goce de haber, hecho que se hará efectivo
+                el día <b>{{ $sancion->fecha_salida_largo }}</b>  hasta el <b>{{ $sancion->fecha_regreso_largo }}</b> reincorporándose a sus labores el
+                día <b>{{ $sancion->fecha_rei_largo }}</b>, el
                 presente documento será incorporado a su legajo personal.
             </p>
             <p class="justify">
@@ -114,6 +114,11 @@
                 normal desarrollo de las actividades y evite que la empresa adopte otras medidas.
             </p>
             <p><b>Atentamente,</b></p>
+            <table class="bold w-100" style="text-align: right;">
+                <tr>
+                   <td>El Papayo, {{ $sancion->fecha_incidencia_largo }}</td>
+                </tr>
+            </table>
             <table class="bold text-center">
                 <tr>
                     <td>
@@ -127,7 +132,7 @@
                     <td>
                         ________________________________________<br />
                         {{ $sancion->empresa->name }}<br />
-                        {{ $sancion->empresa->ruc }}<br />
+                        {{ $sancion->empresa->ruc }}<br /><br />
                         Acepto la presente suspensión,
                     </td>
                 </tr>
@@ -144,11 +149,6 @@
                         {{ $sancion->trabajador->nombre_completo }}<br />
                         DNI: {{ $sancion->trabajador->rut }}
                     </td>
-                </tr>
-            </table>
-            <table class="bold w-100" style="text-align: right;">
-                <tr>
-                   <td>El Papayo, {{ $sancion->fecha_incidencia_largo }}</td>
                 </tr>
             </table>
         </div>

@@ -4,11 +4,12 @@ import Axios from 'axios';
 export const DatosSancion = ({
     handleSubmit,
     form,
-    setForm
+    setForm,
+    incidencias,
+    setIncidencias
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
-    const [incidencias, setIncidencias] = useState([]);
     const [loading, setLoading] = useState({
         empresas: false,
         incidencias: false,
@@ -104,6 +105,15 @@ export const DatosSancion = ({
                         <option value="" key="0" disabled></option>
                         {incidencias.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
                     </select>
+                </div>
+                <div className="form-group col-md-6 col-lg-4">
+                    Tipo documento: <br />
+                    <input
+                        type="text" name="tipo_documento" placeholder="Tipo Documento" readOnly={true}
+                        className="form-control"
+                        value={form.tipo_documento}
+                        onChange={e => setForm({ ...form, tipo_documento: e.target.value })}
+                    />
                 </div>
             </div>
             <div className="row">

@@ -51,8 +51,27 @@ class SancionesController extends Controller
     public function verFicha(Sancion $sancion)
     {
         try {
+            $texto = [];
+            switch ( $sancion->incidencia_id ) {
+                case 1:
+                    $texto = [
+                        'realizar las labores correspondientes de campo',
+                        'Mascarilla'
+                    ];
+                    break;
+                case 2:
+                    $texto = [
+                        'traladarse en el bus',
+                        'Careta Facial'
+                    ];
+                    break;
+                case 3:
+                    break;
+            }
+
             $data = [
-                'sancion'     => $sancion,
+                'sancion'        => $sancion,
+                'texto'          => $texto,
                 'trabajador'     => $sancion->trabajador,
                 'codigo'         => 4 . '@' . $sancion->id,
             ];

@@ -140,7 +140,7 @@ class Sancion extends Model
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];
 
-            if ( $data['incidencia_id'] == 2 ) {
+            if ( $data['incidencia_id'] == 2 || $data['incidencia_id'] == 1 ) {
                 $dias_sancion = new DiasSancion($data['fecha_incidencia'], 2);
 
                 $sancion->fecha_salida = $dias_sancion->getDiaIncio();
@@ -194,6 +194,7 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado'
@@ -232,6 +233,7 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado',

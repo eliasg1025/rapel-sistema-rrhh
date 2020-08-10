@@ -43,6 +43,10 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                 field: 'incidencia',
             },
             {
+                label: 'Fecha Incidencia',
+                field: 'fecha_incidencia',
+            },
+            {
                 label: 'Tipo',
                 field: 'documento'
             },
@@ -82,6 +86,10 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             {
                 label: 'Incidencia',
                 field: 'incidencia',
+            },
+            {
+                label: 'Fecha Incidencia',
+                field: 'fecha_incidencia',
             },
             {
                 label: 'Tipo',
