@@ -105,7 +105,7 @@ class AtencionReseteoClave extends Model
                 ->where('a.usuario_id', '=', $usuario->id)
                 ->where('a.estado', $estado)
                 ->when($estado != 0, function($query) use ($fechas) {
-                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                    $query->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('a.id', 'ASC')
                 ->get();
