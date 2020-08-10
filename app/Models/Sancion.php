@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\DiasSancion;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -30,12 +31,51 @@ class Sancion extends Model
         return $this->belongsTo('App\Models\Incidencia');
     }
 
+    public function oficio()
+    {
+        return $this->belongsTo('App\Models\Oficio');
+    }
+
+    public function zona_labor()
+    {
+        return $this->belongsTo('App\Models\ZonaLabor');
+    }
+
     public function getFechaIncidenciaLargoAttribute($value)
     {
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
         $fecha = Carbon::parse($this->fecha_incidencia);
         $mes = $meses[($fecha->format('n')) - 1];
         return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
+    public function getFechaSalidaLargoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_salida);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
+    public function getFechaRegresoLargoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_regreso);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
+    public function getFechaReiLargoAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_regreso)->addDay();
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
+    public static function getDiasSancion($incio, int $cantidad_dias)
+    {
+
     }
 
     public static function _create(array $data)
@@ -58,7 +98,7 @@ class Sancion extends Model
                 if ( $existe_registro_mismo_dia ) {
                     DB::rollBack();
                     return [
-                        'error' => 'Ya existe una sanción para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
+                        'error' => 'Ya existe una sanción por para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
                 }
 
@@ -79,9 +119,11 @@ class Sancion extends Model
             $sancion->incidencia_id   = $data['incidencia_id'];
 
             if ( $data['incidencia_id'] == 2 ) {
-                $sancion->fecha_salida = Carbon::parse($data['fecha_incidencia'])->addDay();
-                $sancion->fecha_regreso = Carbon::parse($data['fecha_incidencia'])->addDays(3);
-                $sancion->total_horas = 16;
+                $dias_sancion = new DiasSancion($data['fecha_incidencia'], 2);
+
+                $sancion->fecha_salida = $dias_sancion->getDiaIncio();
+                $sancion->fecha_regreso = $dias_sancion->getDiaTermino();
+                $sancion->total_horas = $dias_sancion->getCantidadHotasEfectivas();
             }
 
             if ( $sancion->save() ) {
@@ -100,6 +142,26 @@ class Sancion extends Model
             return [
                 'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
+        }
+    }
+
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
+    {
+        $usuario = Usuario::find($usuario_id);
+
+        if ( !$usuario ) {
+            return [
+                'error' => true,
+                'message' => 'No se encontro el usuario'
+            ];
+        }
+
+        if ( $usuario->sanciones == 1 ) {
+            return [];
+        } else if ( $usuario->sanciones == 2 ) {
+            return [];
+        } else {
+            return [];
         }
     }
 }

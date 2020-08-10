@@ -65,35 +65,25 @@
         </table>
         <br />
         <div style="padding: auto 40px auto 40px;">
-            <table class="bold w-100">
-                <tr>
-                    <td>PARA</td>
-                    <td>:</td>
-                    <td>{{ $sancion->trabajador->nombre_completo }}<br/>{{ $sancion->trabajador->rut }}</td>
-                </tr>
-                <tr>
-                    <td>DE</td>
-                    <td>:</td>
-                    <td>DANIEL JOSE EYHERALDE MUNITA<br/>APODERADO</td>
-                </tr>
-                <tr>
-                    <td>ASUNTO</td>
-                    <td>:</td>
-                    <td>AMONESTACIÓN ESCRITA</td>
-                </tr>
-            </table>
-            <br /><hr /><br />
+            <p class="justify">
+                <b>Señor (a), (ita):</b><br />
+                <b>{{ $sancion->trabajador->nombre_completo_doc }}</b><br />
+                <b>DNI: {{ $sancion->trabajador->rut }}</b><br />
+                Presente .-
+            </p>
             <p class="justify">
                 <b>{{ $sancion->empresa->name }}</b> Identificada con RUC Nº {{ $sancion->empresa->ruc }}, debidamente representada por el
                 Sr. Daniel José Eyheralde Munita, identificado con Carnet de Extranjería N° 001555417, domiciliada en el
-                {{ $sancion->empresa->direccion }}, centro donde usted labora, prestando los servicios de <b>OBRERO DE PLANTA</b>,
+                {{ $sancion->empresa->direccion }}, centro donde usted labora, prestando los servicios de <b>{{ $sancion->oficio->name }}</b>,
                 a usted atentamente dice:
             </p>
             <ol>
-                <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
+                <li><u>No cumplir con las Normas de Seguridad y Salud en el trabajo.</u></li>
             </ol>
             <p class="justify">
-                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, en el Fundo el Papayo, según informe alcanzado por el supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad (Mascarilla) para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
+                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, en {{ $sancion->zona_labor->name }}, según informe alcanzado por el supervisor de Recursos Humanos
+                , el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad (Careta Facial)
+                para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
             </p>
             <p class="justify">
                 Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted; incumpliendo con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
@@ -112,10 +102,16 @@
                 <p>19.  Evitar exponerse a peligros que atenten contra su integridad física y salud personal.</p>
             </div>
             <p class="justify">
-                Que, ante este acto de inconducta funcional e incumplimiento de obligaciones de trabajo, nos vemos en la lamentable situación de otorgarle la presente amonestación por escrito y <b>LLAMAR LA ATENCIÓN POR IMCUMPLIENTO DE OBLIGACIONES</b>, el presente documento será incorporado a su legajo personal.
+                Que, ante este acto de indisciplina, se considera una acción como falta grave, la cual nos faculta a tomar otras decisiones le
+                comunicamos que hemos decidido sancionarlo con una suspensión por <b>DOS DIA(S)</b> hábiles sin goce de haber, hecho que se hará efectivo
+                el día {{ $sancion->fecha_salida_largo }}  hasta el {{ $sancion->fecha_regreso_largo }} reincorporándose a sus labores el
+                día {{ $sancion->fecha_rei_largo }}, el
+                presente documento será incorporado a su legajo personal.
             </p>
             <p class="justify">
-                En este sentido, le solicitamos que en lo sucesivo preste el estricto cumplimiento de lo dispuesto en las normas y procedimientos de la empresa, de lo contrario, se adoptarán las medidas pertinentes, por lo cual deseamos que esta carta sirva para la reflexión y se evite reiteración.
+                Este hecho indica falta de responsabilidad en el cumplimiento de sus obligaciones asumidas por su parte en virtud de la relación
+                de trabajo que mantiene con nosotros. En ese sentido le invocamos a que rectifique su conducta; de tal manera que permita el
+                normal desarrollo de las actividades y evite que la empresa adopte otras medidas.
             </p>
             <p><b>Atentamente,</b></p>
             <table class="bold text-center">
@@ -132,7 +128,7 @@
                         ________________________________________<br />
                         {{ $sancion->empresa->name }}<br />
                         {{ $sancion->empresa->ruc }}<br />
-                        Acepto la presente amonestación por escrito,
+                        Acepto la presente suspensión,
                     </td>
                 </tr>
             </table>

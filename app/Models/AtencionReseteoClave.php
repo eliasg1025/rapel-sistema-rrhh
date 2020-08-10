@@ -104,7 +104,9 @@ class AtencionReseteoClave extends Model
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->where('a.usuario_id', '=', $usuario->id)
                 ->where('a.estado', $estado)
-                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
                 ->orderBy('a.id', 'ASC')
                 ->get();
         } else if ( $usuario->reseteo_clave == 2 ) {
@@ -143,9 +145,11 @@ class AtencionReseteoClave extends Model
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->where('a.estado', $estado)
-                ->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
+                })
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('a.id', 'ASC')
                 ->get();

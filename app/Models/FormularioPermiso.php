@@ -222,7 +222,9 @@ class FormularioPermiso extends Model
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
                 ->orderBy('f.id', 'ASC')
                 ->get();
         } else if ( $usuario->permisos == 2 ) {
@@ -269,7 +271,9 @@ class FormularioPermiso extends Model
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
                 ->where('f.estado', $estado)
-                ->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
                 ->orderBy('f.id', 'ASC')
                 ->get();
         } else {
