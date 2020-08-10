@@ -17,6 +17,27 @@ class SancionesController extends Controller
         return response()->json($result, 400);
     }
 
+    public function getAll(Request $request)
+    {
+        $usuario_id = $request->usuario_id;
+        $fechas = [
+            'desde' => $request->desde,
+            'hasta' => $request->hasta
+        ];
+        $estado = $request->estado;
+        $incidencia_id = $request->incidencia_id;
+
+        $result = Sancion::_getAll($usuario_id, $fechas, $estado, $incidencia_id);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function verFicha(Sancion $sancion)
     {
         try {
@@ -38,5 +59,33 @@ class SancionesController extends Controller
                 'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ]);
         }
+    }
+
+    public function marcarEnviado(Request $request, $id)
+    {
+        $usuario_id = $request->usuario_id;
+        $result = Sancion::marcarEnviado($usuario_id, $id);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
+    public function delete($id)
+    {
+        $form = Sancion::find($id);
+
+        if ( $form->delete() ) {
+            return response()->json([
+                'message' => 'Registro borrado correctamente'
+            ]);
+        }
+        return response()->json([
+            'message' => 'Error al borrar el registro'
+        ], 400);
     }
 }

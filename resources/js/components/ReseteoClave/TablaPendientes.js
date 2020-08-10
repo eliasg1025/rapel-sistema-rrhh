@@ -277,10 +277,12 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
 
     return (
         <>
-            <div className="d-flex justify-content-between">
-                <div>
+            <div className="row">
+                <div className="col-md-4">
+                    Desde - Hasta:<br />
                     <DatePicker.RangePicker
                         placeholder={['Desde', 'Hasta']}
+                        style={{ width: '100%' }}
                         onChange={(date, dateString) => {
                             setFiltro({
                                 ...filtro,
@@ -291,7 +293,8 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
                     />
                 </div>
-                <div>
+                <div className="col-md-4">
+                    Estado:<br />
                     <select
                         className="form-control"
                         value={filtro.estado}
@@ -302,7 +305,8 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                     </select>
                 </div>
                 {usuario.reseteo_clave == 2 && (
-                    <div>
+                    <div className="col-md-4">
+                        Cargado por:<br />
                         <select
                             className="form-control"
                             value={filtro.usuario_carga_id}
@@ -313,7 +317,10 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         </select>
                     </div>
                 )}
-                <div>
+            </div>
+            <br />
+            <div className="row">
+                <div className="col-md-4">
                     <button className="btn btn-success btn-sm" onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar
                     </button>

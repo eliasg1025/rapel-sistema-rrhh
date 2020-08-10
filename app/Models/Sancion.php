@@ -145,7 +145,7 @@ class Sancion extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $incidencia_id=0)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -157,11 +157,105 @@ class Sancion extends Model
         }
 
         if ( $usuario->sanciones == 1 ) {
-            return [];
+            return DB::table('sanciones as f')
+                ->select(
+                    'f.id',
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    't.rut',
+                    't.code',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
+                    'i.documento as documento',
+                    'z.code as zona_labor_id',
+                    'z.name as zona_labor',
+                    'i.name as incidencia',
+                    'f.total_horas as horas',
+                    'e.shortname as empresa',
+                    'f.estado'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+                ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+                ->where('f.usuario_id', $usuario->id)
+                ->where('f.estado', $estado)
+                ->when($incidencia_id != 0, function($query) use ($incidencia_id) {
+                    $query->where('f.incidencia_id', $incidencia_id);
+                })
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->orderBy('f.id', 'ASC')
+                ->get();
         } else if ( $usuario->sanciones == 2 ) {
-            return [];
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+            return DB::table('sanciones as f')
+                ->select(
+                    'f.id',
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    't.rut',
+                    't.code',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
+                    'i.documento as documento',
+                    'z.code as zona_labor_id',
+                    'z.name as zona_labor',
+                    'i.name as incidencia',
+                    'f.total_horas as horas',
+                    'e.shortname as empresa',
+                    'f.estado',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+                ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'f.usuario_id');
+                })
+                ->where('f.estado', $estado)
+                ->when($incidencia_id != 0, function($query) use ($incidencia_id) {
+                    $query->where('f.incidencia_id', $incidencia_id);
+                })
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->orderBy('f.id', 'ASC')
+                ->get();
         } else {
             return [];
         }
+    }
+
+    public static function marcarEnviado(int $usuario_id, int $id)
+    {
+        $sancion = Sancion::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->id !== $sancion->usuario_id ) {
+            return [
+                'error'   => true,
+                'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
+            ];
+        }
+
+        $sancion->estado = 1;
+        $sancion->fecha_hora_enviado = now()->toDateTimeString();
+
+        if ( $sancion->save() ) {
+            return [
+                'message' => 'Estado actualizado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
     }
 }

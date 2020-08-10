@@ -4,7 +4,7 @@ import Axios from 'axios';
 
 import BuscarTrabajador from '../shared/BuscarTrabajador';
 import { DatosSancion } from './DatosSancion';
-import { TablaSacion } from './TablaSancion';
+import { TablaSancion } from './TablaSancion';
 
 const AgregarSancion = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -18,6 +18,7 @@ const AgregarSancion = () => {
         fecha_incidencia: moment().format('YYYY-MM-DD').toString(),
         incidencia_id: '',
     });
+    const [reloadDatos, setReloadDatos] = useState(false);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -92,7 +93,10 @@ const AgregarSancion = () => {
                 setForm={setForm}
             />
             <hr />
-            <TablaSacion />
+            <TablaSancion
+                reloadDatos={reloadDatos}
+                setReloadDatos={setReloadDatos}
+            />
         </>
     );
 }

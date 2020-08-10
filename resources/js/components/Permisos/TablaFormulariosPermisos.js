@@ -435,9 +435,10 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
 
     return (
         <>
-            <div className="d-flex justify-content-between">
-                <div>
+            <div className="row">
+                <div className="col-md-5">
                     <DatePicker.RangePicker
+                        style={{ width: '100%' }}
                         placeholder={['Desde', 'Hasta']}
                         onChange={(date, dateString) => {
                             setFiltro({
@@ -449,14 +450,16 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
                     />
                 </div>
-                <div>
-                    <Tooltip title="Recargar lista">
-                        <button className="btn btn-secondary" onClick={() => setReloadDatos(!reloadDatos)}>
-                            <i className="fas fa-sync-alt"></i>
-                        </button>
-                    </Tooltip>
+                <div className="col-md-1"></div>
+                <div className="col-md-5">
+                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
+                        <i className="fas fa-file-excel"></i> Exportar
+                    </button>
                 </div>
-                <div>
+            </div>
+            <div className="row">
+                <div className="col-md-5">
+                    Estado:<br />
                     <select
                         className="form-control"
                         value={filtro.estado}
@@ -467,11 +470,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         <option value="2">ENVIADO</option>
                         <option value="3">SUBIDO</option>
                     </select>
-                </div>
-                <div>
-                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
-                        <i className="fas fa-file-excel"></i> Exportar
-                    </button>
                 </div>
             </div>
             <br />

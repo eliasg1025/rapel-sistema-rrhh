@@ -8,7 +8,7 @@
     <div class="container p-5">
         <div class="text-center">
             <h3>Cuentas</h3>
-            <span>{{ $data['usuario']['cuentas'] == 2 ? '(Administrador)' : '' }}</span>
+            <span>{{ $data['usuario']['cuentas'] == 2 ? '(Modo Administrador)' : '' }}</span>
         </div>
         <div class="py-5">
             <div id="agregar-cuenta"></div>

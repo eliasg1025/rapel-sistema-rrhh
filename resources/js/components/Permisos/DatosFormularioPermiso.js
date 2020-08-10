@@ -218,7 +218,7 @@ const DatosFormularioPermiso = ({
                         <>
                             Motivo de Permiso&nbsp;
                             <Tooltip title="Todos los motivos de permiso exceptuando el 3 y el 4 cuentan con goce de sueldo">
-                                <span><i class="fas fa-info-circle"></i></span>
+                                <span><i className="fas fa-info-circle"></i></span>
                             </Tooltip>
                             :<br />
                             <Select

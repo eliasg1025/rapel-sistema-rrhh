@@ -43,6 +43,7 @@ const TablaAfps = props => {
             <div className="row">
                 <div className="col-md-4">
                     <DatePicker.RangePicker
+                        style={{ width: '100%' }}
                         placeholder={['Desde', 'Hasta']}
                         onChange={(date, dateString) => {
                             setFiltro({
@@ -54,7 +55,7 @@ const TablaAfps = props => {
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
                     />
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-4">
                     <button className="btn btn-success btn-sm" onClick={handleExportar}>
                         <i className="fas fa-file-excel"></i> Exportar
                     </button>

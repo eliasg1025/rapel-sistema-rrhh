@@ -177,6 +177,7 @@ const TablaCuentas = props => {
                 <div className="col-md-4">
                     <DatePicker.RangePicker
                         placeholder={['Desde', 'Hasta']}
+                        style={{ width: '100%' }}
                         onChange={(date, dateString) => {
                             setFiltro({
                                 ...filtro,
