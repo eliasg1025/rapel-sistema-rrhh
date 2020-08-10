@@ -89,31 +89,59 @@
                 {{ $sancion->empresa->direccion }}, centro donde usted labora, prestando los servicios de <b>{{ $sancion->oficio->name }}</b>,
                 a usted atentamente dice:
             </p>
-            <ol>
-                <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
-            </ol>
-            <p class="justify">
-                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad ({{ $texto[0] }}) para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona.
-            </p>
-            <p>
-                En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
-            </p>
-            <p class="justify">
-                Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted; incumpliendo con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
-            </p>
-            <p><b>Artículo 55°.-</b>son obligaciones del trabajador:</p>
-            <div style="padding-left: 10px;">
-                <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>
-                <p>n) Usar los equipos de protección personal conforme las indicaciones dadas y según las normas de higiene y salud de la empresa.</p>
-                <p>r) Seguir las instrucciones recibidas por los supervisores.</p>
-            </div>
-            <p>Así como también está; incumpliendo con las disposiciones establecidas en el Reglamento de seguridad y salud en el trabajo, en el sentido de lo siguiente:</p>
-            <p><b>Artículo 7°.-</b></p>
-            <div style="padding-left: 10px;">
-                <p>1.	Cumplir con las disposiciones en el reglamento interno de seguridad y salud en el trabajo, las normas, estándares e instrucciones de los programas de seguridad y salud ocupacional.</p>
-                <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
-                <p>19.  Evitar exponerse a peligros que atenten contra su integridad física y salud personal.</p>
-            </div>
+            @if ($sancion->incidencia_id != 5)
+                <ol>
+                    <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
+                </ol>
+                <p class="justify">
+                    El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad ({{ $texto[0] }}) para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona.
+                </p>
+                <p>
+                    En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
+                </p>
+                <p class="justify">
+                    Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted; incumpliendo con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
+                </p>
+                <p><b>Artículo 55°.-</b>son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>
+                    <p>n) Usar los equipos de protección personal conforme las indicaciones dadas y según las normas de higiene y salud de la empresa.</p>
+                    <p>r) Seguir las instrucciones recibidas por los supervisores.</p>
+                </div>
+                <p>Así como también está; incumpliendo con las disposiciones establecidas en el Reglamento de seguridad y salud en el trabajo, en el sentido de lo siguiente:</p>
+                <p><b>Artículo 7°.-</b></p>
+                <div style="padding-left: 10px;">
+                    <p>1.	Cumplir con las disposiciones en el reglamento interno de seguridad y salud en el trabajo, las normas, estándares e instrucciones de los programas de seguridad y salud ocupacional.</p>
+                    <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
+                    <p>19.  Evitar exponerse a peligros que atenten contra su integridad física y salud personal.</p>
+                </div>
+            @else
+                <ol>
+                    <li>Que Ud. Ha incurrido en falta al cumplimientos de sus obligaciones en el sentido siguiente:</li>
+                </ol>
+                <p class="justify">
+                    Usted trabajador no está cumpliendo con sus funciones, puesto que el <b>{{ $sancion->fecha_incidencia_largo }}</b>, se le encontró haciendo otras funciones que su jefe desconocía, generándose así retrasos en su información, por lo que se recomienda cambiar de actitud y en adelante, evitar ese tipo de comportamiento, limitándose a cumplir eficientemente con las políticas, normas y procedimientos que la empresa disponga, esta actitud refleja una falta al cumplimiento de sus obligaciones y responsabilidades, quebrantando la confianza depositada en usted.
+                </p>
+                <p class="justify">
+                    Usted ha incumplido con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
+                </p>
+                <p>
+                    <b>Capítulo VII°. –DE LOS DERECHOS Y OBLIGACIONES DE LOS TRABAJADORES</b>
+                </p>
+                <p><b>Artículo 55°.-</b>son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>a) Realizar las labores a su cargo de manera eficiente.</p>
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>
+                </div>
+                <p><b>Artículo 56°.-</b>Todo trabajador de la empresa debe observar las siguientes prohibiciones:</p>
+                <div style="padding-left: 10px;">
+                    <p>p) La acción u omisión que afecta el normal desarrollo de las actividades de la empresa.</p>
+                </div>
+                <p>
+                    Estos artículos han sido vulnerados toda vez que usted ha incurrido en faltas al incumplimiento de las normas y procedimientos de la Empresa.
+                </p>
+            @endif
+
             <p class="justify">
                 Que, ante este acto de inconducta funcional e incumplimiento de obligaciones de trabajo, nos vemos en la lamentable situación de otorgarle la presente amonestación por escrito y <b>LLAMAR LA ATENCIÓN POR IMCUMPLIENTO DE OBLIGACIONES</b>, el presente documento será incorporado a su legajo personal.
             </p>
