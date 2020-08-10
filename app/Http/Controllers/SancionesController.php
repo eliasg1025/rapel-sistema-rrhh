@@ -66,6 +66,14 @@ class SancionesController extends Controller
                     ];
                     break;
                 case 3:
+                    $texto = [
+                        'Lentes de seguridad'
+                    ];
+                    break;
+                case 4:
+                    $texto = [
+                        'Casco'
+                    ];
                     break;
             }
 

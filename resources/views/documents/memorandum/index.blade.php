@@ -93,7 +93,10 @@
                 <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
             </ol>
             <p class="justify">
-                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad (Mascarilla) para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
+                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de campo, se detectó que no usaba su implemento de bioseguridad ({{ $texto[0] }}) para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona.
+            </p>
+            <p>
+                En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
             </p>
             <p class="justify">
                 Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted; incumpliendo con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
@@ -108,7 +111,7 @@
             <p><b>Artículo 7°.-</b></p>
             <div style="padding-left: 10px;">
                 <p>1.	Cumplir con las disposiciones en el reglamento interno de seguridad y salud en el trabajo, las normas, estándares e instrucciones de los programas de seguridad y salud ocupacional.</p>
-                <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
+                <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
                 <p>19.  Evitar exponerse a peligros que atenten contra su integridad física y salud personal.</p>
             </div>
             <p class="justify">
@@ -118,6 +121,11 @@
                 En este sentido, le solicitamos que en lo sucesivo preste el estricto cumplimiento de lo dispuesto en las normas y procedimientos de la empresa, de lo contrario, se adoptarán las medidas pertinentes, por lo cual deseamos que esta carta sirva para la reflexión y se evite reiteración.
             </p>
             <p><b>Atentamente,</b></p>
+            <table class="bold w-100" style="text-align: right;">
+                <tr>
+                   <td>El Papayo, {{ $sancion->fecha_incidencia_largo }}</td>
+                </tr>
+            </table>
             <table class="bold text-center">
                 <tr>
                     <td>
@@ -131,7 +139,7 @@
                     <td>
                         ________________________________________<br />
                         {{ $sancion->empresa->name }}<br />
-                        {{ $sancion->empresa->ruc }}<br />
+                        {{ $sancion->empresa->ruc }}<br /><br /><br />
                         Acepto la presente amonestación por escrito,
                     </td>
                 </tr>
@@ -148,11 +156,6 @@
                         {{ $sancion->trabajador->nombre_completo }}<br />
                         DNI: {{ $sancion->trabajador->rut }}
                     </td>
-                </tr>
-            </table>
-            <table class="bold w-100" style="text-align: right;">
-                <tr>
-                   <td>El Papayo, {{ $sancion->fecha_incidencia_largo }}</td>
                 </tr>
             </table>
         </div>

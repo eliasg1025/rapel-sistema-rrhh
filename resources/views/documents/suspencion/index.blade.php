@@ -81,7 +81,7 @@
                 <li><u>No cumplir con las Normas de Seguridad y Salud en el trabajo.</u></li>
             </ol>
             <p class="justify">
-                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, en {{ $sancion->zona_labor->name }}, según informe alcanzado por el supervisor de Recursos Humanos
+                El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos
                 , el cual indica que al {{ $texto[0] }}, se detectó que no usaba su implemento de bioseguridad ({{ $texto[1] }})
                 para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
             </p>
@@ -98,7 +98,7 @@
             <p><b>Artículo 7°.-</b></p>
             <div style="padding-left: 10px;">
                 <p>1.	Cumplir con las disposiciones en el reglamento interno de seguridad y salud en el trabajo, las normas, estándares e instrucciones de los programas de seguridad y salud ocupacional.</p>
-                <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
+                <p>7.   Todo trabajador es absolutamente  responsable de velar por su propia salud y su seguridad personal en el trabajo.</p>
                 <p>19.  Evitar exponerse a peligros que atenten contra su integridad física y salud personal.</p>
             </div>
             <p class="justify">
