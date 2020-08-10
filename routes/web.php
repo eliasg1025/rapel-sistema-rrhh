@@ -35,6 +35,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
     Route::get('/sanciones', 'Web\ViewController@sanciones');
+    Route::get('/sanciones/editar/{id}', 'Web\ViewController@editarSancion');
 
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
@@ -54,28 +55,3 @@ Route::group(['middleware' => 'web.auth'], function() {
 
 Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');
-
-
-Route::get('/test-memo', function() {
-
-    $memorandum = (object) [
-        'id' => 1,
-        'empresa_id' => 9,
-        'trabajador_id' => 1,
-        'empresa' => Empresa::find(9),
-        'trabajador' => Trabajador::find(1)
-    ];
-
-    $data = [
-        'memorandum' => $memorandum,
-        'codigo' => 4 . '@' . $memorandum->id
-    ];
-
-    $pdf = \PDF::setOptions([
-        'images' => true
-    ])->loadView('documents.memorandum.index', $data);
-
-    $filename = $memorandum->trabajador->apellido_paterno . '-' . $memorandum->trabajador->apellido_materno . '-' . $memorandum->trabajador->rut . '-' . $memorandum->empresa->shortname . '-MEMORANDUM.pdf';
-
-    return $pdf->stream($filename);
-});

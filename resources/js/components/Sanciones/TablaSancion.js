@@ -133,7 +133,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                                     {item.estado == 0 && (
                                         <>
                                             <Tooltip title="Editar Sancion">
-                                                <a className="btn btn-primary btn-sm" href={`/sancion/editar/${item.id}`} target="_blank">
+                                                <a className="btn btn-primary btn-sm" href={`/sanciones/editar/${item.id}`} target="_blank">
                                                     <i className="far fa-edit" />
                                                 </a>
                                             </Tooltip>
@@ -315,7 +315,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                         value={filtro.incidencia_id}
                         onChange={e => setFiltro({ ...filtro, incidencia_id: e.target.value })}
                     >
-                        <option value="0">TODO</option>
+                        <option value="0">TODOS</option>
                         <option value="1">MEMORANDUM</option>
                         <option value="2">SUSPENCIONES</option>
                     </select>

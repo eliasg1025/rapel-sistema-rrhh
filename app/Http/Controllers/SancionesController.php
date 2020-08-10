@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class SancionesController extends Controller
 {
+    public function show($id)
+    {
+        $result = Sancion::_show($id);
+        /*
+        if (!$result) {
+            return response()->json(['message' => 'Formulario no existe'], 404);
+        }*/
+        return response()->json($result);
+    }
+
     public function create(Request $request)
     {
         $result = Sancion::_create($request->all());

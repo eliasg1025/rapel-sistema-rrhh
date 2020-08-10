@@ -7,7 +7,7 @@ import { DatosSancion } from './DatosSancion';
 import { TablaSancion } from './TablaSancion';
 
 const AgregarSancion = () => {
-    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario, editar } = JSON.parse(sessionStorage.getItem('data'));
 
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
@@ -19,6 +19,29 @@ const AgregarSancion = () => {
         incidencia_id: '',
     });
     const [reloadDatos, setReloadDatos] = useState(false);
+
+    useEffect(() => {
+        if (editar) {
+            let intentos = 0;
+            function fetchSancion() {
+                intentos++;
+                Axios.get(`/api/sancion/${editar}`)
+                    .then(res => {
+                        console.log(res.data);
+
+                        const { data } = res;
+                        setForm({ ...data });
+                    })
+                    .catch(err => {
+                        if (intentos < 3) {
+                            fetchSancion();
+                        }
+                    })
+            }
+
+            fetchSancion();
+        }
+    }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -82,21 +105,25 @@ const AgregarSancion = () => {
 
     return (
         <>
-            <BuscarTrabajador
-                setTrabajador={setTrabajador}
-                setContratoActivo={setContratoActivo}
-                jornal={true}
-            />
+            {!editar && (
+                <BuscarTrabajador
+                    setTrabajador={setTrabajador}
+                    setContratoActivo={setContratoActivo}
+                    jornal={true}
+                />
+            )}
             <DatosSancion
                 handleSubmit={handleSubmit}
                 form={form}
                 setForm={setForm}
             />
             <hr />
-            <TablaSancion
-                reloadDatos={reloadDatos}
-                setReloadDatos={setReloadDatos}
-            />
+            {!editar && (
+                <TablaSancion
+                    reloadDatos={reloadDatos}
+                    setReloadDatos={setReloadDatos}
+                />
+            )}
         </>
     );
 }

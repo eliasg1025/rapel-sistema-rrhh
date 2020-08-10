@@ -192,6 +192,11 @@ class ViewController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->permisos == 0 ) {
+            $nombre_modulo = 'formularios de permiso';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
         $data = [
             'usuario' => $usuario,
             'editar' => 0
@@ -203,6 +208,11 @@ class ViewController extends Controller
     public function editarPermiso(Request $request, int $id)
     {
         $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->permisos == 0 ) {
+            $nombre_modulo = 'formularios de permiso';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
 
         $data = [
             'usuario' => $usuario,
@@ -216,6 +226,11 @@ class ViewController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->reseteo_clave == 0 ) {
+            $nombre_modulo = 'atencion de cambio de clave';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
         $data = [
             'usuario' => $usuario
         ];
@@ -227,8 +242,31 @@ class ViewController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->sanciones == 0 ) {
+            $nombre_modulo = 'sanciones';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
         $data = [
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'editar' => 0
+        ];
+
+        return view('pages.sanciones', compact('data'));
+    }
+
+    public function editarSancion(Request $request, int $id)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->sanciones == 0 ) {
+            $nombre_modulo = 'sanciones';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'editar' => $id
         ];
 
         return view('pages.sanciones', compact('data'));

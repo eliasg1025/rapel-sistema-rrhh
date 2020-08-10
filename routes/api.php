@@ -101,6 +101,7 @@ Route::group(['prefix' => 'formulario-permiso'], function() {
 });
 
 Route::group(['prefix' => 'sancion'], function() {
+    Route::get('/{id}', 'SancionesController@show');
     Route::post('/', 'SancionesController@create');
     Route::post('/get-all', 'SancionesController@getAll');
     Route::put('/marcar-enviado/{id}', 'SancionesController@marcarEnviado');

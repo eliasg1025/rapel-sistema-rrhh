@@ -78,6 +78,28 @@ class Sancion extends Model
 
     }
 
+    public static function _show($id)
+    {
+        $trabajadores = DB::table('trabajadores as t')
+            ->select('t.id', 't.rut', DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'));
+
+            return DB::table('sanciones as f')
+            ->select(
+                'f.id',
+                'trabajador.rut',
+                'f.fecha_solicitud',
+                'f.empresa_id',
+                'trabajador.nombre_completo as nombre_completo',
+                'f.fecha_incidencia',
+                'f.incidencia_id'
+            )
+            ->joinSub($trabajadores, 'trabajador', function($join) {
+                $join->on('trabajador.id', 'f.trabajador_id');
+            })
+            ->where('f.id', $id)
+            ->first();
+    }
+
     public static function _create(array $data)
     {
         DB::beginTransaction();
@@ -124,6 +146,10 @@ class Sancion extends Model
                 $sancion->fecha_salida = $dias_sancion->getDiaIncio();
                 $sancion->fecha_regreso = $dias_sancion->getDiaTermino();
                 $sancion->total_horas = $dias_sancion->getCantidadHotasEfectivas();
+            } else {
+                $sancion->fecha_salida = null;
+                $sancion->fecha_regreso = null;
+                $sancion->total_horas = 0;
             }
 
             if ( $sancion->save() ) {
