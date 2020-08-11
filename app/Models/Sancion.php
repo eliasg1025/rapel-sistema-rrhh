@@ -104,6 +104,7 @@ class Sancion extends Model
     public static function _create(array $data)
     {
         DB::beginTransaction();
+        $message = '';
         try {
             $incidencia = Incidencia::find($data['incidencia_id']);
 
@@ -157,15 +158,19 @@ class Sancion extends Model
             $sancion->incidencia_id   = $data['incidencia_id'];
             $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
 
-            if ( $incidencia->documento = 'SUSPENCION' ) {
+            if ( $incidencia->documento == 'SUSPENCION' ) {
 
                 // Detectar si hay faltas reiterativas sobre la misma incidencia
-                $cantidad_suspenciones_anteriores = Sancion::where([
-                    'trabajador_id' => $trabajador_id,
-                    'incidencia_id' => $data['incidencia_id']
-                ])->whereBetween('fecha_incidencia', [now()->toDateString(), now()->addDays(90)->toDateString()])->count();
+                $rango_fechas = [
+                    Carbon::parse($data['fecha_incidencia'])->subDays(90),
+                    Carbon::parse($data['fecha_incidencia'])
+                ];
 
-                $message = '';
+                $cantidad_suspenciones_anteriores = Sancion::where([
+                    'trabajador_id' => $sancion->trabajador_id,
+                    'incidencia_id' => $data['incidencia_id']
+                ])->whereBetween('fecha_incidencia', $rango_fechas)->count();
+
                 switch ( $cantidad_suspenciones_anteriores ) {
                     case 0:
                         $dias_suspencion = $incidencia->dias;
