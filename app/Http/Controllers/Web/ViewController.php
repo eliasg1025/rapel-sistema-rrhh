@@ -45,6 +45,11 @@ class ViewController extends Controller
         return view('pages.login');
     }
 
+    public function perfil(Request $request)
+    {
+        return 'perfil';
+    }
+
     public function usuarios(Request $request)
     {
         if (!$request->session()->has('usuario'))

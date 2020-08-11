@@ -13,6 +13,9 @@ const AgregarPermiso = () => {
     const [contratoActivo, setContratoActivo] = useState(null);
     const [motivosPermiso, setMotivosPermiso] = useState([]);
 
+    const [zonasLabor, setZonasLabor] = useState([]);
+    const [cuarteles, setCuarteles] = useState([]);
+
     useEffect(() => {
         if (editar) {
             let intentos = 0;
@@ -53,6 +56,8 @@ const AgregarPermiso = () => {
         hora_regreso: '',
         motivo_permiso_id: '',
         observacion: '',
+        zona_labor_id: '',
+        cuartel_id: ''
     });
 
     const [horario, setHorario] = useState({
@@ -74,7 +79,9 @@ const AgregarPermiso = () => {
     useEffect(() => {
         setForm({
             ...form,
-            empresa_id: contratoActivo ? contratoActivo.empresa_id : ''
+            empresa_id: contratoActivo ? contratoActivo.empresa_id : '',
+            zona_labor_id: contratoActivo ? contratoActivo.zona_labor.id : '',
+            cuartel_id: contratoActivo ? contratoActivo.cuartel.id : ''
         });
     }, [contratoActivo]);
 
@@ -152,10 +159,8 @@ const AgregarPermiso = () => {
     const handleSubmit = e => {
         e.preventDefault();
         form.trabajador = trabajador;
-        form.regimen = contratoActivo?.regimen || null;
-        form.cuartel = contratoActivo?.cuartel || null;
         form.oficio = contratoActivo?.oficio || null;
-        form.zona_labor = contratoActivo?.zona_labor || null;
+        form.regimen = contratoActivo?.regimen || null;
 
         form.jefe = trabajadorJefe;
         form.horario_entrada = horario.entrada,
@@ -163,7 +168,11 @@ const AgregarPermiso = () => {
         form.total_horas = totalHoras;
         form.usuario_id = usuario.id;
 
+        const z = zonasLabor.find(e => e.id == form.zona_labor_id);
+        const c = cuarteles.find(e => e.id == form.cuartel_id);
         const m = motivosPermiso.find(e => e.id == form.motivo_permiso_id);
+        form.zona_labor = z;
+        form.cuartel = c;
         form.motivo_permiso = m;
 
         Swal.fire({
@@ -220,6 +229,10 @@ const AgregarPermiso = () => {
                 setMotivosPermiso={setMotivosPermiso}
                 trabajadorJefe={trabajadorJefe}
                 setTrabajadorJefe={setTrabajadorJefe}
+                zonasLabor={zonasLabor}
+                setZonasLabor={setZonasLabor}
+                cuarteles={cuarteles}
+                setCuarteles={setCuarteles}
             />
             <hr />
             {!editar && (

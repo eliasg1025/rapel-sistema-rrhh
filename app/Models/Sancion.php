@@ -92,7 +92,9 @@ class Sancion extends Model
                 'trabajador.nombre_completo as nombre_completo',
                 'f.fecha_incidencia',
                 'f.incidencia_id',
-                'f.observacion'
+                'f.observacion',
+                'f.zona_labor_id',
+                'f.cuartel_id'
             )
             ->joinSub($trabajadores, 'trabajador', function($join) {
                 $join->on('trabajador.id', 'f.trabajador_id');
@@ -145,14 +147,14 @@ class Sancion extends Model
                 $sancion->usuario_id      = $data['usuario_id'];
                 $sancion->trabajador_id   = $trabajador_id;
                 $sancion->regimen_id      = $regimen_id;
-                $sancion->zona_labor_id   = $zona_labor_id;
                 $sancion->oficio_id       = $ofico_id;
-                $sancion->cuartel_id      = $cuartel_id;
                 $sancion->fecha_solicitud = $data['fecha_solicitud'];
             } else {
                 $sancion = Sancion::find($data['id']);
             }
 
+            $sancion->zona_labor_id   = $zona_labor_id;
+            $sancion->cuartel_id      = $cuartel_id;
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];

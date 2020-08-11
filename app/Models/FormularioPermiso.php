@@ -133,6 +133,8 @@ class FormularioPermiso extends Model
                 'm.code as motivo_permiso_id',
                 'f.horario_entrada as entrada',
                 'f.horario_salida as salida',
+                'z.code as zona_labor_id',
+                'c.code as cuartel_id',
                 DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%Y-%m-%d") fecha_regreso'),
                 DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%Y-%m-%d") fecha_salida'),
                 DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
@@ -145,6 +147,8 @@ class FormularioPermiso extends Model
                 $join->on('jefe.id', 'f.jefe_id');
             })
             ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
+            ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+            ->join('cuarteles as c', 'c.id', '=', 'f.cuartel_id')
             ->where('f.id', $id)
             ->first();
     }

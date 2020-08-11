@@ -22,6 +22,7 @@ Route::get('/login', 'Web\ViewController@login');
 
 Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/panel', 'Web\ViewController@panel');
+    Route::get('/perfil', 'Web\ViewController@perfil');
     Route::get('/', 'Web\ViewController@index');
     Route::get('/usuarios', 'Web\ViewController@usuarios');
     Route::get('/trabajadores', 'Web\ViewController@trabajadores');

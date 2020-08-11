@@ -20,7 +20,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">{{ $data['usuario']->trabajador->nombre_completo ?? '' }}</span></a>
+                    <a class="nav-link" href="/perfil">{{ $data['usuario']->trabajador->nombre_completo ?? '' }}</span></a>
                 </li>
             </ul>
             @if (Request::path() === 'panel')

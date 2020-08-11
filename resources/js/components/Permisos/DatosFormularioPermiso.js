@@ -16,7 +16,11 @@ const DatosFormularioPermiso = ({
     trabajadorJefe,
     setTrabajadorJefe,
     totalHoras,
-    errorTotalHoras
+    errorTotalHoras,
+    zonasLabor,
+    setZonasLabor,
+    cuarteles,
+    setCuarteles,
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -24,7 +28,9 @@ const DatosFormularioPermiso = ({
         empresas: false,
         motivos: false,
     });
+    const [loadingZonasLabor, setLoadingZonasLabor] = useState(false);
     const [loadingRegistro, setLoadingRegistro] = useState(false);
+    const [loadingCuarteles, setLoadingCuarteles] = useState(false);
 
     useEffect(() => {
         let intento = 0;
@@ -48,7 +54,7 @@ const DatosFormularioPermiso = ({
     useEffect(() => {
         if (form.empresa_id !== '') {
             let intento1 = 0;
-            function fetchMotivosPermiso(cb) {
+            function fetchMotivosPermiso() {
                 intento1++;
                 Axios.get(`http://192.168.60.16/api/motivo-permiso/${form.empresa_id}`)
                     .then(res => {
@@ -62,10 +68,55 @@ const DatosFormularioPermiso = ({
                         }
                     });
             }
+
+
+            let intento2 = 0;
+            function fetchZonasLabor() {
+                intento2++;
+                Axios.get(`http://192.168.60.16/api/zona-labor/${form.empresa_id}`)
+                    .then(res => {
+                        console.log(res);
+                        setZonasLabor(res.data.data);
+                        setLoadingZonasLabor(false);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        if (intento2 < 5) {
+                            fetchZonasLabor();
+                        }
+                    })
+            }
+
             setLoading({ ...loading, motivos: true });
-            fetchMotivosPermiso();;
+            setLoadingZonasLabor(true);
+            fetchMotivosPermiso();
+            fetchZonasLabor();
         }
-    }, [form.empresa_id])
+    }, [form.empresa_id]);
+
+    useEffect(() => {
+        if (form.zona_labor_id !== '' && form.empresa_id !== '') {
+            let intento = 0;
+            function fetchCuarteles() {
+                intento++;
+                Axios.get(`http://192.168.60.16/api/cuartel/${form.empresa_id}/${form.zona_labor_id}`)
+                    .then(res => {
+                        console.log(res);
+                        setCuarteles(res.data.data);
+                        setLoadingCuarteles(false);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        if (intento < 5) {
+                            fetchCuarteles();
+                        }
+                    });
+            }
+
+            setLoadingCuarteles(true);
+            fetchCuarteles();
+        }
+    }, [form.empresa_id, form.zona_labor_id])
 
     return (
         <form onSubmit={handleSubmit}>
@@ -73,7 +124,7 @@ const DatosFormularioPermiso = ({
                 <div className="form-group col-md-6 col-lg-4">
                     Empresa: <br />
                     <select
-                        type="text" name="empresa_id" placeholder="Empresa"
+                        type="text" name="empresa_id" placeholder="Empresa" readOnly={true} disabled={true}
                         className="form-control"
                         value={form.empresa_id}
                         onChange={e => setForm({ ...form, empresa_id: e.target.value })}
@@ -99,6 +150,66 @@ const DatosFormularioPermiso = ({
                         value={form.nombre_completo}
                         onChange={e => setForm({ ...form, nombre_completo: e.target.value })}
                     />
+                </div>
+            </div>
+            <div className="row">
+                <div className="form-group col-md-6 col-lg-6">
+                    {loadingZonasLabor ? (
+                        <div className="spinner-grow text-info"></div>
+                    ) : (
+                        <>
+                            Zona labor:<br />
+                            <Select
+                                value={form.zona_labor_id}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, zona_labor_id: e })}
+                                style={{
+                                    width: '100%',
+                                }}
+                            >
+                                {zonasLabor.map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id} - ${e.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </>
+                    )}
+                </div>
+                <div className="form-group col-md-6 col-lg-6">
+                    {loadingCuarteles ? (
+                        <div className="spinner-grow text-info"></div>
+                    ) : (
+                        <>
+                            Área/Campo:<br />
+                            <Select
+                                value={form.cuartel_id}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, cuartel_id: e })}
+                                style={{
+                                    width: '100%',
+                                }}
+                            >
+                                {cuarteles.map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id} - ${e.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </>
+                    )}
                 </div>
             </div>
             <div className="row">
