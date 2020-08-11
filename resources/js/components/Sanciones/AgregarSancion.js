@@ -69,6 +69,7 @@ const AgregarSancion = () => {
                 console.log(res.data);
 
                 const { id, message, error } = res.data;
+
                 const url = `/ficha/sancion/${id}`;
 
                 Swal.fire({

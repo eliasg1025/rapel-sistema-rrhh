@@ -128,6 +128,10 @@ const Tabla = props => {
                 width: 270,
             },
             {
+                label: 'Tipo',
+                field: 'tipo',
+            },
+            {
                 label: 'Banco',
                 field: 'banco_name',
                 width: 200,
@@ -177,6 +181,7 @@ const Tabla = props => {
                     const cuentas = res.data.map(item => {
                         return {
                             ...item,
+                            tipo: item.apertura ? 'APERTURA' : 'CAMBIO',
                             acciones: (
                                 <div className="btn-group">
                                     <a className="btn btn-primary btn-sm" href={`/ficha/cambio-cuenta/${item.id}`} target="_blank">

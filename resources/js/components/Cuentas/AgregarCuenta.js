@@ -47,16 +47,27 @@ const AgregarCuenta = props => {
                     });
                     return;
                 }
-                const url = `/ficha/cambio-cuenta/${res.data.cuenta_id}`;
 
-                Swal.fire({
-                    title: 'Cuenta guardada correctamente',
-                    icon: 'success'
-                })
+                if (res.data.cuenta_id != 0) {
+                    const url = `/ficha/cambio-cuenta/${res.data.cuenta_id}`;
+
+                    Swal.fire({
+                        title: 'Cuenta guardada correctamente',
+                        icon: 'success'
+                    })
+                        .then(() => {
+                            window.open(url, '_blank');
+                            location.reload();
+                        });
+                } else {
+                    Swal.fire({
+                        title: 'Cuenta guardada correctamente',
+                        icon: 'success'
+                    })
                     .then(() => {
-                        window.open(url, '_blank');
                         location.reload();
                     });
+                }
             })
             .catch(err => {
                 console.log(err, err.response);

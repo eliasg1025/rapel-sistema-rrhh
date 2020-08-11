@@ -165,19 +165,19 @@ class Sancion extends Model
                     'incidencia_id' => $data['incidencia_id']
                 ])->whereBetween('fecha_incidencia', [now()->toDateString(), now()->addDays(90)->toDateString()])->count();
 
+                $message = '';
                 switch ( $cantidad_suspenciones_anteriores ) {
                     case 0:
                         $dias_suspencion = $incidencia->dias;
                         break;
                     case 1:
                         $dias_suspencion = $incidencia->dias_reiterativo;
+                        $message = '<br/>Esta es una falta reiterativa se suspenderá por ' . $dias_suspencion . ' días';
                         break;
                     case 2:
                         DB::rollBack();
                         return [
-                            'error'   => false,
-                            'message' => 'Este trabajador tiene 2 suspenciones anteriores',
-                            'id'      => $sancion->id
+                            'error'   => 'Este trabajador ya tiene 2 suspenciones anteriores',
                         ];
                 }
 
@@ -196,7 +196,7 @@ class Sancion extends Model
                 DB::commit();
                 return [
                     'error'   => false,
-                    'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente',
+                    'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . $message,
                     'id'      => $sancion->id
                 ];
             }

@@ -181,7 +181,7 @@ class Cuenta extends Model
                 return [
                     'error' => false,
                     'message' => 'Cuenta creada correctamente',
-                    'cuenta_id' => $cuenta->id
+                    'cuenta_id' => $data['apertura'] ? 0 : $cuenta->id
                 ];
             }
             DB::rollBack();
