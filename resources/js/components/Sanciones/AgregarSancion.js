@@ -19,6 +19,7 @@ const AgregarSancion = () => {
         fecha_incidencia: moment().format('YYYY-MM-DD').toString(),
         incidencia_id: '',
         tipo_documento: '',
+        observacion: '',
     });
     const [reloadDatos, setReloadDatos] = useState(false);
 
@@ -106,10 +107,12 @@ const AgregarSancion = () => {
     }, [contratoActivo]);
 
     useEffect(() => {
-        setForm({
-            ...form,
-            tipo_documento: form.incidencia_id != '' ? incidencias.find(item => item.id == form.incidencia_id).documento : ''
-        });
+        if (incidencias.length > 0) {
+            setForm({
+                ...form,
+                tipo_documento: form.incidencia_id != '' ? incidencias.find(item => item.id == form.incidencia_id)?.documento : ''
+            });
+        }
     }, [form.incidencia_id]);
 
     return (

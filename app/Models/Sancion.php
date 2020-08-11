@@ -91,7 +91,8 @@ class Sancion extends Model
                 'f.empresa_id',
                 'trabajador.nombre_completo as nombre_completo',
                 'f.fecha_incidencia',
-                'f.incidencia_id'
+                'f.incidencia_id',
+                'f.observacion'
             )
             ->joinSub($trabajadores, 'trabajador', function($join) {
                 $join->on('trabajador.id', 'f.trabajador_id');
@@ -104,6 +105,8 @@ class Sancion extends Model
     {
         DB::beginTransaction();
         try {
+            $incidencia = Incidencia::find($data['incidencia_id']);
+
             if ( !isset($data['id']) ) {
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
                 $regimen_id        = Regimen::findOrCreate($data['regimen']);
@@ -112,15 +115,28 @@ class Sancion extends Model
                 $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
                 // TODO: Comentado temporalmente para pruebas
-                $existe_registro_mismo_dia = Sancion::where('trabajador_id', $trabajador_id)
+                $registro_mismo_dia = Sancion::where('trabajador_id', $trabajador_id)
                     ->whereDate('fecha_incidencia', $data['fecha_incidencia'])
                     ->where('incidencia_id', $data['incidencia_id'])
                     ->first();
 
-                if ( $existe_registro_mismo_dia ) {
+                if ( $registro_mismo_dia ) {
                     DB::rollBack();
                     return [
-                        'error' => 'Ya existe una sanción por para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $existe_registro_mismo_dia->usuario->trabajador->nombre_completo
+                        'error' => 'Ya existe una sanción por para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $registro_mismo_dia->usuario->trabajador->nombre_completo
+                    ];
+                }
+
+                // Detecta si es que actualmente el trabajador esta suspendido
+                $suspencion_actual = Sancion::where('trabajador_id', $trabajador_id)
+                    ->where('fecha_salida', '<=', date($data['fecha_incidencia']))
+                    ->where('fecha_regreso', '>=', date($data['fecha_incidencia']))
+                    ->first();
+
+                if ( $suspencion_actual ) {
+                    DB::rollBack();
+                    return [
+                        'error' => 'El trabajador se encuentra suspendido desde ' . $suspencion_actual['fecha_salida'] . ' hasta ' . $suspencion_actual['fecha_regreso']
                     ];
                 }
 
@@ -139,9 +155,33 @@ class Sancion extends Model
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];
+            $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
 
-            if ( $data['incidencia_id'] == 2 || $data['incidencia_id'] == 1 ) {
-                $dias_sancion = new DiasSancion($data['fecha_incidencia'], 2);
+            if ( $incidencia->documento = 'SUSPENCION' ) {
+
+                // Detectar si hay faltas reiterativas sobre la misma incidencia
+                $cantidad_suspenciones_anteriores = Sancion::where([
+                    'trabajador_id' => $trabajador_id,
+                    'incidencia_id' => $data['incidencia_id']
+                ])->whereBetween('fecha_incidencia', [now()->toDateString(), now()->addDays(90)->toDateString()])->count();
+
+                switch ( $cantidad_suspenciones_anteriores ) {
+                    case 0:
+                        $dias_suspencion = $incidencia->dias;
+                        break;
+                    case 1:
+                        $dias_suspencion = $incidencia->dias_reiterativo;
+                        break;
+                    case 2:
+                        DB::rollBack();
+                        return [
+                            'error'   => false,
+                            'message' => 'Este trabajador tiene 2 suspenciones anteriores',
+                            'id'      => $sancion->id
+                        ];
+                }
+
+                $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
 
                 $sancion->fecha_salida = $dias_sancion->getDiaIncio();
                 $sancion->fecha_regreso = $dias_sancion->getDiaTermino();

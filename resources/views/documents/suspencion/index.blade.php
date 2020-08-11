@@ -103,7 +103,7 @@
             </div>
             <p class="justify">
                 Que, ante este acto de indisciplina, se considera una acción como falta grave, la cual nos faculta a tomar otras decisiones le
-                comunicamos que hemos decidido <b>SANCIONARLO CON UNA SUSPENCIÓN POR DOS DIA(S)</b> hábiles sin goce de haber, hecho que se hará efectivo
+                comunicamos que hemos decidido <b>SANCIONARLO CON UNA SUSPENCIÓN POR {{ $sancion->total_horas / 8 }} DIA(S)</b> hábiles sin goce de haber, hecho que se hará efectivo
                 el día <b>{{ $sancion->fecha_salida_largo }}</b>  hasta el <b>{{ $sancion->fecha_regreso_largo }}</b> reincorporándose a sus labores el
                 día <b>{{ $sancion->fecha_rei_largo }}</b>, el
                 presente documento será incorporado a su legajo personal.

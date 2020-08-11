@@ -8,24 +8,23 @@ class DiasSancion
 {
     public $fecha_incidencia;
     public $duracion;
-    public $dias_en_hacer_efectivo;
 
-    public function __construct($fecha_incidencia, $duracion, $dias_en_hacer_efectivo=1)
+    public function __construct($fecha_incidencia, int $duracion)
     {
-        $this->fecha_incidencia = $fecha_incidencia;
+        $this->fecha_incidencia = Carbon::parse($fecha_incidencia);
         $this->duracion = $duracion;
-        $this->dias_en_hacer_efectivo;
     }
 
     public function getDiaIncio()
     {
-        return Carbon::parse($this->fecha_incidencia)->addDays($this->dias_en_hacer_efectivo);
+        $dia_inicio = Carbon::parse($this->fecha_incidencia)->addDays(1);
+        return $dia_inicio->isSunday() ? $dia_inicio->addDays(1) : $dia_inicio;
     }
 
     private function getCantidadDomingos()
     {
         $start = $this->getDiaIncio();
-        $end = $this->getDiaIncio()->addDays($this->dias_en_hacer_efectivo + $this->duracion);
+        $end = $this->getDiaIncio()->addDays($this->duracion);
         $days = $start->diff($end, true)->days;
 
         return intval($days / 7) + ($start->format('N') + $days % 7 >= 7);
@@ -33,7 +32,8 @@ class DiasSancion
 
     public function getDiaTermino()
     {
-        return Carbon::parse($this->fecha_incidencia)->addDays($this->dias_en_hacer_efectivo + $this->duracion + $this->getCantidadDomingos());
+        $dia_termino = $this->getDiaIncio()->addDays($this->duracion + $this->getCantidadDomingos() - 1);
+        return $dia_termino;
     }
 
 

@@ -117,6 +117,16 @@ export const DatosSancion = ({
                 </div>
             </div>
             <div className="row">
+                <div className="form-group col">
+                    Observación:<br />
+                    <textarea
+                        className="form-control"
+                        value={form.observacion}
+                        onChange={e => setForm({ ...form, observacion: e.target.value })}
+                    ></textarea>
+                </div>
+            </div>
+            <div className="row">
                 <div className="col">
                     <button
                         type="submit" className="btn btn-primary btn-block"
