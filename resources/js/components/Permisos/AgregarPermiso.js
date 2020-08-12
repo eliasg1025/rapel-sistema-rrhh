@@ -50,6 +50,7 @@ const AgregarPermiso = () => {
         fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
         empresa_id: '',
         refrigerio: 0,
+        jornal: 0,
         fecha_salida: moment().format('YYYY-MM-DD').toString(),
         hora_salida: '',
         fecha_regreso: '',
@@ -81,7 +82,8 @@ const AgregarPermiso = () => {
             ...form,
             empresa_id: contratoActivo ? contratoActivo.empresa_id : '',
             zona_labor_id: contratoActivo ? contratoActivo.zona_labor.id : '',
-            cuartel_id: contratoActivo ? contratoActivo.cuartel.id : ''
+            cuartel_id: contratoActivo ? contratoActivo.cuartel?.id : '',
+            jornal: contratoActivo ? contratoActivo.jornal : 0
         });
     }, [contratoActivo]);
 

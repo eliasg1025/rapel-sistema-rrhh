@@ -333,6 +333,7 @@ class FormularioPermiso extends Model
                 $form->oficio_id       = $ofico_id;
                 $form->cuartel_id      = $cuartel_id;
                 $form->fecha_solicitud = $data['fecha_solicitud'];
+                $form->jornal          = $data['jornal'];
 
                 $form->fecha_hora_salida  = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
                 $form->fecha_hora_regreso = date($data['fecha_regreso'] . ' ' . $data['hora_regreso']);
