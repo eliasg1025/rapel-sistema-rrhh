@@ -198,6 +198,7 @@ class FormularioPermiso extends Model
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
+                    'f.jornal',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
@@ -243,6 +244,7 @@ class FormularioPermiso extends Model
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
+                    'f.jornal',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),

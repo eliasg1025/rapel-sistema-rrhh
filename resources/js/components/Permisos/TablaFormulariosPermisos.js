@@ -160,6 +160,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         console.log(datatable.rows);
         const headings = [
             'EMPRESA',
+            'CON DIGITACION',
             'COD.',
             'APELLIDOS Y NOMBRES',
             'RESPONSABLE',
@@ -182,6 +183,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         const data = datatable.rows.map(item => {
             return {
                 empresa: item.empresa,
+                con_digitacion: item.jornal ? 'SI' : 'NO',
                 cod: item.code,
                 apellidos_nombres: item.nombre_completo,
                 responsable: item.nombre_completo_jefe,
