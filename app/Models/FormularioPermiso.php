@@ -216,7 +216,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%H:%i") hora_regreso'),
                     'e.shortname as empresa',
-                    DB::raw('CONCAT(j.nombre, " ", j.apellido_paterno, " ", j.apellido_materno) as nombre_completo_jefe'),
+                    DB::raw('CONCAT(j.apellido_paterno, " ", j.apellido_materno, " ", j.nombre) as nombre_completo_jefe'),
                     'f.estado'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
@@ -249,7 +249,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_hora_enviado, "%d/%m/%Y %H:%i:%s") fecha_hora_enviado'),
                     't.rut',
                     't.code',
-                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%d/%m/%Y") fecha_salida'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%d/%m/%Y") fecha_regreso'),
                     'm.code as motivo_permiso_id',
@@ -261,10 +261,10 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_hora_salida, "%H:%i") hora_salida'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_regreso, "%H:%i") hora_regreso'),
                     'e.shortname as empresa',
-                    DB::raw('CONCAT(j.nombre, " ", j.apellido_paterno, " ", j.apellido_materno) as nombre_completo_jefe'),
+                    DB::raw('CONCAT(j.apellido_paterno, " ", j.apellido_materno, " ", j.nombre) as nombre_completo_jefe'),
                     'f.estado',
                     'usuario.username as usuario',
-                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('trabajadores as j', 'j.id', '=', 'f.jefe_id')
