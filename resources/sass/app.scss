@@ -7,6 +7,13 @@
 // Bootstrap
 @import './bootstrap.min.css';
 
+// @import '~@fortawesome/fontawesome-free/css/all.min.css';
+
+* {
+    font-size: 13px;
+}
+
+
 .sign-in {
     &__content {
       display: flex;
@@ -167,8 +174,4 @@
     .login {
         width: 500px;
     }
-}
-
-* {
-    font-size: 13.5px;
 }

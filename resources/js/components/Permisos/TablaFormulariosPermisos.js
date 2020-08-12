@@ -159,6 +159,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const handleExportar = () => {
         console.log(datatable.rows);
         const headings = [
+            'EMPRESA',
             'COD.',
             'APELLIDOS Y NOMBRES',
             'RESPONSABLE',
@@ -180,12 +181,13 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
 
         const data = datatable.rows.map(item => {
             return {
+                empresa: item.empresa,
                 cod: item.code,
                 apellidos_nombres: item.nombre_completo,
                 responsable: item.nombre_completo_jefe,
                 dni: item.rut,
-                desde: item.fecha_regreso,
-                hasta: item.fecha_salida,
+                desde: item.fecha_salida,
+                hasta: item.fecha_regreso,
                 motivo_permiso: item.motivo_permiso_id,
                 predio: item.zona_labor_id,
                 horas: item.horas,

@@ -226,7 +226,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                                     <>
                                         {usuario.reseteo_clave == 2 && (
                                             <Tooltip title="Marca como ATENDIDO">
-                                                <button className="btn btn-primary btn-sm" onClick={() => handleResolver(item.id)}>
+                                                <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(item.id)}>
                                                     <i className="fas fa-check"/>
                                                 </button>
                                             </Tooltip>
@@ -322,7 +322,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
             <div className="row">
                 <div className="col-md-4">
                     <button className="btn btn-success btn-sm" onClick={handleExportar}>
-                        <i className="fas fa-file-excel"></i> Exportar
+                        <i className="fas fa-file-excel" /> Exportar
                     </button>
                 </div>
             </div>

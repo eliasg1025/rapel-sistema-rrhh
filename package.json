@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@ant-design/icons": "^4.2.1",
+        "@fortawesome/fontawesome-free": "^5.14.0",
         "antd": "^4.4.3",
         "mdbreact": "^4.27.0",
         "moment": "^2.27.0",

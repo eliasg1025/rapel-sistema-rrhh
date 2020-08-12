@@ -8,8 +8,8 @@
 <div class="container p-5">
     <div class="text-center">
         <h3>Atención Cambio Clave</h3>
+        <span>{{ $data['usuario']['reseteo_clave'] == 2 ? '(Modo Administrador)' : '' }}</span>
     </div>
-    <span>{{ $data['usuario']['reseteo_clave'] == 2 ? '(Modo Administrador)' : '' }}</span>
     <div class="py-5">
         <div id="agregar-reseteo-clave"></div>
     </div>
