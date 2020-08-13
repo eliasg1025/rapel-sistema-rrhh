@@ -264,7 +264,7 @@ class Sancion extends Model
                 ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
                 })
-                ->when($estado != 0, function($query) use ($fechas) {
+                ->when($estado == 2, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
@@ -309,7 +309,7 @@ class Sancion extends Model
                 ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
                 })
-                ->when($estado != 0, function($query) use ($fechas) {
+                ->when($estado == 2, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
