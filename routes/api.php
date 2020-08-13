@@ -96,6 +96,7 @@ Route::group(['prefix' => 'formulario-permiso'], function() {
     Route::put('/toggle-goce/{id}', 'FormularioPermisoController@toggleGoce');
     Route::put('/marcar-firmado/{id}', 'FormularioPermisoController@marcarFirmado');
     Route::put('/marcar-enviado/{id}', 'FormularioPermisoController@marcarEnviado');
+    Route::put('/marcar-recepcionado/{id}', 'FormularioPermisoController@marcarRecepcionado');
     Route::put('/marcar-cargado/{id}', 'FormularioPermisoController@marcarCargado');
     Route::delete('/{id}', 'FormularioPermisoController@delete');
 });

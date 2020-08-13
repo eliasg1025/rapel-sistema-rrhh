@@ -222,7 +222,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                 empresa: item.empresa,
                 cod: item.code,
                 apellidos_nombres: item.nombre_completo,
-                responsable: '',
+                responsable: 'RRHH',
                 dni: item.rut,
                 desde: item.desde,
                 hasta: item.hasta,

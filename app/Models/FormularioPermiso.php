@@ -227,7 +227,7 @@ class FormularioPermiso extends Model
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->when($estado == 3, function($query) use ($fechas) {
+                ->when($estado == 4, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
@@ -277,7 +277,7 @@ class FormularioPermiso extends Model
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
                 ->where('f.estado', $estado)
-                ->when($estado == 3, function($query) use ($fechas) {
+                ->when($estado == 4, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
@@ -446,6 +446,32 @@ class FormularioPermiso extends Model
         ];
     }
 
+    public static function marcarRecepcionado(int $usuario_id, int $id)
+    {
+        $formularioPermiso = FormularioPermiso::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->permisos < 2 ) {
+            return [
+                'error'   => true,
+                'message' => 'Solo un usuario administrador puede marcar este formulario como RECEPCIONADO'
+            ];
+        }
+
+        $formularioPermiso->estado = 3;
+
+        if ( $formularioPermiso->save() ) {
+            return [
+                'message' => 'Formulario actualizado correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
+    }
+
     public static function marcarCargado(int $usuario_id, int $id)
     {
         $formularioPermiso = FormularioPermiso::find($id);
@@ -458,7 +484,7 @@ class FormularioPermiso extends Model
             ];
         }
 
-        $formularioPermiso->estado = 3;
+        $formularioPermiso->estado = 4;
         $formularioPermiso->fecha_hora_subido = now()->toDateTimeString();
 
         if ( $formularioPermiso->save() ) {

@@ -102,6 +102,20 @@ class FormularioPermisoController extends Controller
         return response()->json($result);
     }
 
+    public function marcarRecepcionado(Request $request, $id)
+    {
+        $usuario_id = $request->usuario_id;
+        $result = FormularioPermiso::marcarRecepcionado($usuario_id, $id);
+
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function marcarCargado(Request $request, $id)
     {
         $usuario_id = $request->usuario_id;

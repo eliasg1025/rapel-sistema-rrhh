@@ -350,6 +350,39 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             })
     }
 
+    const handleMarcarRecepcionado = id => {
+        Swal.fire({
+            title: '¿Se recepcionó este formulario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/formulario-permiso/marcar-recepcionado/${id}`, {
+                        usuario_id: usuario.id
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                title: err.response.data.message,
+                                icon: 'error'
+                            })
+                        });
+                }
+            })
+    }
+
     useEffect(() => {
         let intentos = 0;
         function fetchFormulariosPermisos() {
@@ -408,6 +441,15 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                         </>
                                     ) : ''}
                                     {(item.estado == 2 & usuario.permisos == 2) ? (
+                                        <>
+                                            <Tooltip title="Marca como RECEPCIONADO">
+                                                <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarRecepcionado(item.id)}>
+                                                    <i className="fas fa-check" />
+                                                </button>
+                                            </Tooltip>
+                                        </>
+                                    ) : ''}
+                                    {(item.estado == 3 & usuario.permisos == 2) ? (
                                         <>
                                             <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(item.id)}>
@@ -472,7 +514,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         <option value="0">GENERADOS</option>
                         <option value="1">FIRMADOS</option>
                         <option value="2">ENVIADO</option>
-                        <option value="3">SUBIDO</option>
+                        <option value="3">RECEPCIONADO</option>
+                        <option value="4">SUBIDO</option>
                     </select>
                 </div>
             </div>
