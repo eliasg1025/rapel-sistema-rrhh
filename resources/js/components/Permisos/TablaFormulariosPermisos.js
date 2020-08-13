@@ -192,7 +192,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 hasta: item.fecha_regreso,
                 motivo_permiso: item.motivo_permiso_id,
                 predio: item.zona_labor_id,
-                horas: item.horas,
+                horas: item.horas > 8 ? 8 : item.horas,
                 hora_salida: item.hora_salida,
                 hora_regreso: item.hora_regreso,
                 con_goce: item.goce == 0 ? 'NO' : 'SI',

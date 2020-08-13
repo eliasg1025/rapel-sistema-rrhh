@@ -20,8 +20,13 @@ const AgregarSancion = () => {
         incidencia_id: '',
         tipo_documento: '',
         observacion: '',
+        zona_labor_id: '',
+        cuartel_id: '',
     });
     const [reloadDatos, setReloadDatos] = useState(false);
+
+    const [zonasLabor, setZonasLabor] = useState([]);
+    const [cuarteles, setCuarteles] = useState([]);
 
     useEffect(() => {
         if (editar) {
@@ -33,7 +38,7 @@ const AgregarSancion = () => {
                         console.log(res.data);
 
                         const { data } = res;
-                        setForm({ ...data });
+                        setForm({ ...data, observacion: data.observacion || '' });
                     })
                     .catch(err => {
                         if (intentos < 3) {
@@ -51,11 +56,14 @@ const AgregarSancion = () => {
 
         form.trabajador = trabajador;
         form.regimen = contratoActivo?.regimen || null;
-        form.cuartel = contratoActivo?.cuartel || null;
         form.oficio = contratoActivo?.oficio || null;
-        form.zona_labor = contratoActivo?.zona_labor || null;
-
         form.usuario_id = usuario.id;
+
+        const z = zonasLabor.find(e => e.id == form.zona_labor_id);
+        const c = cuarteles.find(e => e.id == form.cuartel_id);
+
+        form.zona_labor = z;
+        form.cuartel = c;
 
         Swal.fire({
             onBeforeOpen: () => {
@@ -103,7 +111,9 @@ const AgregarSancion = () => {
     useEffect(() => {
         setForm({
             ...form,
-            empresa_id: contratoActivo ? contratoActivo.empresa_id : ''
+            empresa_id: contratoActivo ? contratoActivo.empresa_id : '',
+            zona_labor_id: contratoActivo ? contratoActivo.zona_labor.id : '',
+            cuartel_id: contratoActivo ? contratoActivo.cuartel?.id : '',
         });
     }, [contratoActivo]);
 
@@ -111,7 +121,7 @@ const AgregarSancion = () => {
         if (incidencias.length > 0) {
             setForm({
                 ...form,
-                tipo_documento: form.incidencia_id != '' ? incidencias.find(item => item.id == form.incidencia_id)?.documento : ''
+                tipo_documento: form.incidencia_id !== '' ? incidencias.find(item => item.id == form.incidencia_id)?.documento : ''
             });
         }
     }, [form.incidencia_id]);
@@ -131,6 +141,10 @@ const AgregarSancion = () => {
                 setForm={setForm}
                 incidencias={incidencias}
                 setIncidencias={setIncidencias}
+                zonasLabor={zonasLabor}
+                setZonasLabor={setZonasLabor}
+                cuarteles={cuarteles}
+                setCuarteles={setCuarteles}
             />
             <hr />
             {!editar && (

@@ -292,14 +292,14 @@ class FormularioPermiso extends Model
         DB::beginTransaction();
         try {
             $motivo_permiso_id = MotivoPermiso::findOrCreate($data['motivo_permiso']);
+            $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
+            $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
             if ( !isset($data['id']) ) {
                 $jefe_id           = Trabajador::findOrCreate($data['jefe']);
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
                 $regimen_id        = Regimen::findOrCreate($data['regimen']);
-                $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
                 $ofico_id          = Oficio::findOrCreate($data['oficio']);
-                $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
                 // TODO: Comentado temporalmente para pruebas
                 $existe_registro_mismo_dia = FormularioPermiso::where('trabajador_id', $trabajador_id)
@@ -332,8 +332,8 @@ class FormularioPermiso extends Model
                 $form->trabajador_id   = $trabajador_id;
                 $form->regimen_id      = $regimen_id;
                 $form->zona_labor_id   = $zona_labor_id;
-                $form->oficio_id       = $ofico_id;
                 $form->cuartel_id      = $cuartel_id;
+                $form->oficio_id       = $ofico_id;
                 $form->fecha_solicitud = $data['fecha_solicitud'];
                 $form->jornal          = $data['jornal'];
 
@@ -353,6 +353,8 @@ class FormularioPermiso extends Model
                 }
             } else {
                 $form                     = FormularioPermiso::find($data['id']);
+                $form->zona_labor_id   = $zona_labor_id;
+                $form->cuartel_id      = $cuartel_id;
                 $form->fecha_hora_salida  = date($data['fecha_salida'] . ' ' . $data['hora_salida']);
                 $form->fecha_hora_regreso = date($data['fecha_regreso'] . ' ' . $data['hora_regreso']);
                 $form->refrigerio         = $data['refrigerio'];

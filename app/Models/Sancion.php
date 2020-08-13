@@ -93,12 +93,14 @@ class Sancion extends Model
                 'f.fecha_incidencia',
                 'f.incidencia_id',
                 'f.observacion',
-                'f.zona_labor_id',
-                'f.cuartel_id'
+                'z.code as zona_labor_id',
+                'c.code as cuartel_id'
             )
             ->joinSub($trabajadores, 'trabajador', function($join) {
                 $join->on('trabajador.id', 'f.trabajador_id');
             })
+            ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+            ->join('cuarteles as c', 'c.id', '=', 'f.cuartel_id')
             ->where('f.id', $id)
             ->first();
     }
@@ -109,13 +111,13 @@ class Sancion extends Model
         $message = '';
         try {
             $incidencia = Incidencia::find($data['incidencia_id']);
+            $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
+            $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
             if ( !isset($data['id']) ) {
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
                 $regimen_id        = Regimen::findOrCreate($data['regimen']);
-                $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
                 $ofico_id          = Oficio::findOrCreate($data['oficio']);
-                $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
 
                 // TODO: Comentado temporalmente para pruebas
                 $registro_mismo_dia = Sancion::where('trabajador_id', $trabajador_id)
@@ -149,13 +151,12 @@ class Sancion extends Model
                 $sancion->regimen_id      = $regimen_id;
                 $sancion->oficio_id       = $ofico_id;
                 $sancion->fecha_solicitud = $data['fecha_solicitud'];
-                $sancion->zona_labor_id   = $zona_labor_id;
-                $sancion->cuartel_id      = $cuartel_id;
             } else {
                 $sancion = Sancion::find($data['id']);
             }
 
-
+            $sancion->zona_labor_id   = $zona_labor_id;
+            $sancion->cuartel_id      = $cuartel_id;
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];
@@ -219,9 +220,13 @@ class Sancion extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $incidencia_id=0)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, string $incidencia_id="0")
     {
         $usuario = Usuario::find($usuario_id);
+
+        if ($incidencia_id != "0") {
+            $incidencia_id = $incidencia_id == "1" ? 'MEMORANDUM' : 'SUSPENCION';
+        }
 
         if ( !$usuario ) {
             return [
@@ -234,7 +239,7 @@ class Sancion extends Model
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
-                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d-%m-%Y") fecha_solicitud'),
                     'f.observacion',
                     't.rut',
                     't.code',
@@ -243,7 +248,9 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
-                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d-%m-%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d-%m-%Y") desde'),
+                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d-%m-%Y") hasta'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado'
@@ -254,8 +261,8 @@ class Sancion extends Model
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->when($incidencia_id != 0, function($query) use ($incidencia_id) {
-                    $query->where('f.incidencia_id', $incidencia_id);
+                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                    $query->where('i.documento', $incidencia_id);
                 })
                 ->when($estado != 0, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
@@ -274,7 +281,7 @@ class Sancion extends Model
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
-                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d-%m-%Y") fecha_solicitud'),
                     'f.observacion',
                     't.rut',
                     't.code',
@@ -283,7 +290,9 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
-                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d-%m-%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d-%m-%Y") desde'),
+                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d-%m-%Y") hasta'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado',
@@ -297,8 +306,8 @@ class Sancion extends Model
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
                 ->where('f.estado', $estado)
-                ->when($incidencia_id != 0, function($query) use ($incidencia_id) {
-                    $query->where('f.incidencia_id', $incidencia_id);
+                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                    $query->where('i.documento', $incidencia_id);
                 })
                 ->when($estado != 0, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);

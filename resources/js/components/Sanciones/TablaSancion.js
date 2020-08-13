@@ -191,6 +191,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
     const handleExportar = () => {
         console.log(datatable.rows);
         const headings = [
+            'EMPRESA',
             'COD.',
             'APELLIDOS Y NOMBRES',
             'RESPONSABLE',
@@ -205,25 +206,28 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             'TIPO',
             'CARGADO POR',
             'FECHA SOLICITUD',
+            'INCIDENCIA',
             'OBSERVACION',
         ];
 
         const data = datatable.rows.map(item => {
             return {
+                empresa: item.empresa,
                 cod: item.code,
                 apellidos_nombres: item.nombre_completo,
                 responsable: '',
                 dni: item.rut,
-                desde: '',
-                hasta: '',
+                desde: item.desde,
+                hasta: item.hasta,
                 motivo_permiso: '',
                 predio: item.zona_labor_id,
-                horas: item.horas,
+                horas: item.horas > 8 ? 8 : item.horas,
                 hora_salida: '',
                 hora_regreso: '',
                 tipo: item.documento,
                 cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud,
+                incidencia: item.incidencia,
                 observacion: item.observacion
             };
         });
@@ -335,7 +339,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                     >
                         <option value="0">TODOS</option>
                         <option value="1">MEMORANDUM</option>
-                        <option value="2">SUSPENCIONES</option>
+                        <option value="2">SUSPENCION</option>
                     </select>
                 </div>
                 <div className="col-md-4">
