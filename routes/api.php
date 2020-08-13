@@ -105,6 +105,7 @@ Route::group(['prefix' => 'sancion'], function() {
     Route::post('/', 'SancionesController@create');
     Route::post('/get-all', 'SancionesController@getAll');
     Route::put('/marcar-enviado/{id}', 'SancionesController@marcarEnviado');
+    Route::put('/marcar-subido/{id}', 'SancionesController@marcarSubido');
     Route::delete('/{id}', 'SancionesController@delete');
 });
 

@@ -345,4 +345,30 @@ class Sancion extends Model
             'message' => 'No se pudo resolver esta operación'
         ];
     }
+
+    public static function marcarSubido(int $usuario_id, int $id)
+    {
+        $sancion = Sancion::find($id);
+        $usuario = Usuario::find($usuario_id);
+
+        if ( $usuario->sanciones < 2 ) {
+            return [
+                'error' => 'Solo un usuario administrador puede marcar este formulario como CARGADO'
+            ];
+        }
+
+        $sancion->estado = 2;
+        $sancion->fecha_hora_subido = now()->toDateTimeString();
+
+        if ( $sancion->save() ) {
+            return [
+                'message' => 'Sancion actualizada correctamente'
+            ];
+        }
+
+        return [
+            'error'   => true,
+            'message' => 'No se pudo resolver esta operación'
+        ];
+    }
 }

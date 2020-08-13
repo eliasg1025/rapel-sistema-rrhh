@@ -169,7 +169,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                                     )}
                                     {(item.estado == 1 && usuario.sanciones == 2) && (
                                         <Tooltip title="Marca como SUBIDO">
-                                            <button className="btn btn-outline-warning btn-sm" onClick={() => console.log(item.id)}>
+                                            <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarSubido(item.id)}>
                                                 <i className="fas fa-check" />
                                             </button>
                                         </Tooltip>
@@ -317,6 +317,39 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                         });
                 }
             })
+    }
+
+    const handleMarcarSubido = id => {
+        Swal.fire({
+            title: '¿Se cargó este documento?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/sancion/marcar-subido/${id}`, {
+                        usuario_id: usuario.id
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: res.data.message,
+                                icon: res.status < 400 ? 'success' : 'error'
+                            })
+                                .then(() => setReloadDatos(!reloadDatos));
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire({
+                                title: err.response.data.message,
+                                icon: 'error'
+                            })
+                        });
+                }
+            });
     }
 
     return (

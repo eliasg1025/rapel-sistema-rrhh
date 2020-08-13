@@ -112,6 +112,20 @@ class SancionesController extends Controller
         return response()->json($result);
     }
 
+    public function marcarSubido(Request $request, $id)
+    {
+        $usuario_id = $request->usuario_id;
+        $result = Sancion::marcarSubido($usuario_id, $id);
+
+        if ( isset($result['error']) ) {
+            return response()->json([
+                'message' => $result['error']
+            ], 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function delete($id)
     {
         $form = Sancion::find($id);
