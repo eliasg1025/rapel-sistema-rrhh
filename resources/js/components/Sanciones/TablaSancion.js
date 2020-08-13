@@ -55,6 +55,10 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                 field: 'zona_labor'
             },
             {
+                label: 'Observación',
+                field: 'observacion'
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
@@ -102,6 +106,10 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             {
                 label: 'Cargado por',
                 field: 'nombre_completo_usuario'
+            },
+            {
+                label: 'Observación',
+                field: 'observacion'
             },
             {
                 label: 'Acciones',
@@ -196,7 +204,8 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             'HORA REGRESO',
             'TIPO',
             'CARGADO POR',
-            'FECHA SOLICITUD'
+            'FECHA SOLICITUD',
+            'OBSERVACION',
         ];
 
         const data = datatable.rows.map(item => {
@@ -215,6 +224,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                 tipo: item.documento,
                 cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud,
+                observacion: item.observacion
             };
         });
 

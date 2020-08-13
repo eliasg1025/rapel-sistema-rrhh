@@ -149,12 +149,13 @@ class Sancion extends Model
                 $sancion->regimen_id      = $regimen_id;
                 $sancion->oficio_id       = $ofico_id;
                 $sancion->fecha_solicitud = $data['fecha_solicitud'];
+                $sancion->zona_labor_id   = $zona_labor_id;
+                $sancion->cuartel_id      = $cuartel_id;
             } else {
                 $sancion = Sancion::find($data['id']);
             }
 
-            $sancion->zona_labor_id   = $zona_labor_id;
-            $sancion->cuartel_id      = $cuartel_id;
+
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];
@@ -234,6 +235,7 @@ class Sancion extends Model
                 ->select(
                     'f.id',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    'f.observacion',
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
@@ -273,6 +275,7 @@ class Sancion extends Model
                 ->select(
                     'f.id',
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    'f.observacion',
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
