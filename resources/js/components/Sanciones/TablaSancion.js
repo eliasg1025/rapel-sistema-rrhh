@@ -158,7 +158,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                                                     <i className="fas fa-check" />
                                                 </button>
                                             </Tooltip>
-                                            {item.fecha_solicitud === moment().format('DD/MM/YYYY') && (
+                                            {item.fecha_solicitud === moment().format('DD-MM-YYYY') && (
                                                 <Tooltip title="Eliminar">
                                                     <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
                                                         <i className="fas fa-trash-alt" />
@@ -166,6 +166,13 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                                                 </Tooltip>
                                             )}
                                         </>
+                                    )}
+                                    {(item.estado == 1 && usuario.sanciones == 2) && (
+                                        <Tooltip title="Marca como SUBIDO">
+                                            <button className="btn btn-outline-warning btn-sm" onClick={() => console.log(item.id)}>
+                                                <i className="fas fa-check" />
+                                            </button>
+                                        </Tooltip>
                                     )}
                                 </div>
                             )
