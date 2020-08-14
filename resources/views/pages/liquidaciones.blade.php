@@ -9,7 +9,6 @@
         <div class="container p-5">
             <div class="text-center">
                 <h3>Pago de Liquidaciones y Utilidades</h3>
-                <span>{{ $data['usuario']['liquidaciones'] == 2 ? '(Modo Administrador)' : '' }}</span>
             </div>
 
             <div class="py-5">

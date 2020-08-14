@@ -75,6 +75,10 @@ class SancionesController extends Controller
                         'Casco'
                     ];
                     break;
+                case 6:
+                    $texto = [
+                        'Alcohol'
+                    ];
             }
 
             $data = [

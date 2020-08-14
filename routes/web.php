@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', 'Web\ViewController@login');
 
 Route::group(['middleware' => 'web.auth'], function() {
-    Route::get('/panel', 'Web\ViewController@panel');
+    Route::get('/', 'Web\ViewController@panel');
     Route::get('/perfil', 'Web\ViewController@perfil');
-    Route::get('/', 'Web\ViewController@index');
+    Route::get('/ingresos', 'Web\ViewController@index');
     Route::get('/usuarios', 'Web\ViewController@usuarios');
     Route::get('/trabajadores', 'Web\ViewController@trabajadores');
     Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
@@ -38,7 +38,13 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/sanciones', 'Web\ViewController@sanciones');
     Route::get('/sanciones/editar/{id}', 'Web\ViewController@editarSancion');
 
-    Route::get('/liquidaciones-utilidades', 'Web\ViewController@liquidaciones');
+    Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
+        Route::get('/', 'Web\ViewController@liquidaciones');
+        Route::get('/importacion', 'Web\Controller@liquidacionesImportacion');
+        Route::get('/consulta', 'Web\Controller@liquidacionesConsulta');
+        Route::get('/l', 'Web\Controller@liquidacionesL');
+        Route::get('/u', 'Web\Controller@liquidacionesU');
+    });
 
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');

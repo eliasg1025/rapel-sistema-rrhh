@@ -5,12 +5,14 @@
 @endsection
 
 @section('contenido')
-    <div class="container p-5 text-center">
-        <h3>¿Á que módulo deseas entrar?</h3>
+    <div class="container p-5">
+        <div class="text-center">
+            <h3>¿Á que módulo deseas entrar?</h3>
+        </div>
         <div class="py-5">
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block btn-light" href="/" {{ $data['usuario']->ingresos === 0 ? 'disabled' : '' }}>
+                    <a class="btn btn-block btn-light" href="/ingresos" {{ $data['usuario']->ingresos === 0 ? 'disabled' : '' }}>
                         <i class="fas fa-arrow-up"></i> Ingresos Personal
                     </a>
                 </div>

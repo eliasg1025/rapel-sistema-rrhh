@@ -61,7 +61,56 @@ class ViewController extends Controller
         $usuario = $request->session()->get('usuario');
 
         $data = [
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'submodule' => 'main'
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
+    }
+
+    public function liquidacionesImportacion(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'importacion'
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
+    }
+
+    public function liquidacionesConsulta(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'consulta'
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
+    }
+
+    public function liquidacionesL(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'l'
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
+    }
+
+    public function liquidacionesU(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'u'
         ];
 
         return view('pages.liquidaciones', compact('data'));

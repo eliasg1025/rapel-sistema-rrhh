@@ -23,14 +23,14 @@
                     <a class="nav-link" href="/perfil">{{ $data['usuario']->trabajador->nombre_completo ?? '' }}</span></a>
                 </li>
             </ul>
-            @if (Request::path() === 'panel')
+            @if (Request::path() === '/')
                 <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
                     @csrf
                     <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Cerrar Sesión</button>
                 </form>
             @else
                 <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
-                    <a class="btn btn-outline-danger my-2 my-sm-0" href="/panel">Salir</a>
+                    <a class="btn btn-outline-danger my-2 my-sm-0" href="/">Salir</a>
                 </form>
             @endif
         </div>

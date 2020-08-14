@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Registro | Grupo Verfrut
+    Ingresos | Grupo Verfrut
 @endsection
 
 @section('contenido')

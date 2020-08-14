@@ -28,7 +28,7 @@ const TrabajadoresLayout = props => {
                 <br />
                 <Menu mode="inline" defaultSelectedKeys={['3']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
-                        <a href="/">
+                        <a href="/ingresos">
                             Inicio
                         </a>
                     </Menu.Item>
@@ -48,7 +48,7 @@ const TrabajadoresLayout = props => {
                         </a>
                     </Menu.Item>
                     <Menu.Item key="6" icon={<LogoutOutlined />}>
-                        <a href="/panel">
+                        <a href="/">
                             Salir
                         </a>
                     </Menu.Item>
