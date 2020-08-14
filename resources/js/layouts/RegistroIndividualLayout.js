@@ -25,9 +25,6 @@ const MainLayout = props => {
                     //console.log(collapsed, type);
                 }}
             >
-                <div className="logo">
-                    <img src="/img/logo-grupo-verfrut.png" width="160"/>
-                </div>
                 <br />
                 <Menu mode="inline" defaultSelectedKeys={['4']}>
                     <Menu.Item key="1" icon={<HomeOutlined />}>
@@ -35,15 +32,6 @@ const MainLayout = props => {
                             Inicio
                         </a>
                     </Menu.Item>
-                    {
-                        usuario.usuario.rol === 'admin' && (
-                            <Menu.Item key="2" icon={<UserOutlined />}>
-                                <a href="/usuarios">
-                                    Usuarios
-                                </a>
-                            </Menu.Item>
-                        )
-                    }
                     <Menu.Item key="3" icon={<UploadOutlined />}>
                         <a href="/trabajadores">
                             Trabajadores

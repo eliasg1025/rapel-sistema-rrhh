@@ -25,8 +25,6 @@ export default function Home(props) {
 
     return (
         <div>
-            <h4>Bienvenido, <b>{props.usuario.usuario.username}</b></h4>
-            <br />
             {
                 props.usuario.usuario.rol === 'admin' ? (
                     <Spin spinning={loading}>

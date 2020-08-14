@@ -47,7 +47,24 @@ class ViewController extends Controller
 
     public function perfil(Request $request)
     {
-        return 'perfil';
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.perfil', compact('data'));
+    }
+
+    public function liquidaciones(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
     }
 
     public function usuarios(Request $request)

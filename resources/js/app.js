@@ -11,6 +11,9 @@ import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
 import AgregarSancion from "./components/Sanciones/AgregarSancion";
+import EstadisticasUsuarios from "./components/EstadisticasUsuario";
+import ConsultarEstadoLiquidacion from "./components/Liquidaciones/ConsultarEstadoLiquidacion";
+import AdminLiquidaciones from "./components/Liquidaciones/AdminLiquidaciones";
 
 require('./bootstrap');
 
@@ -33,6 +36,27 @@ require('./components/Afp/AgregarAfp');
 require('./components/Permisos/AgregarPermiso');
 require('./components/Sanciones/AgregarSancion');
 
+// Estadisticas
+require('./components/EstadisticasUsuario');
+
+
+// Liquidaciones
+require('./components/Liquidaciones/ConsultarEstadoLiquidacion');
+require('./components/Liquidaciones/AdminLiquidaciones');
+
+
+//
+if (document.getElementById("consultar-estado-liquidacion")) {
+    const element = document.getElementById("consultar-estado-liquidacion");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<ConsultarEstadoLiquidacion {...props} />, document.getElementById("consultar-estado-liquidacion"));
+}
+
+if (document.getElementById('estadisticas-usuarios')) {
+    const element = document.getElementById('estadisticas-usuarios');
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<EstadisticasUsuarios {...props} />, document.getElementById('estadisticas-usuarios'));
+}
 
 if (document.getElementById("agregar-cuenta")) {
     const element = document.getElementById("agregar-cuenta");
@@ -62,4 +86,10 @@ if (document.getElementById("agregar-sancion")) {
     const element = document.getElementById("agregar-sancion");
     const props = Object.assign({}, element.dataset);
     ReactDOM.render(<AgregarSancion {...props} />, document.getElementById("agregar-sancion"));
+}
+
+if (document.getElementById("admin-liquidaciones")) {
+    const element = document.getElementById("admin-liquidaciones");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<AdminLiquidaciones {...props} />, document.getElementById("admin-liquidaciones"));
 }

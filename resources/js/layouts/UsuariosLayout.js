@@ -25,16 +25,8 @@ const MainLayout = props => {
                     //console.log(collapsed, type);
                 }}
             >
-                <div className="logo">
-                    <img src="/img/logo-grupo-verfrut.png" width="160"/>
-                </div>
                 <br />
                 <Menu mode="inline" defaultSelectedKeys={['2']}>
-                    <Menu.Item key="1" icon={<HomeOutlined />}>
-                        <a href="/">
-                            Inicio
-                        </a>
-                    </Menu.Item>
                     {
                         usuario.usuario.rol === 'admin' && (
                             <Menu.Item key="2" icon={<UserOutlined />}>
@@ -44,26 +36,6 @@ const MainLayout = props => {
                             </Menu.Item>
                         )
                     }
-                    <Menu.Item key="3" icon={<UploadOutlined />}>
-                        <a href="/trabajadores">
-                            Trabajadores
-                        </a>
-                    </Menu.Item>
-                    <Menu.Item key="4" icon={<UserOutlined />}>
-                        <a href="/registro-individual">
-                            Registro Individual
-                        </a>
-                    </Menu.Item>
-                    <Menu.Item key="5" icon={<UserOutlined />}>
-                        <a href="/registro-masivo">
-                            Registro Masivo
-                        </a>
-                    </Menu.Item>
-                    <Menu.Item key="6" icon={<LogoutOutlined />}>
-                        <a href="/panel">
-                            Salir
-                        </a>
-                    </Menu.Item>
                     {/*
                     <Menu.Item key="7" icon={<LogoutOutlined />} onClick={(e) => document.getElementById("logoutForm").submit()}>
                         <a href="/panel">

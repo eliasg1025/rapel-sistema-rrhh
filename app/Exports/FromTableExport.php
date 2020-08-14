@@ -33,7 +33,8 @@ class FromTableExport implements FromArray, WithColumnFormatting
     public function columnFormats(): array
     {
         return [
-            'B' => '#0'
+            'B' => '#0',
+            'F' => '#0',
         ];
     }
 }

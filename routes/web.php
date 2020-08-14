@@ -38,6 +38,8 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/sanciones', 'Web\ViewController@sanciones');
     Route::get('/sanciones/editar/{id}', 'Web\ViewController@editarSancion');
 
+    Route::get('/liquidaciones-utilidades', 'Web\ViewController@liquidaciones');
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');
