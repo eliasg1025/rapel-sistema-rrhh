@@ -2,6 +2,12 @@ import React from 'react';
 
 export const Importacion = () => {
     return (
-        <h1>Importacion</h1>
+        <>
+            <div className="card">
+                <div className="card-body">
+                    Importacion
+                </div>
+            </div>
+        </>
     );
 }

@@ -7,7 +7,9 @@ const CargasExcel = () => {
     const [cargasPdf, setCargasPdf] = useState([]);
 
     useEffect(() => {
+        let intento = 0;
         const fetchData = async () => {
+            intento++;
             try {
                 const res = await axios.get('/api/cargas-excel');
                 const cargas = res.data.map(carga => {
@@ -18,10 +20,10 @@ const CargasExcel = () => {
                 });
                 setCargasPdf(cargas);
             } catch (err) {
-                notification['error']({
-                    message: 'Error al traer los datos de las cargas pdf'
-                })
                 console.log(err);
+                if (intento < 5) {
+                    fetchData();
+                }
             }
         };
         fetchData();

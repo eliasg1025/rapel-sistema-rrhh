@@ -1,7 +1,12 @@
 import React from 'react';
+import ConsultarEstadoLiquidacion from '../ConsultarEstadoLiquidacion';
 
 export const Consulta = () => {
     return (
-        <h1>Consulta</h1>
+        <>
+            <h4>Consulta Estado Liquidaciones - Utilidades</h4>
+            <br />
+            <ConsultarEstadoLiquidacion />
+        </>
     );
 }

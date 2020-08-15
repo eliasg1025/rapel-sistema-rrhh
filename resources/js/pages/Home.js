@@ -32,10 +32,10 @@ export default function Home(props) {
                             <h5>Opciones de administrador</h5>
                             <br></br>
                             <Button onClick={() => setUpload(true)}>
-                                Actualizar datos empresa
+                                Sincronizar datos empresa
                             </Button>
                             <Button onClick={uploadDataLocalidades}>
-                                Actualizar datos localidades
+                                Sincronizar datos localidades
                             </Button>
                         </Card>
                     </Spin>
