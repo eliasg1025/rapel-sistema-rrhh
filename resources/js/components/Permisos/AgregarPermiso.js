@@ -106,10 +106,12 @@ const AgregarPermiso = () => {
     }, [horario.salida]);
 
     useEffect(() => {
-        setForm({
-            ...form,
-            fecha_regreso: form.fecha_salida
-        });
+        if (!editar) {
+            setForm({
+                ...form,
+                fecha_regreso: form.fecha_salida
+            });
+        }
     }, [form.fecha_salida]);
 
     const fetchHorasTotales = () => {
