@@ -40,10 +40,10 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
         Route::get('/', 'Web\ViewController@liquidaciones');
-        Route::get('/importacion', 'Web\Controller@liquidacionesImportacion');
-        Route::get('/consulta', 'Web\Controller@liquidacionesConsulta');
-        Route::get('/l', 'Web\Controller@liquidacionesL');
-        Route::get('/u', 'Web\Controller@liquidacionesU');
+        Route::get('/importacion', 'Web\ViewController@liquidacionesImportacion');
+        Route::get('/consulta', 'Web\ViewController@liquidacionesConsulta');
+        Route::get('/l', 'Web\ViewController@liquidacionesL');
+        Route::get('/u', 'Web\ViewController@liquidacionesU');
     });
 
     Route::group(['prefix' => 'ficha'], function() {

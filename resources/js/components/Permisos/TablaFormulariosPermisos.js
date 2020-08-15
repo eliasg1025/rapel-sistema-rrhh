@@ -433,6 +433,11 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                     )}
                                     {(item.estado == 1) ? (
                                         <>
+                                            <Tooltip title="Editar Formulario">
+                                                <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${item.id}`} target="_blank">
+                                                    <i className="far fa-edit" />
+                                                </a>
+                                            </Tooltip>
                                             <Tooltip title="Marca como ENVIADO">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarEnviado(item.id)}>
                                                     <i className="fas fa-check" />
@@ -442,6 +447,11 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                     ) : ''}
                                     {(item.estado == 2 & usuario.permisos == 2) ? (
                                         <>
+                                            <Tooltip title="Editar Formulario">
+                                                <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${item.id}`} target="_blank">
+                                                    <i className="far fa-edit" />
+                                                </a>
+                                            </Tooltip>
                                             <Tooltip title="Marca como RECEPCIONADO">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarRecepcionado(item.id)}>
                                                     <i className="fas fa-check" />
