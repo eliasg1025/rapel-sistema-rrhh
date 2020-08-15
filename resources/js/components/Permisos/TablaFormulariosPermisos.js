@@ -83,10 +83,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 field: 'fecha_solicitud'
             },
             {
-                label: 'Hora',
-                field: 'hora'
-            },
-            {
                 label: 'RUT',
                 field: 'rut',
                 sort: 'disabled'
@@ -116,8 +112,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 field: 'hasta'
             },
             {
-                label: 'Horas',
-                field: 'horas'
+                label: 'H',
+                field: 'horas',
             },
             {
                 label: 'Motivo',
@@ -134,10 +130,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             {
                 label: 'Cargado por',
                 field: 'nombre_completo_usuario'
-            },
-            {
-                label: 'Fecha Firmado',
-                field: 'fecha_hora_firmado'
             },
             {
                 label: 'Fecha Envio',
@@ -398,6 +390,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     const formularios = data.map(item => {
                         return {
                             ...item,
+                            fecha_solicitud: `${item.fecha_solicitud} ${item.hora}`,
                             desde: `${item.fecha_salida} ${item.hora_salida}`,
                             hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
                             goce_checkbox: item.estado == 0 ? (

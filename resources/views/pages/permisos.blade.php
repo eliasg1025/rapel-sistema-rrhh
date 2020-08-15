@@ -5,16 +5,16 @@
 @endsection
 
 @section('contenido')
-    <div class="container p-5">
+    <div class="container">
         <div class="text-center">
             <h3>Formularios de Permisos</h3>
             <span>{{ $data['usuario']['permisos'] == 2 ? '(Modo Administrador)' : '' }}</span>
         </div>
-        <div class="py-5">
+        <div class="py-5" style="font-size: 10px;">
             <div id="agregar-permiso"></div>
-            <script>
-                sessionStorage.setItem('data', JSON.stringify(@json($data)) );
-            </script>
         </div>
     </div>
+    <script>
+        sessionStorage.setItem('data', JSON.stringify(@json($data)) );
+    </script>
 @endsection
