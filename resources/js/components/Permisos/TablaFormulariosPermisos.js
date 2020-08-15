@@ -461,6 +461,11 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                     ) : ''}
                                     {(item.estado == 3 & usuario.permisos == 2) ? (
                                         <>
+                                            <Tooltip title="Editar Formulario">
+                                                <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${item.id}`} target="_blank">
+                                                    <i className="far fa-edit" />
+                                                </a>
+                                            </Tooltip>
                                             <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
                                                 <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(item.id)}>
                                                     <i className="fas fa-check" />
