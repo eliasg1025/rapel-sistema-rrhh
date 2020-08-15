@@ -205,7 +205,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         });
 
         Axios({
-            url: '/descargar',
+            url: '/descargar/formularios',
             data: {headings, data},
             method: 'POST',
             responseType: 'blob'

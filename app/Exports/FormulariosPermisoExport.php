@@ -5,6 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class FormulariosPermisoExport implements FromArray, WithColumnFormatting
 {
@@ -28,6 +29,18 @@ class FormulariosPermisoExport implements FromArray, WithColumnFormatting
             $this->cabeceras,
             $this->data
         ];
+        /*
+        $all =  [
+            $this->cabeceras
+        ];
+
+        foreach ($this->data as $data) {
+            array_push($all, [
+
+            ]);
+        }
+
+        return [];*/
     }
 
     public function columnFormats(): array
@@ -35,8 +48,10 @@ class FormulariosPermisoExport implements FromArray, WithColumnFormatting
         return [
             'C' => '@',
             'F' => '@',
-            'L' => '',
-            'M' => '',
+            'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'H' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'L' => NumberFormat::FORMAT_DATE_TIME3,
+            'M' => NumberFormat::FORMAT_DATE_TIME3,
         ];
     }
 }

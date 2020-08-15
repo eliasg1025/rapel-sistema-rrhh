@@ -59,6 +59,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::post('/observados', 'Web\TrabajadorController@descargarObservado');
         Route::post('/cuentas', 'Web\CuentasController@descargarCuentas');
         Route::post('/elecciones-afp', 'Web\EleccionAfpController@descargarEleccionesAfp');
+        Route::post('/formularios', 'Web\FormularioPermisoController@descargar');
     });
 });
 
