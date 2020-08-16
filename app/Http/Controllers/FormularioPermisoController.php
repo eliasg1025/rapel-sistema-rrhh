@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FormularioPermiso;
 use App\Helpers\DatosHoras;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class FormularioPermisoController extends Controller
@@ -148,14 +149,20 @@ class FormularioPermisoController extends Controller
     {
         $form = FormularioPermiso::find($id);
 
-        if ( $form->delete() ) {
+        if ($form->fecha_solicitud == now()->toDateString()) {
+            if ( $form->delete() ) {
+                return response()->json([
+                    'message' => 'Registro borrado correctamente'
+                ]);
+            }
             return response()->json([
-                'message' => 'Registro borrado correctamente'
-            ]);
+                'message' => 'Error al borrar el registro'
+            ], 400);
+        } else {
+            return response()->json([
+                'message' => 'No se pueden borrar formularios de dias anteriores'
+            ], 400);
         }
-        return response()->json([
-            'message' => 'Error al borrar el registro'
-        ], 400);
     }
 
     public function verFicha(FormularioPermiso $formularioPermiso)

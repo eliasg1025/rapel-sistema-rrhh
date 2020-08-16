@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('titulo')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <script src="https://kit.fontawesome.com/7d6675ea6f.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
