@@ -3,7 +3,119 @@ import moment from 'moment';
 import { Table, Checkbox, Tooltip, message } from 'antd';
 import Axios from 'axios';
 
-const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
+
+const Acciones = ({
+    record,
+    handleMarcarFirmado,
+    handleEliminar,
+    handleMarcarEnviado,
+    handleMarcarCargado,
+    handleMarcarRecepcionado
+}) => {
+    return (
+        <div className="btn-group">
+            <Tooltip title="Ver documento">
+                <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${record.id}`} target="_blank">
+                    <i className="fas fa-search"/>
+                </a>
+            </Tooltip>
+            {record.estado == 0 && (
+                <>
+                    <Tooltip title="Editar Formulario">
+                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
+                            <i className="far fa-edit" />
+                        </a>
+                    </Tooltip>
+                    <Tooltip title="Marcar como FIRMADO">
+                        <button className="btn btn-outline-primary btn-sm" onClick={() => handleMarcarFirmado(record.id)}>
+                            <i className="fas fa-check" />
+                        </button>
+                    </Tooltip>
+                    <button
+                        className="btn btn-danger btn-sm"
+                        disabled={moment(record.fecha_solicitud).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')}
+                        onClick={() => handleEliminar(record.id)}
+                    >
+                        <i className="fas fa-trash-alt" />
+                    </button>
+                </>
+            )}
+            {(record.estado == 1) ? (
+                <>
+                    <Tooltip title="Editar Formulario">
+                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
+                            <i className="far fa-edit" />
+                        </a>
+                    </Tooltip>
+                    <Tooltip title="Marca como ENVIADO">
+                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarEnviado(record.id)}>
+                            <i className="fas fa-check" />
+                        </button>
+                    </Tooltip>
+                </>
+            ) : ''}
+            {(record.estado == 2 & usuario.permisos == 2) ? (
+                <>
+                    <Tooltip title="Editar Formulario">
+                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
+                            <i className="far fa-edit" />
+                        </a>
+                    </Tooltip>
+                    <Tooltip title="Marca como RECEPCIONADO">
+                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarRecepcionado(record.id)}>
+                            <i className="fas fa-check" />
+                        </button>
+                    </Tooltip>
+                </>
+            ) : ''}
+            {(record.estado == 3 & usuario.permisos == 2) ? (
+                <>
+                    <Tooltip title="Editar Formulario">
+                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
+                            <i className="far fa-edit" />
+                        </a>
+                    </Tooltip>
+                    <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
+                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(record.id)}>
+                            <i className="fas fa-check" />
+                        </button>
+                    </Tooltip>
+                </>
+            ) : ''}
+        </div>
+    );
+}
+
+const CheckboxGoce = ({ record }) => {
+
+    const [checked, setChecked] = useState(record.goce);
+
+    const handleCheckGoce = id => {
+        setChecked(!checked);
+        Axios.put(`/api/formulario-permiso/toggle-goce/${id}`)
+            .then(res => setChecked(res.data.goce));
+    }
+
+    return (
+        <Checkbox
+            checked={checked}
+            disabled={record.estado !== 0}
+            onChange={e => handleCheckGoce(record.id)}
+        />
+    )
+}
+
+export const TablaFP = ({
+    data,
+    filtro,
+    handleEliminar,
+    handleMarcarFirmado,
+    handleMarcarEnviado,
+    handleMarcarRecepcionado,
+    handleMarcarCargado
+}) => {
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
 const getColumns = (
     handleEliminar,
@@ -153,116 +265,6 @@ const getColumns = (
     }
 }
 
-const Acciones = ({
-    record,
-    handleMarcarFirmado,
-    handleEliminar,
-    handleMarcarEnviado,
-    handleMarcarCargado,
-    handleMarcarRecepcionado
-}) => {
-    return (
-        <div className="btn-group">
-            <Tooltip title="Ver documento">
-                <a className="btn btn-primary btn-sm" href={`/ficha/formulario-permiso/${record.id}`} target="_blank">
-                    <i className="fas fa-search"/>
-                </a>
-            </Tooltip>
-            {record.estado == 0 && (
-                <>
-                    <Tooltip title="Editar Formulario">
-                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
-                            <i className="far fa-edit" />
-                        </a>
-                    </Tooltip>
-                    <Tooltip title="Marcar como FIRMADO">
-                        <button className="btn btn-outline-primary btn-sm" onClick={() => handleMarcarFirmado(record.id)}>
-                            <i className="fas fa-check" />
-                        </button>
-                    </Tooltip>
-                    <button
-                        className="btn btn-danger btn-sm"
-                        disabled={moment(record.fecha_solicitud).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')}
-                        onClick={() => handleEliminar(record.id)}
-                    >
-                        <i className="fas fa-trash-alt" />
-                    </button>
-                </>
-            )}
-            {(record.estado == 1) ? (
-                <>
-                    <Tooltip title="Editar Formulario">
-                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
-                            <i className="far fa-edit" />
-                        </a>
-                    </Tooltip>
-                    <Tooltip title="Marca como ENVIADO">
-                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarEnviado(record.id)}>
-                            <i className="fas fa-check" />
-                        </button>
-                    </Tooltip>
-                </>
-            ) : ''}
-            {(record.estado == 2 & usuario.permisos == 2) ? (
-                <>
-                    <Tooltip title="Editar Formulario">
-                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
-                            <i className="far fa-edit" />
-                        </a>
-                    </Tooltip>
-                    <Tooltip title="Marca como RECEPCIONADO">
-                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarRecepcionado(record.id)}>
-                            <i className="fas fa-check" />
-                        </button>
-                    </Tooltip>
-                </>
-            ) : ''}
-            {(record.estado == 3 & usuario.permisos == 2) ? (
-                <>
-                    <Tooltip title="Editar Formulario">
-                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
-                            <i className="far fa-edit" />
-                        </a>
-                    </Tooltip>
-                    <Tooltip title="Marca como SUBIDO EN EL SISTEMA">
-                        <button className="btn btn-outline-warning btn-sm" onClick={() => handleMarcarCargado(record.id)}>
-                            <i className="fas fa-check" />
-                        </button>
-                    </Tooltip>
-                </>
-            ) : ''}
-        </div>
-    );
-}
-
-const CheckboxGoce = ({ record }) => {
-
-    const [checked, setChecked] = useState(record.goce);
-
-    const handleCheckGoce = id => {
-        setChecked(!checked);
-        Axios.put(`/api/formulario-permiso/toggle-goce/${id}`)
-            .then(res => setChecked(res.data.goce));
-    }
-
-    return (
-        <Checkbox
-            checked={checked}
-            disabled={record.estado !== 0}
-            onChange={e => handleCheckGoce(record.id)}
-        />
-    )
-}
-
-export const TablaFP = ({
-    data,
-    filtro,
-    handleEliminar,
-    handleMarcarFirmado,
-    handleMarcarEnviado,
-    handleMarcarRecepcionado,
-    handleMarcarCargado
-}) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
 

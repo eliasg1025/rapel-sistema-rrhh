@@ -3,7 +3,48 @@ import moment from 'moment';
 import { Table, Checkbox, Tooltip, message } from 'antd';
 import Axios from 'axios';
 
-const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
+
+const Acciones = ({
+    record,
+    handleEliminar,
+    handleResolver,
+    handleVerCambio,
+}) => {
+    return (
+        <div className="btn-group">
+            {record.estado == 0 ? (
+                <>
+                    {usuario.reseteo_clave == 2 && (
+                        <Tooltip title="Marca como ATENDIDO">
+                            <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
+                                <i className="fas fa-check"/>
+                            </button>
+                        </Tooltip>
+                    )}
+                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(record.id)}>
+                        <i className="fas fa-trash-alt" />
+                    </button>
+                </>
+            ) : (
+                <button className="btn btn-light btn-sm" onClick={() => handleVerCambio(record)}>
+                    <i className="fas fa-eye" /> Clave
+                </button>
+            )}
+        </div>
+);
+}
+
+export const TablaR = ({
+    data,
+    filtro,
+    handleEliminar,
+    handleResolver,
+    handleVerCambio,
+    setReloadDatos,
+    reloadDatos
+}) => {
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
 const getColumns = (
     handleEliminar,
@@ -83,45 +124,6 @@ const getColumns = (
     }
 }
 
-const Acciones = ({
-    record,
-    handleEliminar,
-    handleResolver,
-    handleVerCambio,
-}) => {
-    return (
-        <div className="btn-group">
-            {record.estado == 0 ? (
-                <>
-                    {usuario.reseteo_clave == 2 && (
-                        <Tooltip title="Marca como ATENDIDO">
-                            <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
-                                <i className="fas fa-check"/>
-                            </button>
-                        </Tooltip>
-                    )}
-                    <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(record.id)}>
-                        <i className="fas fa-trash-alt" />
-                    </button>
-                </>
-            ) : (
-                <button className="btn btn-light btn-sm" onClick={() => handleVerCambio(record)}>
-                    <i className="fas fa-eye" /> Clave
-                </button>
-            )}
-        </div>
-);
-}
-
-export const TablaR = ({
-    data,
-    filtro,
-    handleEliminar,
-    handleResolver,
-    handleVerCambio,
-    setReloadDatos,
-    reloadDatos
-}) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
 
