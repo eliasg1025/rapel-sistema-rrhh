@@ -461,11 +461,13 @@ class FormularioPermiso extends Model
         $formularioPermiso = FormularioPermiso::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ( $usuario->id !== $formularioPermiso->usuario_id ) {
-            return [
-                'error'   => true,
-                'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
-            ];
+        if ( $usuario->permisos < 2 ) {
+            if ( $usuario->id !== $formularioPermiso->usuario_id ) {
+                return [
+                    'error'   => true,
+                    'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
+                ];
+            }
         }
 
         $formularioPermiso->estado = 2;
