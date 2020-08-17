@@ -255,7 +255,7 @@ class FormularioPermiso extends Model
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->when($estado == 3, function($query) use ($fechas) {
+                ->when($estado == 4, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->when($goce != 2, function($query) use($goce) {
