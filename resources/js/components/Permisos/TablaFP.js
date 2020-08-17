@@ -6,6 +6,7 @@ import Axios from 'axios';
 
 
 const Acciones = ({
+    usuario,
     record,
     handleMarcarFirmado,
     handleEliminar,
@@ -34,7 +35,6 @@ const Acciones = ({
                     </Tooltip>
                     <button
                         className="btn btn-danger btn-sm"
-                        disabled={moment(record.fecha_solicitud).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')}
                         onClick={() => handleEliminar(record.id)}
                     >
                         <i className="fas fa-trash-alt" />
@@ -117,153 +117,156 @@ export const TablaFP = ({
 }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
-const getColumns = (
-    handleEliminar,
-    handleMarcarFirmado,
-    handleMarcarEnviado,
-    handleMarcarRecepcionado,
-    handleMarcarCargado,
-) => {
-    if (usuario.permisos == 1) {
-        return [
-            {
-                title: 'Fecha Solicitud',
-                dataIndex: 'fecha_solicitud'
-            },
-            {
-                title: 'RUT',
-                dataIndex: 'rut',
+    const getColumns = (
+        usuario,
+        handleEliminar,
+        handleMarcarFirmado,
+        handleMarcarEnviado,
+        handleMarcarRecepcionado,
+        handleMarcarCargado,
+    ) => {
+        if (usuario.permisos == 1) {
+            return [
+                {
+                    title: 'Fecha Solicitud',
+                    dataIndex: 'fecha_solicitud'
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
 
-            },
-            {
-                title: 'Trabajador',
-                dataIndex: 'nombre_completo',
-            },
-            {
-                title: 'Empresa',
-                dataIndex: 'empresa',
-            },
-            {
-                title: 'Responsable',
-                dataIndex: 'nombre_completo_jefe',
-            },
-            {
-                title: 'Desde',
-                dataIndex: 'desde'
-            },
-            {
-                title: 'Hasta',
-                dataIndex: 'hasta'
-            },
-            {
-                title: 'H',
-                dataIndex: 'horas'
-            },
-            {
-                title: 'Motivo',
-                dataIndex: 'motivo_permiso'
-            },
-            {
-                title: 'Predio',
-                dataIndex: 'zona_labor'
-            },
-            {
-                title: 'Con Goce',
-                dataIndex: 'goce_checkbox',
-                render: (_, record) => <CheckboxGoce record={record} />
-            },
-            {
-                title: 'Acciones',
-                dataIndex: 'acciones',
-                fixed: 'right',
-                width: 120,
-                render: (_, record) => (
-                    <Acciones
-                        record={record}
-                        handleEliminar={handleEliminar}
-                        handleMarcarFirmado={handleMarcarFirmado}
-                        handleMarcarEnviado={handleMarcarEnviado}
-                        handleMarcarRecepcionado={handleMarcarRecepcionado}
-                        handleMarcarCargado={handleMarcarCargado}
-                    />
-                )
-            }
-        ];
-    } else {
-        return [
-            {
-                title: 'Fecha Solicitud',
-                dataIndex: 'fecha_solicitud'
-            },
-            {
-                title: 'RUT',
-                dataIndex: 'rut',
+                },
+                {
+                    title: 'Trabajador',
+                    dataIndex: 'nombre_completo',
+                },
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'Responsable',
+                    dataIndex: 'nombre_completo_jefe',
+                },
+                {
+                    title: 'Desde',
+                    dataIndex: 'desde'
+                },
+                {
+                    title: 'Hasta',
+                    dataIndex: 'hasta'
+                },
+                {
+                    title: 'H',
+                    dataIndex: 'horas'
+                },
+                {
+                    title: 'Motivo',
+                    dataIndex: 'motivo_permiso'
+                },
+                {
+                    title: 'Predio',
+                    dataIndex: 'zona_labor'
+                },
+                {
+                    title: 'Con Goce',
+                    dataIndex: 'goce_checkbox',
+                    render: (_, record) => <CheckboxGoce record={record} />
+                },
+                {
+                    title: 'Acciones',
+                    dataIndex: 'acciones',
+                    fixed: 'right',
+                    width: 120,
+                    render: (_, record) => (
+                        <Acciones
+                            usuario={usuario}
+                            record={record}
+                            handleEliminar={handleEliminar}
+                            handleMarcarFirmado={handleMarcarFirmado}
+                            handleMarcarEnviado={handleMarcarEnviado}
+                            handleMarcarRecepcionado={handleMarcarRecepcionado}
+                            handleMarcarCargado={handleMarcarCargado}
+                        />
+                    )
+                }
+            ];
+        } else {
+            return [
+                {
+                    title: 'Fecha Solicitud',
+                    dataIndex: 'fecha_solicitud'
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
 
-            },
-            {
-                title: 'Trabajador',
-                dataIndex: 'nombre_completo',
-            },
-            {
-                title: 'Empresa',
-                dataIndex: 'empresa',
-            },
-            {
-                title: 'Responsable',
-                dataIndex: 'nombre_completo_jefe',
-            },
-            {
-                title: 'Desde',
-                dataIndex: 'desde'
-            },
-            {
-                title: 'Hasta',
-                dataIndex: 'hasta'
-            },
-            {
-                title: 'H',
-                dataIndex: 'horas'
-            },
-            {
-                title: 'Motivo',
-                dataIndex: 'motivo_permiso'
-            },
-            {
-                title: 'Predio',
-                dataIndex: 'zona_labor'
-            },
-            {
-                title: 'Con Goce',
-                dataIndex: 'goce_checkbox',
-                render: (_, record) => <CheckboxGoce record={record} />
-            },
-            {
-                title: 'Cargador por',
-                dataIndex: 'nombre_completo_usuario'
-            },
-            {
-                title: 'Fecha Envío',
-                dataIndex: 'fecha_hora_enviado'
-            },
-            {
-                title: 'Acciones',
-                dataIndex: 'acciones',
-                fixed: 'right',
-                width: 120,
-                render: (_, record) => (
-                    <Acciones
-                        record={record}
-                        handleEliminar={handleEliminar}
-                        handleMarcarFirmado={handleMarcarFirmado}
-                        handleMarcarEnviado={handleMarcarEnviado}
-                        handleMarcarRecepcionado={handleMarcarRecepcionado}
-                        handleMarcarCargado={handleMarcarCargado}
-                    />
-                )
-            }
-        ];
+                },
+                {
+                    title: 'Trabajador',
+                    dataIndex: 'nombre_completo',
+                },
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'Responsable',
+                    dataIndex: 'nombre_completo_jefe',
+                },
+                {
+                    title: 'Desde',
+                    dataIndex: 'desde'
+                },
+                {
+                    title: 'Hasta',
+                    dataIndex: 'hasta'
+                },
+                {
+                    title: 'H',
+                    dataIndex: 'horas'
+                },
+                {
+                    title: 'Motivo',
+                    dataIndex: 'motivo_permiso'
+                },
+                {
+                    title: 'Predio',
+                    dataIndex: 'zona_labor'
+                },
+                {
+                    title: 'Con Goce',
+                    dataIndex: 'goce_checkbox',
+                    render: (_, record) => <CheckboxGoce record={record} />
+                },
+                {
+                    title: 'Cargador por',
+                    dataIndex: 'nombre_completo_usuario'
+                },
+                {
+                    title: 'Fecha Envío',
+                    dataIndex: 'fecha_hora_enviado'
+                },
+                {
+                    title: 'Acciones',
+                    dataIndex: 'acciones',
+                    fixed: 'right',
+                    width: 120,
+                    render: (_, record) => (
+                        <Acciones
+                            usuario={usuario}
+                            record={record}
+                            handleEliminar={handleEliminar}
+                            handleMarcarFirmado={handleMarcarFirmado}
+                            handleMarcarEnviado={handleMarcarEnviado}
+                            handleMarcarRecepcionado={handleMarcarRecepcionado}
+                            handleMarcarCargado={handleMarcarCargado}
+                        />
+                    )
+                }
+            ];
+        }
     }
-}
 
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -322,7 +325,7 @@ const getColumns = (
             </div>
             <Table
                 rowSelection={rowSelection}
-                columns={getColumns(handleEliminar, handleMarcarFirmado, handleMarcarEnviado, handleMarcarRecepcionado, handleMarcarCargado)}
+                columns={getColumns(usuario, handleEliminar, handleMarcarFirmado, handleMarcarEnviado, handleMarcarRecepcionado, handleMarcarCargado)}
                 dataSource={data}
                 scroll={{ x: 1000 }}
                 size="small"

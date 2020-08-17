@@ -7,6 +7,7 @@ import Axios from 'axios';
 
 const Acciones = ({
     record,
+    usuario,
     handleEliminar,
     handleResolver,
     handleVerCambio,
@@ -47,6 +48,7 @@ export const TablaR = ({
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
 const getColumns = (
+    usuario,
     handleEliminar,
     handleResolver,
     handleVerCambio,
@@ -74,6 +76,7 @@ const getColumns = (
                 dataIndex: 'acciones',
                 render: (_, record) => (
                     <Acciones
+                        usuario={usuario}
                         record={record}
                         handleEliminar={handleEliminar}
                         handleResolver={handleResolver}
@@ -113,6 +116,7 @@ const getColumns = (
                 dataIndex: 'acciones',
                 render: (_, record) => (
                     <Acciones
+                        usuario={usuario}
                         record={record}
                         handleEliminar={handleEliminar}
                         handleResolver={handleResolver}
@@ -181,7 +185,7 @@ const getColumns = (
             </div>
             <Table
                 rowSelection={rowSelection}
-                columns={getColumns(handleEliminar, handleResolver, handleVerCambio)}
+                columns={getColumns(usuario, handleEliminar, handleResolver, handleVerCambio)}
                 dataSource={data}
                 scroll={{ x: 1000 }}
                 size="small"
