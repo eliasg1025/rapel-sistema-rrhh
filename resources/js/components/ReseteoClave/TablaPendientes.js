@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { DatePicker, message, Tooltip } from 'antd';
-import { MDBDataTableV5 } from 'mdbreact';
+import { TablaR } from './TablaR';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -18,91 +18,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [usuariosCarga, setUsuariosCarga] = useState([]);
-
-    let _columns = [];
-    if (usuario.reseteo_clave == 1) {
-        _columns = [
-            {
-                label: 'Fecha Solicitud',
-                field: 'fecha_solicitud',
-                sort: 'disabled',
-                width: 150
-            },
-            {
-                label: 'Hora',
-                field: 'hora'
-            },
-            {
-                label: 'RUT',
-                field: 'rut',
-                sort: 'disabled',
-            },
-            {
-                label: 'Trabajador',
-                field: 'nombre_completo',
-                sort: 'disabled',
-                width: 270,
-            },
-            {
-                label: 'Empresa',
-                field: 'empresa',
-                sort: 'disabled',
-                width: 150,
-            },
-            {
-                label: 'Acciones',
-                field: 'acciones',
-                sort: 'disabled'
-            }
-        ];
-    } else {
-        _columns = [
-            {
-                label: 'Fecha Solicitud',
-                field: 'fecha_solicitud',
-                sort: 'disabled',
-                width: 150
-            },
-            {
-                label: 'Hora',
-                field: 'hora'
-            },
-            {
-                label: 'RUT',
-                field: 'rut',
-                sort: 'disabled',
-            },
-            {
-                label: 'Trabajador',
-                field: 'nombre_completo',
-                sort: 'disabled',
-            },
-            {
-                label: 'Empresa',
-                field: 'empresa',
-                sort: 'disabled',
-                width: 150,
-            },
-            {
-                label: 'Cargado por',
-                field: 'nombre_completo_usuario',
-            },
-            {
-                label: 'Clave sugerida',
-                field: 'clave'
-            },
-            {
-                label: 'Acciones',
-                field: 'acciones',
-                sort: 'disabled'
-            }
-        ];
-    }
-
-    const [datatable, setDatatable] = useState({
-        columns: _columns,
-        rows: []
-    });
+    const [data, setData] = useState([]);
 
     const handleExportar = () => {
         const headings = [
@@ -211,44 +127,18 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
             estado: filtro.estado
         })
             .then(res => {
-                const { data } = res;
-
                 message['success']({
-                    content: `Se encontraron ${data.length} registros`
+                    content: `Se encontraron ${res.data.length} registros`
                 });
 
-                const atenciones = data.map(item => {
+                const atenciones = res.data.map(item => {
                     return {
                         ...item,
-                        acciones: (
-                            <div className="btn-group">
-                                {item.estado == 0 ? (
-                                    <>
-                                        {usuario.reseteo_clave == 2 && (
-                                            <Tooltip title="Marca como ATENDIDO">
-                                                <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(item.id)}>
-                                                    <i className="fas fa-check"/>
-                                                </button>
-                                            </Tooltip>
-                                        )}
-                                        <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(item.id)}>
-                                            <i className="fas fa-trash-alt" />
-                                        </button>
-                                    </>
-                                ) : (
-                                    <button className="btn btn-light btn-sm" onClick={() => handleVerCambio(item)}>
-                                        <i className="fas fa-eye" /> Clave
-                                    </button>
-                                )}
-                            </div>
-                        )
+                        key: item.id
                     }
                 });
 
-                setDatatable({
-                    ...datatable,
-                    rows: atenciones
-                });
+                setData(atenciones);
             })
             .catch(err => console.error(err));
     }, [filtro.desde, filtro.hasta, filtro.estado, filtro.usuario_carga_id, reloadDatos]);
@@ -327,15 +217,14 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 </div>
             </div>
             <br />
-            <MDBDataTableV5
-                hover
-                responsive
-                entriesOptions={[10, 20, 25]}
-                entries={10}
-                pagesAmount={10}
-                data={datatable}
-                searchTop
-                searchBottom={false}
+            <TablaR
+                data={data}
+                filtro={filtro}
+                handleEliminar={handleEliminar}
+                handleVerCambio={handleVerCambio}
+                handleResolver={handleResolver}
+                setReloadDatos={setReloadDatos}
+                reloadDatos={reloadDatos}
             />
             <Modal
                 title="Cambio de clave"

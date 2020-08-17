@@ -183,7 +183,7 @@ class FormularioPermiso extends Model
         ];
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -229,6 +229,9 @@ class FormularioPermiso extends Model
                 ->where('f.estado', $estado)
                 ->when($estado == 4, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->when($goce != 2, function($query) use($goce) {
+                    $query->where('f.goce', $goce);
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();
@@ -279,6 +282,9 @@ class FormularioPermiso extends Model
                 ->where('f.estado', $estado)
                 ->when($estado == 4, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->when($goce != 2, function($query) use($goce) {
+                    $query->where('f.goce', $goce);
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();

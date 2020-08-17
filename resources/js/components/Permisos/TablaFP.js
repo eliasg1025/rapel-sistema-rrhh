@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { Table, Checkbox, Tooltip } from 'antd';
+import { Table, Checkbox, Tooltip, message } from 'antd';
 import Axios from 'axios';
 
 const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -256,6 +256,7 @@ const CheckboxGoce = ({ record }) => {
 
 export const TablaFP = ({
     data,
+    filtro,
     handleEliminar,
     handleMarcarFirmado,
     handleMarcarEnviado,
@@ -273,8 +274,13 @@ export const TablaFP = ({
         }, 1500)
     }
 
+    const notAvalible = () => {
+        message['warning']({
+            content: 'Función aún no disponible'
+        });
+    }
+
     const onSelectChange = selectedRowKeys => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         setSelectedRowKeys(selectedRowKeys);
     };
 
@@ -288,23 +294,23 @@ export const TablaFP = ({
         <div>
             <div style={{ marginBottom: 16 }}>
                 {(hasSelected && filtro.estado == 0) && (
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como FIRMADO
                     </button>
 
                 )}
                 {(hasSelected && filtro.estado == 1) && (
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como ENVIADO
                     </button>
                 )}
                 {(hasSelected && filtro.estado == 2 && usuario.permisos == 2) && (
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como RECEPCIONADO
                     </button>
                 )}
                 {(hasSelected && filtro.estado == 3 && usuario.permisos == 2) && (
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como SUBIDO AL SISTEMA
                     </button>
                 )}
@@ -316,7 +322,7 @@ export const TablaFP = ({
                 rowSelection={rowSelection}
                 columns={getColumns(handleEliminar, handleMarcarFirmado, handleMarcarEnviado, handleMarcarRecepcionado, handleMarcarCargado)}
                 dataSource={data}
-                scroll={{ x: 1200 }}
+                scroll={{ x: 1000 }}
                 size="small"
             />
         </div>

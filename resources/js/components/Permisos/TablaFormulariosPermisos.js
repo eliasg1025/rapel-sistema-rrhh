@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message, Tooltip } from 'antd';
-import { MDBDataTableV5 } from 'mdbreact';
+import { DatePicker, message } from 'antd';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { TablaFP } from './TablaFP';
@@ -12,147 +11,9 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         desde: moment().format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
+        goce: 2,
         // usuario_carga_id: 0
     });
-
-    let _columns = [];
-    if (usuario.permisos == 1) {
-        _columns = [
-            {
-                label: 'Fecha Solicitud',
-                field: 'fecha_solicitud'
-            },
-            {
-                label: 'Hora',
-                field: 'hora'
-            },
-            {
-                label: 'RUT',
-                field: 'rut',
-                sort: 'disabled'
-            },
-            {
-                label: 'Trabajador',
-                field: 'nombre_completo',
-                sort: 'disabled',
-                width: 270,
-            },
-            {
-                label: 'Empresa',
-                field: 'empresa',
-                sort: 'disabled',
-                width: 150,
-            },
-            {
-                label: 'Responsable',
-                field: 'nombre_completo_jefe',
-            },
-            {
-                label: 'Desde',
-                field: 'desde'
-            },
-            {
-                label: 'Hasta',
-                field: 'hasta'
-            },
-            {
-                label: 'Horas',
-                field: 'horas'
-            },
-            {
-                label: 'Motivo',
-                field: 'motivo_permiso'
-            },
-            {
-                label: 'Predio',
-                field: 'zona_labor'
-            },
-            {
-                label: 'Con Goce',
-                field: 'goce_checkbox',
-            },
-            {
-                label: 'Acciones',
-                field: 'acciones',
-                sort: 'disabled'
-            }
-        ]
-    } else {
-        _columns = [
-            {
-                label: 'Fecha Solicitud',
-                field: 'fecha_solicitud',
-                sort: 'disabled'
-            },
-            {
-                label: 'RUT',
-                field: 'rut',
-                sort: 'disabled'
-            },
-            {
-                label: 'Trabajador',
-                field: 'nombre_completo',
-                sort: 'disabled',
-                width: 270,
-            },
-            {
-                label: 'Empresa',
-                field: 'empresa',
-                sort: 'disabled',
-                width: 150,
-            },
-            {
-                label: 'Responsable',
-                field: 'nombre_completo_jefe',
-                sort: 'disabled'
-            },
-            {
-                label: 'Desde',
-                field: 'desde',
-                sort: 'disabled'
-            },
-            {
-                label: 'Hasta',
-                field: 'hasta',
-                sort: 'disabled'
-            },
-            {
-                label: 'H',
-                field: 'horas',
-                sort: 'disabled'
-            },
-            {
-                label: 'Motivo',
-                field: 'motivo_permiso',
-                sort: 'disabled'
-            },
-            {
-                label: 'Predio',
-                field: 'zona_labor',
-                sort: 'disabled'
-            },
-            {
-                label: 'Con Goce',
-                field: 'goce_checkbox',
-                sort: 'disabled'
-            },
-            {
-                label: 'Cargado por',
-                field: 'nombre_completo_usuario',
-                sort: 'disabled'
-            },
-            {
-                label: 'Fecha Envio',
-                field: 'fecha_hora_enviado',
-                sort: 'disabled'
-            },
-            {
-                label: 'Acciones',
-                field: 'acciones',
-                sort: 'disabled'
-            }
-        ]
-    }
 
     const [data, setData] = useState([]);
 
@@ -449,6 +310,18 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         <option value="4">SUBIDO</option>
                     </select>
                 </div>
+                <div className="col-md-4">
+                    ¿Con goce?<br />
+                    <select
+                        className="form-control"
+                        value={filtro.goce}
+                        onChange={e => setFiltro({ ...filtro, goce: e.target.value })}
+                    >
+                        <option value="2">-</option>
+                        <option value="0">NO</option>
+                        <option value="1">SI</option>
+                    </select>
+                </div>
             </div>
             <br />
             <div className="row">
@@ -461,6 +334,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             <br />
             <TablaFP
                 data={data}
+                filtro={filtro}
                 handleEliminar={handleEliminar}
                 handleMarcarFirmado={handleMarcarFirmado}
                 handleMarcarEnviado={handleMarcarEnviado}

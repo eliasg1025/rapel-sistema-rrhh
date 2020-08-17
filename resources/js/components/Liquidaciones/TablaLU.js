@@ -54,14 +54,14 @@ export const TablaLU = ({ data }) => {
     return (
         <div>
             <div style={{ marginBottom: 16 }}>
-                <div className="btn btn-primary" disabled={!hasSelected || loading} onClick={reload}>
+                <button className="btn btn-primary" disabled={!hasSelected || loading} onClick={reload}>
                     {loading ? (
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             <span className="sr-only">Loading...</span>
                         </>
                     ) : 'Para Pago'}
-                </div>
+                </button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>

@@ -56,8 +56,9 @@ class FormularioPermisoController extends Controller
             'hasta' => $request->hasta
         ];
         $estado = $request->estado;
+        $goce = $request->goce;
 
-        $result = FormularioPermiso::_getAll($usuario_id, $fechas, $estado);
+        $result = FormularioPermiso::_getAll($usuario_id, $fechas, $estado, $goce);
 
         if (isset($result['error'])) {
             return response()->json([
