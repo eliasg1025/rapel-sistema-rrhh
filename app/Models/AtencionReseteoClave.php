@@ -90,7 +90,7 @@ class AtencionReseteoClave extends Model
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',
                     'a.estado',
-                    'a.clave',
+                    'a.clave'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -129,7 +129,7 @@ class AtencionReseteoClave extends Model
                     'a.estado',
                     'a.clave',
                     'usuario.username as usuario',
-                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {

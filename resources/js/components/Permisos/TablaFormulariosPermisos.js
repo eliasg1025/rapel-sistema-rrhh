@@ -4,6 +4,7 @@ import { DatePicker, message } from 'antd';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { TablaFP } from './TablaFP';
+import {TablaR} from "../ReseteoClave/TablaR";
 
 export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -18,7 +19,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const [data, setData] = useState([]);
     const [usuariosCarga, setUsuariosCarga] = useState([]);
 
-    const handleExportar = () => {
+    const handleExportar = (selected=[]) => {
         const headings = [
             'EMPRESA',
             'CON DIGITACION',
@@ -37,11 +38,18 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             'CARGADO POR',
             'FECHA SOLICITUD',
             'HORA SOLICITUD',
-            'FECHA HORA FIRMADO',
-            'FECHA HORA ENVIADO'
+            'FECHA HORA ENVIADO',
+            'FECHA HORA RECEPCIONADO'
         ];
 
-        const d = data.map(item => {
+        let origen_datos;
+        if (selected.length === 0) {
+            origen_datos = data;
+        } else {
+            origen_datos = data.filter(e => selected.includes(e.id));
+        }
+
+        const d = origen_datos.map(item => {
             return {
                 empresa: item.empresa,
                 con_digitacion: item.jornal ? 'SI' : 'NO',
@@ -60,8 +68,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud,
                 hora_solicitud: item.hora,
-                fecha_hora_firmado: item.fecha_hora_firmado,
-                fecha_hora_enviado: item.fecha_hora_enviado
+                fecha_hora_enviado: item.fecha_hora_enviado,
+                fecha_hora_recepcionado: item.fecha_hora_recepcionado,
             };
         });
 
@@ -76,7 +84,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
                 let link = document.createElement('a')
                 link.href = window.URL.createObjectURL(blob)
-                link.download = `FORMULARIOS_PERMISO-${filtro.estado == 0 ? "NO_FIRMADOS" : "FIRMADOS"}-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.download = `FORMULARIOS_PERMISO-${filtro.estado == 0 ? "NO_ENVIADOS" : "ENVIADOS"}-${filtro.desde}-${filtro.hasta}.xlsx`
                 link.click();
             });
     }
@@ -362,7 +370,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             <br />
             <div className="row">
                 <div className="col-md-4">
-                    <button className="btn btn-success btn-sm" onClick={handleExportar}>
+                    <button className="btn btn-success btn-sm" onClick={() => handleExportar([])}>
                         <i className="fas fa-file-excel"></i> Exportar TODOS
                     </button>
                 </div>
@@ -376,6 +384,9 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 handleMarcarEnviado={handleMarcarEnviado}
                 handleMarcarRecepcionado={handleMarcarRecepcionado}
                 handleMarcarCargado={handleMarcarCargado}
+                handleExportar={handleExportar}
+                setReloadDatos={setReloadDatos}
+                reloadDatos={reloadDatos}
             />
         </>
     );

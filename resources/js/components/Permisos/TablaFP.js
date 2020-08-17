@@ -109,11 +109,14 @@ const CheckboxGoce = ({ record }) => {
 export const TablaFP = ({
     data,
     filtro,
+    handleExportar,
     handleEliminar,
     handleMarcarFirmado,
     handleMarcarEnviado,
     handleMarcarRecepcionado,
-    handleMarcarCargado
+    handleMarcarCargado,
+    setReloadDatos,
+    reloadDatos,
 }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
@@ -285,7 +288,51 @@ export const TablaFP = ({
         });
     }
 
+    const handleMassiveMarcarEnviado = () => {
+        function resolver(id) {
+            Axios.put(`/api/formulario-permiso/marcar-enviado/${id}`, { usuario_id: usuario.id })
+                .then(res => {
+                    setReloadDatos(!reloadDatos);
+                })
+                .catch(err => console.error)
+        }
+
+        function resolverTodos(ids) {
+            return ids.reduce((p, id) => {
+                return p.then(() => resolver(id));
+            }, Promise.resolve());
+        };
+
+        resolverTodos(selectedRowKeys);
+        setSelectedRowKeys([]);
+    }
+
+    const handleMassiveMarcarRecepcionado = () => {
+        function resolver(id) {
+            Axios.put(`/api/formulario-permiso/marcar-recepcionado/${id}`, { usuario_id: usuario.id })
+                .then(res => {
+                    setReloadDatos(!reloadDatos);
+                })
+                .catch(err => console.error)
+        }
+
+        function resolverTodos(ids) {
+            return ids.reduce((p, id) => {
+                return p.then(() => resolver(id));
+            }, Promise.resolve());
+        };
+
+        resolverTodos(selectedRowKeys);
+        setSelectedRowKeys([]);
+    }
+
+    const handleSelectionExport = () => {
+        handleExportar(selectedRowKeys);
+        setSelectedRowKeys([]);
+    }
+
     const onSelectChange = selectedRowKeys => {
+        console.log(selectedRowKeys)
         setSelectedRowKeys(selectedRowKeys);
     };
 
@@ -305,12 +352,17 @@ export const TablaFP = ({
 
                 )*/}
                 {(hasSelected && filtro.estado == 0) && (
-                    <button className="btn btn-primary" onClick={notAvalible}>
-                        Marcar como ENVIADO
+                    <button className="btn btn-primary btn-sm" onClick={handleMassiveMarcarEnviado}>
+                        {loading ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                                <span className="sr-only">Cargando...</span>
+                            </>
+                        ) : 'Marcar como ENVIADO'}
                     </button>
                 )}
                 {(hasSelected && filtro.estado == 2 && usuario.permisos == 2) && (
-                    <button className="btn btn-primary" onClick={notAvalible}>
+                    <button className="btn btn-primary btn-sm" onClick={handleMassiveMarcarRecepcionado}>
                         Marcar como RECEPCIONADO
                     </button>
                 )}
@@ -319,6 +371,11 @@ export const TablaFP = ({
                         Marcar como SUBIDO AL SISTEMA
                     </button>
                 )*/}
+                {hasSelected && (
+                    <button className="btn btn-success btn-sm" onClick={handleSelectionExport}>
+                        <i className="fas fa-file-excel" /> Exportar SELECCIONADOS
+                    </button>
+                )}
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>

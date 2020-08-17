@@ -211,7 +211,7 @@ class FormularioPermiso extends Model
             ->get();
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2, int $usuario_carga_id)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -230,7 +230,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
-                    DB::raw('DATE_FORMAT(f.fecha_hora_recepcion, "%d/%m/%Y %H:%i:%s") fecha_hora_recepcion'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_recepcionado, "%d/%m/%Y %H:%i:%s") fecha_hora_recepcionado'),
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
@@ -313,6 +313,9 @@ class FormularioPermiso extends Model
                 })
                 ->when($goce != 2, function($query) use($goce) {
                     $query->where('f.goce', $goce);
+                })
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();
