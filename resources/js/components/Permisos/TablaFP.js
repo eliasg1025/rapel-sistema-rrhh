@@ -327,7 +327,7 @@ export const TablaFP = ({
                 rowSelection={rowSelection}
                 columns={getColumns(usuario, handleEliminar, handleMarcarFirmado, handleMarcarEnviado, handleMarcarRecepcionado, handleMarcarCargado)}
                 dataSource={data}
-                scroll={{ x: 1000 }}
+                scroll={{ x: 1200 }}
                 size="small"
             />
         </div>
