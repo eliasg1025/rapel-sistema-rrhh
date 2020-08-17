@@ -31,7 +31,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
             'CLAVE SUGERIDA',
             'ATENDIDO POR',
         ];
-        const data = datatable.rows.map(item => {
+        const d = data.map(item => {
             return {
                 fecha_solicitud: item.fecha_solicitud,
                 hora: item.hora,
@@ -46,7 +46,7 @@ const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
 
         Axios({
             url: '/descargar',
-            data: {headings, data},
+            data: {headings, data: d},
             method: 'POST',
             responseType: 'blob'
         })
