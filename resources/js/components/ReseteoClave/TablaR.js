@@ -60,6 +60,10 @@ const getColumns = (
                 dataIndex: 'fecha_solicitud'
             },
             {
+                title: 'Hora',
+                dataIndex: 'hora'
+            },
+            {
                 title: 'RUT',
                 dataIndex: 'rut',
             },
@@ -90,6 +94,10 @@ const getColumns = (
             {
                 title: 'Fecha Solicitud',
                 dataIndex: 'fecha_solicitud'
+            },
+            {
+                title: 'Hora',
+                dataIndex: 'hora'
             },
             {
                 title: 'RUT',
