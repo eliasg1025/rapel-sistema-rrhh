@@ -100,6 +100,7 @@ Route::group(['prefix' => 'formulario-permiso'], function() {
     Route::put('/marcar-recepcionado/{id}', 'FormularioPermisoController@marcarRecepcionado');
     Route::put('/marcar-cargado/{id}', 'FormularioPermisoController@marcarCargado');
     Route::delete('/{id}', 'FormularioPermisoController@delete');
+    Route::delete('/{id}/admin', 'FormularioPermisoController@deleteAdmin');
 });
 
 Route::group(['prefix' => 'sancion'], function() {

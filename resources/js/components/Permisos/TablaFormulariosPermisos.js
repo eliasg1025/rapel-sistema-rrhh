@@ -107,14 +107,41 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                                 title: res.data.message,
                                 icon: res.status < 400 ? 'success' : 'error'
                             })
-                                .then(() => setReloadDatos(!reloadDatos));
+                            .then(() => setReloadDatos(!reloadDatos));
                         })
                         .catch(err => {
                             console.log(err.response);
-                            Swal.fire({
-                                title: err.response.data.message,
-                                icon: 'error'
-                            });
+
+                            if (usuario.permisos == 2) {
+                                Swal.fire({
+                                    title: 'Este formulario es de un día anterior. ¿Estás seguro que deseas eliminarlo?',
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Si, borrarlo',
+                                    cancelButtonText: 'Cancelar'
+                                })
+                                    .then(result => {
+                                        if (result.value) {
+                                            Axios.delete(`/api/formulario-permiso/${id}/admin`)
+                                            .then(res => {
+                                                Swal.fire({
+                                                    title: res.data.message,
+                                                    icon: res.status < 400 ? 'success' : 'error'
+                                                })
+                                                .then(() => setReloadDatos(!reloadDatos));
+                                            })
+                                        }
+                                    });
+                                return;
+                            } else {
+                                Swal.fire({
+                                    title: err.response.data.message,
+                                    icon: 'error'
+                                });
+                                return;
+                            }
                         });
                 }
             });
