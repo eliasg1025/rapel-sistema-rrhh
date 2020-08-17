@@ -183,6 +183,34 @@ class FormularioPermiso extends Model
         ];
     }
 
+    public static function _getUsuariosCarga(array $fechas, int $estado=0, int $goce=2)
+    {
+        $usuarios = DB::table('usuarios as u')
+            ->select(
+                'u.id',
+                'u.username',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+            )
+            ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+        return DB::table('formularios_permisos as f')
+            ->select(
+                DB::raw('MIN(usuario_id) as id'),
+                'usuario.username as usuario',
+                'usuario.nombre_completo_usuario as nombre_completo'
+            )
+            ->joinSub($usuarios, 'usuario', function($join) {
+                $join->on('usuario.id', '=', 'f.usuario_id');
+            })
+            ->where('f.estado', $estado)
+            //->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+            ->when($goce != 2, function($query) use($goce) {
+                $query->where('f.goce', $goce);
+            })
+            ->groupBy('usuario')
+            ->get();
+    }
+
     public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2)
     {
         $usuario = Usuario::find($usuario_id);
@@ -202,7 +230,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
-                    DB::raw('DATE_FORMAT(f.fecha_hora_enviado, "%d/%m/%Y %H:%i:%s") fecha_hora_enviado'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_recepcion, "%d/%m/%Y %H:%i:%s") fecha_hora_recepcion'),
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
@@ -227,7 +255,7 @@ class FormularioPermiso extends Model
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->when($estado == 4, function($query) use ($fechas) {
+                ->when($estado == 3, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->when($goce != 2, function($query) use($goce) {
@@ -251,7 +279,7 @@ class FormularioPermiso extends Model
                     DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     DB::raw('DATE_FORMAT(f.created_at, "%H:%i:%s") hora'),
                     DB::raw('DATE_FORMAT(f.fecha_hora_firmado, "%d/%m/%Y %H:%i:%s") fecha_hora_firmado'),
-                    DB::raw('DATE_FORMAT(f.fecha_hora_enviado, "%d/%m/%Y %H:%i:%s") fecha_hora_enviado'),
+                    DB::raw('DATE_FORMAT(f.fecha_hora_recepcionado, "%d/%m/%Y %H:%i:%s") fecha_hora_recepcionado'),
                     't.rut',
                     't.code',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
@@ -465,6 +493,7 @@ class FormularioPermiso extends Model
         }
 
         $formularioPermiso->estado = 3;
+        $formularioPermiso->fecha_hora_recepcionado = now()->toDateTimeString();
 
         if ( $formularioPermiso->save() ) {
             return [

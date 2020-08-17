@@ -93,6 +93,7 @@ Route::group(['prefix' => 'formulario-permiso'], function() {
     Route::post('/', 'FormularioPermisoController@create');
     Route::post('/get-all', 'FormularioPermisoController@getAll');
     Route::post('/calcular-horas', 'FormularioPermisoController@calcularHoras');
+    Route::post('/get-usuarios-carga', 'FormularioPermisoController@getUsuariosCarga');
     Route::put('/toggle-goce/{id}', 'FormularioPermisoController@toggleGoce');
     Route::put('/marcar-firmado/{id}', 'FormularioPermisoController@marcarFirmado');
     Route::put('/marcar-enviado/{id}', 'FormularioPermisoController@marcarEnviado');

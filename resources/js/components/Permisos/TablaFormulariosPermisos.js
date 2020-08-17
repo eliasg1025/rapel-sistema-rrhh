@@ -12,10 +12,11 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
         goce: 2,
-        // usuario_carga_id: 0
+        usuario_carga_id: 0
     });
 
     const [data, setData] = useState([]);
+    const [usuariosCarga, setUsuariosCarga] = useState([]);
 
     const handleExportar = () => {
         const headings = [
@@ -278,6 +279,28 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         fetchFormulariosPermisos();
     }, [ filtro, reloadDatos ]);
 
+    useEffect(() => {
+        setFiltro({ ...filtro, usuario_carga_id: 0 });
+        let intentos = 0;
+        function fetchUsuariosCarga() {
+            intentos++;
+            Axios.post('/api/formulario-permiso/get-usuarios-carga', {
+                desde: filtro.desde,
+                hasta: filtro.hasta,
+                estado: filtro.estado,
+                goce: filtro.goce
+            })
+                .then(res => setUsuariosCarga(res.data))
+                .catch(err => {
+                    if (intentos < 5) {
+                        fetchUsuariosCarga();
+                    }
+                    console.error(err)
+                });
+        }
+        fetchUsuariosCarga();
+    }, [filtro.desde, filtro.hasta, filtro.goce, filtro.estado]);
+
     return (
         <>
             <div className="row">
@@ -304,10 +327,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         onChange={e => setFiltro({ ...filtro, estado: e.target.value })}
                     >
                         <option value="0">GENERADOS</option>
-                        <option value="1">FIRMADOS</option>
                         <option value="2">ENVIADO</option>
                         <option value="3">RECEPCIONADO</option>
-                        <option value="4">SUBIDO</option>
                     </select>
                 </div>
                 <div className="col-md-4">
@@ -323,11 +344,26 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     </select>
                 </div>
             </div>
+            <div className="row">
+                {usuario.permisos === 2 && (
+                    <div className="col-md-4">
+                        Cargado por:<br />
+                        <select
+                            className="form-control"
+                            value={filtro.usuario_carga_id}
+                            onChange={e => setFiltro({ ...filtro, usuario_carga_id: e.target.value})}
+                        >
+                            <option value={0} key={0}>TODOS</option>
+                            {usuariosCarga.map(option => <option value={option.id} key={option.id}>{ `${option.nombre_completo}` }</option>)}
+                        </select>
+                    </div>
+                )}
+            </div>
             <br />
             <div className="row">
                 <div className="col-md-4">
                     <button className="btn btn-success btn-sm" onClick={handleExportar}>
-                        <i className="fas fa-file-excel"></i> Exportar
+                        <i className="fas fa-file-excel"></i> Exportar TODOS
                     </button>
                 </div>
             </div>

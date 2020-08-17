@@ -48,6 +48,20 @@ class FormularioPermisoController extends Controller
         return response()->json($result, 400);
     }
 
+    public function getUsuariosCarga(Request $request)
+    {
+        $fechas = [
+            'desde' => date($request->desde),
+            'hasta' => date($request->hasta)
+        ];
+        $estado = $request->estado;
+        $goce = $request->goce;
+
+        $result = FormularioPermiso::_getUsuariosCarga($fechas, $estado, $goce);
+
+        return response()->json($result);
+    }
+
     public function getAll(Request $request)
     {
         $usuario_id = $request->usuario_id;

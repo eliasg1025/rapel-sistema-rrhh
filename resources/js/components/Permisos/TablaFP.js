@@ -28,8 +28,8 @@ const Acciones = ({
                             <i className="far fa-edit" />
                         </a>
                     </Tooltip>
-                    <Tooltip title="Marcar como FIRMADO">
-                        <button className="btn btn-outline-primary btn-sm" onClick={() => handleMarcarFirmado(record.id)}>
+                    <Tooltip title="Marcar como ENVIADO">
+                        <button className="btn btn-outline-primary btn-sm" onClick={() => handleMarcarEnviado(record.id)}>
                             <i className="fas fa-check" />
                         </button>
                     </Tooltip>
@@ -69,7 +69,7 @@ const Acciones = ({
                     </Tooltip>
                 </>
             ) : ''}
-            {(record.estado == 3 & usuario.permisos == 2) ? (
+            {/*(record.estado == 3 & usuario.permisos == 2) ? (
                 <>
                     <Tooltip title="Editar Formulario">
                         <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
@@ -82,7 +82,7 @@ const Acciones = ({
                         </button>
                     </Tooltip>
                 </>
-            ) : ''}
+            ) : ''*/}
         </div>
     );
 }
@@ -240,12 +240,12 @@ export const TablaFP = ({
                     render: (_, record) => <CheckboxGoce record={record} />
                 },
                 {
-                    title: 'Cargador por',
+                    title: 'Cargado por',
                     dataIndex: 'nombre_completo_usuario'
                 },
                 {
-                    title: 'Fecha Envío',
-                    dataIndex: 'fecha_hora_enviado'
+                    title: 'Fecha Recepción',
+                    dataIndex: 'fecha_hora_recepcionado'
                 },
                 {
                     title: 'Acciones',
@@ -298,13 +298,13 @@ export const TablaFP = ({
     return (
         <div>
             <div style={{ marginBottom: 16 }}>
-                {(hasSelected && filtro.estado == 0) && (
+                {/*(hasSelected && filtro.estado == 0) && (
                     <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como FIRMADO
                     </button>
 
-                )}
-                {(hasSelected && filtro.estado == 1) && (
+                )*/}
+                {(hasSelected && filtro.estado == 0) && (
                     <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como ENVIADO
                     </button>
@@ -314,11 +314,11 @@ export const TablaFP = ({
                         Marcar como RECEPCIONADO
                     </button>
                 )}
-                {(hasSelected && filtro.estado == 3 && usuario.permisos == 2) && (
+                {/*(hasSelected && filtro.estado == 3 && usuario.permisos == 2) && (
                     <button className="btn btn-primary" onClick={notAvalible}>
                         Marcar como SUBIDO AL SISTEMA
                     </button>
-                )}
+                )*/}
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>
