@@ -69,6 +69,15 @@ const Acciones = ({
                     </Tooltip>
                 </>
             ) : ''}
+            {(record.estado == 3 & usuario.permisos == 2) ? (
+                <>
+                    <Tooltip title="Editar Formulario">
+                        <a className="btn btn-primary btn-sm" href={`/formularios-permisos/editar/${record.id}`} target="_blank">
+                            <i className="far fa-edit" />
+                        </a>
+                    </Tooltip>
+                </>
+            ) : ''}
             {/*(record.estado == 3 & usuario.permisos == 2) ? (
                 <>
                     <Tooltip title="Editar Formulario">
