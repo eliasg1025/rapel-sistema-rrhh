@@ -96,7 +96,7 @@ const Acciones = ({
     );
 }
 
-const CheckboxGoce = ({ record }) => {
+const CheckboxGoce = ({ record, usuario }) => {
 
     const [checked, setChecked] = useState(record.goce);
 
@@ -109,7 +109,7 @@ const CheckboxGoce = ({ record }) => {
     return (
         <Checkbox
             checked={checked}
-            disabled={record.estado !== 0}
+            disabled={record.estado !== 0 && usuario.permisos !== 2}
             onChange={e => handleCheckGoce(record.id)}
         />
     )
@@ -183,7 +183,7 @@ export const TablaFP = ({
                 {
                     title: 'Con Goce',
                     dataIndex: 'goce_checkbox',
-                    render: (_, record) => <CheckboxGoce record={record} />
+                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
                 },
                 {
                     title: 'Acciones',
@@ -249,7 +249,7 @@ export const TablaFP = ({
                 {
                     title: 'Con Goce',
                     dataIndex: 'goce_checkbox',
-                    render: (_, record) => <CheckboxGoce record={record} />
+                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
                 },
                 {
                     title: 'Cargado por',

@@ -309,7 +309,8 @@ class FormularioPermiso extends Model
                 })
                 ->where('f.estado', $estado)
                 ->when($estado == 3, function($query) use ($fechas) {
-                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                    $query->whereDate('f.fecha_hora_recepcionado', '>=', $fechas['desde'])
+                        ->whereDate('f.fecha_hora_recepcionado', '<=', $fechas['hasta']);
                 })
                 ->when($goce != 2, function($query) use($goce) {
                     $query->where('f.goce', $goce);
