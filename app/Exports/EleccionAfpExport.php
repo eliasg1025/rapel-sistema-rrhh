@@ -26,7 +26,8 @@ class EleccionAfpExport implements FromArray, WithColumnFormatting
             'FECHA DE SOLICITUD',
             'DNI',
             'TRABAJADOR',
-            'EMPRESA'
+            'EMPRESA',
+            'SUBIDO POR',
         ];
         return [
             $cabeceras,

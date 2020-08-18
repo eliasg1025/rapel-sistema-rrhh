@@ -19,7 +19,8 @@ const TablaAfps = props => {
                 fecha_solicitud: item.fecha_solicitud,
                 dni: item.rut,
                 trabajador: item.nombre_completo,
-                empresa: item.empresa
+                empresa: item.empresa,
+                usuario: item.nombre_completo_usuario
             }
         });
         Axios({
