@@ -53,7 +53,7 @@ const getColumns = (
     handleResolver,
     handleVerCambio,
 ) => {
-    if (usuario.permisos == 1) {
+    if (usuario.reseteo_clave == 1) {
         return [
             {
                 title: 'Fecha Solicitud',
