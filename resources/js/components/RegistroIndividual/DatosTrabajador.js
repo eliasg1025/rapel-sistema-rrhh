@@ -61,24 +61,31 @@ const DatosTrabajador = props => {
     const url = 'http://192.168.60.16/api';
 
     useEffect(() => {
+        let intentos = 0;
         function fetchDepartamentos() {
+            intentos++;
             axios.get(`${url}/departamento`)
                 .then(res => {
                     setDepartamentos(res.data.data);
                 })
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener los departamentos, vuelva a cargar la página',
-                    });
-                    fetchDepartamentos();
+                    if (intentos < 3) {
+                        fetchDepartamentos();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener los departamentos, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
         fetchDepartamentos();
     }, []);
 
     useEffect(() => {
+        let intentos = 0;
         function fetchProvincias() {
+            intentos++;
             axios.get(`${url}/departamento/${trabajador.departamento_id}/provincias`)
                 .then(res => {
                     //console.log(res);
@@ -86,10 +93,13 @@ const DatosTrabajador = props => {
                 })
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener las provincias, vuelva a cargar la página',
-                    });
-                    fetchProvincias();
+                    if (intentos < 3) {
+                        fetchProvincias();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener las provincias, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
         if (trabajador.departamento_id !== '') {
@@ -98,6 +108,7 @@ const DatosTrabajador = props => {
     }, [trabajador.departamento_id]);
 
     useEffect(() => {
+        let intentos = 0;
         function fetchDistritos() {
             axios.get(`${url}/provincia/${trabajador.provincia_id}/distritos`)
                 .then(res => {
@@ -106,10 +117,13 @@ const DatosTrabajador = props => {
                 })
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener las distritos, vuelva a cargar la página',
-                    });
-                    fetchDistritos();
+                    if ( intentos < 3 ) {
+                        fetchDistritos();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener las distritos, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
         if (trabajador.provincia_id !== '') {
@@ -118,37 +132,53 @@ const DatosTrabajador = props => {
     }, [trabajador.provincia_id]);
 
     useEffect(() => {
+        let intentos = 0;
+        let intentos1 = 0;
+        let intentos2 = 0;
+
         function fetchNacionalidades() {
+            intentos++;
             axios.get(`${url}/nacionalidad/${contrato.empresa_id}`)
                 .then(res => setNacionalidades(res.data.data))
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener las nacionalidades, vuelva a cargar la página',
-                    });
-                    fetchNacionalidades();
+                    if (intentos < 3) {
+                        fetchNacionalidades();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener las nacionalidades, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
         function fetchTiposZonas() {
+            intentos1++;
             axios.get(`${url}/tipo-zona/${contrato.empresa_id}`)
                 .then(res => setTiposZonas(res.data.data))
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener las tipos zonas, vuelva a cargar la página',
-                    });
-                    fetchTiposZonas();
+                    if (intentos1 < 3) {
+                        fetchTiposZonas();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener las tipos zonas, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
         function fetchTiposVias() {
+            intentos2++;
             axios.get(`${url}/tipo-via/${contrato.empresa_id}`)
                 .then(res => setTiposVias(res.data.data))
                 .catch(err => {
                     console.log(err.response);
-                    notification['warning']({
-                        message: 'Error al obtener las tipos vias, vuelva a cargar la página',
-                    });
-                    fetchTiposVias();
+                    if (intentos2 < 3) {
+                        fetchTiposVias();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener las tipos vias, vuelva a cargar la página',
+                        });
+                    }
                 });
         }
 
@@ -249,6 +279,7 @@ const DatosTrabajador = props => {
                                     'DD/MM/YYYY'
                                 )}
                                 format={['DD/MM/YYYY']}
+                                allowClear={false}
                                 onChange={(date, dateString) => setTrabajador({ ...trabajador, fecha_nacimiento: date })}
                             />
                             <small>

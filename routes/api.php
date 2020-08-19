@@ -112,6 +112,10 @@ Route::group(['prefix' => 'sancion'], function() {
     Route::delete('/{id}', 'SancionesController@delete');
 });
 
+Route::group(['prefix' => 'finiquitos'], function() {
+   Route::post('/importar', 'LiquidacionesController@importar');
+});
+
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');

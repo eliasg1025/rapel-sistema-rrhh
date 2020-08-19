@@ -47,11 +47,6 @@ const TrabajadoresLayout = props => {
                             Registro Masivo
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="6" icon={<LogoutOutlined />}>
-                        <a href="/">
-                            Salir
-                        </a>
-                    </Menu.Item>
                     {/*
                     <Menu.Item key="7" icon={<LogoutOutlined />} onClick={(e) => document.getElementById("logoutForm").submit()}>
                         <a href="/panel">

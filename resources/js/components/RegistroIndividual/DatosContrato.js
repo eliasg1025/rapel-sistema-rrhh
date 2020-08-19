@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Card, Form, Input, Select, Row, Col, DatePicker, notification} from 'antd';
+import {Card, Form, Input, Select, Row, Col, DatePicker, notification, message} from 'antd';
 import moment from 'moment';
 
 import { empresa, tipos_trabajadores } from '../../data/default.json';
@@ -96,16 +96,24 @@ const DatosContrato = props => {
 
     useEffect(() => {
         setLoadingRegimenes(true);
+        let intentos = 0;
         function fetchRegimenes() {
+            intentos++;
             axios.get(`${url}/regimen`)
-                .then(res => setRegimenes(res.data.data))
-                .catch(err => {
-                    console.log(err)
-                    fetchRegimenes();
-                })
-                .finally(() => {
+                .then(res => {
+                    setRegimenes(res.data.data);
                     setLoadingRegimenes(false);
                 })
+                .catch(err => {
+                    console.log(err);
+                    if (intentos < 5) {
+                        fetchRegimenes();
+                    } else {
+                        notification['warning']({
+                            message: 'Error al obtener los departamentos, vuelva a cargar la página',
+                        });
+                    }
+                });
         }
         fetchRegimenes();
     }, []);
@@ -120,75 +128,69 @@ const DatosContrato = props => {
 
         function fetchZonasLabores() {
             axios.get(`${url}/zona-labor/${contrato.empresa_id}`)
-                .then(res => setZonasLabor(res.data.data))
+                .then(res => {
+                    setZonasLabor(res.data.data);
+                    setLoadingZonaLabores(false)
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener zonas de labor, vuelva a cargar la página',
-                    });
                     fetchZonasLabores();
-                })
-                .finally(() => setLoadingZonaLabores(false));
+                });
         }
         function fetchOficios() {
             axios.get(`${url}/oficio/${contrato.empresa_id}`)
-                .then(res => setOficios(res.data.data))
+                .then(res => {
+                    setOficios(res.data.data);
+                    setLoadingOficios(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener oficios, vuelva a cargar la página',
-                    });
                     fetchOficios();
-                })
-                .finally(() => setLoadingOficios(false));
+                });
         }
         function fetchActividades() {
             axios.get(`${url}/actividad/${contrato.empresa_id}`)
-                .then(res => setActividades(res.data.data))
+                .then(res => {
+                    setActividades(res.data.data);
+                    setLoadingActividades(false)
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener actividades, vuelva a cargar la página',
-                    });
                     fetchActividades();
-                })
-                .finally(() => setLoadingActividades(false));
+                });
         }
         function fetchAgrupaciones() {
             axios.get(`${url}/agrupacion/${contrato.empresa_id}`)
-                .then(res => setAgrupaciones(res.data.data))
+                .then(res => {
+                    setAgrupaciones(res.data.data);
+                    setLoadingAgrupaciones(false)
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                    });
                     fetchAgrupaciones();
-                })
-                .finally(() => setLoadingAgrupaciones(false));
+                });
         }
         function fetchTiposContratos() {
             axios.get(`${url}/tipo-contrato/${contrato.empresa_id}`)
-                .then(res => setTiposContratos(res.data.data))
+                .then(res => {
+                    setTiposContratos(res.data.data);
+                    setLoadingTiposContratos(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                    });
                     fetchTiposContratos();
-                })
-                .finally(() => setLoadingTiposContratos(false));
+                });
         }
         function fetchTroncales() {
             axios.get(`${url}/troncal/${contrato.empresa_id}`)
-                .then(res => setTroncales(res.data.data))
+                .then(res => {
+                    setTroncales(res.data.data);
+                    setLoadingTroncales(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener agrupaciones, vuelva a cargar la página',
-                    });
                     fetchTroncales();
-                })
-                .finally(() => setLoadingTroncales(false));
+                });
         }
         fetchZonasLabores();
         fetchOficios();
@@ -201,15 +203,14 @@ const DatosContrato = props => {
     useEffect(() => {
         function fetchRutas() {
             axios.get(`${url}/ruta/${contrato.empresa_id}/${contrato.troncal_id}`)
-                .then(res => setRutas(res.data.data))
+                .then(res => {
+                    setRutas(res.data.data);
+                    setLoadingRutas(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener rutas, vuelva a cargar la página',
-                    });
                     fetchRutas();
-                })
-                .finally(() => setLoadingRutas(false));
+                });
         }
         if (contrato.troncal_id !== '') {
             setLoadingRutas(true);
@@ -220,15 +221,14 @@ const DatosContrato = props => {
     useEffect(() => {
         function fetchCuarteles() {
             axios.get(`${url}/cuartel/${contrato.empresa_id}/${contrato.zona_labor_id}`)
-                .then(res => setCuarteles(res.data.data))
+                .then(res => {
+                    setCuarteles(res.data.data);
+                    setLoadingCuarteles(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener cuarteles, vuelva a cargar la página',
-                    });
                     fetchCuarteles();
-                })
-                .finally(() => setLoadingCuarteles(false));
+                });
         }
         if (contrato.zona_labor_id !== '') {
             setLoadingCuarteles(true);
@@ -239,14 +239,14 @@ const DatosContrato = props => {
     useEffect(() => {
         function fetchActividades() {
             axios.get(`${url}/labor/${contrato.empresa_id}/${contrato.actividad_id}`)
-                .then(res => setLabores(res.data.data))
+                .then(res => {
+                    setLabores(res.data.data);
+                    setLoadingLabores(false);
+                })
                 .catch(err => {
                     console.log(err);
-                    notification['error']({
-                        message: 'Error al obtener labores, vuelva a cargar la página',
-                    });
-                })
-                .finally(() => setLoadingLabores(false));
+                    fetchActividades();
+                });
         }
         if (contrato.actividad_id !== '') {
             setLoadingLabores(true);
@@ -362,6 +362,7 @@ const DatosContrato = props => {
                                 placeholder="Fecha Ingreso"
                                 value={moment(contrato.fecha_ingreso)}
                                 onChange={setChangeFechaIngreso}
+                                allowClear={false}
                             />
                         </Form.Item>
                     </Col>
@@ -370,6 +371,7 @@ const DatosContrato = props => {
                             <DatePicker
                                 placeholder="Fecha Termino"
                                 value={moment(contrato.fecha_termino)}
+                                allowClear={false}
                                 onChange={(date, dateString) => {
                                     setContrato({
                                         ...contrato,
