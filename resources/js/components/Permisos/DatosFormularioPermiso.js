@@ -21,6 +21,7 @@ const DatosFormularioPermiso = ({
     setZonasLabor,
     cuarteles,
     setCuarteles,
+    nocturno,
 }) => {
 
     const [empresas, setEmpresas] = useState([]);
@@ -302,7 +303,7 @@ const DatosFormularioPermiso = ({
                     </select>
                 </div>
                 <div className="form-group col-md-6 col-lg-6">
-                    Total horas:<br />
+                    Total horas  {nocturno && '(Horario nocturno)'}:<br />
                     <input
                         type="number" name="hp" placeholder="H-P" readOnly={true}
                         className={errorTotalHoras ? "form-control is-invalid" : "form-control is-valid"}

@@ -155,22 +155,25 @@ class FormularioPermiso extends Model
 
     public static function calcularHoras(DatosHoras $datosHoras)
     {
+        /*
         if ( !$datosHoras->esValido() ) {
             return [
                 'error'   => true,
                 'message' => 'La fecha y hora de salida es mayor a la fecha de regreso',
                 'horas'   => 0
             ];
-        }
+        }*/
 
+        /*
         if ( !$datosHoras->verificarHoras() ) {
             return [
                 'error'   => true,
                 'message' => 'Las horas del permiso no están dentro horario asignado',
                 'horas'   => 0
             ];
-        }
+        }*/
 
+        $datosHoras->validarNocturno();
         $dias = $datosHoras->getDias();
         $horas = $datosHoras->getHoras();
         $total_horas = $datosHoras->getTotalHoras();
@@ -180,6 +183,7 @@ class FormularioPermiso extends Model
             'dias'        => $dias,
             'horas'       => $horas,
             'total_horas' => $total_horas,
+            'nocturno' => $datosHoras->nocturno,
         ];
     }
 

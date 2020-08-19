@@ -68,6 +68,7 @@ const AgregarPermiso = () => {
 
     const [totalHoras, setTotalHoras] = useState(0);
     const [errorTotalHoras, setErrorTotalHoras] = useState(null);
+    const [nocturno, setNocturno] = useState(false);
     const [reloadDatos, setReloadDatos] = useState(false);
 
     useEffect(() => {
@@ -127,6 +128,7 @@ const AgregarPermiso = () => {
 
                 setTotalHoras(res.data.total_horas);
                 setErrorTotalHoras(null);
+                setNocturno(res.data.nocturno);
                 return;
             })
             .catch(err => {
@@ -237,6 +239,7 @@ const AgregarPermiso = () => {
                 setZonasLabor={setZonasLabor}
                 cuarteles={cuarteles}
                 setCuarteles={setCuarteles}
+                nocturno={nocturno}
             />
             <hr />
             {!editar && (
