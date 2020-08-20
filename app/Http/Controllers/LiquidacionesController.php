@@ -12,18 +12,32 @@ class LiquidacionesController extends Controller
     {
         $file = $request->file('finiquitos');
 
-        return \Storage::disk('public')->put('/finiquitos', $file);
+        $name = '/finiquitos/' . now()->unix() . '.' . $file->getClientOriginalExtension();
 
-        $liquidaciones = (new FastExcel)->configureCsv(';','#',',', 'gbk')->import($file, function($line) {
-            return Liquidaciones::create([
-                'id' => $line['IdLiquidacion'],
-                'finiquito_id' => $line['IdFiniquito'],
-                'rut' => $line['RutTrabajador'],
-                'ano' => $line['Ano'],
-                'mes' => $line['Mes'],
-                'monto' => $line['MontoAPagar'],
-                'empresa_id' => $line['IdEmpresa']
-            ]);
-        });
+        if (!\Storage::disk('public')->put($name, \File::get($file))) {
+            return response()->json(['message' => 'Error al guardar el archivo']);
+        }
+
+        try {
+            (new FastExcel)
+                ->import(storage_path('app/public') . $name, function($line) {
+                    return Liquidaciones::updateOrCreate(
+                        [
+                            'id' => $line['IdLiquidacion']
+                        ],
+                        [
+                            'finiquito_id' => $line['IdFiniquito'],
+                            'rut' => $line['RutTrabajador'],
+                            'ano' => $line['Ano'],
+                            'mes' => $line['Mes'],
+                            'monto' => $line['MontoAPagar'],
+                            'empresa_id' => $line['IdEmpresa']
+                        ]
+                    );
+                });
+            return true;
+        } catch (\Execption $e) {
+            return false;
+        }
     }
 }

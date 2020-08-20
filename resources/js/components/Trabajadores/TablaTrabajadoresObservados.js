@@ -187,7 +187,7 @@ const TablaTrabajadoresObservados = ({
                                         ? moment(o.fecha).format('YYYY-MM-DD')
                                         : 'Sin fecha'}
                                     <br />
-                                    Dígito: {o.digito ? o.digito : 'Sin dígito'}
+                                    VIGENTE: {o.digito ? (o.digito ? 'SI' : 'NO') : 'Sin dígito'}
                                 </li>
                             );
                         }
