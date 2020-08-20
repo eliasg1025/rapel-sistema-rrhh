@@ -72,8 +72,9 @@ class FormularioPermisoController extends Controller
         $estado = $request->estado;
         $goce = $request->goce;
         $usuario_carga_id = $request->usuario_carga_id;
+        $rut = $request->rut;
 
-        $result = FormularioPermiso::_getAll($usuario_id, $fechas, $estado, $goce, $usuario_carga_id);
+        $result = FormularioPermiso::_getAll($usuario_id, $fechas, $estado, $goce, $usuario_carga_id, $rut);
 
         if (isset($result['error'])) {
             return response()->json([

@@ -215,7 +215,7 @@ class FormularioPermiso extends Model
             ->get();
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2, int $usuario_carga_id)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $goce=2, int $usuario_carga_id, $rut)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -264,6 +264,9 @@ class FormularioPermiso extends Model
                 })
                 ->when($goce != 2, function($query) use($goce) {
                     $query->where('f.goce', $goce);
+                })
+                ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
+                    $query->where('t.rut', 'like', $rut . '%');
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();
@@ -321,6 +324,9 @@ class FormularioPermiso extends Model
                 })
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
+                })
+                ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
+                    $query->where('t.rut', 'like', $rut . '%');
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();

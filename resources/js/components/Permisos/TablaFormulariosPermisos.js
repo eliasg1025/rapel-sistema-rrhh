@@ -13,7 +13,8 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
         goce: 2,
-        usuario_carga_id: 0
+        usuario_carga_id: 0,
+        rut: '',
     });
 
     const [data, setData] = useState([]);
@@ -312,7 +313,7 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
         }
 
         fetchFormulariosPermisos();
-    }, [ filtro, reloadDatos ]);
+    }, [ filtro.desde, filtro.hasta, filtro.estado, filtro.goce, filtro.usuario_carga_id, filtro.rut, reloadDatos ]);
 
     useEffect(() => {
         setFiltro({ ...filtro, usuario_carga_id: 0 });
@@ -367,6 +368,17 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                     </select>
                 </div>
                 <div className="col-md-4">
+                    Busqueda por DNI:<br />
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={filtro.rut}
+                        onChange={e => setFiltro({ ...filtro, rut: e.target.value })}
+                    />
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-md-4">
                     ¿Con goce?<br />
                     <select
                         className="form-control"
@@ -378,8 +390,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                         <option value="1">SI</option>
                     </select>
                 </div>
-            </div>
-            <div className="row">
                 {usuario.permisos === 2 && (
                     <div className="col-md-4">
                         Cargado por:<br />
