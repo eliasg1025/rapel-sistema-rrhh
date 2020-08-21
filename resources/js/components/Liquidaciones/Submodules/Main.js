@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DatePicker } from 'antd';
 import moment from 'moment';
+import Axios from 'axios';
 
 export const Main = () => {
 
     const [filtro, setFiltro] = useState({
-        desde: moment('2013-01-01').format('YYYY-MM-DD').toString(),
-        hasta: moment().format('YYYY-MM-DD').toString(),
+        desde: moment('2020-01').format('YYYY-MM').toString(),
+        hasta: moment().format('YYYY-MM').toString(),
     });
 
     const handleSincronizar = () => {
@@ -14,7 +15,7 @@ export const Main = () => {
     }
 
     const handleExportar = () => {
-        console.log('exportar');
+        console.log('Exportar');
     }
 
     const handleImportar = () => {

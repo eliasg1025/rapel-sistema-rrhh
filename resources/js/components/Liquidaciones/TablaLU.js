@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
+import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const columns = [
     {
@@ -24,9 +25,27 @@ const columns = [
     },
     {
         title: 'Estado',
-        dataIndex: 'estado'
+        dataIndex: 'estado',
+        render: (_, record) => renderTags(record.estado)
     }
 ];
+
+function renderTags(estado) {
+    switch (estado) {
+        case 0:
+            return <Tag color="default" icon={<ClockCircleOutlined />}>PENDIENTE</Tag>;
+        case 1:
+            return <Tag color="warning" icon={<ClockCircleOutlined />}>FIRMADO</Tag>;
+        case 2:
+            return <Tag color="processing" icon={<SyncOutlined spin/>}>PARA PAGO</Tag>;
+        case 3:
+            return <Tag color="success" icon={<CheckCircleOutlined />}>PAGADO</Tag>;
+        case 4:
+            return <Tag color="error" icon={<CloseCircleOutlined />}>RECHAZADO</Tag>;
+        default:
+            return null;
+    }
+}
 
 export const TablaLU = ({ data }) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
@@ -54,14 +73,16 @@ export const TablaLU = ({ data }) => {
     return (
         <div>
             <div style={{ marginBottom: 16 }}>
-                <button className="btn btn-primary" disabled={!hasSelected || loading} onClick={reload}>
-                    {loading ? (
-                        <>
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span className="sr-only">Loading...</span>
-                        </>
-                    ) : 'Para Pago'}
-                </button>
+                {hasSelected && (
+                    <button className="btn btn-primary" disabled={!hasSelected || loading} onClick={reload}>
+                        {loading ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <span className="sr-only">Loading...</span>
+                            </>
+                        ) : 'Para Pago'}
+                    </button>
+                )}
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>

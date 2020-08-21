@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Liquidaciones extends Model
 {
@@ -12,5 +13,18 @@ class Liquidaciones extends Model
 
     public $timestamps = false;
 
-    public $fillable = ['id', 'finiquito_id', 'rut', 'mes', 'ano', 'monto', 'empresa_id'];
+    public $fillable = ['id', 'finiquito_id', 'rut', 'mes', 'ano', 'monto', 'empresa_id', 'fecha_emision'];
+
+    public static function get(array $fechas, int $estado, int $empresa_id)
+    {
+        return DB::table('liquidaciones as l')
+            ->select('l.id', 'l.rut', 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa')
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->whereBetween('l.fecha_emision', [$fechas['desde'], $fechas['hasta']])
+            ->where('l.estado', $estado)
+            ->when($empresa_id !== 0, function($query) use($empresa_id) {
+                $query->where('l.empresa_id', $empresa_id);
+            })
+            ->get();
+    }
 }
