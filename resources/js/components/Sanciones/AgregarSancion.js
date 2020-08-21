@@ -76,7 +76,7 @@ const AgregarSancion = () => {
             .then(res => {
                 console.log(res.data);
 
-                const { id, message, error } = res.data;
+                const { id, message, error, desvinculacion } = res.data;
 
                 const url = `/ficha/sancion/${id}`;
 
@@ -85,8 +85,12 @@ const AgregarSancion = () => {
                     icon: error ? 'error' : 'success'
                 })
                     .then(res => {
-                        window.open(url, '_blank');
-                        location.reload();
+                        if (!desvinculacion) {
+                            window.open(url, '_blank');
+                            location.reload();
+                        } else {
+                            setReloadDatos(!reloadDatos);
+                        }
                     });
             })
             .catch(err => {

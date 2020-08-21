@@ -153,6 +153,7 @@ class Sancion extends Model
                 $sancion->fecha_solicitud = $data['fecha_solicitud'];
             } else {
                 $sancion = Sancion::find($data['id']);
+                $trabajador_id = $sancion->trabajador_id;
             }
 
             $sancion->zona_labor_id   = $zona_labor_id;
@@ -160,7 +161,6 @@ class Sancion extends Model
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $data['incidencia_id'];
-            $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
 
             if ( $incidencia->documento == 'SUSPENCION' ) {
 
@@ -170,32 +170,37 @@ class Sancion extends Model
                     Carbon::parse($data['fecha_incidencia'])
                 ];
 
-                $cantidad_suspenciones_anteriores = Sancion::where([
-                    'trabajador_id' => $sancion->trabajador_id,
+                $suspencion = Sancion::where([
+                    'trabajador_id' => $trabajador_id,
                     'incidencia_id' => $data['incidencia_id']
-                ])->whereBetween('fecha_incidencia', $rango_fechas)->count();
+                ])->whereBetween('fecha_incidencia', $rango_fechas)
+                    ->orderBy('fecha_incidencia', 'DESC')
+                    ->first();
 
-                switch ( $cantidad_suspenciones_anteriores ) {
-                    case 0:
-                        $dias_suspencion = $incidencia->dias;
-                        break;
-                    case 1:
+                $dias_suspencion = 0;
+                //dd($suspencion);
+                if (!$suspencion) {
+                    $dias_suspencion = $incidencia->dias;
+                } else {
+                    if ($suspencion->reiterativo === 1) {
                         $dias_suspencion = $incidencia->dias_reiterativo;
-                        $message = '<br/>Esta es una falta reiterativa se suspenderá por ' . $dias_suspencion . ' días';
-                        break;
-                    case 2:
-                        DB::rollBack();
-                        return [
-                            'error'   => 'Este trabajador ya tiene 2 suspenciones anteriores',
-                        ];
+                        $sancion->reiterativo = 2;
+                        $message = 'Esta es una falta reiterativa se suspenderá por ' . $dias_suspencion . ' días.';
+                    } else if ($suspencion->reiterativo === 2) {
+                        $sancion->reiterativo = 3;
+                        $sancion->desvinculacion = true;
+                        $message = 'Este trabajador ya tiene 2 suspenciones anteriores. Se procederá a registrar una DESVINCULACIÓN.';
+                    }
                 }
 
                 $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
 
-                $sancion->fecha_salida = $dias_sancion->getDiaIncio();
+                $sancion->observacion = $message . ' ' . $data['observacion'];
+                $sancion->fecha_salida  = $dias_sancion->getDiaIncio();
                 $sancion->fecha_regreso = $dias_sancion->getDiaTermino();
-                $sancion->total_horas = $dias_sancion->getCantidadHotasEfectivas();
+                $sancion->total_horas   = $dias_sancion->getCantidadHotasEfectivas();
             } else {
+                $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
                 $sancion->fecha_salida = null;
                 $sancion->fecha_regreso = null;
                 $sancion->total_horas = 0;
@@ -205,8 +210,9 @@ class Sancion extends Model
                 DB::commit();
                 return [
                     'error'   => false,
-                    'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . $message,
-                    'id'      => $sancion->id
+                    'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . '<br />' . $message,
+                    'id'      => $sancion->id,
+                    'desvinculacion' => $sancion->desvinculacion
                 ];
             }
 
@@ -239,7 +245,7 @@ class Sancion extends Model
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
-                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d-%m-%Y") fecha_solicitud'),
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     'f.observacion',
                     't.rut',
                     't.code',
@@ -248,9 +254,9 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
-                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d-%m-%Y") fecha_incidencia'),
-                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d-%m-%Y") desde'),
-                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d-%m-%Y") hasta'),
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d/%m/%Y") desde'),
+                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d/%m/%Y") hasta'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado'
@@ -281,7 +287,7 @@ class Sancion extends Model
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
-                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d-%m-%Y") fecha_solicitud'),
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
                     'f.observacion',
                     't.rut',
                     't.code',
@@ -290,9 +296,9 @@ class Sancion extends Model
                     'z.code as zona_labor_id',
                     'z.name as zona_labor',
                     'i.name as incidencia',
-                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d-%m-%Y") fecha_incidencia'),
-                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d-%m-%Y") desde'),
-                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d-%m-%Y") hasta'),
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d/%m/%Y") desde'),
+                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d/%m/%Y") hasta'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado',
