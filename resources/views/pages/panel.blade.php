@@ -52,6 +52,11 @@
                         <i class="fas fa-money-bill-wave"></i> Pagos Liquidaciones y Utilidades
                     </a>
                 </div>
+                <div class="col-md-6">
+                    <a class="btn btn-block btn-light" href="/consulta-trabajadores" {{ $data['usuario']->consultas_trabajadores === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-users"></i> Consulta de Trabajadores
+                    </a>
+                </div>
             </div>
         </div>
         <br />

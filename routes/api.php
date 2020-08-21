@@ -114,7 +114,11 @@ Route::group(['prefix' => 'sancion'], function() {
 
 Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'LiquidacionesController@get');
-   Route::post('/importar', 'LiquidacionesController@importar');
+    Route::post('/importar', 'LiquidacionesController@importar');
+});
+
+Route::group(['prefix' => 'consultas-trabajadores'], function() {
+    Route::post('/', 'ConsultasTrabajadoresController@craate');
 });
 
 /*

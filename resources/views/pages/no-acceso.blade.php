@@ -10,6 +10,6 @@
             <h4>No tiene acceso al módulo de <u style="text-transform: uppercase">{{ $nombre_modulo }}</u></h4>
         </div>
         <br />
-        <a href="/panel"><i class="fas fa-long-arrow-alt-left"></i> Regresar</a>
+        <a href="/"><i class="fas fa-long-arrow-alt-left"></i> Regresar</a>
     </div>
 @endsection

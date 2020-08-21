@@ -343,6 +343,22 @@ class ViewController extends Controller
         return view('pages.sanciones', compact('data'));
     }
 
+    public function consultaTrabajadores(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->consultas_trabajadores == 0 ) {
+            $nombre_modulo = 'consultas de trabajadores';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+        ];
+
+        return view('pages.consultas-trabajadores', compact('data'));
+    }
+
     public function panel(Request $request)
     {
         $usuario = $request->session()->get('usuario');

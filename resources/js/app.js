@@ -14,6 +14,7 @@ import AgregarSancion from "./components/Sanciones/AgregarSancion";
 import EstadisticasUsuarios from "./components/EstadisticasUsuario";
 import ConsultarEstadoLiquidacion from "./components/Liquidaciones/ConsultarEstadoLiquidacion";
 import AdminLiquidaciones from "./components/Liquidaciones/AdminLiquidaciones";
+import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
 
 require('./bootstrap');
 
@@ -35,6 +36,7 @@ require('./components/Cuentas/TablaCuentasAdmin');
 require('./components/Afp/AgregarAfp');
 require('./components/Permisos/AgregarPermiso');
 require('./components/Sanciones/AgregarSancion');
+require('./components/ConsultaTrabajadores/ConsultarTrabajadores');
 
 // Estadisticas
 require('./components/EstadisticasUsuario');
@@ -46,6 +48,12 @@ require('./components/Liquidaciones/AdminLiquidaciones');
 
 
 //
+if (document.getElementById("consulta-trabajadores")) {
+    const element = document.getElementById("consulta-trabajadores");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<ConsultaTrabajadores {...props} />, document.getElementById("consulta-trabajadores"));
+}
+
 if (document.getElementById("consultar-estado-liquidacion")) {
     const element = document.getElementById("consultar-estado-liquidacion");
     const props = Object.assign({}, element.dataset);

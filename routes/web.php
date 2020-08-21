@@ -37,6 +37,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
     Route::get('/sanciones', 'Web\ViewController@sanciones');
     Route::get('/sanciones/editar/{id}', 'Web\ViewController@editarSancion');
+    Route::get('/consulta-trabajadores', 'Web\ViewController@consultaTrabajadores');
 
     Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
         Route::get('/', 'Web\ViewController@liquidaciones');
