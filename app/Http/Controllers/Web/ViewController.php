@@ -354,6 +354,7 @@ class ViewController extends Controller
 
         $data = [
             'usuario' => $usuario,
+            'submodule' => 'consulta'
         ];
 
         return view('pages.consultas-trabajadores', compact('data'));

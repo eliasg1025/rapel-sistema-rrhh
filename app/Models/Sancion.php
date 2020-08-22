@@ -259,12 +259,16 @@ class Sancion extends Model
                     DB::raw('DATE_FORMAT(f.fecha_regreso, "%d/%m/%Y") hasta'),
                     'f.total_horas as horas',
                     'e.shortname as empresa',
-                    'f.estado'
+                    'f.estado',
+                    're.name as regimen',
+                    'o.name  as oficio'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+                ->join('regimenes as re', 're.id', '=', 'f.regimen_id')
+                ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
                 ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
@@ -302,12 +306,16 @@ class Sancion extends Model
                     'f.total_horas as horas',
                     'e.shortname as empresa',
                     'f.estado',
+                    're.name as regimen',
+                    'o.name  as oficio',
                     'usuario.nombre_completo_usuario as nombre_completo_usuario'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+                ->join('regimenes as re', 're.id', '=', 'f.regimen_id')
+                ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
                 ->joinSub($usuarios, 'usuario', function($join) {
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
