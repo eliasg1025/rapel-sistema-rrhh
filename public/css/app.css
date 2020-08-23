@@ -18,6 +18,10 @@
   font-size: 13px;
 }
 
+.table-row-red {
+  background-color: rgba(0, 255, 34, 0.42);
+}
+
 .sign-in__content {
   display: flex;
   flex-direction: column;
