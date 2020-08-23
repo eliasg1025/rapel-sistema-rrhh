@@ -117,8 +117,8 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/importar', 'LiquidacionesController@importar');
 });
 
-Route::group(['prefix' => 'consultas-trabajadores'], function() {
-    Route::post('/', 'ConsultasTrabajadoresController@craate');
+Route::group(['prefix' => 'consulta-trabajador'], function() {
+    Route::post('/', 'ConsultaTrabajadorController@create');
 });
 
 /*

@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 
 export const BusquedaTrabajador = ({ setTrabajador, setPeriodos, setAlertas }) => {
 
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
     const [rut, setRut] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -33,6 +35,14 @@ export const BusquedaTrabajador = ({ setTrabajador, setPeriodos, setAlertas }) =
                     }
                 }));
                 setAlertas(alertas);
+
+                Axios.post('/api/consulta-trabajador', {
+                    usuario_id: usuario.id,
+                    rut: rut,
+                    activo: periodos.reduce((a, p) => parseInt(p.indicador_vigencia) + a, 0)
+                })
+                    .then(res => console.log(res))
+                    .catch(err => console.log(err));
 
                 Swal.fire('Trabajador encontrado', '', 'success');
             })
