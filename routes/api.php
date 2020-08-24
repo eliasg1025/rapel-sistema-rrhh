@@ -118,6 +118,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {
+    Route::get('/', 'ConsultaTrabajadorController@get');
     Route::post('/', 'ConsultaTrabajadorController@create');
 });
 

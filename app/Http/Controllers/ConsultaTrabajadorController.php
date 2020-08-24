@@ -19,4 +19,11 @@ class ConsultaTrabajadorController extends Controller
 
         return response()->json($result);
     }
+
+    public function get()
+    {
+        $result = ConsultaTrabajador::_get();
+
+        return response()->json($result);
+    }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Consulta } from './Submodules/Consulta';
+import { HistorialBusqueda } from './Submodules/HistorialBusqueda';
 import {QuestionCircleOutlined} from "@ant-design/icons";
 import moment from 'moment';
 
@@ -26,7 +27,7 @@ export default function ConsultaTrabajadores() {
                     </Menu.Item>
                     {usuario.consultas_trabajadores === 2 && (
                         <Menu.Item key="historial-busqueda" icon={<QuestionCircleOutlined />}>
-                            <a href="/historial-busqueda">
+                            <a href="/consulta-trabajadores/historial-busqueda">
                                 Historial Busqueda
                             </a>
                         </Menu.Item>
@@ -37,6 +38,7 @@ export default function ConsultaTrabajadores() {
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         {submodule === 'consulta' && <Consulta />}
+                        {submodule === 'historial-busqueda' && <HistorialBusqueda />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>

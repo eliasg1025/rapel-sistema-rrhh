@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ConsultaTrabajador extends Model
 {
@@ -25,5 +26,29 @@ class ConsultaTrabajador extends Model
                 'error' => $e->getMessage()
             ];
         }
+    }
+
+    public static function _get()
+    {
+        $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+        return DB::table('consultas_trabajadores as ct')
+            ->select(
+                'ct.id',
+                'ct.created_at',
+                'ct.rut',
+                'ct.activo',
+                'usuario.nombre_completo_usuario as usuario'
+            )
+            ->joinSub($usuarios, 'usuario', function($join) {
+                $join->on('usuario.id', '=', 'ct.usuario_id');
+            })
+            ->get();
     }
 }
