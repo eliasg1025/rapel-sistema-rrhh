@@ -54,8 +54,6 @@ const AutocompletarTrabajador = ({ setTrabajador, setPeriodos, setAlertas }) => 
 
 
                     setLoading(false);
-
-                    Swal.fire('Trabajador encontrado', '', 'success');
                 })
                 .catch(err => {
                     if (intentos < 5) {

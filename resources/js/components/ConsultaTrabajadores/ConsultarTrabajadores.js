@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { Consulta } from './Submodules/Consulta';
 import { HistorialBusqueda } from './Submodules/HistorialBusqueda';
-import {QuestionCircleOutlined} from "@ant-design/icons";
+import {QuestionCircleOutlined, BookOutlined} from "@ant-design/icons";
 import moment from 'moment';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -26,9 +26,9 @@ export default function ConsultaTrabajadores() {
                         </a>
                     </Menu.Item>
                     {usuario.consultas_trabajadores === 2 && (
-                        <Menu.Item key="historial-busqueda" icon={<QuestionCircleOutlined />}>
+                        <Menu.Item key="historial-busqueda" icon={<BookOutlined />}>
                             <a href="/consulta-trabajadores/historial-busqueda">
-                                Historial Busqueda
+                                Historial Búsqueda
                             </a>
                         </Menu.Item>
                     )}

@@ -4,7 +4,6 @@ export const DatosPersonales = ({ trabajador }) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-
     }
 
     return (
@@ -31,7 +30,7 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-2 col-sm-6 col-xs-6">
                             <div className="form-group">
                                 Fecha Nacimiento:<br />
                                 <input
@@ -41,7 +40,7 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-2 col-sm-6 col-xs-6">
                             <div className="form-group">
                                 Edad:<br />
                                 <input
@@ -53,7 +52,17 @@ export const DatosPersonales = ({ trabajador }) => {
                         </div>
                     </div>
                     <div className="form-row">
-                        <div className="col-md-3 col-sm-3">
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                Dirección<br />
+                                <input
+                                    type="text" placeholder="Dirección" className="form-control"
+                                    value={trabajador?.direccion || ''}
+                                    readOnly={true}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-2 col-sm-3">
                             <div className="form-group">
                                 Sexo:<br />
                                 <input
@@ -63,7 +72,7 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
-                        <div className="col-md-3 col-sm-3">
+                        <div className="col-md-2 col-sm-3">
                             <div className="form-group">
                                 Estado Civil:<br />
                                 <input
@@ -73,7 +82,7 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
-                        <div className="col-md-6 col-sm-6">
+                        <div className="col-md-2 col-sm-6">
                             <div className="form-group">
                                 Nacionalidad:<br />
                                 <input
@@ -83,14 +92,6 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        Dirección<br />
-                        <input
-                            type="text" placeholder="Dirección" className="form-control"
-                            value={trabajador?.direccion || ''}
-                            readOnly={true}
-                        />
                     </div>
                 </form>
             </div>
