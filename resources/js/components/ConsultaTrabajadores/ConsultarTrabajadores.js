@@ -24,6 +24,13 @@ export default function ConsultaTrabajadores() {
                             Consulta
                         </a>
                     </Menu.Item>
+                    {usuario.consultas_trabajadores === 2 && (
+                        <Menu.Item key="historial-busqueda" icon={<QuestionCircleOutlined />}>
+                            <a href="/historial-busqueda">
+                                Historial Busqueda
+                            </a>
+                        </Menu.Item>
+                    )}
                 </Menu>
             </Sider>
             <Layout>
