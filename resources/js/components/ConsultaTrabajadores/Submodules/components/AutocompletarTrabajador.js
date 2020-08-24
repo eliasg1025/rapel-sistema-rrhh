@@ -12,7 +12,7 @@ const AutocompletarTrabajador = ({ setTrabajador, setPeriodos, setAlertas }) => 
 
     const handleSearch = searchText => {
         if (searchText.length >= 5) {
-            Axios.get(`http://rapel-api.test/api/trabajador/buscar-todos?t=${searchText}`)
+            Axios.get(`http://192.168.60.16/api/trabajador/buscar-todos?t=${searchText}`)
                 .then(res => {
                     setOptions(res.data.map(item => ({ value: item.nombre_completo, rut: item.rut }) ));
                 })
