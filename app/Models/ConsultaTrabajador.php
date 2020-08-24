@@ -49,6 +49,7 @@ class ConsultaTrabajador extends Model
             ->joinSub($usuarios, 'usuario', function($join) {
                 $join->on('usuario.id', '=', 'ct.usuario_id');
             })
+            ->orderBy('ct.created_at', 'DESC')
             ->get();
     }
 }

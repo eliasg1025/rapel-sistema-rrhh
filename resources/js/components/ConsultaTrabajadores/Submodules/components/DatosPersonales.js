@@ -52,14 +52,6 @@ export const DatosPersonales = ({ trabajador }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="form-group">
-                        Dirección<br />
-                        <input
-                            type="text" placeholder="Dirección" className="form-control"
-                            value={trabajador?.direccion || ''}
-                            readOnly={true}
-                        />
-                    </div>
                     <div className="form-row">
                         <div className="col-md-3 col-sm-3">
                             <div className="form-group">
@@ -91,6 +83,14 @@ export const DatosPersonales = ({ trabajador }) => {
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="form-group">
+                        Dirección<br />
+                        <input
+                            type="text" placeholder="Dirección" className="form-control"
+                            value={trabajador?.direccion || ''}
+                            readOnly={true}
+                        />
                     </div>
                 </form>
             </div>
