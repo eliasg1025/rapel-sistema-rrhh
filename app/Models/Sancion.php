@@ -87,6 +87,7 @@ class Sancion extends Model
             ->join('incidencias as i', 's.incidencia_id', '=', 'i.id')
             ->where('i.documento', 'MEMORANDUM')
             ->whereYear('s.fecha_solicitud', $anio)
+            ->orderBy('s.id')
             ->get()->toArray();
 
         return array_search($this->id, array_column($ids, 'id')) + 1;
