@@ -226,7 +226,35 @@ class Sancion extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, string $incidencia_id="0")
+    public static function _getUsuariosCarga($fechas, $estado, $incidencia_id)
+    {
+        $usuarios = DB::table('usuarios as u')
+            ->select(
+                'u.id',
+                'u.username',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+            )
+            ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+        return DB::table('sanciones as f')
+            ->select(
+                DB::raw('MIN(usuario_id) as id'),
+                'usuario.username as usuario',
+                'usuario.nombre_completo_usuario as nombre_completo'
+            )
+            ->joinSub($usuarios, 'usuario', function($join) {
+                $join->on('usuario.id', '=', 'f.usuario_id');
+            })
+            ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+            ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                $query->where('i.documento', $incidencia_id);
+            })
+            ->where('f.estado', $estado)
+            ->groupBy('usuario')
+            ->get();
+    }
+
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, string $incidencia_id="0", $usuario_carga_id)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -322,6 +350,9 @@ class Sancion extends Model
                 ->where('f.estado', $estado)
                 ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
+                })
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
                 })
                 ->when($estado == 2, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);

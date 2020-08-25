@@ -5,6 +5,7 @@
 @endsection
 
 @section('contenido')
+    <!--
     <div class="container p-5">
         <div class="text-center">
             <h3>Sanciones</h3>
@@ -12,9 +13,10 @@
         </div>
         <div class="py-5">
             <div id="agregar-sancion"></div>
-            <script>
-                sessionStorage.setItem('data', JSON.stringify(@json($data)) );
-            </script>
         </div>
-    </div>
+    </div>-->
+    <div id="sanciones"></div>
+    <script>
+        sessionStorage.setItem('data', JSON.stringify(@json($data)) );
+    </script>
 @endsection

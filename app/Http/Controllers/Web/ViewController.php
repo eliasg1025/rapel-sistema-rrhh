@@ -320,7 +320,8 @@ class ViewController extends Controller
 
         $data = [
             'usuario' => $usuario,
-            'editar' => 0
+            'editar' => 0,
+            'submodule' => 'sanciones',
         ];
 
         return view('pages.sanciones', compact('data'));
@@ -337,7 +338,44 @@ class ViewController extends Controller
 
         $data = [
             'usuario' => $usuario,
-            'editar' => $id
+            'editar' => $id,
+            'submodule' => 'sanciones'
+        ];
+
+        return view('pages.sanciones', compact('data'));
+    }
+
+    public function sancionesReportes(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->sanciones == 0 ) {
+            $nombre_modulo = 'sanciones';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'editar' => 0,
+            'submodule' => 'reportes',
+        ];
+
+        return view('pages.sanciones', compact('data'));
+    }
+
+    public function sancionesDesvinculaciones(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->sanciones == 0 ) {
+            $nombre_modulo = 'sanciones';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'editar' => 0,
+            'submodule' => 'desvinculaciones',
         ];
 
         return view('pages.sanciones', compact('data'));

@@ -27,6 +27,21 @@ class SancionesController extends Controller
         return response()->json($result, 400);
     }
 
+    public function getUsuariosCarga(Request $request)
+    {
+        $fechas = [
+            'desde' => date($request->desde),
+            'hasta' => date($request->hasta)
+        ];
+        $estado = $request->estado;
+        $incidencia_id = $request->incidencia_id;
+
+        $result = Sancion::_getUsuariosCarga($fechas, $estado, $incidencia_id);
+
+        return response()->json($result);
+    }
+
+
     public function getAll(Request $request)
     {
         $usuario_id = $request->usuario_id;
@@ -36,8 +51,9 @@ class SancionesController extends Controller
         ];
         $estado = $request->estado;
         $incidencia_id = $request->incidencia_id;
+        $usuario_carga_id = $request->usuario_carga_id;
 
-        $result = Sancion::_getAll($usuario_id, $fechas, $estado, $incidencia_id);
+        $result = Sancion::_getAll($usuario_id, $fechas, $estado, $incidencia_id, $usuario_carga_id);
 
         if (isset($result['error'])) {
             return response()->json([

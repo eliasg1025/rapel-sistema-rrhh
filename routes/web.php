@@ -35,10 +35,18 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/formularios-permisos', 'Web\ViewController@permisos');
     Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
-    Route::get('/sanciones', 'Web\ViewController@sanciones');
-    Route::get('/sanciones/editar/{id}', 'Web\ViewController@editarSancion');
-    Route::get('/consulta-trabajadores', 'Web\ViewController@consultaTrabajadores');
-    Route::get('/consulta-trabajadores/historial-busqueda', 'Web\ViewController@historialConsultaTrabajadores');
+
+    Route::group(['prefix' => 'sanciones'], function() {
+        Route::get('/', 'Web\ViewController@sanciones');
+        Route::get('/editar/{id}', 'Web\ViewController@editarSancion');
+        Route::get('/reportes', 'Web\ViewController@sancionesReportes');
+        Route::get('/desvinculaciones', 'Web\ViewController@sancionesDesvinculaciones');
+    });
+
+    Route::group(['prefix' => 'consulta-trabajadores'], function() {
+        Route::get('/', 'Web\ViewController@consultaTrabajadores');
+        Route::get('/historial-busqueda', 'Web\ViewController@historialConsultaTrabajadores');
+    });
 
     Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
         Route::get('/', 'Web\ViewController@liquidaciones');

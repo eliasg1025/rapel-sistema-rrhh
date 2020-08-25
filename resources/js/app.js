@@ -10,11 +10,12 @@ import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
-import AgregarSancion from "./components/Sanciones/AgregarSancion";
+import AgregarSancion from "./components/Sanciones/Submodules/AgregarSancion";
 import EstadisticasUsuarios from "./components/EstadisticasUsuario";
 import ConsultarEstadoLiquidacion from "./components/Liquidaciones/ConsultarEstadoLiquidacion";
 import AdminLiquidaciones from "./components/Liquidaciones/AdminLiquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
+import Sanciones from "./components/Sanciones/Sanciones";
 
 require('./bootstrap');
 
@@ -35,7 +36,7 @@ require('./components/Cuentas/TablaCuentas');
 require('./components/Cuentas/TablaCuentasAdmin');
 require('./components/Afp/AgregarAfp');
 require('./components/Permisos/AgregarPermiso');
-require('./components/Sanciones/AgregarSancion');
+require('./components/Sanciones/Submodules/AgregarSancion');
 require('./components/ConsultaTrabajadores/ConsultarTrabajadores');
 
 // Estadisticas
@@ -46,8 +47,15 @@ require('./components/EstadisticasUsuario');
 require('./components/Liquidaciones/ConsultarEstadoLiquidacion');
 require('./components/Liquidaciones/AdminLiquidaciones');
 
+require('./components/Sanciones/Sanciones');
 
 //
+if (document.getElementById("sanciones")) {
+    const element = document.getElementById("sanciones");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Sanciones {...props} />, document.getElementById("sanciones"));
+}
+
 if (document.getElementById("consulta-trabajadores")) {
     const element = document.getElementById("consulta-trabajadores");
     const props = Object.assign({}, element.dataset);
