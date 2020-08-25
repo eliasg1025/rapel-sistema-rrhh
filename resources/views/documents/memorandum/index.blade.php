@@ -56,7 +56,7 @@
                     </div>
                 </td>
                 <td>
-                    <h3 style="text-align: center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MEMORANDUM RR.HH. N°2 - 2020</h3>
+                    <h3 style="text-align: center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MEMORANDUM RR.HH. N°{{ $sancion->getCorrelativo($sancion->fecha_incidencia) }} - 2020</h3>
                 </td>
                 <td>
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />

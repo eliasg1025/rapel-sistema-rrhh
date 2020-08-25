@@ -78,6 +78,20 @@ class Sancion extends Model
 
     }
 
+    public function getCorrelativo($fecha_incidencia)
+    {
+        $anio = Carbon::parse($fecha_incidencia)->format('Y');
+
+        $ids = DB::table('sanciones as s')
+            ->select('s.id as id')
+            ->join('incidencias as i', 's.incidencia_id', '=', 'i.id')
+            ->where('i.documento', 'MEMORANDUM')
+            ->whereYear('s.fecha_solicitud', $anio)
+            ->get()->toArray();
+
+        return array_search($this->id, array_column($ids, 'id')) + 1;
+    }
+
     public static function _show($id)
     {
         $trabajadores = DB::table('trabajadores as t')
