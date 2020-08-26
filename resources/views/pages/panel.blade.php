@@ -58,6 +58,13 @@
                     </a>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="btn btn-block btn-light" href="/liquidaciones-utilidades" disabled>
+                        SCTR
+                    </a>
+                </div>
+            </div>
         </div>
         <br />
         <form class="form-inline m-auto" method="POST" action="/logout">

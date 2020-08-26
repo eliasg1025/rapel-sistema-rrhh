@@ -33,10 +33,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                     const formularios = data.map(item => {
                         return {
                             ...item,
-                            key: item.id,
-                            fecha_solicitud: `${item.fecha_solicitud}`,
-                            desde: `${item.fecha_salida} ${item.hora_salida}`,
-                            hasta: `${item.fecha_regreso} ${item.hora_regreso}`,
+                            key: item.id
                         }
                     });
 
@@ -79,7 +76,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
     }, [filtro.desde, filtro.hasta, filtro.estado]);
 
     const handleExportar = () => {
-        console.log(datatable.rows);
+        console.log(data)
         const headings = [
             'EMPRESA',
             'COD.',
@@ -102,7 +99,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             'OBSERVACION',
         ];
 
-        const data = datatable.rows.map(item => {
+        const d = data.map(item => {
             return {
                 empresa: item.empresa,
                 cod: item.code,
@@ -128,7 +125,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
 
         Axios({
             url: '/descargar',
-            data: {headings, data},
+            data: {headings, data: d},
             method: 'POST',
             responseType: 'blob'
         })
@@ -289,7 +286,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                         <select
                             className="form-control"
                             value={filtro.usuario_carga_id}
-                            onChange={e => setFiltro({ ...filtro, usuario_carga_id: e.target.value})}
+                            onChange={e => setFiltro({ ...filtro, usuario_carga_id: parseInt(e.target.value)})}
                         >
                             <option value={0} key={0}>TODOS</option>
                             {usuariosCarga.map(option => <option value={option.id} key={option.id}>{ `${option.nombre_completo}` }</option>)}
