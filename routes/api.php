@@ -60,6 +60,12 @@ Route::group(['prefix' => 'oficio'], function() {
     Route::put('/{id}/disable-sctr', 'OficioController@disableSctr');
 });
 
+Route::group(['prefix' => 'cuartel'], function() {
+    Route::post('/', 'CuartelController@create');
+    Route::get('/get-with-sctr', 'CuartelController@getWithSctr');
+    Route::put('/{id}/disable-sctr', 'CuartelController@disableSctr');
+});
+
 Route::group(['prefix' => 'contrato'], function() {
     Route::get('/{id}', 'ContratoController@show');
     Route::post('/', 'ContratoController@test');

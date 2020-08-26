@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Cuartel extends Model
 {
@@ -17,17 +18,54 @@ class Cuartel extends Model
                 'zona_labor_id' => $zona_labor_id
             ])->first();
 
-            if ($cuartel) {
-                return $cuartel->id;
+            if (!$cuartel) {
+                $cuartel = new Cuartel();
             }
 
-            $cuartel = new Cuartel();
             $cuartel->code = $data['id'];
             $cuartel->empresa_id = $data['empresa_id'];
             $cuartel->cod_subcentro = $data['cod_subcentro'] ?? null;
             $cuartel->nom_subcentro = $data['nom_subcentro'] ?? null;
             $cuartel->name = $data['name'];
+            if (isset($data['sctr'])) {
+                $cuartel->sctr = $data['sctr'];
+            }
             $cuartel->zona_labor_id = $zona_labor_id;
+
+            if ($cuartel->save()) {
+                return $cuartel->id;
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public static function getWithSctr()
+    {
+        return DB::table('cuarteles as c')
+            ->select(
+                'c.id',
+                'zl.name as zona_labor',
+                'c.name as cuartel',
+                'e.shortname as empresa'
+            )
+            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
+            ->join('zona_labores as zl', [
+                'zl.empresa_id' => 'c.empresa_id',
+                'zl.id' => 'c.zona_labor_id'
+            ])
+            ->where('c.sctr', true)
+            ->orderBy('e.shortname', 'ASC')
+            ->orderBy('zl.name', 'ASC')
+            ->orderBy('c.name', 'ASC')
+            ->get();
+    }
+
+    public static function disableSctr($id)
+    {
+        try {
+            $cuartel = Cuartel::find($id);
+            $cuartel->sctr = false;
 
             if ($cuartel->save()) {
                 return $cuartel->id;
