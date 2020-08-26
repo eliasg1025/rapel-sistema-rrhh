@@ -54,6 +54,12 @@ Route::group(['prefix' => 'trabajador'], function() {
     });
 });
 
+Route::group(['prefix' => 'oficio'], function() {
+    Route::post('/', 'OficioController@create');
+    Route::get('/get-with-sctr', 'OficioController@getWithSctr');
+    Route::put('/{id}/disable-sctr', 'OficioController@disableSctr');
+});
+
 Route::group(['prefix' => 'contrato'], function() {
     Route::get('/{id}', 'ContratoController@show');
     Route::post('/', 'ContratoController@test');

@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { Habilitar } from './Submodules/Habilitar';
 import { Reportes } from './Submodules/Reportes';
 import { Consulta } from './Submodules/Consulta';
-import {QuestionCircleOutlined, BookOutlined} from "@ant-design/icons";
+import {QuestionCircleOutlined, BookOutlined, EditOutlined} from "@ant-design/icons";
 import moment from 'moment';
 
 const { Content, Footer, Sider } = Layout;
@@ -15,19 +15,18 @@ export default function Sctr() {
     return (
         <Layout>
             <Sider
-                theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
             >
                 <br />
-                <Menu mode="inline" defaultSelectedKeys={[submodule]}>
+                <Menu mode="inline" defaultSelectedKeys={[submodule]} theme="dark">
                     <Menu.Item key="consulta" icon={<QuestionCircleOutlined />}>
                         <a href="/sctr">
                             Consulta
                         </a>
                     </Menu.Item>
                     {usuario.sctr === 2 && (
-                        <Menu.Item key="habilitar" icon={<BookOutlined />}>
+                        <Menu.Item key="habilitar" icon={<EditOutlined />}>
                             <a href="/sctr/habilitar">
                                 Habilitar
                             </a>
