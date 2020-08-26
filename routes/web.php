@@ -36,6 +36,12 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
 
+    Route::group(['prefix' => 'sctr'], function() {
+        Route::get('/', 'Web\SctrController@consultas');
+        Route::get('/habilitar', 'Web\SctrController@habilitar');
+        Route::get('/reportes', 'Web\SctrController@reportes');
+    });
+
     Route::group(['prefix' => 'sanciones'], function() {
         Route::get('/', 'Web\ViewController@sanciones');
         Route::get('/editar/{id}', 'Web\ViewController@editarSancion');

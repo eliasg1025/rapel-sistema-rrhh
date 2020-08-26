@@ -16,6 +16,7 @@ import ConsultarEstadoLiquidacion from "./components/Liquidaciones/ConsultarEsta
 import AdminLiquidaciones from "./components/Liquidaciones/AdminLiquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
+import Sctr from "./components/Sctr/Sctr";
 
 require('./bootstrap');
 
@@ -48,8 +49,15 @@ require('./components/Liquidaciones/ConsultarEstadoLiquidacion');
 require('./components/Liquidaciones/AdminLiquidaciones');
 
 require('./components/Sanciones/Sanciones');
+require('./components/Sctr/Sctr');
 
 //
+if (document.getElementById("sctr")) {
+    const element = document.getElementById("sctr");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Sctr {...props} />, document.getElementById("sctr"));
+}
+
 if (document.getElementById("sanciones")) {
     const element = document.getElementById("sanciones");
     const props = Object.assign({}, element.dataset);

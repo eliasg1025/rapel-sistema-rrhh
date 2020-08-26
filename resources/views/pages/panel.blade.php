@@ -60,8 +60,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a class="btn btn-block btn-light" href="/liquidaciones-utilidades" disabled>
-                        SCTR
+                    <a class="btn btn-block btn-light" href="/sctr" {{ $data['usuario']->sctr === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-file-alt"></i> SCTR
                     </a>
                 </div>
             </div>
