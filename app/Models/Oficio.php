@@ -47,6 +47,8 @@ class Oficio extends Model
             )
             ->join('empresas as e', 'e.id', '=', 'o.empresa_id')
             ->where('o.sctr', true)
+            ->orderBy('e.shortname', 'ASC')
+            ->orderBy('o.name', 'ASC')
             ->get();
     }
 
