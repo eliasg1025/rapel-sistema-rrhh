@@ -63,19 +63,18 @@ class Cuartel extends Model
 
     public static function getIndexesWithSctr($empresa_id)
     {
-        return DB::table('cuarteles as c')
-            ->select(
-                'c.empresa_id as IdEmpresa',
-                'zl.code as IdZona',
-                'c.code as IdCuartel'
-            )
-            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
+        $cuarteles = DB::table('cuarteles as c')
+            ->select(DB::raw("CONCAT(zl.code, '@', c.code) as id"))
             ->join('zona_labores as zl', [
                 'zl.empresa_id' => 'c.empresa_id',
                 'zl.id' => 'c.zona_labor_id'
             ])
             ->where('c.sctr', true)
-            ->get();
+            ->where('c.empresa_id', $empresa_id)
+            ->get()->toArray();
+
+        $cuarteles_indexes = array_column($cuarteles, 'id'); // Obteniendo solo los valor de los pk
+        return $cuarteles_indexes;
     }
 
     public static function disableSctr($id)

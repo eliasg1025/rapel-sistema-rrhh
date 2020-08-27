@@ -56,7 +56,7 @@ export const Reportes = () => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        Axios.post(`http://rapel-api.test/api/planilla/sctr/${form.empresa_id}`, {
+        Axios.post(`http://192.168.60.16/api/planilla/sctr/${form.empresa_id}`, {
             oficios: oficiosSctr,
             cuarteles: cuartelesSctr
         })
