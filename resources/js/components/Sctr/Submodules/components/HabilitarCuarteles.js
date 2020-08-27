@@ -4,7 +4,6 @@ import Axios from 'axios';
 
 import { empresa } from '../../../../data/default.json';
 import { TablaHabilitados } from './TablaHabilitados';
-import { data } from 'jquery';
 
 export const HabilitarCuarteles = () => {
     const [zonasLabor, setZonasLabor] = useState([]);

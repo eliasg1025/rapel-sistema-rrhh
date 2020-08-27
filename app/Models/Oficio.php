@@ -65,4 +65,15 @@ class Oficio extends Model
             return $e->getMessage();
         }
     }
+
+    public static function getIndexesWithSctr($empresa_id)
+    {
+        $oficios = DB::table('oficios')
+            ->select('code as id')
+            ->where('sctr', true)
+            ->where('empresa_id', $empresa_id)
+            ->get()->toArray();
+        $oficios_indexes = array_column($oficios, 'id'); // Obteniendo solo los valor de los pk
+        return $oficios_indexes;
+    }
 }

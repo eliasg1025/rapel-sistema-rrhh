@@ -33,6 +33,12 @@ class CuartelController extends Controller
         return response()->json($cuarteles);
     }
 
+    public function getIndexesWithSctr($empresa_id)
+    {
+        $cuarteles = Cuartel::getIndexesWithSctr($empresa_id);
+        return response()->json($cuarteles);
+    }
+
     public function disableSctr($id)
     {
         $cuartel_id = Cuartel::disableSctr($id);

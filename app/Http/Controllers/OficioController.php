@@ -31,6 +31,12 @@ class OficioController extends Controller
         return response()->json($oficios);
     }
 
+    public function getIndexesWithSctr($empresa_id)
+    {
+        $oficios = Oficio::getIndexesWithSctr($empresa_id);
+        return response()->json($oficios);
+    }
+
     public function disableSctr($id)
     {
         $oficio = Oficio::disableSctr($id);

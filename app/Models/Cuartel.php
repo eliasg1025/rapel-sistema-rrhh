@@ -61,6 +61,23 @@ class Cuartel extends Model
             ->get();
     }
 
+    public static function getIndexesWithSctr($empresa_id)
+    {
+        return DB::table('cuarteles as c')
+            ->select(
+                'c.empresa_id as IdEmpresa',
+                'zl.code as IdZona',
+                'c.code as IdCuartel'
+            )
+            ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
+            ->join('zona_labores as zl', [
+                'zl.empresa_id' => 'c.empresa_id',
+                'zl.id' => 'c.zona_labor_id'
+            ])
+            ->where('c.sctr', true)
+            ->get();
+    }
+
     public static function disableSctr($id)
     {
         try {
