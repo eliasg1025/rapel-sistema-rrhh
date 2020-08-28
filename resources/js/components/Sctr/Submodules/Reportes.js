@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Select, message } from 'antd';
+import { Select, message, DatePicker } from 'antd';
 import Axios from 'axios';
-import { ReporteDiario } from './components/ReporteDiario';
+import moment from 'moment';
 
 import { empresa } from '../../../data/default.json';
 import { TablaAsegurados } from './components/TablaAsegurados';
-import { filter } from 'lodash';
 
 export const Reportes = () => {
 
@@ -15,6 +14,9 @@ export const Reportes = () => {
 
     const [form, setForm] = useState({
         empresa_id: 9,
+        actual: true,
+        desde: moment().format('YYYY-MM-DD'),
+        hasta: moment().format('YYYY-MM-DD')
     });
 
     useEffect(() => {
@@ -44,7 +46,7 @@ export const Reportes = () => {
                 })
                 .catch(err => {
                     console.error(err)
-                    if (intentos < 3) {
+                    if (intentos1 < 3) {
                         fetchCuartelesIndexesSctr();
                     }
                 });
@@ -59,7 +61,9 @@ export const Reportes = () => {
 
         Axios.post(`http://192.168.60.16/api/planilla/sctr/${form.empresa_id}`, {
             oficios: oficiosSctr,
-            cuarteles: cuartelesSctr
+            cuarteles: cuartelesSctr,
+            actual: form.actual,
+            fechas: { desde: form.desde, hasta: form.hasta }
         })
             .then(res => {
                 message['success']({
@@ -118,6 +122,12 @@ export const Reportes = () => {
             })
     }
 
+    const handleMonthlySave = () => {
+        message['warning']({
+            content: 'Aún no disponible'
+        })
+    }
+
     return (
         <>
             <h4>Reportes</h4>
@@ -144,16 +154,45 @@ export const Reportes = () => {
                                     ))}
                                 </Select>
                             </div>
+                            {!form.actual && (
+                                <div className="col-md-4">
+                                    Desde - Hasta:<br />
+                                    <DatePicker.RangePicker
+                                        style={{ width: '100%' }}
+                                        placeholder={['Desde', 'Hasta']}
+                                        allowClear={false}
+                                        onChange={(date, dateString) => {
+                                            setForm({
+                                                ...form,
+                                                desde: dateString[0],
+                                                hasta: dateString[1],
+                                            });
+                                        }}
+                                        value={[moment(form.desde), moment(form.hasta)]}
+                                    />
+                                </div>
+                            )}
+                            <div className="col-md-4">
+                                <br />
+                                <div className="form-check">
+                                    <input className="form-check-input" type="checkbox" checked={form.actual} onChange={e => setForm({ ...form, actual: e.target.checked })}  />
+                                    <label className="form-check-label">
+                                        Registrados hasta mes actual
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-row">
                             <div className="col-md-4">
                                 <br />
                                 <button type="submit" className="btn btn-primary">
-                                    Buscar
+                                    <i className="fas fa-search"></i> Buscar
                                 </button>
-                            </div>
-                            <div className="col-md-4">
-                                <br />
                                 <button type="button" className="btn btn-success" onClick={handleExport}>
-                                    Exportar
+                                    <i className="fas fa-file-export"></i> Exportar
+                                </button>
+                                <button type="button" className="btn btn-warning" onClick={handleMonthlySave}>
+                                    <i className="far fa-save"></i> Corte Mensual
                                 </button>
                             </div>
                         </div>
@@ -163,10 +202,6 @@ export const Reportes = () => {
             <br />
             <TablaAsegurados
                 asegurados={asegurados}
-            />
-            <ReporteDiario
-                oficiosSctr={oficiosSctr}
-                cuartelesSctr={cuartelesSctr}
             />
         </>
     );
