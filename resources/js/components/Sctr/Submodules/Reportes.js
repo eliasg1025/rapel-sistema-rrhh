@@ -5,6 +5,7 @@ import { ReporteDiario } from './components/ReporteDiario';
 
 import { empresa } from '../../../data/default.json';
 import { TablaAsegurados } from './components/TablaAsegurados';
+import { filter } from 'lodash';
 
 export const Reportes = () => {
 
@@ -56,7 +57,7 @@ export const Reportes = () => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        Axios.post(`http://192.168.60.16/api/planilla/sctr/${form.empresa_id}`, {
+        Axios.post(`http://rapel-api.test/api/planilla/sctr/${form.empresa_id}`, {
             oficios: oficiosSctr,
             cuarteles: cuartelesSctr
         })
@@ -72,6 +73,49 @@ export const Reportes = () => {
                 }))
             })
             .catch(err => console.error(err));
+    }
+
+    const handleExport = () => {
+        const headings = [
+            'Item', 'Apellido Paterno', 'Apellido Materno', 'Nombres', 'Sexo', 'Fecha Nac.', 'Nacionalidad',
+            'Tipo Doc.', 'Numero Doc.', 'DC', 'Condición', 'Cargo', 'Moneda Sueldo', 'Sueldo', 'Tasa', 'Fec. Ingreso'
+        ];
+
+        const data = asegurados.map((a, i) => {
+            return {
+                item: i,
+                apellido_paterno: a.apellido_paterno,
+                apellido_materno: a.apellido_materno,
+                nombre: a.nombres,
+                sexo: a.sexo,
+                fecha_nacimiento: a.fecha_nacimiento,
+                nacionalidad: '',
+                tipo_documento: a.tipo_documento,
+                numero_documento: a.rut,
+                dc: '',
+                condicion: 'P',
+                cargo: a.cargo,
+                moneda_sueldo: '0',
+                sueldo: a.sueldo,
+                tasa: '',
+                fecha_ingreso: a.fecha_ingreso
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `PLANILLA-SCTR-${parseInt(form.empresa_id) === 9  ? 'RAPEL' : 'VERFRUT'}-ACTUAL.xlsx`
+                link.click();
+            })
     }
 
     return (
@@ -108,7 +152,7 @@ export const Reportes = () => {
                             </div>
                             <div className="col-md-4">
                                 <br />
-                                <button type="button" className="btn btn-success">
+                                <button type="button" className="btn btn-success" onClick={handleExport}>
                                     Exportar
                                 </button>
                             </div>

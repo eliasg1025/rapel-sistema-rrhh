@@ -95,6 +95,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
             'OFICIO',
             'CARGADO POR',
             'FECHA SOLICITUD',
+            'FECHA INCIDENCIA',
             'INCIDENCIA',
             'OBSERVACION',
         ];
@@ -118,6 +119,7 @@ export const TablaSancion = ({ reloadDatos, setReloadDatos }) => {
                 oficio: item.oficio,
                 cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud,
+                fecha_incidencia: item.fecha_incidencia,
                 incidencia: item.incidencia,
                 observacion: item.observacion
             };
