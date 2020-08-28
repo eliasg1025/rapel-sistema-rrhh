@@ -87,7 +87,7 @@ export const Reportes = () => {
 
         const data = asegurados.map((a, i) => {
             return {
-                item: i,
+                item: i + 1,
                 apellido_paterno: a.apellido_paterno,
                 apellido_materno: a.apellido_materno,
                 nombre: a.nombres,
