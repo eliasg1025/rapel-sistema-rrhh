@@ -49,7 +49,7 @@ export const Periodos = ({ periodos }) => {
         <Table
             rowClassName={(record, index) => record.indicador_vigencia == 1 && 'table-row-red'}
             columns={columns} dataSource={periodos} size="small"
-            scroll={{ x: 1300 }}
+            scroll={{ x: 1000 }}
         />
     );
 }

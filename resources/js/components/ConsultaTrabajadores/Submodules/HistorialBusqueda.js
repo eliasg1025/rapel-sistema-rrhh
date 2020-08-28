@@ -39,15 +39,23 @@ export const HistorialBusqueda = () => {
             .catch(err => console.error(err));
     }, []);
 
+    const handleExportar = () => {
+        const columns = [];
+        console.log(consultas);
+    }
+
     return (
         <>
             <h4>Historial</h4>
-            <br />
+            <button type="button" className="btn btn-success btn-sm" onClick={handleExportar}>
+                <i className="far fa-file-excel"></i> Exportar
+            </button>
+            <br /><br />
             <div className="row">
                 <div className="col">
                     <Table
                         columns={columns} dataSource={consultas} size="small"
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 700 }}
                     />
                 </div>
             </div>

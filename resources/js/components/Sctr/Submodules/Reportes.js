@@ -102,8 +102,14 @@ export const Reportes = () => {
                             </div>
                             <div className="col-md-4">
                                 <br />
-                                <button type="submit" className="btn btn-success">
+                                <button type="submit" className="btn btn-primary">
                                     Buscar
+                                </button>
+                            </div>
+                            <div className="col-md-4">
+                                <br />
+                                <button type="button" className="btn btn-success">
+                                    Exportar
                                 </button>
                             </div>
                         </div>

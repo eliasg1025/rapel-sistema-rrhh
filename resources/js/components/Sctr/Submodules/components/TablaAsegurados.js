@@ -49,6 +49,7 @@ export const TablaAsegurados = ({ asegurados }) => {
         <>
             <Table
                 columns={columns} dataSource={asegurados} size="small"
+                scroll={{ x: 800 }}
             />
         </>
     );

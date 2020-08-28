@@ -6,6 +6,7 @@ export const TablaHabilitados = ({ columns, data }) => {
         <>
             <Table
                 columns={columns} dataSource={data} size="small"
+                scroll={{ x: 300 }}
             />
         </>
     );
