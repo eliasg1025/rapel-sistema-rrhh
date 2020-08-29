@@ -28,6 +28,7 @@ export const Consulta = () => {
             />
             <DatosPersonales
                 trabajador={trabajador}
+                contratos={contratos}
             />
         </>
     );

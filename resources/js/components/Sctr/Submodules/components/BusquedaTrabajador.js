@@ -23,13 +23,13 @@ export const BusquedaTrabajador = ({ setTrabajador, setContratos,setSctr }) => {
                 const { trabajador, contrato_activo } = res.data;
 
                 if (trabajador !== null && contrato_activo.length > 0) {
-                    const { empresa_id, oficio_id, zona_id, cuartel_id } = contrato_activo[0];
+                    const { empresa_id, oficio, zona_labor, cuartel } = contrato_activo[0];
 
                     Axios.put(`/api/trabajador/${trabajador.rut}/sctr`, {
                         empresa_id,
-                        oficio_id,
-                        zona_id,
-                        cuartel_id
+                        oficio_id: oficio.id,
+                        zona_id: zona_labor.id,
+                        cuartel_id: cuartel.id
                     })
                         .then(res => {
                             setSctr(res.data.sctr);

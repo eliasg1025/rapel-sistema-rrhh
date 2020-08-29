@@ -123,9 +123,7 @@ export const Reportes = () => {
     }
 
     const handleMonthlySave = () => {
-        message['warning']({
-            content: 'Aún no disponible'
-        })
+        console.log(asegurados);
     }
 
     return (

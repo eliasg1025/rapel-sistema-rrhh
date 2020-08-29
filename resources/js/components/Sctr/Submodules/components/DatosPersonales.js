@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const DatosPersonales = ({ trabajador }) => {
+export const DatosPersonales = ({ trabajador, contratos }) => {
     return (
         <div className="card">
             <div className="card-body">
@@ -92,6 +92,38 @@ export const DatosPersonales = ({ trabajador }) => {
                                 <input
                                     type="text" className="form-control"
                                     value={trabajador?.nacionalidad || ''}
+                                    readOnly={true}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-row">
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                Zona Labor:<br />
+                                <input
+                                    type="text" placeholder="Zona Labor" className="form-control"
+                                    value={contratos[0]?.zona_labor?.name || ''}
+                                    readOnly={true}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                Cuartel:<br />
+                                <input
+                                    type="text" placeholder="Cuartel" className="form-control"
+                                    value={contratos[0]?.cuartel?.name || ''}
+                                    readOnly={true}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-md-4">
+                            <div className="form-group">
+                                Oficio:<br />
+                                <input
+                                    type="text" placeholder="Oficio" className="form-control"
+                                    value={contratos[0]?.oficio?.name || ''}
                                     readOnly={true}
                                 />
                             </div>
