@@ -318,4 +318,32 @@ class Trabajador extends Model
 
         return $d;
     }
+
+    public static function sctr($data)
+    {
+        $oficio = DB::table('oficios')
+            ->where([
+                'empresa_id' => $data['empresa_id'],
+                'code' => $data['oficio_id']
+            ])
+            ->first();
+
+        $cuartel = DB::table('cuarteles as c')
+            ->join('zona_labores as zl', 'zl.id', '=', 'c.zona_labor_id')
+            ->where([
+                'c.empresa_id' => $data['empresa_id'],
+                'zl.code' => $data['zona_id'],
+                'c.code' => $data['cuartel_id']
+            ])
+            ->first();
+
+        $oficio_sctr = $oficio ? $oficio->sctr : false;
+        $cuartel_sctr = $cuartel ? $cuartel->sctr : false;
+
+        if ($oficio_sctr || $cuartel_sctr) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

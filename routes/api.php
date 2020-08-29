@@ -48,6 +48,7 @@ Route::group(['prefix' => 'trabajador'], function() {
     Route::post('/revision', 'TrabajadorController@revision');
     Route::put('/{id}/habilitar', 'TrabajadorController@habilitar');
     Route::get('/{rut}/horarios', 'TrabajadorController@getHorarios');
+    Route::put('/{rut}/sctr', 'TrabajadorController@sctr');
     Route::group(['prefix' => 'reniec'], function() {
         Route::get('/{rut}', 'TrabajadorController@obtencionReniecIndividual');
         Route::post('/masiva', 'TrabajadorController@obtencionReniecMasiva');

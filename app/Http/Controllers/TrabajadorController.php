@@ -37,6 +37,15 @@ class TrabajadorController extends Controller
         ], 200);
     }
 
+    public function sctr(Request $request)
+    {
+        $sctr = Trabajador::sctr($request->all());
+
+        return response()->json([
+            'sctr' => $sctr
+        ]);
+    }
+
     public function getObservados(Request $request)
     {
         $filtro = $request->all();

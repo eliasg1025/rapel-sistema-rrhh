@@ -4,6 +4,8 @@ import Axios from 'axios';
 
 import { empresa } from '../../../../data/default.json';
 import { TablaHabilitados } from './TablaHabilitados';
+import Swal from 'sweetalert2';
+import { SubidaImportacion } from './SubidaImportacion';
 
 export const HabilitarOficios = () => {
     const [oficios, setOficios] = useState([]);
@@ -44,14 +46,28 @@ export const HabilitarOficios = () => {
 
     const handleDelete = id => {
         console.log(id);
-        Axios.put(`/api/oficio/${id}/disable-sctr`)
-            .then(res => {
-                message['success']({
-                    content: res.data.message
-                });
-                setReloadData(!reloadData);
-            })
-            .catch(err => console.log(err));
+        Swal.fire({
+            title: '¿Deseas deshabilitar este registro?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borrarlo',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(result => {
+                if (result.value) {
+                    Axios.put(`/api/oficio/${id}/disable-sctr`)
+                        .then(res => {
+                            message['success']({
+                                content: res.data.message
+                            });
+                            setReloadData(!reloadData);
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
+
     }
 
     const handleSubmit = e => {
@@ -68,6 +84,11 @@ export const HabilitarOficios = () => {
                 setReloadData(!reloadData);
             })
             .catch(err => console.error(err));
+    }
+
+    const handleImport = e => {
+        e.preventDefault();
+        console.log('import');
     }
 
     const columns = [
@@ -143,6 +164,9 @@ export const HabilitarOficios = () => {
                                         <button type="submit" className="btn btn-success">
                                             Habilitar Oficio
                                         </button>
+                                        <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#importacion">
+                                            <i className="fas fa-file-import"></i> Importación
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -157,6 +181,24 @@ export const HabilitarOficios = () => {
                         columns={columns}
                         data={oficiosSctr}
                     />
+                </div>
+            </div>
+
+            <div className="modal fade" id="importacion">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Importación</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <SubidaImportacion
+                                handleImport={handleImport}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
