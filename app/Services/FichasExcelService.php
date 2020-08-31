@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FichasExcelService
 {
-    public function generarExcel($usuario, array $data=[])
+    public function generarExcel($empresa_id, $usuario, array $data=[])
     {
         try {
             $exported_data = $this->ordernarDatos($data);
@@ -25,14 +25,21 @@ class FichasExcelService
                 $carga_excel->fecha_hora = now()->toDateTimeString();
                 $carga_excel->link = $filename;
                 $carga_excel->usuario_id = $usuario['id'];
+                $carga_excel->empresa_id = $empresa_id;
                 if ($carga_excel->save()) {
-                    return true;
+                    return [
+                        'message' => 'Exportación completada exitosamente',
+                        'carga_excel' => $carga_excel
+                    ];
                 }
-                return false;
+                return [
+                    'error' => 'No se pudo generar la exportación de excel'
+                ];
             }
-            return false;
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return [
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ];
         }
     }
 

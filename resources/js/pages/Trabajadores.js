@@ -22,6 +22,7 @@ const Trabajadores = props => {
     const [trabajadoresObservados, setTrabajadoresObservados] = useState([]);
     const [loading, setLoading] = useState(false);
     const [reload, setReload] = useState(false);
+    const [estadoCarga, setEstadoCarga] = useState(null);
 
     const getTrabajadores = () => {
         axios.put('/api/trabajador', filtro)
@@ -87,6 +88,7 @@ const Trabajadores = props => {
         try {
             const res = await axios.post('/api/contrato/generar-pdf', {
                 usuario,
+                empresa_id: filtro.empresa_id,
                 data: lista_contratos
             });
             console.log('Generar contrato response: ', res);
@@ -94,13 +96,20 @@ const Trabajadores = props => {
                 notification['success']({
                     message: `Se han procesando los contratos`
                 });
+
+                setEstadoCarga(res.data);
+
             } else {
                 notification['error']({
                     message: `Error al generar los contratos`
                 });
             }
         } catch (err) {
-            console.log(err);
+            console.log(err.response);
+            setEstadoCarga(null);
+            notification['error']({
+                message: err.response.data.error
+            });
         } finally {
             setLoading(false);
         }
@@ -111,6 +120,7 @@ const Trabajadores = props => {
         try {
             const res = await axios.post('/api/contrato/generar-ficha-excel', {
                 usuario,
+                empresa_id: filtro.empresa_id,
                 data: lista_contratos
             });
             console.log('Generar contrato response: ', res);
@@ -118,13 +128,20 @@ const Trabajadores = props => {
                 notification['success']({
                     message: `Se han procesando los contratos`
                 });
+
+                setEstadoCarga(res.data);
+
             } else {
                 notification['error']({
                     message: `Error al generar los contratos`
                 });
             }
         } catch (err) {
-            console.log(err);
+            console.log(err.response);
+            setEstadoCarga(null);
+            notification['error']({
+                message: err.response.data.error
+            });
         } finally {
             setLoading(false);
         }
@@ -208,6 +225,7 @@ const Trabajadores = props => {
                 generarContrato={generarContrato}
                 generarFicha={generarFicha}
                 eliminarContrato={eliminarContrato}
+                estadoCarga={estadoCarga}
             />
             <br/>
             <hr />

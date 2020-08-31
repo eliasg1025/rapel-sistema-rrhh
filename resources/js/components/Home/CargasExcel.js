@@ -31,9 +31,14 @@ const CargasExcel = () => {
 
     const columns = [
         {
-            title: 'Codigo',
+            title: 'Código',
             dataIndex: 'id',
             key: 'id'
+        },
+        {
+            title: 'Empresa',
+            dataIndex: 'empresa',
+            key: 'empresa'
         },
         {
             title: 'Fecha y hora',
@@ -46,20 +51,22 @@ const CargasExcel = () => {
             key: 'username'
         },
         {
-            title: 'Enlace',
+            title: 'Ver',
             key: 'action',
             render: (_, record) => {
                 const link = `/storage/${record.link}`
                 return (
                     <Space size="middle">
-                        <a href={link} target="_blank" rel="noopener noreferrer">Enlace</a>
+                        <a href={link} target="_blank" rel="noopener noreferrer">
+                            <i className="fas fa-search" />
+                        </a>
                     </Space>
                 )
             }
         },
     ];
 
-    return <Table columns={columns} dataSource={cargasPdf} size="small" scroll={{ x: 1300 }}/>;
+    return <Table columns={columns} dataSource={cargasPdf} size="small" scroll={{ x: 500 }}/>;
 };
 
 export default CargasExcel;

@@ -156,7 +156,7 @@ const TablaTrabajadores = props => {
                             disabled={!hasSelected}
                             loading={props.loading}
                         >
-                            Generar Contrato
+                            <i className="far fa-file-alt" />&nbsp;Generar Contratos
                         </Button>
                         <Button
                             type="primary"
@@ -164,22 +164,48 @@ const TablaTrabajadores = props => {
                             disabled={!hasSelected}
                             loading={props.loading}
                         >
-                            Generar Ficha
+                            <i className="far fa-file-excel" />&nbsp;Exportar Registros
                         </Button>
                     </ButtonGroup>
 
                     <span style={{ marginLeft: 8 }}>
-                            {hasSelected
-                                ? `${selectedRowKeys.length} elementos seleccionados `
-                                : ''}
-                        </span>
+                        {hasSelected
+                            ? `${selectedRowKeys.length} elementos seleccionados `
+                            : ''}
+                    </span>
                 </div>
             </div>
+            {props.estadoCarga && (
+                <div className="alert alert-success" role="alert">
+                    <b>Estado de carga:</b>
+                    {props.estadoCarga.carga_excel && (
+                        <>
+                            <br />
+                            <span>Código de la carga: <b>{props.estadoCarga.carga_excel.id}</b></span>
+                            <p>
+                                <span>{props.estadoCarga.message}</span>. Puede descargar el documento <b><u><a href={`/storage/${props.estadoCarga.carga_excel.link}`} target="_blank">AQUÍ</a></u></b> o dirigirse a la pestaña <b><u><a
+                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas > Fichas excel</b>.
+                            </p>
+                        </>
+                    )}
+                    {props.estadoCarga.carga_pdf && (
+                        <>
+                            <br/>
+                            <span>Código de la carga: <b>{props.estadoCarga.carga_pdf.id}</b></span>
+                            <p>
+                                Se procesaron {props.estadoCarga.generados.length} registro(s) correctamente con {props.estadoCarga.errores.length} error(es).
+                                Puede descargar el documento <b><u><a href={`/storage/${props.estadoCarga.carga_pdf.link}`} target="_blank">AQUÍ</a></u></b> o dirigirse a la pestaña <b><u><a
+                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas > Contratos</b>.
+                            </p>
+                        </>
+                    )}
+                </div>
+            )}
             <Table
                 rowSelection={rowSelection}
                 columns={getColumns(props.eliminarContrato)}
                 dataSource={props.trabajadores}
-                scroll={{ x: 1300 }}
+                scroll={{ x: 1200 }}
             />
         </div>
     );

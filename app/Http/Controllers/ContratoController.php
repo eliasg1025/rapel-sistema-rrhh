@@ -64,7 +64,12 @@ class ContratoController extends Controller
     {
         $data = $request->get('data');
         $usuario = $request->get('usuario');
-        $result = (new ContratosService())->generarPdfMasivo($usuario, $data);
+        $empresa_id = $request->get('empresa_id');
+        $result = (new ContratosService())->generarPdfMasivo($empresa_id, $usuario, $data);
+
+        if ( isset($result['error']) ) {
+            return response()->json($result, 400);
+        }
         return response()->json($result, 200);
     }
 
@@ -72,7 +77,12 @@ class ContratoController extends Controller
     {
         $data = $request->get('data');
         $usuario = $request->get('usuario');
-        $result = (new FichasExcelService())->generarExcel($usuario, $data);
+        $empresa_id = $request->get('empresa_id');
+        $result = (new FichasExcelService())->generarExcel($empresa_id, $usuario, $data);
+
+        if ( isset($result['error']) ) {
+            return response()->json($result, 400);
+        }
         return response()->json($result);
     }
 

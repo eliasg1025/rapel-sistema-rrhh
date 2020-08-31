@@ -45,11 +45,16 @@ export default function Home(props) {
             <Card>
                 <h6><u>Cargas realizadas</u></h6>
                 <br></br>
-                <h6>Contratos</h6>
-                    <CargasPdf />
-                <br />
-                <h6>Fichas excel</h6>
-                    <CargasExcel />
+                <div className="row">
+                    <div className="col-md-6">
+                        <h6><i className="far fa-file-alt"/>&nbsp;Contratos</h6>
+                        <CargasPdf />
+                    </div>
+                    <div className="col-md-6">
+                        <h6><i className="far fa-file-excel"/>&nbsp;Fichas excel</h6>
+                        <CargasExcel />
+                    </div>
+                </div>
             </Card>
         </div>
     )
