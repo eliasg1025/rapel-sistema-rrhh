@@ -5,6 +5,8 @@ import moment from 'moment';
 
 import { empresa } from '../../../data/default.json';
 import { TablaAsegurados } from './components/TablaAsegurados';
+import {CorteMensual} from "./components/CorteMensual";
+
 
 export const Reportes = () => {
 
@@ -122,10 +124,6 @@ export const Reportes = () => {
             })
     }
 
-    const handleMonthlySave = () => {
-        console.log(asegurados);
-    }
-
     return (
         <>
             <h4>Reportes</h4>
@@ -189,7 +187,7 @@ export const Reportes = () => {
                                 <button type="button" className="btn btn-success" onClick={handleExport}>
                                     <i className="fas fa-file-export"></i> Exportar
                                 </button>
-                                <button type="button" className="btn btn-warning" onClick={handleMonthlySave}>
+                                <button type="button" className="btn btn-warning" data-toggle="modal" data-target="#corteMensual">
                                     <i className="far fa-save"></i> Corte Mensual
                                 </button>
                             </div>
@@ -200,6 +198,12 @@ export const Reportes = () => {
             <br />
             <TablaAsegurados
                 asegurados={asegurados}
+            />
+
+            <CorteMensual
+                asegurados={asegurados}
+                empresas={empresa}
+                empresa_id={form.empresa_id}
             />
         </>
     );

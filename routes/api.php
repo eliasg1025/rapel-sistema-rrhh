@@ -138,6 +138,10 @@ Route::group(['prefix' => 'consulta-trabajador'], function() {
     Route::post('/', 'ConsultaTrabajadorController@create');
 });
 
+Route::group(['prefix' => 'corte-sctr'], function() {
+    Route::post('/', 'CorteSctrController@create');
+});
+
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');
