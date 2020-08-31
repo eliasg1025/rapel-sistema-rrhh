@@ -1,7 +1,7 @@
 @extends('pdf-layout')
 
 @section('titulo')
-    FICHA PERSONAL contrato declaracion topico - Obrero de Campo
+    FICHA PERSONAL contrato declaracion topico - <span style="text-transform: capitalize">{{ $contrato->oficio->name }}</span>
 @endsection
 
 <style>
@@ -427,8 +427,8 @@
     </section>
     <section id="page1" class="contrato">
         <small>{{ $trabajador->rut ?? '' }}</small>
-        <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>INTERMITENTE</b></h4>
-        <p>Conste mediante el presente documento el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad Intermitente</b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 27360, Ley de Promoción del Sector Agrario; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
+        <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>{{ $contrato->tipo_contrato->name }}</b></h4>
+        <p>Conste mediante el presente documento el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 27360, Ley de Promoción del Sector Agrario; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
         <ul>
             <li>
                 <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C.</b>, R.U.C. Nº 20601438586, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, <b>Daniel José Eyheralde Munita</b>, identificado con Documento Nacional de Identidad C.E. Nº 001555417, a la que en adelante le denominará <b>EL EMPLEADOR</b>; y de la otra parte,
@@ -448,12 +448,12 @@
             </li>
             <li>
                 <b><u>CLÁUSULA SEGUNDA:</u> Causa objetiva de la contratación.-</b>
-                <br>2.1 Considerando la naturaleza agrícola de sus actividades, las mismas que son de carácter permanente pero discontinúo, con períodos de incremento y de inactividad, <b>EL EMPLEADOR</b> requiere contratar a plazo fijo y bajo la modalidad <b>INTERMITENTE</b> los servicios de <b>EL TRABAJADOR</b>.
+                <br>2.1 Considerando la naturaleza agrícola de sus actividades, las mismas que son de carácter permanente pero discontinúo, con períodos de incremento y de inactividad, <b>EL EMPLEADOR</b> requiere contratar a plazo fijo y bajo la modalidad <b>{{ $contrato->tipo_contrato->name }}</b> los servicios de <b>EL TRABAJADOR</b>.
                 <br>2.2	<b>EL EMPLEADOR</b>, conforme lo señalado en el párrafo anterior, precisa que la intermitencia se basa en la naturaleza agrícola de las actividades a desarrollar, las cuales están afectas a factores externos como clima, suelo, crecimiento del producto agrícola, etc. Dichos factores externos escapan al control d<b>el EMPLEADOR</b>, por lo cual la necesidad del recurso humano no puede ser prevista con exactitud, y se irá adecuando en cada oportunidad, según el requerimiento de las áreas involucradas.
             </li>
             <li>
                 <b><u>CLÁUSULA TERCERA:</u> Objeto.-</b>
-                <br>3.1	En razón de la causa objetiva señalada en la cláusula anterior, <b>EL EMPLEADOR</b> contrata a plazo fijo bajo la modalidad indicada, los servicios de <b>EL TRABAJADOR</b> para que desempeñe el cargo de OBRERO DE CAMPO.
+                <br>3.1	En razón de la causa objetiva señalada en la cláusula anterior, <b>EL EMPLEADOR</b> contrata a plazo fijo bajo la modalidad indicada, los servicios de <b>EL TRABAJADOR</b> para que desempeñe el cargo de {{ $contrato->oficio->name }}.
                 <br>3.2	<b>EL TRABAJADOR</b> conoce y entiende que <b>EL EMPLEADOR</b> cuenta con facultades de dirección reconocida en el artículo 9° de la LPCL, por lo cual, en ejercicio legítimo de la misma, <b>EL EMPLEADOR</b> puede organizar y controlar el buen cumplimiento de las obligaciones de <b>EL TRABAJADOR</b>.
                 <br>3.3	<b>EL EMPLEADOR</b> en función de sus necesidades y requerimientos podrá modificar las condiciones de la prestación de los servicios objeto de la relación laboral, siendo pasibles de variación lo referente a la jornada y horario de trabajo, designación del centro de labores a cualquiera de las sedes que existan en su oportunidad, forma, funciones, categoría, modalidad dentro de los límites que la razonabilidad y la ley establecen. <b>EL TRABAJADOR</b> entiende que dichas variaciones no significan una rebaja de categoría y/o remuneración.
             </li>
@@ -683,7 +683,7 @@
                 ____________________________________________________________<br>
                 Nombre: <span>{{ $trabajador->nombre . ' ' . $trabajador->apellidos }}</span><br>
                 DNI: <span>{{ $trabajador->rut }} </span><br>
-                Cargo: <span>OBRERO DE CAMPO</span><br>
+                Cargo: <span>{{ $contrato->oficio->name }}</span><br>
             </p>
         </div>
     </section>
@@ -800,7 +800,7 @@
         <h4 class="titulo">DECLARACIÓN DE ACEPTACIÓN DEL REGLAMENTO INTERNO DE SEGURIDAD  Y SALUD EN EL TRABAJO</h4>
         <br>
         <p>
-            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>OBRERO DE CAMPO</b>, declaro que desarrollare mis labores en forma segura, comprometiéndome a cumplir y acatar todas las normativas y procedimientos de Seguridad y Salud en el Trabajo establecidas por la Empresa en el presente Reglamento y demás directivas o políticas internas; siendo esto condición imprescindible para mi permanencia en la Empresa.
+            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro que desarrollare mis labores en forma segura, comprometiéndome a cumplir y acatar todas las normativas y procedimientos de Seguridad y Salud en el Trabajo establecidas por la Empresa en el presente Reglamento y demás directivas o políticas internas; siendo esto condición imprescindible para mi permanencia en la Empresa.
         </p>
         <p>
             Asimismo, declaro que me regiré por los procedimientos mencionados de Seguridad y Salud en el Trabajo y las normas que sobre el tema se han dictado y se dicten en adelante; adecuando mi desempeño laboral a una conducta segura e higiénica, y de respeto hacia mis compañeros de trabajo, jefes, clientes, comunidad y medio ambiente. Cualquier incumplimiento de las normas y procedimientos establecidos en SOCIEDAD EXPORTADORA VERFRUT S.A.C., me obligará a someterme a las sanciones establecidas en el Reglamento Interno de Seguridad y Salud en el Trabajo, y demás normas internas de la Empresa., las cuales conozco y acato en su totalidad.
@@ -843,7 +843,7 @@
         <h4 class="titulo">RADIACIÓN ULTRAVIOLETA</h4>
         <br>
         <p>
-            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>OBRERO DE CAMPO</b>, declaro haber recibido instrucción e información sobre la Guía para el cumplimiento legal de la Ley Nº 30102, “LEY QUE DISPONE MEDIDAS PREVENTIVAS CONTRA LOS EFECTOS NOCIVOS PARA LA SALUD POR LA EXPOSICIÓN PROLONGADA A LA RADIACIÓN SOLAR”, indicándome los riesgos específicos de exposición laboral a radiación UV de origen solar y sus medidas de control en los siguientes términos: “la exposición excesiva y/o acumulada de radiación ultravioleta produce efectos dañinos a corto y largo plazo, principalmente en ojos y piel que van desde quemaduras solares, queratitis actínica y alteraciones de la respuesta inmune hasta foto envejecimiento, tumores malignos de piel y cataratas a nivel ocular”, en los siguientes términos:
+            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro haber recibido instrucción e información sobre la Guía para el cumplimiento legal de la Ley Nº 30102, “LEY QUE DISPONE MEDIDAS PREVENTIVAS CONTRA LOS EFECTOS NOCIVOS PARA LA SALUD POR LA EXPOSICIÓN PROLONGADA A LA RADIACIÓN SOLAR”, indicándome los riesgos específicos de exposición laboral a radiación UV de origen solar y sus medidas de control en los siguientes términos: “la exposición excesiva y/o acumulada de radiación ultravioleta produce efectos dañinos a corto y largo plazo, principalmente en ojos y piel que van desde quemaduras solares, queratitis actínica y alteraciones de la respuesta inmune hasta foto envejecimiento, tumores malignos de piel y cataratas a nivel ocular”, en los siguientes términos:
         </p>
         <ol>
             <li>Efectos en la salud por exposición a radiación UV.</li>
@@ -915,7 +915,7 @@
                     </tr>
                     <tr>
                         <td>Cargo:</td>
-                        <td>OBRERO DE CAMPO</td>
+                        <td>{{ $contrato->oficio->name }}</td>
                     </tr>
                     <tr>
                         <td>DNI N°:</td>
@@ -1007,7 +1007,7 @@
                     </tr>
                     <tr>
                         <td>Cargo:</td>
-                        <td>OBRERO DE CAMPO</td>
+                        <td>{{ $contrato->oficio->name }}</td>
                     </tr>
                     <tr>
                         <td>DNI N°:</td>
@@ -1115,7 +1115,7 @@
                 </tr>
                 <tr>
                     <td>Cargo:</td>
-                    <td><b>OBRERO DE CAMPO</b></td>
+                    <td><b>{{ $contrato->oficio->name }}</b></td>
                     <td>Nivel Educativo:</td>
                     <td colspan="2"></td>
                     <td>

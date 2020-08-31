@@ -37,6 +37,16 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Ruta');
     }
 
+    public function tipo_contrato()
+    {
+        return $this->belongsTo('App\Models\TipoContrato');
+    }
+
+    public function oficio()
+    {
+        return $this->belongsTo('App\Models\Oficio');
+    }
+
     /**
      * Mutators
      */

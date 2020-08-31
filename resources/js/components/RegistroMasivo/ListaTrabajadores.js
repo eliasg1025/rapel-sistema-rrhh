@@ -45,11 +45,13 @@ const ListaTrabajadores = props => {
             responsive: ['lg'],
             render: (_, record) => (
                 <Button.Group>
+                    {/*
                     <Tooltip title="Editar">
                         <Button type="primary" onClick={console.log}>
                             <EditOutlined />
                         </Button>
                     </Tooltip>
+                     */}
                     <Tooltip title="Borrar">
                         <Button
                             type="danger"
