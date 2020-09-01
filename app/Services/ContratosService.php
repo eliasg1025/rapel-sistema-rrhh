@@ -83,7 +83,8 @@ class ContratosService
 
             $data = [
                 'trabajador' => $trabajador,
-                'contrato' => $contrato
+                'contrato' => $contrato,
+                'data' => 5 . '@' . $contrato->id
             ];
 
             $content = \PDF::setOptions([

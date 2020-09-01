@@ -42,7 +42,8 @@ class ContratoController extends Controller
 
             $data = [
                 'trabajador' => $trabajador,
-                'contrato' => $contrato
+                'contrato' => $contrato,
+                'codigo' => 5 . '@' . $contrato->id
             ];
 
             $pdf = \PDF::setOptions([
