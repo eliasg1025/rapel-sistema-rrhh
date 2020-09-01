@@ -184,7 +184,7 @@ const TablaTrabajadores = props => {
                             <span>Código de la carga: <b>{props.estadoCarga.carga_excel.id}</b></span>
                             <p>
                                 <span>{props.estadoCarga.message}</span>. Puede descargar el documento <b><u><a href={`/storage/${props.estadoCarga.carga_excel.link}`} target="_blank">AQUÍ</a></u></b> o dirigirse a la pestaña <b><u><a
-                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas > Fichas excel</b>.
+                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas &gt; Fichas excel</b>.
                             </p>
                         </>
                     )}
@@ -195,7 +195,7 @@ const TablaTrabajadores = props => {
                             <p>
                                 Se procesaron {props.estadoCarga.generados.length} registro(s) correctamente con {props.estadoCarga.errores.length} error(es).
                                 Puede descargar el documento <b><u><a href={`/storage/${props.estadoCarga.carga_pdf.link}`} target="_blank">AQUÍ</a></u></b> o dirigirse a la pestaña <b><u><a
-                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas > Contratos</b>.
+                                href="/ingresos" target="_blank">Inicio</a></u></b> a la sección <b>Cargas realizadas &gt; Contratos</b>.
                             </p>
                         </>
                     )}

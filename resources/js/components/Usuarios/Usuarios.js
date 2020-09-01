@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 
-import ListaUsuarios from '../components/Usuarios/ListaUsuarios';
+import ListaUsuarios from './submodules/ListaUsuarios';
 
 const Usuarios = props => {
     console.log(props);
@@ -23,6 +23,7 @@ const Usuarios = props => {
         <div className="users">
             <h3>Usuarios</h3>
             <ListaUsuarios
+                reloadUser={reloadUser}
                 setReloadUser={setReloadUser}
                 usersActive={usersActive}
                 usersInactive={usersInactive}

@@ -6,7 +6,7 @@ import moment from 'moment';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-import Usuarios from '../pages/Usuarios';
+import Usuarios from '../components/Usuarios/Usuarios';
 
 import 'antd/dist/antd.css';
 

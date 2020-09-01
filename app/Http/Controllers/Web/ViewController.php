@@ -116,20 +116,7 @@ class ViewController extends Controller
         return view('pages.liquidaciones', compact('data'));
     }
 
-    public function usuarios(Request $request)
-    {
-        if (!$request->session()->has('usuario'))
-            return redirect('/login');
-        $usuario = $request->session()->get('usuario');
 
-        if ($usuario->rol !== 'admin') {
-            return redirect('/');
-        }
-        $data = [
-            'usuario' => $usuario
-        ];
-        return view('pages.usuarios', compact('data'));
-    }
 
     public function trabajadores(Request $request)
     {
@@ -379,6 +366,22 @@ class ViewController extends Controller
         ];
 
         return view('pages.sanciones', compact('data'));
+    }
+
+    public function usuarios(Request $request)
+    {
+        if (!$request->session()->has('usuario'))
+            return redirect('/login');
+        $usuario = $request->session()->get('usuario');
+
+        if ($usuario->rol !== 'admin' || $usuario->usuarios == 0) {
+            $nombre_modulo = 'usuarios';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+        $data = [
+            'usuario' => $usuario
+        ];
+        return view('pages.usuarios', compact('data'));
     }
 
     public function consultaTrabajadores(Request $request)

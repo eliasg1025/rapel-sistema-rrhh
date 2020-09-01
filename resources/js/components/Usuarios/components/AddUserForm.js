@@ -50,14 +50,18 @@ export default function AddUserForm(props) {
         Axios.post('/api/usuario', data)
             .then(res => {
                 notification['success']({
-                    message: res.message,
+                    message: res.data.message,
                 });
             })
             .catch(err =>  {
                 console.log(err);
                 notification['error']({
-                    message: err.message,
+                    message: err.response.data.message,
                 });
+            })
+            .finally(() => {
+                setIsVisibleModal(false);
+                setReloadUser(true);
             });
         /*
         createUserApi(token, data)
