@@ -9,11 +9,12 @@ export const Liquidaciones = () => {
 
     const [data, setData] = useState([]);
     const [filtro, setFiltro] = useState({
-        desde: moment().format('YYYY-MM'),
+        desde: moment().subtract('M', 1).format('YYYY-MM'),
         hasta: moment().format('YYYY-MM'),
         estado: 0,
         empresa_id: 0
     });
+    const [reloadData, setReloadData] = useState(false);
 
     const getData = () => {
         let intentos = 0;
@@ -46,7 +47,7 @@ export const Liquidaciones = () => {
 
     useEffect(() => {
         getData();
-    }, [filtro]);
+    }, [filtro, reloadData]);
 
     return (
         <>
@@ -60,6 +61,8 @@ export const Liquidaciones = () => {
             <TablaLU
                 data={data}
                 estado={filtro.estado}
+                reloadData={reloadData}
+                setReloadData={setReloadData}
             />
         </>
     );

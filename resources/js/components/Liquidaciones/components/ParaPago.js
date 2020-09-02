@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
 import moment from 'moment';
+import Axios from 'axios';
+import Swal from 'sweetalert2';
 
-export const ParaPago = ({ finiquitos }) => {
+export const ParaPago = ({ finiquitos, reloadData, setReloadData }) => {
 
+    const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         fecha: moment().format('YYYY-MM-DD').toString()
     });
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log({
+
+        setLoading(true);
+        Axios.post('/api/finiquitos/programar-para-pago', {
             fecha: form.fecha,
             finiquitos
-        });
+        })
+            .then(res => {
+                const { message } = res.data;
+
+                setLoading(false);
+                Swal.fire(message, '', 'success')
+                    .then(res => {
+                        setReloadData(!reloadData);
+                    });
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+                Swal.fire('Error al actualizar el estado', '', 'error');
+            });
     }
 
     return (
@@ -26,7 +45,11 @@ export const ParaPago = ({ finiquitos }) => {
                 </div>
                 <div className="col">
                     <button className="btn btn-primary" type="submit">
-                        Programar para pago
+                        {!loading ? 'Programar para pago' : (
+                            <>
+                                <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

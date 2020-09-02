@@ -34,4 +34,21 @@ class Liquidaciones extends Model
             })
             ->get();
     }
+
+    public static function forPayment(string $fecha, array $finiquitos)
+    {
+        try {
+            return DB::table('liquidaciones')
+                ->whereIn('id', $finiquitos)
+                ->update([
+                    'estado' => 2,
+                    'fecha_pago' => date($fecha),
+                    'fecha_hora_marca_para_pago' => now()->toDateTimeString()
+                ]);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
 }

@@ -115,4 +115,22 @@ class LiquidacionesController extends Controller
             ], 400);
         }
     }
+
+    public function programarParaPago(Request $request)
+    {
+        $fecha = $request->get('fecha');
+        $finiquitos = $request->get('finiquitos');
+        $result = Liquidaciones::forPayment($fecha, $finiquitos);
+
+        if ( isset($result['error']) ) {
+            return response()->json([
+                'message' => $result['error']
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Se actualizaron ' . $result . ' registros',
+            'actualizados' => $result
+        ]);
+    }
 }
