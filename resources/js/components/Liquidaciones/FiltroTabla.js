@@ -14,6 +14,7 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="form-group col-md-3">
+                            Periodos:<br />
                             <DatePicker.RangePicker
                                 allowClear={false}
                                 style={{ width: '100%' }}
@@ -30,6 +31,7 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                             />
                         </div>
                         <div className="form-group col-md-3">
+                            Estado: <br />
                             <select className="form-control" onChange={e => setFiltro({ ...filtro, estado: e.target.value })}>
                                 <option key={0} value={0}>PENDIENTE</option>
                                 <option key={1} value={1}>FIRMADO</option>
@@ -39,14 +41,12 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                             </select>
                         </div>
                         <div className="form-group col-md-3">
+                            Empresa: <br />
                             <select className="form-control" onChange={e => setFiltro({ ...filtro, empresa_id: e.target.value })}>
-                                <option key={0} value={0}>TODOS</option>
+                                <option key={0} value={0}>TODAS</option>
                                 <option key={9} value={9}>RAPEL</option>
                                 <option key={14} value={14}>VERFRUT</option>
                             </select>
-                        </div>
-                        <div className="form-group col-md-3">
-
                         </div>
                     </div>
                     <div className="row">

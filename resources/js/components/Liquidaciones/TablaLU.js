@@ -1,34 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Checkbox } from 'antd';
 import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {ModalBootstrap} from "../shared/ModalBootstrap";
+import {ParaPago} from "./components/ParaPago";
 
-const columns = [
-    {
-        title: 'Empresa',
-        dataIndex: 'empresa',
-    },
-    {
-        title: 'RUT',
-        dataIndex: 'rut',
-    },
-    {
-        title: 'Mes',
-        dataIndex: 'mes',
-    },
-    {
-        title: 'Año',
-        dataIndex: 'ano'
-    },
-    {
-        title: 'Monto',
-        dataIndex: 'monto'
-    },
-    {
-        title: 'Estado',
-        dataIndex: 'estado',
-        render: (_, record) => renderTags(record.estado)
+const getColumns = (data) => {
+
+    const getFechasFirmado = liquidaciones => {
+        const fechas_repetidas = liquidaciones.map(l => l.fecha_firmado);
+        const fechas = new Set(fechas_repetidas);
+
+        return Array.from(fechas).map(f => ({ text: f, value: f }));
     }
-];
+
+    return [
+        {
+            title: 'Empresa',
+            dataIndex: 'empresa',
+        },
+        {
+            title: 'RUT',
+            dataIndex: 'rut',
+        },
+        {
+            title: 'Mes',
+            dataIndex: 'mes',
+        },
+        {
+            title: 'Año',
+            dataIndex: 'ano'
+        },
+        {
+            title: 'Monto',
+            dataIndex: 'monto'
+        },
+        {
+            title: 'Fecha Firmado',
+            dataIndex: 'fecha_firmado',
+            filters: getFechasFirmado(data),
+            onFilter: (value, record) => record.fecha_firmado.indexOf(value) === 0
+        },
+        {
+            title: 'Estado',
+            dataIndex: 'estado',
+            render: (_, record) => renderTags(record.estado)
+        },
+    ];
+}
 
 function renderTags(estado) {
     switch (estado) {
@@ -47,9 +65,10 @@ function renderTags(estado) {
     }
 }
 
-export const TablaLU = ({ data }) => {
+export const TablaLU = ({ data, estado }) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [all, setAll] = useState(false);
 
     const reload = () => {
         setLoading(true);
@@ -64,6 +83,19 @@ export const TablaLU = ({ data }) => {
         setSelectedRowKeys(selectedRowKeys);
     };
 
+    const toggleSeleccionarTodos = () => {
+        if (all) {
+            setAll(false);
+            setSelectedRowKeys([]);
+
+            return;
+        }
+
+        const x = data.map(l => l.id);
+        setAll(true);
+        setSelectedRowKeys(x);
+    }
+
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
@@ -71,10 +103,10 @@ export const TablaLU = ({ data }) => {
     const hasSelected = selectedRowKeys.length > 0;
 
     return (
-        <div>
-            <div style={{ marginBottom: 16 }}>
-                {hasSelected && (
-                    <button className="btn btn-primary" disabled={!hasSelected || loading} onClick={reload}>
+        <>
+            <div style={{ marginBottom: 16, marginTop: 12 }}>
+                {(hasSelected && parseInt(estado) === 1) && (
+                    <button className="btn btn-primary" data-toggle="modal" data-target="#paraPago">
                         {loading ? (
                             <>
                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -87,7 +119,19 @@ export const TablaLU = ({ data }) => {
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>
             </div>
-            <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
-        </div>
+            <Table
+                rowSelection={rowSelection} columns={getColumns(data)} dataSource={data} size="small" scroll={{ x: 500 }}
+                pagination={{ pageSize: 20 }}
+            />
+
+            <ModalBootstrap
+                id="paraPago"
+                title="Programar para pago"
+            >
+                <ParaPago
+                    finiquitos={rowSelection.selectedRowKeys}
+                />
+            </ModalBootstrap>
+        </>
     );
 }

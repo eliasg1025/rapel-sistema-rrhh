@@ -199,6 +199,7 @@ const TablaTrabajadoresObservados = ({
                 dataSource={trabajadoresObservados}
                 size="small"
                 scroll={{ x: 1200 }}
+                pagination={{ pageSize: 20 }}
             />
         </div>
     );

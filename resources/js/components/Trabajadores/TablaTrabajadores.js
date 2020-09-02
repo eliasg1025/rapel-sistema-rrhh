@@ -205,7 +205,9 @@ const TablaTrabajadores = props => {
                 rowSelection={rowSelection}
                 columns={getColumns(props.eliminarContrato)}
                 dataSource={props.trabajadores}
+                size="small"
                 scroll={{ x: 1200 }}
+                pagination={{ pageSize: 20 }}
             />
         </div>
     );

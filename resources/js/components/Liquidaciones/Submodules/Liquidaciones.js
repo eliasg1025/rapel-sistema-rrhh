@@ -46,7 +46,7 @@ export const Liquidaciones = () => {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [filtro]);
 
     return (
         <>
@@ -59,6 +59,7 @@ export const Liquidaciones = () => {
             />
             <TablaLU
                 data={data}
+                estado={filtro.estado}
             />
         </>
     );
