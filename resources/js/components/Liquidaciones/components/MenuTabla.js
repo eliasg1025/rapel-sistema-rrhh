@@ -75,7 +75,10 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData }) => {
                     title: 'Proceso completado',
                     icon: 'info',
                     text: `Completados ${data.completados} de ${data.total}`,
-                });
+                })
+                    .then(res => {
+                        setReloadData(!reloadData);
+                    });
             })
             .catch(err => {
                 console.log(err);
