@@ -14,6 +14,13 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="form-group col-md-3">
+                            Empresa: <br />
+                            <select className="form-control" onChange={e => setFiltro({ ...filtro, empresa_id: e.target.value })}>
+                                <option key={9} value={9}>RAPEL</option>
+                                <option key={14} value={14}>VERFRUT</option>
+                            </select>
+                        </div>
+                        <div className="form-group col-md-3">
                             Periodos:<br />
                             <DatePicker.RangePicker
                                 allowClear={false}
@@ -40,22 +47,16 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                                 <option key={4} value={4}>RECHAZADO</option>
                             </select>
                         </div>
-                        <div className="form-group col-md-3">
-                            Empresa: <br />
-                            <select className="form-control" onChange={e => setFiltro({ ...filtro, empresa_id: e.target.value })}>
-                                <option key={0} value={0}>TODAS</option>
-                                <option key={9} value={9}>RAPEL</option>
-                                <option key={14} value={14}>VERFRUT</option>
-                            </select>
-                        </div>
                     </div>
-                    <div className="row">
-                        <div className="col">
-                            <button type="submit" className="btn btn-primary">
-                                Filtrar
-                            </button>
+                    {/*
+                        <div className="row">
+                            <div className="col">
+                                <button type="submit" className="btn btn-primary">
+                                    Filtrar
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    */}
                 </form>
             </div>
         </div>

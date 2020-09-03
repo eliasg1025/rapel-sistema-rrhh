@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Tag, Checkbox } from 'antd';
+import React, { useState } from 'react';
+import { Table, Tag } from 'antd';
 import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import {ModalBootstrap} from "../shared/ModalBootstrap";
-import {ParaPago} from "./components/ParaPago";
-import { GenerarArchivoBanco } from './components/GenerarArchivoBanco';
 
 const getColumns = (data) => {
 
@@ -66,9 +63,8 @@ function renderTags(estado) {
     }
 }
 
-export const TablaLU = ({ data, estado, reloadData, setReloadData }) => {
+export const TablaLU = ({ data, loading }) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [all, setAll] = useState(false);
 
     const reload = () => {
@@ -104,66 +100,9 @@ export const TablaLU = ({ data, estado, reloadData, setReloadData }) => {
     const hasSelected = selectedRowKeys.length > 0;
 
     return (
-        <>
-            <div style={{ marginBottom: 16, marginTop: 12 }}>
-                <div>
-                    <Checkbox
-                        onClick={toggleSeleccionarTodos}
-                        checked={all}
-                    >
-                        Seleccionar todos
-                    </Checkbox>
-                </div>
-
-                {(parseInt(estado) === 1) && (
-                    <>
-                        <br />
-                        <button className="btn btn-primary" disabled={!hasSelected} data-toggle="modal" data-target="#paraPago">
-                            Para Pago
-                        </button>
-                        <span style={{ marginLeft: 8 }}>
-                            {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
-                        </span>
-                    </>
-                )}
-                {(parseInt(estado) === 2) && (
-                    <>
-                        <br />
-                        <button className="btn btn-primary" data-toggle="modal" data-target="#archivoBanco">
-                            Generar archivos banco
-                        </button>
-                        <span style={{ marginLeft: 8 }}>
-                            {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
-                        </span>
-                    </>
-                )}
-            </div>
-            <Table
-                rowSelection={rowSelection} columns={getColumns(data)} dataSource={data} size="small" scroll={{ x: 500 }}
-                pagination={{ pageSize: 20 }}
-            />
-
-            <ModalBootstrap
-                id="paraPago"
-                title="Programar para pago"
-            >
-                <ParaPago
-                    finiquitos={rowSelection.selectedRowKeys}
-                    reloadData={reloadData}
-                    setReloadData={setReloadData}
-                />
-            </ModalBootstrap>
-
-            <ModalBootstrap
-                id="archivoBanco"
-                title="Generar archivos banco"
-            >
-                <GenerarArchivoBanco
-                    finiquitos={data}
-                    reloadData={reloadData}
-                    setReloadData={setReloadData}
-                />
-            </ModalBootstrap>
-        </>
+        <Table
+            columns={getColumns(data)} dataSource={data} size="small" scroll={{ x: 500 }}
+            pagination={{ pageSize: 20 }} loading={loading}
+        />
     );
 }

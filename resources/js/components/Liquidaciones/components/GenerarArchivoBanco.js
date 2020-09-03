@@ -16,7 +16,7 @@ export const GenerarArchivoBanco = ({ finiquitos, reloadData, setReloadData }) =
             </div>
             <div className="form-row">
                 <div className="col">
-                    <button className="btn btn-primary" type="submit">
+                    <button className="btn btn-primary btn-block" type="submit">
                         Generar
                     </button>
                 </div>

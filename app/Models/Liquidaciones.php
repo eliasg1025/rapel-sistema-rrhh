@@ -51,4 +51,46 @@ class Liquidaciones extends Model
             ];
         }
     }
+
+    public static function massiveCreate(array $liquidaciones)
+    {
+        $count = 0;
+        $total = sizeof($liquidaciones);
+        $errors = [];
+
+        foreach($liquidaciones as $liquidacion)
+        {
+            try {
+                $result = DB::table('liquidaciones')->updateOrInsert(
+                    [
+                        'id' => $liquidacion['IdLiquidacion']
+                    ],
+                    [
+                        'finiquito_id' => $liquidacion['IdFiniquito'],
+                        'rut' => $liquidacion['RutTrabajador'],
+                        'ano' => $liquidacion['Ano'],
+                        'mes' => $liquidacion['Mes'],
+                        'monto' => $liquidacion['MontoAPagar'],
+                        'empresa_id' => $liquidacion['IdEmpresa'],
+                        'fecha_emision' => date($liquidacion['FechaEmision']),
+                        'banco_id' => $liquidacion['IdBanco'],
+                        'numero_cuenta' => $liquidacion['NumeroCuentaBancaria']
+                    ]
+                );
+
+                $count++;
+            } catch (\Exception $e) {
+                array_push($errors, [
+                    'id' => $liquidacion['IdLiquidacion'],
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return [
+            'total' => $total,
+            'completados' => $count,
+            'errores' => $errors
+        ];
+    }
 }

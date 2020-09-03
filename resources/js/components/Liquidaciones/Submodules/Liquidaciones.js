@@ -4,20 +4,24 @@ import { FiltroTabla } from '../FiltroTabla';
 import Axios from 'axios';
 import moment from 'moment';
 import { message } from 'antd';
+import { MenuTabla } from '../components/MenuTabla';
 
 export const Liquidaciones = () => {
 
     const [data, setData] = useState([]);
     const [filtro, setFiltro] = useState({
-        desde: moment().subtract('M', 1).format('YYYY-MM'),
+        desde: moment().subtract(1, 'M').format('YYYY-MM'),
         hasta: moment().format('YYYY-MM'),
         estado: 0,
-        empresa_id: 0
+        empresa_id: 9
     });
     const [reloadData, setReloadData] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const getData = () => {
         let intentos = 0;
+        setLoading(true);
+
         function fetchFiniquitos() {
             intentos++;
             Axios.get(`/api/finiquitos?desde=${filtro.desde}&hasta=${filtro.hasta}&estado=${filtro.estado}&empresa_id=${filtro.empresa_id}`)
@@ -34,6 +38,7 @@ export const Liquidaciones = () => {
                     });
 
                     setData(total);
+                    setLoading(false);
                 })
                 .catch(err => {
                     if (intentos < 3) {
@@ -53,16 +58,21 @@ export const Liquidaciones = () => {
         <>
             <h4>Liquidaciones</h4>
             <br />
+            <MenuTabla
+                filtro={filtro}
+                data={data}
+                reloadData={reloadData}
+                setReloadData={setReloadData}
+            />
             <FiltroTabla
                 getData={getData}
                 filtro={filtro}
                 setFiltro={setFiltro}
             />
+            <br />
             <TablaLU
                 data={data}
-                estado={filtro.estado}
-                reloadData={reloadData}
-                setReloadData={setReloadData}
+                loading={loading}
             />
         </>
     );

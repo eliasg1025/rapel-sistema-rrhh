@@ -8,21 +8,21 @@ import { Consulta } from './Submodules/Consulta';
 import { Liquidaciones } from './Submodules/Liquidaciones';
 import { Utilidades } from './Submodules/Utilidades';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 export default function main() {
 
-    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+    const { submodule } = JSON.parse(sessionStorage.getItem('data'));
 
     return (
         <Layout>
             <Sider
-                theme="light"
                 breakpoint="lg"
                 collapsedWidth="0"
+                theme="dark"
             >
                 <br />
-                <Menu mode="inline" defaultSelectedKeys={[submodule]}>
+                <Menu mode="inline" theme="dark" defaultSelectedKeys={[submodule]}>
                     <Menu.Item key="main" icon={<HomeOutlined />}>
                         <a href="/liquidaciones-utilidades">
                             Inicio

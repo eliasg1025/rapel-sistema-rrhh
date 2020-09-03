@@ -10,6 +10,15 @@ use Rap2hpoutre\FastExcel\FastExcel;
 
 class LiquidacionesController extends Controller
 {
+    public function massiveCreate(Request $request)
+    {
+        $data = $request->get('data');
+
+        $result = Liquidaciones::massiveCreate($data);
+
+        return response()->json($result);
+    }
+
     public function importar(Request $request)
     {
         $file = $request->file('finiquitos');
@@ -34,7 +43,9 @@ class LiquidacionesController extends Controller
                             'mes' => $line['Mes'],
                             'monto' => $line['MontoAPagar'],
                             'empresa_id' => $line['IdEmpresa'],
-                            'fecha_emision' => date($line['FechaEmision'])
+                            'fecha_emision' => date($line['FechaEmision']),
+                            'banco_id' => $line['IdBanco'],
+                            'numero_cuenta' => $line['NumeroCuentaBancaria']
                         ]
                     );
                 });

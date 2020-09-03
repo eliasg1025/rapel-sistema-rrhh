@@ -130,6 +130,7 @@ Route::group(['prefix' => 'sancion'], function() {
 
 Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'LiquidacionesController@get');
+    Route::post('/massive', 'LiquidacionesController@massiveCreate');
     Route::post('/importar', 'LiquidacionesController@importar');
     Route::post('/importar-tu-recibo', 'LiquidacionesController@importarTuRecibo');
     Route::post('/programar-para-pago', 'LiquidacionesController@programarParaPago');
