@@ -3,12 +3,14 @@ import { DatosPersonales } from '../Submodules/components/DatosPersonales';
 import { BusquedaTrabajador } from './components/BusquedaTrabajador';
 import { InfoSctr } from './components/InfoSctr';
 import Axios from 'axios';
+import { Historial } from './components/Historial';
 
 export const Consulta = () => {
 
     const [trabajador, setTrabajador] = useState(null);
     const [contratos, setContratos] = useState([]);
     const [sctr, setSctr] = useState(false);
+    const [reloadData, setReloadData] = useState(false);
 
     const handleExportOficios = () => {
         Axios({
@@ -28,24 +30,22 @@ export const Consulta = () => {
 
     return (
         <>
-            <div className="row">
+            <div className="row mb-1">
+                <div className="col-md-5 col-sm-12">
+                    <BusquedaTrabajador
+                        setTrabajador={setTrabajador}
+                        setContratos={setContratos}
+                        setSctr={setSctr}
+                        reloadData={reloadData}
+                        setReloadData={setReloadData}
+                    />
+                </div>
                 <div className="col-md-6">
                     <button className="btn btn-success" onClick={handleExportOficios}>
                         <i className="fas fa-file-excel"></i>&nbsp;Exportar Oficios
                     </button>
                 </div>
             </div>
-            <br />
-            <div className="row">
-                <div className="col-md-5 col-sm-12">
-                    <BusquedaTrabajador
-                        setTrabajador={setTrabajador}
-                        setContratos={setContratos}
-                        setSctr={setSctr}
-                    />
-                </div>
-            </div>
-            <br />
             <InfoSctr
                 trabajador={trabajador}
                 contratos={contratos}
@@ -54,6 +54,10 @@ export const Consulta = () => {
             <DatosPersonales
                 trabajador={trabajador}
                 contratos={contratos}
+            />
+            <br />
+            <Historial
+                reloadData={reloadData}
             />
         </>
     );

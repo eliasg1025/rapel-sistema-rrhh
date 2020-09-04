@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 
-export const BusquedaTrabajador = ({ setTrabajador, setContratos,setSctr }) => {
+export const BusquedaTrabajador = ({ setTrabajador, setContratos, setSctr, reloadData, setReloadData }) => {
+
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
     const [rut, setRut] = useState('');
 
@@ -33,6 +35,21 @@ export const BusquedaTrabajador = ({ setTrabajador, setContratos,setSctr }) => {
                     })
                         .then(res => {
                             setSctr(res.data.sctr);
+
+                            Axios.post('/api/consulta-sctr', {
+                                usuario_id: usuario.id,
+                                rut: rut,
+                                sctr: res.data.sctr,
+                                empresa_id,
+                                oficio: oficio.name,
+                                zona_labor: zona_labor.name,
+                                nombre_completo: `${trabajador.apellido_paterno} ${trabajador.apellido_materno} ${trabajador.nombre}`
+                            })
+                                .then(res => {
+                                    console.log(res);
+                                    setReloadData(!reloadData);
+                                })
+                                .catch(err => console.log(err));
                         })
                         .catch(err => {
                             setSctr(false);

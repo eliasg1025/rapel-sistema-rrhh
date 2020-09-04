@@ -142,6 +142,11 @@ Route::group(['prefix' => 'consulta-trabajador'], function() {
     Route::post('/', 'ConsultaTrabajadorController@create');
 });
 
+Route::group(['prefix' => 'consulta-sctr'], function() {
+    Route::get('/{usuario_id}', 'ConsultaSctrController@get');
+    Route::post('/', 'ConsultaSctrController@create');
+});
+
 Route::group(['prefix' => 'corte-sctr'], function() {
     Route::post('/', 'CorteSctrController@create');
 });
