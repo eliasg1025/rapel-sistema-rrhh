@@ -60,9 +60,7 @@ class ConsultaSctr extends Model
             ->joinSub($usuarios, 'usuario', function($join) {
                 $join->on('usuario.id', '=', 'cs.usuario_id');
             })
-            ->when($usuario->sctr !== 2, function($query) use ($usuario) {
-                $query->where('cs.usuario_id', $usuario->id);
-            })
+            ->where('cs.usuario_id', $usuario->id)
             ->orderBy('cs.created_at', 'DESC')
             ->get();
     }
