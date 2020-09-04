@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OficiosSctrExport;
 use App\Models\Oficio;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,23 @@ class OficioController extends Controller
                 'error' => $oficio
             ], 400);
         }
+    }
+
+    public function exportarSctr()
+    {
+        $oficios = Oficio::getWithSctr();
+
+        $data = [];
+
+        foreach ($oficios as $oficio) {
+            array_push($data, [
+                'empresa' => $oficio->empresa,
+                'oficio' => $oficio->oficio,
+                'codigo' => $oficio->code
+            ]);
+        }
+
+        return (new OficiosSctrExport($data))->download('EXPORT.xlsx');
     }
 
     public function getWithSctr()

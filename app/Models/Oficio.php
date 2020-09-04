@@ -42,6 +42,7 @@ class Oficio extends Model
         return DB::table('oficios as o')
             ->select(
                 'o.id',
+                'o.code as code',
                 'o.name as oficio',
                 'e.shortname as empresa'
             )

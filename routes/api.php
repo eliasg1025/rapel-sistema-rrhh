@@ -59,6 +59,7 @@ Route::group(['prefix' => 'oficio'], function() {
     Route::post('/', 'OficioController@create');
     Route::get('/get-with-sctr', 'OficioController@getWithSctr');
     Route::get('/get-indexes-with-sctr/{empresa_id}', 'OficioController@getIndexesWithSctr');
+    Route::get('/exportar/sctr', 'OficioController@exportarSctr');
     Route::put('/{id}/disable-sctr', 'OficioController@disableSctr');
 });
 
