@@ -44,7 +44,7 @@ class LiquidacionesController extends Controller
                             'monto' => $line['MontoAPagar'],
                             'empresa_id' => $line['IdEmpresa'],
                             'fecha_emision' => date($line['FechaEmision']),
-                            'banco_id' => $line['IdBanco'],
+                            'banco' => $line['Banco'],
                             'numero_cuenta' => $line['NumeroCuentaBancaria']
                         ]
                     );
@@ -62,11 +62,11 @@ class LiquidacionesController extends Controller
 
     public function get(Request $request)
     {
+        $estado = $request->estado;
         $fechas = [
             'desde' => Carbon::parse($request->desde),
-            'hasta' => Carbon::parse($request->hasta)->lastOfMonth()
+            'hasta' => $estado == 0 ? Carbon::parse($request->hasta)->lastOfMonth() : Carbon::parse($request->hasta)
         ];
-        $estado = $request->estado;
         $empresa_id = $request->empresa_id;
 
         $result = Liquidaciones::get($fechas, $estado, $empresa_id);

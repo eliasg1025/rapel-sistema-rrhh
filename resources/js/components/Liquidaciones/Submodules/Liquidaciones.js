@@ -57,6 +57,11 @@ export const Liquidaciones = () => {
     return (
         <>
             <h4>Liquidaciones</h4>
+            <FiltroTabla
+                getData={getData}
+                filtro={filtro}
+                setFiltro={setFiltro}
+            />
             <br />
             <MenuTabla
                 filtro={filtro}
@@ -64,15 +69,10 @@ export const Liquidaciones = () => {
                 reloadData={reloadData}
                 setReloadData={setReloadData}
             />
-            <FiltroTabla
-                getData={getData}
-                filtro={filtro}
-                setFiltro={setFiltro}
-            />
-            <br />
             <TablaLU
                 data={data}
                 loading={loading}
+                estado={filtro.estado}
             />
         </>
     );

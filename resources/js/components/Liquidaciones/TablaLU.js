@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Table, Tag } from 'antd';
 import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-const getColumns = (data) => {
+const getColumns = (data, estado) => {
 
     const getFechasFirmado = liquidaciones => {
         const fechas_repetidas = liquidaciones.map(l => l.fecha_firmado);
@@ -11,39 +11,217 @@ const getColumns = (data) => {
         return Array.from(fechas).map(f => ({ text: f, value: f }));
     }
 
-    return [
-        {
-            title: 'Empresa',
-            dataIndex: 'empresa',
-        },
-        {
-            title: 'RUT',
-            dataIndex: 'rut',
-        },
-        {
-            title: 'Mes',
-            dataIndex: 'mes',
-        },
-        {
-            title: 'Año',
-            dataIndex: 'ano'
-        },
-        {
-            title: 'Monto',
-            dataIndex: 'monto'
-        },
-        {
-            title: 'Fecha Firmado',
-            dataIndex: 'fecha_firmado',
-            filters: getFechasFirmado(data),
-            onFilter: (value, record) => record.fecha_firmado.indexOf(value) === 0
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-            render: (_, record) => renderTags(record.estado)
-        },
-    ];
+    switch ( parseInt(estado) ) {
+        case 0:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+
+        case 1:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Fecha Firmado',
+                    dataIndex: 'fecha_firmado',
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+
+        case 2:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Fecha Firmado',
+                    dataIndex: 'fecha_firmado',
+                },
+                {
+                    title: 'Fecha Pago',
+                    dataIndex: 'fecha_pago'
+                },
+                {
+                    title: 'Banco',
+                    dataIndex: 'banco',
+                },
+                {
+                    title: 'Número Cuenta',
+                    dataIndex: 'numero_cuenta'
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+
+        case 3:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Fecha Firmado',
+                    dataIndex: 'fecha_firmado',
+                },
+                {
+                    title: 'Banco',
+                    dataIndex: 'banco',
+                },
+                {
+                    title: 'Número Cuenta',
+                    dataIndex: 'numero_cuenta'
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+
+        case 4:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Fecha Firmado',
+                    dataIndex: 'fecha_firmado',
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+
+        default:
+            return [
+                {
+                    title: 'Empresa',
+                    dataIndex: 'empresa',
+                },
+                {
+                    title: 'RUT',
+                    dataIndex: 'rut',
+                },
+                {
+                    title: 'Mes',
+                    dataIndex: 'mes',
+                },
+                {
+                    title: 'Año',
+                    dataIndex: 'ano'
+                },
+                {
+                    title: 'Monto',
+                    dataIndex: 'monto'
+                },
+                {
+                    title: 'Estado',
+                    dataIndex: 'estado',
+                    render: (_, record) => renderTags(record.estado)
+                },
+            ];
+    }
 }
 
 function renderTags(estado) {
@@ -63,7 +241,7 @@ function renderTags(estado) {
     }
 }
 
-export const TablaLU = ({ data, loading }) => {
+export const TablaLU = ({ data, loading, estado }) => {
     const [selectedRowKeys , setSelectedRowKeys] = useState([]);
     const [all, setAll] = useState(false);
 
@@ -101,7 +279,7 @@ export const TablaLU = ({ data, loading }) => {
 
     return (
         <Table
-            columns={getColumns(data)} dataSource={data} size="small" scroll={{ x: 500 }}
+            columns={getColumns(data, estado)} dataSource={data} size="small" scroll={{ x: 500 }}
             pagination={{ pageSize: 20 }} loading={loading}
         />
     );

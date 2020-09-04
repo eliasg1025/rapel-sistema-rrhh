@@ -19,6 +19,7 @@ class Liquidaciones extends Model
     {
         return DB::table('liquidaciones as l')
             ->select('l.id', 'l.rut', 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa',
+                'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_para_pago, "%d/%m/%Y") fecha_para_pago'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_pagado, "%d/%m/%Y") fecha_pagado'),
@@ -27,10 +28,19 @@ class Liquidaciones extends Model
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
-            ->whereBetween('l.fecha_emision', [$fechas['desde'], $fechas['hasta']])
             ->where('l.estado', $estado)
             ->when($empresa_id !== 0, function($query) use($empresa_id) {
                 $query->where('l.empresa_id', $empresa_id);
+            })
+            ->when($estado === 0, function($query) use ($fechas) {
+                $query->whereBetween('l.fecha_emision', [$fechas['desde'], $fechas['hasta']]);
+            })
+            ->when($estado === 1, function($query) use ($fechas) {
+                $query->whereDate('l.fecha_hora_marca_firmado', '>=' , $fechas['desde'])
+                    ->whereDate('l.fecha_hora_marca_firmado', '<=', $fechas['hasta']);
+            })
+            ->when($estado === 2, function($query) use ($fechas) {
+                $query->whereBetween('l.fecha_pago', [$fechas['desde'], $fechas['hasta']]);
             })
             ->get();
     }
@@ -73,7 +83,7 @@ class Liquidaciones extends Model
                         'monto' => $liquidacion['MontoAPagar'],
                         'empresa_id' => $liquidacion['IdEmpresa'],
                         'fecha_emision' => date($liquidacion['FechaEmision']),
-                        'banco_id' => $liquidacion['IdBanco'],
+                        'banco' => $liquidacion['Banco'],
                         'numero_cuenta' => $liquidacion['NumeroCuentaBancaria']
                     ]
                 );

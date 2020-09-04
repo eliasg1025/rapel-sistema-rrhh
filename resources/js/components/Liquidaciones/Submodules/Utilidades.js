@@ -21,7 +21,7 @@ export const Utilidades = () => {
         <>
             <h4>Utilidades</h4>
             <br />
-            <TablaLU data={data} />
+
         </>
     );
 }
