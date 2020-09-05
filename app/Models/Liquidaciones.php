@@ -18,8 +18,9 @@ class Liquidaciones extends Model
     public static function get(array $fechas, int $estado, int $empresa_id)
     {
         return DB::table('liquidaciones as l')
-            ->select('l.id', 'l.rut', 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa',
-                'l.banco', 'l.numero_cuenta',
+            ->select(
+                'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_para_pago, "%d/%m/%Y") fecha_para_pago'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_pagado, "%d/%m/%Y") fecha_pagado'),
@@ -71,13 +72,16 @@ class Liquidaciones extends Model
         foreach($liquidaciones as $liquidacion)
         {
             try {
-                $result = DB::table('liquidaciones')->updateOrInsert(
+                DB::table('liquidaciones')->updateOrInsert(
                     [
                         'id' => $liquidacion['IdLiquidacion']
                     ],
                     [
                         'finiquito_id' => $liquidacion['IdFiniquito'],
                         'rut' => $liquidacion['RutTrabajador'],
+                        'nombre' => $liquidacion['Nombre'],
+                        'apellido_paterno' => $liquidacion['ApellidoPaterno'],
+                        'apellido_materno' => $liquidacion['ApellidoMaterno'],
                         'ano' => $liquidacion['Ano'],
                         'mes' => $liquidacion['Mes'],
                         'monto' => $liquidacion['MontoAPagar'],

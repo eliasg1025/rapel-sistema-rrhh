@@ -23,6 +23,11 @@ const getColumns = (data, estado) => {
                     dataIndex: 'rut',
                 },
                 {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
+                },
+                {
                     title: 'Mes',
                     dataIndex: 'mes',
                 },
@@ -50,6 +55,11 @@ const getColumns = (data, estado) => {
                 {
                     title: 'RUT',
                     dataIndex: 'rut',
+                },
+                {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
                 },
                 {
                     title: 'Mes',
@@ -83,6 +93,11 @@ const getColumns = (data, estado) => {
                 {
                     title: 'RUT',
                     dataIndex: 'rut',
+                },
+                {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
                 },
                 {
                     title: 'Mes',
@@ -130,6 +145,11 @@ const getColumns = (data, estado) => {
                     dataIndex: 'rut',
                 },
                 {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
+                },
+                {
                     title: 'Mes',
                     dataIndex: 'mes',
                 },
@@ -171,6 +191,11 @@ const getColumns = (data, estado) => {
                     dataIndex: 'rut',
                 },
                 {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
+                },
+                {
                     title: 'Mes',
                     dataIndex: 'mes',
                 },
@@ -202,6 +227,11 @@ const getColumns = (data, estado) => {
                 {
                     title: 'RUT',
                     dataIndex: 'rut',
+                },
+                {
+                    title: 'Nombre Completo',
+                    dataIndex: 'nombre_completo',
+                    render: (_, record) => `${record.apellido_paterno} ${record.apellido_materno} ${record.nombre}`
                 },
                 {
                     title: 'Mes',

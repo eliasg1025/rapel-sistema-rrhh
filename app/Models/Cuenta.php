@@ -145,10 +145,9 @@ class Cuenta extends Model
         DB::beginTransaction();
         try {
             $banco_id = Banco::findOrCreate($data['banco']);
-
             if (!isset($data['id'])) { // Si es que no viene el parametro id (actualizar registro), se crea uno nuevo
-                $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
 
+                $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
                 $existe_cuenta = Cuenta::where([
                     'trabajador_id' => $trabajador_id,
                     'fecha_solicitud' => $data['fecha_solicitud']
@@ -163,7 +162,6 @@ class Cuenta extends Model
 
                 $cuenta = new Cuenta();
                 $cuenta->apertura = $data['apertura'];
-                $cuenta->numero_cuenta = !$data['apertura'] ? $data['numero_cuenta'] : null;
                 $cuenta->fecha_solicitud = $data['fecha_solicitud'];
                 $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->usuario_id = $data['usuario_id'];
@@ -173,9 +171,25 @@ class Cuenta extends Model
                 $cuenta = Cuenta::find($data['id']);
                 $cuenta->empresa_id = $data['empresa_id'];
                 $cuenta->banco_id = $banco_id;
-                $cuenta->numero_cuenta = !$data['apertura'] ? $data['numero_cuenta'] : null;
+
+                $trabajador_id = $cuenta->trabajador_id;
             }
 
+            if ( !$data['apertura'] ) {
+                $cuenta_repetido = Cuenta::where([
+                    'numero_cuenta' => $data['numero_cuenta'],
+                    'banco_id' => $banco_id
+                ])->first();
+
+                if ( $cuenta_repetido && $cuenta_repetido->trabajador_id !== $trabajador_id ) {
+                    DB::rollBack();
+                    return [
+                        'error' => 'Este número de cuenta esta siendo utilizado por otro trabajador'
+                    ];
+                }
+
+                $cuenta->numero_cuenta = $data['numero_cuenta'];
+            }
             if ($cuenta->save()) {
                 DB::commit();
                 return [

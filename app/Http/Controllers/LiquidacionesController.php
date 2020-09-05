@@ -144,4 +144,9 @@ class LiquidacionesController extends Controller
             'actualizados' => $result
         ]);
     }
+
+    public function testExcel(Request $request)
+    {
+        return response()->json($request->all());
+    }
 }

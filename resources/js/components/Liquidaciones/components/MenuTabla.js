@@ -89,7 +89,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData }) => {
         <>
             <div style={{ marginBottom: 16 }}>
                 <div className="btn-group">
-                    <button className="btn btn-primary" onClick={consultarSincronizacion}>
+                    <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 0} onClick={consultarSincronizacion}>
                         <i className="fas fa-sync" />&nbsp;Sincronizar DB
                     </button>
                     <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 0} onClick={() => setIsVisibleImportarFirmados(true)}>
