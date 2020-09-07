@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empresa;
 use App\Models\Liquidaciones;
+use App\Services\ArchivosBancoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -147,6 +149,53 @@ class LiquidacionesController extends Controller
 
     public function testExcel(Request $request)
     {
-        return response()->json($request->all());
+        try {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/BCP.xlsm');
+            $worksheet = $spreadsheet->getActiveSheet();
+
+            $worksheet->getCell('D12')->setValue('72437334');
+            $worksheet->getStyle('D12')->getNumberFormat()->setFormatCode('@');
+            $worksheet->getCell('E12')->setValue('GUERE');
+            $worksheet->getCell('F12')->setValue('CANCHUCAJA');
+            $worksheet->getCell('G12')->setValue('ELIAS');
+
+            /*
+            $worksheet->getCell('D13')->setValue('02437334');
+            $worksheet->getStyle('D13')->getNumberFormat()->setFormatCode('@');
+            $worksheet->getCell('E13')->setValue('GUERE');
+            $worksheet->getCell('F13')->setValue('CANCHUCAJA');
+            $worksheet->getCell('G13')->setValue('ELIAS');*/
+
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsm');
+            $writer->save(storage_path('app/public') . '/archivos-banco/generados/BCP.xlsm');
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+    public function generateArchivosBanco(Request $request)
+    {
+        $data = $request->get('data');
+
+        $fecha_pago = $request->get('filtro')['desde'] === $request->get('filtro')['hasta'] ? $request->get('filtro')['desde'] : false;
+        $empresa = Empresa::find($request->get('filtro')['empresa_id']);
+
+        if (!$fecha_pago) {
+            return response()->json([
+                'message' => 'Solo se procesa 1 fecha de pago a la vez'
+            ], 400);
+        }
+
+        $archivos_banco = new ArchivosBancoService('finiquitos', $empresa, $fecha_pago, $data);
+
+        $result = [
+            'bcp' => $archivos_banco->archivosBcp(),
+            'banbif' => $archivos_banco->archivosBanbif(),
+            'scotiabank' => $archivos_banco->archivosScotiabank(),
+            'bbva' => $archivos_banco->archivosBbva(),
+            'interbank' => $archivos_banco->archivosInterbank()
+        ];
+
+        return response()->json($result);
     }
 }

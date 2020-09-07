@@ -136,6 +136,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/importar-tu-recibo', 'LiquidacionesController@importarTuRecibo');
     Route::post('/programar-para-pago', 'LiquidacionesController@programarParaPago');
     Route::get('/excel-banco', 'LiquidacionesController@testExcel');
+    Route::post('/generar-archivos-banco', 'LiquidacionesController@generateArchivosBanco');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {
@@ -150,6 +151,11 @@ Route::group(['prefix' => 'consulta-sctr'], function() {
 
 Route::group(['prefix' => 'corte-sctr'], function() {
     Route::post('/', 'CorteSctrController@create');
+});
+
+Route::group(['prefix' => 'archivo-banco'], function() {
+    Route::post('/descargar', 'ArchivosBancoController@descargar');
+    Route::get('/liquidaciones', 'ArchivosBancoController@liquidaciones');
 });
 
 /*

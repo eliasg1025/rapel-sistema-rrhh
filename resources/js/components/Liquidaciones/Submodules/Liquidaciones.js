@@ -5,6 +5,7 @@ import Axios from 'axios';
 import moment from 'moment';
 import { message } from 'antd';
 import { MenuTabla } from '../components/MenuTabla';
+import { TablaArchivosBanco } from '../../shared/TablaArchivosBanco';
 
 export const Liquidaciones = () => {
 
@@ -16,6 +17,7 @@ export const Liquidaciones = () => {
         empresa_id: 9
     });
     const [reloadData, setReloadData] = useState(false);
+    const [reloadDataAB, setReloadDataAB] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const getData = () => {
@@ -68,11 +70,18 @@ export const Liquidaciones = () => {
                 data={data}
                 reloadData={reloadData}
                 setReloadData={setReloadData}
+                reloadDataAB={reloadDataAB}
+                setReloadDataAB={setReloadDataAB}
             />
             <TablaLU
                 data={data}
                 loading={loading}
                 estado={filtro.estado}
+            />
+            <hr /><br />
+            <h5>Archivos Banco</h5>
+            <TablaArchivosBanco
+                reloadData={reloadDataAB}
             />
         </>
     );

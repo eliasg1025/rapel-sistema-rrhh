@@ -64,6 +64,11 @@
                         <i class="fas fa-file-alt"></i> SCTR
                     </a>
                 </div>
+                <div class="col-md-6">
+                    <a class="btn btn-block btn-light" href="/estado-documentos" {{ $data['usuario']->estado_documentos === 0 ? 'disabled' : '' }}>
+                        <i class="fas fa-file-alt"></i> Estado documentos TU RECIBO
+                    </a>
+                </div>
             </div>
         </div>
         <br />

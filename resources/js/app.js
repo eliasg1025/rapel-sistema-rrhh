@@ -16,6 +16,7 @@ import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
 import Sctr from "./components/Sctr/Sctr";
+import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
 
 require('./bootstrap');
 
@@ -50,6 +51,12 @@ require('./components/Sanciones/Sanciones');
 require('./components/Sctr/Sctr');
 
 //
+if (document.getElementById("estado-documentos")) {
+    const element = document.getElementById("estado-documentos");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<EstadoDocumentos {...props} />, document.getElementById("estado-documentos"));
+}
+
 if (document.getElementById("sctr")) {
     const element = document.getElementById("sctr");
     const props = Object.assign({}, element.dataset);

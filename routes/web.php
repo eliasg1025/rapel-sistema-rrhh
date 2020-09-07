@@ -36,6 +36,12 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
 
+    Route::group(['prefix' => 'estado-documentos'], function() {
+        Route::get('/', 'Web\EstadoDocumentosController@index');
+        Route::get('/boletas', 'Web\EstadoDocumentosController@boletas');
+        Route::get('/prorrogas', 'Web\EstadoDocumentosController@prorrogas');
+    });
+
     Route::group(['prefix' => 'sctr'], function() {
         Route::get('/', 'Web\SctrController@consultas');
         Route::get('/habilitar', 'Web\SctrController@habilitar');

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 import {ParaPago} from "./ParaPago";
@@ -10,11 +10,17 @@ import Swal from 'sweetalert2';
 
 moment.locale('es');
 
-export const MenuTabla = ({ filtro, data, reloadData, setReloadData }) => {
+export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataAB, setReloadDataAB }) => {
 
     const [isVisibleImportarFirmados, setIsVisibleImportarFirmados] = useState(false);
     const [isVisibleProgramarParaPago, setIsVisibleProgramarParaPago] = useState(false);
     const [isVisibleGenerarArchivoBanco, setIsVisibleGenerarArchivoBanco] = useState(false);
+
+    const [bcp, setBcp] = useState([]);
+    const [interbank, setInterbank] = useState([]);
+    const [scotiabank, setScotiabank] = useState([]);
+    const [bbva, setBbva] = useState([]);
+    const [banbif, setBanbif] = useState([]);
 
     const consultarSincronizacion = () => {
         Swal.fire({
@@ -85,6 +91,16 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData }) => {
             });
     }
 
+    useEffect(() => {
+        if (parseInt(filtro.estado) === 2) {
+            setBcp(data.filter(liq => liq.banco === 'BANCO DE CREDITO'));
+            setInterbank(data.filter(liq => liq.banco === 'INTERBANK'));
+            setBbva(data.filter(liq => liq.banco === 'BBVA BANCO CONTINENTAL'));
+            setBanbif(data.filter(liq => liq.banco === 'INTERAMERICANO FINANZAS'));
+            setScotiabank(data.filter(liq => liq.banco === 'SCOTIABANK PERU'));
+        }
+    }, [data]);
+
     return (
         <>
             <div style={{ marginBottom: 16 }}>
@@ -135,9 +151,19 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData }) => {
                 setIsVisible={setIsVisibleGenerarArchivoBanco}
             >
                 <GenerarArchivoBanco
-                    finiquitos={data}
+                    data={{
+                        bcp,
+                        bbva,
+                        interbank,
+                        scotiabank,
+                        banbif
+                    }}
+                    filtro={filtro}
                     reloadData={reloadData}
                     setReloadData={setReloadData}
+                    reloadDataAB={reloadDataAB}
+                    setReloadDataAB={setReloadDataAB}
+                    setIsVisibleParent={setIsVisibleGenerarArchivoBanco}
                 />
             </Modal>
         </>
