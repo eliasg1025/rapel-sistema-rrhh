@@ -23,11 +23,10 @@ class ZonaLabor extends Model
             ])
             ->first();
 
-        return DB::connection('mysql')
-                ->table('zona_labores as z')
+        return DB::table('zona_labores as z')
                 ->where([
-                    'code' => $zona->IdZona,
-                    'empresa_id' => $empresa_id
+                    'z.code' => $zona->IdZona,
+                    'z.empresa_id' => $empresa_id
                 ])
                 ->first();
     }
