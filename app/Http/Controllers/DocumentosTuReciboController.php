@@ -70,8 +70,8 @@ class DocumentosTuReciboController extends Controller
                         'apellido_materno' => $apellidos[1],
                         'nombre' => $data[6],
                         'firmado' => $data[3],
-                        'fecha_carga' => Carbon::parse($data[11])->toDateTimeString(),
-                        'fecha_firma' => Carbon::parse($data[12])->toDateTimeString(),
+                        'fecha_carga' => $data[11],
+                        'fecha_firma' => $data[12],
                         'regimen_id' => $regimen_id,
                         'zona_labor_id' => ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id),
                     ];
