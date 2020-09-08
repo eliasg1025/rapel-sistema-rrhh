@@ -15,20 +15,20 @@ class ZonaLabor extends Model
 
     public static function getIdByTrabajador($rut, $empresa_id)
     {
-        $zona_code = DB::connection('sqlsrv')
+        $zona = DB::connection('sqlsrv')
             ->table('dbo.Trabajador as t')
             ->where([
                 't.RutTrabajador' => $rut,
                 't.IdEmpresa' => $empresa_id
             ])
-            ->first()->IdZona;
+            ->first();
 
         return DB::connection('mysql')
                 ->table('zona_labores as z')
                 ->where([
-                    'code' => $zona_code,
+                    'code' => $zona->IdZona,
                     'empresa_id' => $empresa_id
                 ])
-                ->first()->id;
+                ->first();
     }
 }
