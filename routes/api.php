@@ -158,6 +158,11 @@ Route::group(['prefix' => 'archivo-banco'], function() {
     Route::get('/liquidaciones', 'ArchivosBancoController@liquidaciones');
 });
 
+Route::group(['prefix' => 'documentos-turecibo'], function() {
+    Route::post('/importar', 'DocumentosTuReciboController@importar');
+    Route::get('/', 'DocumentosTuReciboController@get');
+});
+
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');
