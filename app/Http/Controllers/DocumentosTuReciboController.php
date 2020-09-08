@@ -76,6 +76,7 @@ class DocumentosTuReciboController extends Controller
                         'zona_labor_id' => ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id),
                     ];
                 } catch (\Exception $e) {
+                    return response()->json($e->getMessage());
                     continue;
                 }
             }
