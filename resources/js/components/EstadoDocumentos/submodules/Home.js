@@ -8,7 +8,7 @@ import { BuscarTrabajador } from './components/BuscarTrabajador';
 export const Home = () => {
 
     const [filter, setFilter] = useState({
-        desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
+        desde: moment().subtract(1, 'M').format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
     });
 

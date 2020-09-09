@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { message } from 'antd';
 
-import { ImportarDocumentos, TablaDocumentos } from './components';
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos } from './components';
 
 export const Prorrogas = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -10,6 +10,12 @@ export const Prorrogas = () => {
     const [reloadData, setReloadData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [documentos, setDocumentos] = useState([]);
+    const [filter, setFilter] = useState({
+        empresa_id: 9,
+        regimen_id: 1,
+        zona_labor_id: 0,
+        estado: ''
+    });
 
     useEffect(() => {
         let intentos = 0;
@@ -56,7 +62,13 @@ export const Prorrogas = () => {
             )}
             <hr />
             <br />
-            <h5><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h5>
+            <FiltroTablaDocumentos
+                reloadData={reloadData}
+                setReloadData={setReloadData}
+                filter={filter}
+                setFilter={setFilter}
+            />
+            <br />
             <TablaDocumentos
                 reloadData={reloadData}
                 loading={loading}

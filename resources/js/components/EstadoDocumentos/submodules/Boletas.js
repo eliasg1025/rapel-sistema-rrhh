@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ImportarDocumentos, TablaDocumentos, BuscarTrabajador } from './components'
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos } from './components'
 import Axios from 'axios';
 import { message } from 'antd';
 
@@ -10,6 +10,12 @@ export const Boletas = () => {
     const [reloadData, setReloadData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [documentos, setDocumentos] = useState([]);
+    const [filter, setFilter] = useState({
+        empresa_id: 9,
+        regimen_id: 1,
+        zona_labor_id: '',
+        estado: 'NO FIRMADO'
+    });
 
     useEffect(() => {
         let intentos = 0;
@@ -56,7 +62,13 @@ export const Boletas = () => {
             </div>
             <hr />
             <br />
-            <h5><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h5>
+            <FiltroTablaDocumentos
+                reloadData={reloadData}
+                setReloadData={setReloadData}
+                filter={filter}
+                setFilter={setFilter}
+            />
+            <br />
             <TablaDocumentos
                 reloadData={reloadData}
                 loading={loading}
