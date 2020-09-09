@@ -69,11 +69,10 @@ export const GraficoDocumentos = ({ filter }) => {
             })
             .catch(err => console.error(err))
 
-            Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${1}&desde=${filter.desde}&hasta=${filter.hasta}`)
+        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${1}&desde=${filter.desde}&hasta=${filter.hasta}`)
             .then(res => {
                 const { dias, cantidades } = res.data;
 
-                setDias(dias);
                 setFirmasProrrogas(cantidades);
             })
             .catch(err => console.error(err))
