@@ -64,11 +64,12 @@ export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, l
             tipo_documento_turecibo_id: tipoDocumento.id
         })
             .then(res => {
-                const { message, data } = res.data;
 
-                console.log(data);
-
-                Swal.fire(message, '', 'success')
+                Swal.fire({
+                    title: 'Proceso terminado',
+                    icon: 'info',
+                    html: `Completados ${res.data.completados} de ${res.data.total}.<br /> <b>${res.data.errores?.length || 0} errores <a href="#">Descargar aquí</a></b>`
+                })
                     .then(res => {
                         setIsVisible(false);
                         setLoading(false);

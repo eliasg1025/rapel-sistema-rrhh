@@ -79,7 +79,7 @@ class DocumentoTuRecibo extends Model
                         'apellido_materno' => $documento['apellido_materno'],
                         'estado' => $documento['estado'],
                         'fecha_carga' => DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_carga']),
-                        'fecha_firma' => DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_firma']),
+                        'fecha_firma' => isset($documento['fecha_firma']) ? DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_firma']) : null,
                         'regimen_id' => $documento['regimen_id'],
                         'zona_labor_id' => isset($documento['zona_labor_id']) ? $documento['zona_labor_id'] : null,
                     ]
@@ -98,6 +98,23 @@ class DocumentoTuRecibo extends Model
             'total' => $total,
             'completados' => $count,
             'errores' => $errors,
+        ];
+    }
+
+    public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta)
+    {
+        $result = DB::select('CALL obetener_cantidad_firmados_por_dia(?, ?, ?)', [
+            $tipo_documento_turecibo_id,
+            $desde,
+            $hasta
+        ]);
+
+        $dias = array_column($result, 'dia');
+        $cantidades = array_column($result, 'cantidad');
+
+        return [
+            'dias' => $dias,
+            'cantidades' => $cantidades
         ];
     }
 }

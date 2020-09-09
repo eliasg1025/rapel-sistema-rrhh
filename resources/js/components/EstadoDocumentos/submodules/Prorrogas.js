@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
+import { message } from 'antd';
 
 import { ImportarDocumentos, TablaDocumentos } from './components';
 
@@ -17,6 +18,11 @@ export const Prorrogas = () => {
             Axios.get(`/api/documentos-turecibo?tipo_documento_turecibo_id=${1}`)
                 .then(res => {
                     console.log(res);
+
+                    message['success']({
+                        content: `Se encontraton ${res.data.length} registros`
+                    });
+
                     setDocumentos(res.data);
                 })
                 .catch(err => {
@@ -29,7 +35,7 @@ export const Prorrogas = () => {
         }
 
         fetchTipoDocumentosTurecibo();
-    }, [])
+    }, [reloadData])
 
     return (
         <>
@@ -50,7 +56,7 @@ export const Prorrogas = () => {
             )}
             <hr />
             <br />
-            <h6><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h6>
+            <h5><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h5>
             <TablaDocumentos
                 reloadData={reloadData}
                 loading={loading}

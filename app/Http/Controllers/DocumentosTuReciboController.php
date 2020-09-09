@@ -92,9 +92,9 @@ class DocumentosTuReciboController extends Controller
                         'nombre' => $data[6],
                         'estado' => $data[3],
                         'fecha_carga' => $data[11],
-                        'fecha_firma' => $data[12] === '' ? $data[12] : null,
+                        'fecha_firma' => $data[12],
                         'regimen_id' => $regimen_id,
-                        'zona_labor_id' => $regimen_id === 1 ? ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id) : null,
+                        'zona_labor_id' => $regimen_id !== 3 ? ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id) : null,
                     ];
 
                 } catch (\Exception $e) {
@@ -105,6 +105,7 @@ class DocumentosTuReciboController extends Controller
                     continue;
                 }
             }
+            //var_dump($contents_arr);
 
             array_shift($contents_arr);
             return response()->json([
@@ -123,6 +124,17 @@ class DocumentosTuReciboController extends Controller
         $tipo_documento_turecibo_id = $request->query('tipo_documento_turecibo_id');
 
         $result = DocumentoTuRecibo::_get($tipo_documento_turecibo_id);
+
+        return response()->json($result);
+    }
+
+    public function getCantidadFirmadosPorDia(Request $request)
+    {
+        $tipo_documento_turecibo_id = $request->query('tipo_documento_turecibo_id');
+        $desde = $request->query('desde');
+        $hasta = $request->query('hasta');
+
+        $result = DocumentoTuRecibo::getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta);
 
         return response()->json($result);
     }

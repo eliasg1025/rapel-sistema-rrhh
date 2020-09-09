@@ -1,13 +1,14 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2'
 
 import moment from 'moment';
+import Axios from 'axios';
 
 export const GraficoDocumentos = ({ filter }) => {
 
-    const [days, setDays] = useState([]);
-
-    const chartRef = createRef();
+    const [dias, setDias] = useState([]);
+    const [firmasBoletas, setFirmasBoletas] = useState([]);
+    const [firmasProrrogas, setFirmasProrrogas] = useState([]);
 
     const getDates = (startDate, stopDate) => {
         var dateArray = [];
@@ -20,74 +21,65 @@ export const GraficoDocumentos = ({ filter }) => {
         return dateArray;
     }
 
-    const data = canvas => {
-        const ctx = canvas.getContext("2d");
-        const gradient = ctx.createLinearGradient(0,0,100,0);
-
+    const data = () => {
         return {
-            backgroundColor: gradient
-        }
-    }
-
-    const options = {
-        title: {
-            display: true,
-            text: 'Cantidad de firmas por día'
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-
-    window.onload = function() {
-        const ctx = document.getElementById('docChart');
-
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: getDates(filter.desde, filter.hasta),
-                datasets: [
-                    {
-                        label: '# de Firmas BOLETAS',
-                        data: [12, 19, 3, 5, 2, 3],
-                        backgroundColor:  'rgba(255, 99, 132, 0.2)',
-                        borderColor:  'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: '# de Firmas PRORROGAS',
-                        data: [5, 12, 5, 0, 0, 10],
-                        backgroundColor:  'rgba(54, 162, 235, 0.2)',
-                        borderColor:  'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Cantidad de firmas por día'
+            labels: dias,
+            datasets: [
+                {
+                    label: '# de Firmas BOLETAS',
+                    data: firmasBoletas,
+                    backgroundColor:  'rgba(255, 99, 132, 0.2)',
+                    borderColor:  'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
                 },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                {
+                    label: '# de Firmas PRORROGAS',
+                    data: firmasProrrogas,
+                    backgroundColor:  'rgba(54, 162, 235, 0.2)',
+                    borderColor:  'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
                 }
-            }
-        });
+            ]
+        }
     }
+
+    const options = () => {
+        return {
+            title: {
+                display: true,
+                text: 'Cantidad de firmas por día'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    }
+
+    useEffect(() => {
+        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${2}&desde=${filter.desde}&hasta=${filter.hasta}`)
+            .then(res => {
+                const { dias, cantidades } = res.data;
+
+                setDias(dias);
+                setFirmasBoletas(cantidades);
+            })
+            .catch(err => console.error(err))
+
+            Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${1}&desde=${filter.desde}&hasta=${filter.hasta}`)
+            .then(res => {
+                const { dias, cantidades } = res.data;
+
+                setDias(dias);
+                setFirmasProrrogas(cantidades);
+            })
+            .catch(err => console.error(err))
+    }, [filter]);
 
     return (
-        <Line
-            ref={chartRef}
-            data={data}
-            options={options}
-        />
-    );
+        <Line data={data()} options={options()} height={100} />
+    )
 }

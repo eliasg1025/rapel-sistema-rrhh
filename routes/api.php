@@ -159,9 +159,10 @@ Route::group(['prefix' => 'archivo-banco'], function() {
 });
 
 Route::group(['prefix' => 'documentos-turecibo'], function() {
+    Route::get('/', 'DocumentosTuReciboController@get');
     Route::post('/generar-archivo', 'DocumentosTuReciboController@generateJson');
     Route::post('/massive', 'DocumentosTuReciboController@massive');
-    Route::get('/', 'DocumentosTuReciboController@get');
+    Route::get('/cantidad-firmados-dia', 'DocumentosTuReciboController@getCantidadFirmadosPorDia');
     Route::get('/{rut}', 'DocumentosTuReciboController@getByTrabajador');
 });
 
