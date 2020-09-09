@@ -3,6 +3,7 @@ import Modal from '../../../Modal';
 
 import { SubirArchivo } from '../../../shared/SubirArchivo';
 import Axios from 'axios';
+import Swal from 'sweetalert2';
 
 export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, loading, setLoading }) => {
 
@@ -13,7 +14,7 @@ export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, l
 
     const handleSubmit = e => {
         e.preventDefault();
-        const url = `/api/documentos-turecibo/importar`;
+        const url = `/api/documentos-turecibo/generar-archivo`;
         const formData = new FormData();
         formData.append('file', form.file);
         formData.append('empresa_id', form.empresa_id);
@@ -25,24 +26,60 @@ export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, l
             }
         }
 
+        Swal.fire({
+            title: 'Generando archivo de subida',
+            text: 'Este proceso puede tardar unos minutos',
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         setLoading(true);
         Axios.post(url, formData, config)
             .then(res => {
-                console.log(res);
 
-                const { message } = res.data;
+                const { data } = res.data;
 
-                setLoading(false);
-                Swal.fire(message, '', 'success')
-                    .then(res => {
-                        setIsVisible(false);
-                        setReloadData(!reloadData);
-                    });
+                insertarDatos(data);
             })
             .catch(err => {
                 console.error(err);
                 setLoading(false);
+                Swal.fire('Error al generar archivo', '', 'error');
             });
+    }
+
+    const insertarDatos = data => {
+        Swal.fire({
+            title: 'Ingresando registros',
+            text: 'Este proceso puede tardar unos minutos',
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        Axios.post('/api/documentos-turecibo/massive', {
+            data,
+            empresa_id: form.empresa_id,
+            tipo_documento_turecibo_id: tipoDocumento.id
+        })
+            .then(res => {
+                const { message, data } = res.data;
+
+                console.log(data);
+
+                Swal.fire(message, '', 'success')
+                    .then(res => {
+                        setIsVisible(false);
+                        setLoading(false);
+                        setReloadData(!reloadData);
+                    });
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+                Swal.fire('Error al generar archivo', '', 'error');
+            })
     }
 
     return (

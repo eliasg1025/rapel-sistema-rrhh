@@ -14,7 +14,24 @@ use Rap2hpoutre\FastExcel\FastExcel;
 
 class DocumentosTuReciboController extends Controller
 {
-    public function importar(Request $request)
+    public function getByTrabajador($rut)
+    {
+        $result = DocumentoTuRecibo::_getByTrabajador($rut);
+        return response()->json($result);
+    }
+
+    public function massive(Request $request)
+    {
+        $data = $request->get('data');
+        $empresa_id = $request->get('empresa_id');
+        $tipo_documento_turecibo_id = $request->get('tipo_documento_turecibo_id');
+
+        $result = DocumentoTuRecibo::massiveCreate($empresa_id, $tipo_documento_turecibo_id, $data);
+
+        return response()->json($result);
+    }
+
+    public function generateJson(Request $request)
     {
         try {
             $file = $request->file('file');
@@ -33,17 +50,21 @@ class DocumentosTuReciboController extends Controller
             $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
 
             foreach ($contents_arr as $key => $value) {
+                $data = str_getcsv($value, "\t");
 
                 try {
-                    $data = str_getcsv($value, "\t");
-
                     foreach ($data as $k => $v) {
                         $data[$k] = mb_convert_encoding($v, 'UTF-8', 'UTF-8');
                     }
 
                     $contents_arr[$key] = $data;
 
+                    if (!is_numeric($data[0])) {
+                        continue;
+                    }
+
                     $nombre_archivo = explode('_', $data[4]);
+                    $mes = explode('.', $nombre_archivo[2]);
                     $apellidos = explode(' ', $data[5]);
 
                     $regimen_id = 0;
@@ -64,17 +85,18 @@ class DocumentosTuReciboController extends Controller
                     $contents_arr[$key] = [
                         'rut' => $nombre_archivo[0],
                         'ano' => $nombre_archivo[1],
-                        'mes' => $nombre_archivo[2],
+                        'mes' => (int) $mes[0],
                         'estado' => $data[3],
                         'apellido_paterno' => $apellidos[0],
-                        'apellido_materno' => $apellidos[1],
+                        'apellido_materno' => $apellidos[sizeof($apellidos) - 1],
                         'nombre' => $data[6],
-                        'firmado' => $data[3],
+                        'estado' => $data[3],
                         'fecha_carga' => $data[11],
-                        'fecha_firma' => $data[12],
+                        'fecha_firma' => $data[12] === '' ? $data[12] : null,
                         'regimen_id' => $regimen_id,
-                        'zona_labor_id' => ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id),
+                        'zona_labor_id' => $regimen_id === 1 ? ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id) : null,
                     ];
+
                 } catch (\Exception $e) {
                     return response()->json([
                         'message' => $e->getMessage() . ' -- ' . $e->getLine(),
@@ -84,50 +106,9 @@ class DocumentosTuReciboController extends Controller
                 }
             }
 
-            //var_dump($contents_arr);
-            return response()->json($contents_arr);
-            /*
-            (new FastExcel)
-                ->import(storage_path('app/public') . $name, function($line) use ($empresa_id, $tipo_documento_id, $correctos, $errores) {
-                    $text = explode('_', $line['Archivo']);
-                    $apellido = explode(' ', $line['Apellido']);
-                    try {
-                        $result = DB::table('documentos_turecibo')->updateOrInsert(
-                            [
-                                'rut' => (string) trim($text[0]),
-                                'mes' => (int) trim($text[2]),
-                                'ano' => (int) trim($text[1]),
-                                'empresa_id' => $empresa_id,
-                                'tipo_documento_turecibo_id' => $tipo_documento_id,
-                            ],
-                            [
-                                'estado_documento_turecibo_id' => EstadoDocumentoTuRecibo::where('name', $line['Firmado'])->first()->id,
-                                'apellido_paterno' => $apellido[0],
-                                'apellido_materno' => $apellido[1],
-                                'nombre' => $line['Nombre'],
-                                'email' => $line['Mail'] !== '' ? $line['Mail'] : null,
-                                'regimen_id' => Regimen::where('name', $line['Sector'])->first()->id,
-                                'zona_labor_id' => ZonaLabor::searchByTrabajador(trim($text[0]), $empresa_id)->zona_labor,
-                                'fecha_carga' => Carbon::parse($line['Fecha Carga']),
-                                'fecha_firma' => Carbon::parse($line['Fecha Firma']),
-                            ]
-                        );
-
-                        $correctos++;
-                        return true;
-                    } catch (\Exception $e) {
-                        array_push($errores, [
-                            'rut' => (string) trim($text[0]),
-                            'error' => $e->getMessage() . ' -- ' . $e->getLine()
-                        ]);
-                        return false;
-                    }
-                });*/
-
+            array_shift($contents_arr);
             return response()->json([
-                'message' => 'Actualización completada',
-                'correctos' => $correctos,
-                'errores' => $errores
+                'data' => $contents_arr,
             ]);
         } catch (\Exception $e) {
             return response()->json([

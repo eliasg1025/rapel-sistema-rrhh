@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ImportarDocumentos, TablaDocumentos } from './components'
+import { ImportarDocumentos, TablaDocumentos, BuscarTrabajador } from './components'
 import Axios from 'axios';
 
 export const Boletas = () => {
@@ -35,9 +35,11 @@ export const Boletas = () => {
         <>
             <h4>Boletas <small>{usuario.estado_documentos === 2 ? '(Administrador)' : ''}</small></h4>
             <br />
-            {usuario.estado_documentos === 2 && (
-                <div className="row">
-                    <div className="col">
+            <h5><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h5>
+            <br />
+            <div className="row">
+                <div className="col">
+                    {usuario.estado_documentos === 2 && (
                         <ImportarDocumentos
                             tipoDocumento={{ name: "BOLETA MENSUAL", id: 2 }}
                             reloadData={reloadData}
@@ -45,12 +47,10 @@ export const Boletas = () => {
                             loading={loading}
                             setLoading={setLoading}
                         />
-                    </div>
+                    )}
                 </div>
-            )}
-            <hr />
+            </div>
             <br />
-            <h6><i className="fas fa-user-clock"></i>&nbsp;Pendientes</h6>
             <TablaDocumentos
                 reloadData={reloadData}
                 loading={loading}

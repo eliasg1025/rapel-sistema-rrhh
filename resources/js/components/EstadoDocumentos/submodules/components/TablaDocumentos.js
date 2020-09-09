@@ -21,6 +21,10 @@ export const TablaDocumentos = ({ data, reloadData, loading }) => {
             dataIndex: 'regimen'
         },
         {
+            title: 'Zona Labor',
+            dataIndex: 'zona_labor'
+        },
+        {
             title: 'Estado',
             dataIndex: 'estado'
         }
