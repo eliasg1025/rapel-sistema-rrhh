@@ -14,14 +14,14 @@ export const Prorrogas = () => {
         empresa_id: 9,
         regimen_id: 1,
         zona_labor_id: 0,
-        estado: ''
+        estado: 'NO FIRMADO'
     });
 
     useEffect(() => {
         let intentos = 0;
         function fetchTipoDocumentosTurecibo() {
             intentos++;
-            Axios.get(`/api/documentos-turecibo?tipo_documento_turecibo_id=${1}`)
+            Axios.get(`/api/documentos-turecibo?tipo_documento_turecibo_id=${1}&empresa_id=${filter.empresa_id}&estado=${filter.estado}&regimen_id=${filter.regimen_id}&zona_labor_id=${filter.zona_labor_id}`)
                 .then(res => {
                     console.log(res);
 
@@ -41,7 +41,7 @@ export const Prorrogas = () => {
         }
 
         fetchTipoDocumentosTurecibo();
-    }, [reloadData])
+    }, [filter, reloadData])
 
     return (
         <>

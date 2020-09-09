@@ -122,8 +122,12 @@ class DocumentosTuReciboController extends Controller
     public function get(Request $request)
     {
         $tipo_documento_turecibo_id = $request->query('tipo_documento_turecibo_id');
+        $empresa_id = $request->query('empresa_id');
+        $regimen_id = $request->query('regimen_id');
+        $zona_labor_id = $request->query('zona_labor_id');
+        $estado = $request->query('estado');
 
-        $result = DocumentoTuRecibo::_get($tipo_documento_turecibo_id);
+        $result = DocumentoTuRecibo::_get($tipo_documento_turecibo_id, $estado, $empresa_id, $regimen_id, $zona_labor_id);
 
         return response()->json($result);
     }

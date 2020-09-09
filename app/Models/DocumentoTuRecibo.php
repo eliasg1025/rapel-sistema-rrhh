@@ -33,8 +33,13 @@ class DocumentoTuRecibo extends Model
             ->get();
     }
 
-    public static function _get($tipo_documento_turecibo_id, $estado = 'NO FIRMADO')
+    public static function _get($tipo_documento_turecibo_id, $estado, $empresa_id, $regimen_id, $zona_labor_id)
     {
+        $zona_labor = ZonaLabor::where([
+            'code' => $zona_labor_id,
+            'empresa_id' => $empresa_id
+        ])->first();
+
         $result = DB::table('documentos_turecibo as dt')
             ->select(
                 'dt.id as key',
@@ -51,6 +56,11 @@ class DocumentoTuRecibo extends Model
             ->leftJoin('zona_labores as z', 'z.id', '=', 'dt.zona_labor_id')
             ->where('dt.estado', $estado)
             ->where('dt.tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
+            ->where('dt.empresa_id', $empresa_id)
+            ->where('dt.regimen_id', $regimen_id)
+            ->when($zona_labor !== null, function($query) use ($zona_labor) {
+                $query->where('dt.zona_labor_id', $zona_labor->id);
+            })
             ->get();
 
         return $result;
