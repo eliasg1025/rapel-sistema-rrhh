@@ -103,7 +103,7 @@ class DocumentoTuRecibo extends Model
 
     public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta)
     {
-        $result = DB::select('CALL obetener_cantidad_firmados_por_dia(?, ?, ?)', [
+        $result = DB::select('CALL obtener_cantidad_firmados_por_dia(?, ?, ?)', [
             $tipo_documento_turecibo_id,
             $desde,
             $hasta
