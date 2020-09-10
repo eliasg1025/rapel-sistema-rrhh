@@ -6,6 +6,8 @@ import Axios from "axios";
 
 export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFilter }) => {
 
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
     const estados = [
         {
             id: 'NO FIRMADO',
@@ -98,11 +100,24 @@ export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFi
                                 }
                                 onChange={e => setFilter({ ...filter, regimen_id: e })}
                             >
-                                {regimenes.map(e => (
-                                    <Select.Option value={e.id} key={e.id}>
-                                        {`${e.id} - ${e.name}`}
-                                    </Select.Option>
-                                ))}
+                                {
+                                    usuario.estado_documentos === 2 ? (
+                                        regimenes.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id} - ${e.name}`}
+                                            </Select.Option>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <Select.Option value={1} key={1}>
+                                                {`${1} - Empleados Agrarios`}
+                                            </Select.Option>
+                                            <Select.Option value={3} key={3}>
+                                                {`${3} - Obreros`}
+                                            </Select.Option>
+                                        </>
+                                    )
+                                }
                             </Select>
                         </div>
                         <div className="col-md-3">

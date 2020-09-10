@@ -70,11 +70,17 @@ class DocumentoTuRecibo extends Model
         return $result;
     }
 
-    public static function massiveCreate($empresa_id, $tipo_documento_turecibo_id, array $documentos)
+    public static function massiveCreate($usuario_id, $empresa_id, $tipo_documento_turecibo_id, array $documentos)
     {
         $count = 0;
         $total = sizeof($documentos);
         $errors = [];
+
+        $corte = new CorteDocumentoTurecibo();
+        $corte->fecha_hora_corte = now()->toDateTimeString();
+        $corte->empresa_id = $empresa_id;
+        $corte->usuario_id = $usuario_id;
+        $corte->save();
 
         foreach ($documentos as $documento)
         {
@@ -85,7 +91,7 @@ class DocumentoTuRecibo extends Model
                         'ano' => $documento['ano'],
                         'mes' => $documento['mes'],
                         'empresa_id' => $empresa_id,
-                        'tipo_documento_turecibo_id' => $tipo_documento_turecibo_id
+                        'tipo_documento_turecibo_id' => $tipo_documento_turecibo_id,
                     ],
                     [
                         'nombre' => $documento['nombre'],
@@ -96,6 +102,7 @@ class DocumentoTuRecibo extends Model
                         'fecha_firma' => isset($documento['fecha_firma']) ? DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_firma']) : null,
                         'regimen_id' => $documento['regimen_id'],
                         'zona_labor_id' => isset($documento['zona_labor_id']) ? $documento['zona_labor_id'] : null,
+                        'corte_turecibo_id' => $corte->id
                     ]
                 );
 
@@ -108,6 +115,10 @@ class DocumentoTuRecibo extends Model
             }
         }
 
+        $corte->cantidad = $total;
+        $corte->errores = json_encode($errors);
+        $corte->save();
+
         return [
             'total' => $total,
             'completados' => $count,
@@ -115,7 +126,7 @@ class DocumentoTuRecibo extends Model
         ];
     }
 
-    public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id)
+    public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id, $periodo)
     {
         /*
         $result = DB::select('CALL obtener_cantidad_firmados_por_dia(?, ?, ?)', [
@@ -129,11 +140,16 @@ class DocumentoTuRecibo extends Model
             'empresa_id' => $empresa_id
         ])->first();
 
+        $p= explode('-', $periodo);
+
         $result = DB::table('documentos_turecibo as dt')
             ->select(
                 DB::raw('DATE(dt.fecha_firma) as dia'),
                 DB::raw('COUNT(*) as cantidad')
             )
+            /*
+            ->where('dt.mes', $p[1])
+            ->where('dt.ano', $p[0])*/
             ->where('dt.tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
             ->where('dt.estado', 'FIRMADO CONFORME')
             ->where('dt.empresa_id', $empresa_id)
@@ -156,5 +172,33 @@ class DocumentoTuRecibo extends Model
             'dias' => $dias,
             'cantidades' => $cantidades
         ];
+    }
+
+    public static function getCantidadPorZonaLabor($periodo, $empresa_id)
+    {
+        $p= explode('-', $periodo);
+
+        $result = DB::table('documentos_turecibo as dt')
+            ->select(
+                'zl.name as zona_labor',
+                DB::raw('count(case dt.estado when \'FIRMADO CONFORME\' then 1 else null end) as firmados'),
+                DB::raw('count(case dt.estado when \'NO FIRMADO\' then 1 else null end) as no_firmados'),
+                DB::raw('
+                    (
+		                ROUND( count(case dt.estado when \'FIRMADO CONFORME\' then 1 else null end) * 100 / count(*), 2 )
+	                ) as procentaje_firmados
+                ')
+            )
+            ->join('zona_labores as zl', 'zl.id', '=', 'dt.zona_labor_id')
+            ->where([
+                'mes' => $p[1],
+                'ano' => $p[0]
+            ])
+            ->where('dt.regimen_id',  1)
+            ->where('dt.empresa_id', $empresa_id)
+            ->groupBy('dt.zona_labor_id')
+            ->get();
+
+        return $result;
     }
 }

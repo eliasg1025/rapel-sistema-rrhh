@@ -13,6 +13,10 @@ export const TablaDocumentos = ({ data, reloadData, loading }) => {
             dataIndex: 'periodo',
         },
         {
+            title: 'RUT',
+            dataIndex: 'rut'
+        },
+        {
             title: 'Nombre Completo',
             dataIndex: 'nombre_completo'
         },

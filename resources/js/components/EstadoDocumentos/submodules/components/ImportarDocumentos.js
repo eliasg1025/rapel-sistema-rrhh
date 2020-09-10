@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 
 export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, loading, setLoading }) => {
 
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
     const [isVisible, setIsVisible] = useState(false);
     const [form, setForm] = useState({
         empresa_id: 9,
@@ -61,7 +63,8 @@ export const ImportarDocumentos = ({ tipoDocumento, reloadData, setReloadData, l
         Axios.post('/api/documentos-turecibo/massive', {
             data,
             empresa_id: form.empresa_id,
-            tipo_documento_turecibo_id: tipoDocumento.id
+            tipo_documento_turecibo_id: tipoDocumento.id,
+            usuario_id: usuario.id
         })
             .then(res => {
 

@@ -27,8 +27,9 @@ class DocumentosTuReciboController extends Controller
         $data = $request->get('data');
         $empresa_id = $request->get('empresa_id');
         $tipo_documento_turecibo_id = $request->get('tipo_documento_turecibo_id');
+        $usuario_id = $request->get('usuario_id');
 
-        $result = DocumentoTuRecibo::massiveCreate($empresa_id, $tipo_documento_turecibo_id, $data);
+        $result = DocumentoTuRecibo::massiveCreate($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
 
         return response()->json($result);
     }
@@ -51,6 +52,35 @@ class DocumentosTuReciboController extends Controller
 
             $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
 
+            function getMes($text) {
+                switch ($text) {
+                    case 'Ene':
+                        return 1;
+                    case 'Feb':
+                        return 2;
+                    case 'Mar':
+                        return 3;
+                    case 'Abr':
+                        return 4;
+                    case 'May':
+                        return 5;
+                    case 'Jun':
+                        return 6;
+                    case 'Jul':
+                        return 7;
+                    case 'Ago':
+                        return 8;
+                    case 'Set':
+                        return 9;
+                    case 'Oct':
+                        return 10;
+                    case 'Nov':
+                        return 11;
+                    case 'Dic':
+                        return 12;
+                }
+            }
+
             foreach ($contents_arr as $key => $value) {
                 $data = str_getcsv($value, "\t");
 
@@ -66,7 +96,7 @@ class DocumentosTuReciboController extends Controller
                     }
 
                     $nombre_archivo = explode('_', $data[4]);
-                    $mes = explode('.', $nombre_archivo[2]);
+                    $periodo = explode('-', $data[1]);
                     $apellidos = explode(' ', $data[5]);
 
                     $regimen_id = 0;
@@ -86,8 +116,8 @@ class DocumentosTuReciboController extends Controller
 
                     $contents_arr[$key] = [
                         'rut' => $nombre_archivo[0],
-                        'ano' => $nombre_archivo[1],
-                        'mes' => (int) $mes[0],
+                        'ano' => 2000 + $periodo[1],
+                        'mes' => getMes($periodo[0]),
                         'estado' => $data[3],
                         'apellido_paterno' => $apellidos[0],
                         'apellido_materno' => $apellidos[sizeof($apellidos) - 1],
@@ -143,9 +173,20 @@ class DocumentosTuReciboController extends Controller
         $empresa_id = $request->query('empresa_id');
         $regimen_id = $request->query('regimen_id');
         $zona_labor_id = $request->query('zona_labor_id');
+        $periodo = $request->query('periodo');
 
-        $result = DocumentoTuRecibo::getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id);
+        $result = DocumentoTuRecibo::getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id, $periodo);
 
+
+        return response()->json($result);
+    }
+
+    public function getCantidadPorZonaLabor(Request $request)
+    {
+        $periodo = $request->query('periodo');
+        $empresa_id = $request->query('empresa_id');
+
+        $result = DocumentoTuRecibo::getCantidadPorZonaLabor($periodo, $empresa_id);
 
         return response()->json($result);
     }

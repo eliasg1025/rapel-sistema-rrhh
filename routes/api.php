@@ -163,6 +163,7 @@ Route::group(['prefix' => 'documentos-turecibo'], function() {
     Route::post('/generar-archivo', 'DocumentosTuReciboController@generateJson');
     Route::post('/massive', 'DocumentosTuReciboController@massive');
     Route::get('/cantidad-firmados-dia', 'DocumentosTuReciboController@getCantidadFirmadosPorDia');
+    Route::get('/cantidad-firmados-zona-labor', 'DocumentosTuReciboController@getCantidadPorZonaLabor');
     Route::get('/{rut}', 'DocumentosTuReciboController@getByTrabajador');
 });
 
