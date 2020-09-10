@@ -16,6 +16,10 @@ class EstadoDocumentosController extends Controller
             return view('pages.no-acceso', compact('nombre_modulo'));
         }
 
+        if ( $usuario->estado_documentos == 1 ) {
+            return redirect('/estado-documentos/boletas');
+        }
+
         $data = [
             'usuario' => $usuario,
             'submodule' => 'main'

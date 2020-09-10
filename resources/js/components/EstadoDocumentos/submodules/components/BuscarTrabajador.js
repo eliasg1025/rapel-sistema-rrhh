@@ -4,7 +4,7 @@ import Axios from 'axios';
 import Modal from '../../../Modal';
 import { Table } from 'antd';
 
-export const BuscarTrabajador = () => {
+export const BuscarTrabajador = ({ tipoDocumento }) => {
 
     const [rut, setRut] = useState('');
     const [trabajador, setTrabajador] = useState(null);
@@ -68,7 +68,7 @@ export const BuscarTrabajador = () => {
     }
 
     const fetchDocumentos = () => {
-        Axios.get(`/api/documentos-turecibo/${rut}`)
+        Axios.get(`/api/documentos-turecibo/${rut}?tipo_documento_turecibo_id=${tipoDocumento.id}`)
             .then(res => {
                 console.log(res);
 

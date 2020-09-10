@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos } from './components'
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador } from './components'
 import Axios from 'axios';
 import { message } from 'antd';
 
@@ -43,14 +43,59 @@ export const Boletas = () => {
         }
 
         fetchTipoDocumentosTurecibo();
-    }, [filter, reloadData])
+    }, [filter, reloadData]);
+
+    const exportar = () => {
+        console.log(documentos);
+        const headings = [
+            'Empresa',
+            'Periodo',
+            'RUT',
+            'Nombre Completo',
+            'Regimen',
+            'Zona Labor',
+            'Estado'
+        ];
+
+        const data = documentos.map(d => {
+            return {
+                empresa: d.empresa,
+                periodo: d.periodo,
+                rut: d.rut,
+                nombre_completo: d.nombre_completo,
+                regimen: d.regimen,
+                zona_labor: d.zona_labor,
+                estado: d.estado
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `${filter.estado}.xlsx`
+                link.click();
+            })
+    }
 
     return (
         <>
             <h4>Boletas <small>{usuario.estado_documentos === 2 ? '(Administrador)' : ''}</small></h4>
             <br />
             <div className="row">
-                <div className="col">
+                <div className="col-md-6 col-sm-12">
+                    <BuscarTrabajador
+                        tipoDocumento={{ name: "BOLETA MENSUAL", id: 2}}
+                    />
+                </div>
+                <div className="col-md-3 col-sm-12">
                     {usuario.estado_documentos === 2 && (
                         <ImportarDocumentos
                             tipoDocumento={{ name: "BOLETA MENSUAL", id: 2 }}
@@ -60,6 +105,9 @@ export const Boletas = () => {
                             setLoading={setLoading}
                         />
                     )}
+                    <button className="btn btn-success" onClick={() => exportar()}>
+                        <i className="fas fa-file-export"></i> Exportar Registros
+                    </button>
                 </div>
             </div>
             <hr />

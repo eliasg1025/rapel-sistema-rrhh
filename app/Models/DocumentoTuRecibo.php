@@ -11,7 +11,7 @@ class DocumentoTuRecibo extends Model
 {
     protected $table = 'documentos_turecibo';
 
-    public static function _getByTrabajador($rut)
+    public static function _getByTrabajador($tipo_documento_turecibo_id, $rut)
     {
         return DB::table('documentos_turecibo as dt')
             ->select(
@@ -30,6 +30,7 @@ class DocumentoTuRecibo extends Model
             ->join('regimenes as re', 're.id', '=', 'dt.regimen_id')
             ->join('tipo_documentos_turecibo as td', 'td.id', '=', 'dt.tipo_documento_turecibo_id')
             ->where('dt.rut', $rut)
+            ->where('dt.tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
             ->get();
     }
 
@@ -46,6 +47,7 @@ class DocumentoTuRecibo extends Model
                 'dt.id',
                 'e.shortname as empresa',
                 DB::raw('CONCAT(dt.mes, "-", dt.ano) as periodo'),
+                'dt.rut',
                 DB::raw('CONCAT(dt.apellido_paterno, " ", dt.apellido_materno, " ", dt.nombre) as nombre_completo'),
                 're.name as regimen',
                 'dt.estado',
@@ -61,6 +63,8 @@ class DocumentoTuRecibo extends Model
             ->when($zona_labor !== null, function($query) use ($zona_labor) {
                 $query->where('dt.zona_labor_id', $zona_labor->id);
             })
+            ->orderBy('periodo', 'DESC')
+            ->orderBy('nombre_completo', 'ASC')
             ->get();
 
         return $result;
@@ -111,13 +115,39 @@ class DocumentoTuRecibo extends Model
         ];
     }
 
-    public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta)
+    public static function getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id)
     {
+        /*
         $result = DB::select('CALL obtener_cantidad_firmados_por_dia(?, ?, ?)', [
             $tipo_documento_turecibo_id,
             $desde,
             $hasta
-        ]);
+        ]);*/
+
+        $zona_labor = ZonaLabor::where([
+            'code' => $zona_labor_id,
+            'empresa_id' => $empresa_id
+        ])->first();
+
+        $result = DB::table('documentos_turecibo as dt')
+            ->select(
+                DB::raw('DATE(dt.fecha_firma) as dia'),
+                DB::raw('COUNT(*) as cantidad')
+            )
+            ->where('dt.tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
+            ->where('dt.estado', 'FIRMADO CONFORME')
+            ->where('dt.empresa_id', $empresa_id)
+            ->when($regimen_id != 0, function($query) use ($regimen_id) {
+                $query->where('dt.regimen_id', $regimen_id);
+            })
+            ->when($zona_labor !== null, function($query) use ($zona_labor) {
+                $query->where('dt.zona_labor_id', $zona_labor->id);
+            })
+            ->whereNotNull('dt.fecha_firma')
+            ->whereDate('dt.fecha_firma', '>=', $desde)
+            ->whereDate('dt.fecha_firma', '<=', $hasta)
+            ->groupBy('dia')
+            ->get()->toArray();
 
         $dias = array_column($result, 'dia');
         $cantidades = array_column($result, 'cantidad');

@@ -60,7 +60,7 @@ export const GraficoDocumentos = ({ filter }) => {
     }
 
     useEffect(() => {
-        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${2}&desde=${filter.desde}&hasta=${filter.hasta}`)
+        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${2}&desde=${filter.desde}&hasta=${filter.hasta}&empresa_id=${filter.empresa_id}&regimen_id=${filter.regimen_id}&zona_labor_id=${filter.zona_labor_id}`)
             .then(res => {
                 const { dias, cantidades } = res.data;
 
@@ -69,7 +69,7 @@ export const GraficoDocumentos = ({ filter }) => {
             })
             .catch(err => console.error(err))
 
-        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${1}&desde=${filter.desde}&hasta=${filter.hasta}`)
+        Axios.get(`/api/documentos-turecibo/cantidad-firmados-dia?tipo_documento_turecibo_id=${1}&desde=${filter.desde}&hasta=${filter.hasta}&empresa_id=${filter.empresa_id}&regimen_id=${filter.regimen_id}&zona_labor_id=${filter.zona_labor_id}`)
             .then(res => {
                 const { dias, cantidades } = res.data;
 

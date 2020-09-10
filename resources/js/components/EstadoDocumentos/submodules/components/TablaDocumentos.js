@@ -33,6 +33,7 @@ export const TablaDocumentos = ({ data, reloadData, loading }) => {
     return (
         <Table
             columns={columns} dataSource={data} size="small"
+            scroll={{ x: 500 }}
         />
     );
 }

@@ -14,9 +14,11 @@ use Rap2hpoutre\FastExcel\FastExcel;
 
 class DocumentosTuReciboController extends Controller
 {
-    public function getByTrabajador($rut)
+    public function getByTrabajador(Request $request, $rut)
     {
-        $result = DocumentoTuRecibo::_getByTrabajador($rut);
+        $tipo_documento_turecibo_id = $request->query('tipo_documento_turecibo_id');
+
+        $result = DocumentoTuRecibo::_getByTrabajador($tipo_documento_turecibo_id, $rut);
         return response()->json($result);
     }
 
@@ -138,7 +140,12 @@ class DocumentosTuReciboController extends Controller
         $desde = $request->query('desde');
         $hasta = $request->query('hasta');
 
-        $result = DocumentoTuRecibo::getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta);
+        $empresa_id = $request->query('empresa_id');
+        $regimen_id = $request->query('regimen_id');
+        $zona_labor_id = $request->query('zona_labor_id');
+
+        $result = DocumentoTuRecibo::getCantidadFirmadosPorDia($tipo_documento_turecibo_id, $desde, $hasta, $empresa_id, $regimen_id, $zona_labor_id);
+
 
         return response()->json($result);
     }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { message } from 'antd';
 
-import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos } from './components';
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador } from './components';
 
 export const Prorrogas = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
@@ -47,9 +47,14 @@ export const Prorrogas = () => {
         <>
             <h4>Prórrogas <small>{usuario.estado_documentos === 2 ? '(Administrador)' : ''}</small></h4>
             <br />
-            {usuario.estado_documentos === 2 && (
-                <div className="row">
-                    <div className="col">
+            <div className="row">
+                <div className="col-md-6 col-sm-12">
+                    <BuscarTrabajador
+                        tipoDocumento={{ name: "PRORROGAS DE CONTRATO", id: 1 }}
+                    />
+                </div>
+                <div className="col-md-3 col-sm-12">
+                    {usuario.estado_documentos === 2 && (
                         <ImportarDocumentos
                             tipoDocumento={{ name: "PRORROGAS DE CONTRATO", id: 1 }}
                             reloadData={reloadData}
@@ -57,9 +62,12 @@ export const Prorrogas = () => {
                             loading={loading}
                             setLoading={setLoading}
                         />
-                    </div>
+                    )}
+                    <button className="btn btn-success">
+                        <i className="fas fa-file-export"></i> Exportar Registros
+                    </button>
                 </div>
-            )}
+            </div>
             <hr />
             <br />
             <FiltroTablaDocumentos

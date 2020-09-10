@@ -31,16 +31,6 @@ export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFi
     }, []);
 
     useEffect(() => {
-        Axios.get('http://192.168.60.16/api/regimen')
-            .then(res => {
-                setRegimenes(res.data.data);
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    }, []);
-
-    useEffect(() => {
         if (filter.empresa_id !== '') {
             Axios.get(`http://192.168.60.16/api/zona-labor/${filter.empresa_id}`)
                 .then(res => {
