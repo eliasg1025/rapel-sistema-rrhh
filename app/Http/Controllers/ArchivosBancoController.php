@@ -11,19 +11,20 @@ class ArchivosBancoController extends Controller
 {
     public function descargar(Request $request)
     {
-        $files = Storage::disk('public')->files($request->get('link'));
+        //$files = Storage::disk('public')->files($request->get('link'));
 
         $zip_files = 'archivos-banco.zip';
         $zip = new ZipArchive();
         $zip->open($zip_files, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        foreach ($files as $name => $file)
-        {
+        $path = storage_path('app/public') . '/' . $request->get('link');
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        foreach ($files as $name => $file) {
             if (!$file->isDir()) {
                 $filePath     = $file->getRealPath();
 
                 // extracting filename with substr/strlen
-                $relativePath = 'invoices/' . substr($filePath, strlen($request->get('link')) + 1);
+                $relativePath = substr($filePath, strlen($path) + 1);
 
                 $zip->addFile($filePath, $relativePath);
             }

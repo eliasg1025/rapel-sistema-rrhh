@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 import Axios from 'axios';
+import { split } from 'lodash';
 
 export const TablaArchivosBanco = ({ reloadData }) => {
 
@@ -27,14 +28,22 @@ export const TablaArchivosBanco = ({ reloadData }) => {
     ];
 
     const descargar = link => {
+        const separated = split(link, '/');
+
         Axios({
             url: '/api/archivo-banco/descargar',
             data: { link },
             method: 'POST',
-            //responseType: 'blob'
+            responseType: 'blob'
         })
-            .then(res => {
-                console.log(res);
+            .then(response => {
+                console.log(separated);
+
+                let blob = new Blob([response.data], { type: 'application/zip' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `ARCHIVOS-BANCO_${separated[2].toUpperCase()}_${separated[separated.length - 1]}.zip`
+                link.click();
             })
     }
 

@@ -3,11 +3,7 @@ import Axios from 'axios';
 
 export const GenerarArchivoBanco = ({ data, filtro, reloadData, setReloadData, setIsVisibleParent, reloadDataAB, setReloadDataAB }) => {
 
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        //console.log({ filtro, data });
-
+    const generarArchivosBanco = () => {
         Axios.post('/api/finiquitos/generar-archivos-banco', { filtro, data })
             .then(res => {
                 console.log(res);
@@ -15,6 +11,11 @@ export const GenerarArchivoBanco = ({ data, filtro, reloadData, setReloadData, s
             .catch(err => {
                 console.error(err);
             });
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        console.log({ filtro, data });
     }
 
     const reducer = (p, c) => p + c.monto;
@@ -88,7 +89,7 @@ export const GenerarArchivoBanco = ({ data, filtro, reloadData, setReloadData, s
                 <div className="col text-center">
                     {(filtro.desde !== filtro.hasta) && <span style={{ fontWeight: 'bold', color: 'red' }}>Sólo se puede procesar 1 fecha de pago a la vez</span>}
                     <div className="btn-group" style={{ width: '100%' }}>
-                        <button className="btn btn-primary" type="submit" disabled={filtro.desde !== filtro.hasta}>
+                        <button className="btn btn-primary" type="button" disabled={filtro.desde !== filtro.hasta} onClick={generarArchivosBanco}>
                             Generar archivos
                         </button>
                         <button className="btn btn-success" type="submit" disabled={filtro.desde !== filtro.hasta}>
