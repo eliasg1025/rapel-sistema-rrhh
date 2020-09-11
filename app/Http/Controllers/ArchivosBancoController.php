@@ -5,13 +5,33 @@ namespace App\Http\Controllers;
 use App\Services\ArchivosBancoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class ArchivosBancoController extends Controller
 {
     public function descargar(Request $request)
     {
         $files = Storage::disk('public')->files($request->get('link'));
-        return response()->json($files);
+
+        $zip_files = 'archivos-banco.zip';
+        $zip = new ZipArchive();
+        $zip->open($zip_files, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        foreach ($files as $name => $file)
+        {
+            if (!$file->isDir()) {
+                $filePath     = $file->getRealPath();
+
+                // extracting filename with substr/strlen
+                $relativePath = 'invoices/' . substr($filePath, strlen($request->get('link')) + 1);
+
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+
+        return response()->download($zip_files);
     }
 
     public function liquidaciones(Request $request)

@@ -22,6 +22,15 @@ export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFi
     const [regimenes, setRegimenes] = useState([]);
     const [zonasLabores, setZonasLabores] = useState([]);
 
+    const zonasBloqueadas = {
+        rapel: [
+            '50', '51', '52', '53', '56', '57', '58', '70', '80', '81', '90'
+        ],
+        verfrut: [
+            '31', '40', '41', '50', '51', '52', '53', '54', '56', '57', '58', '59', '80', '81', '90'
+        ]
+    }
+
     useEffect(() => {
         Axios.get('http://192.168.60.16/api/regimen')
             .then(res => {
@@ -135,11 +144,35 @@ export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFi
                                 <Select.Option value={0} key={0}>
                                     {`${0} - TODOS`}
                                 </Select.Option>
-                                {zonasLabores.map(e => (
-                                    <Select.Option value={e.id} key={e.id}>
-                                        {`${e.id} - ${e.name}`}
-                                    </Select.Option>
-                                ))}
+                                {
+                                    usuario.estado_documentos === 2 ? (
+                                        zonasLabores.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id} - ${e.name}`}
+                                            </Select.Option>
+                                        ))
+                                    ) : (
+                                        zonasLabores.map(z => {
+                                            if (z.empresa_id == 9) {
+                                                if (zonasBloqueadas.rapel.find(i => i == z.id)) {
+                                                    return (
+                                                        <Select.Option value={z.id} key={z.id}>
+                                                            {`${z.id} - ${z.name}`}
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                            } else {
+                                                if (zonasBloqueadas.verfrut.find(i => i == z.id)) {
+                                                    return (
+                                                        <Select.Option value={z.id} key={z.id}>
+                                                            {`${z.id} - ${z.name}`}
+                                                        </Select.Option>
+                                                    )
+                                                }
+                                            }
+                                        })
+                                    )
+                                }
                             </Select>
                         </div>
                     </div>

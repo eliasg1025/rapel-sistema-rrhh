@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import BuscarTrabajador from '../../shared/BuscarTrabajador';
+import { InfoTrabajador } from '../components/InfoTrabajador';
+import { TablaConsulta } from '../components/TablaConsulta';
 
 export const Consulta = () => {
 
@@ -14,6 +16,11 @@ export const Consulta = () => {
                 setTrabajador={setTrabajador}
                 setContratoActivo={setContratoActivo}
                 activo={false}
+            />
+            <InfoTrabajador />
+            <br />
+            <TablaConsulta
+
             />
         </>
     );
