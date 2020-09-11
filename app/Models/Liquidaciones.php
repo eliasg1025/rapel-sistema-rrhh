@@ -107,4 +107,20 @@ class Liquidaciones extends Model
             'errores' => $errors
         ];
     }
+
+    public static function marcarPagadoMasivo(array $finiquitos)
+    {
+        try {
+            return DB::table('liquidaciones')
+                ->whereIn('id', $finiquitos)
+                ->update([
+                    'estado' => 2,
+                    'fecha_hora_marca_pagado' => now()->toDateTimeString()
+                ]);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
 }

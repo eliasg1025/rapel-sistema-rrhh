@@ -137,6 +137,8 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/programar-para-pago', 'LiquidacionesController@programarParaPago');
     Route::get('/excel-banco', 'LiquidacionesController@testExcel');
     Route::post('/generar-archivos-banco', 'LiquidacionesController@generateArchivosBanco');
+
+    Route::put('/marcar-pagado-masivo', 'LiquidacionesController@marcarPagadoMasivo');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {

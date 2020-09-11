@@ -13,7 +13,7 @@ export const Boletas = () => {
     const [filter, setFilter] = useState({
         empresa_id: 9,
         regimen_id: 1,
-        zona_labor_id: 0,
+        zona_labor_id: usuario.estado_documentos === 2 ? 0 : '51',
         estado: 'NO FIRMADO'
     });
 

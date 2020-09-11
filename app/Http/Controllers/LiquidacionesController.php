@@ -97,7 +97,7 @@ class LiquidacionesController extends Controller
                     try {
                         return DB::table('liquidaciones')->updateOrInsert(
                             [
-                                'rut' => $line['CUIL'],
+                                'rut' => $line['DNI'],
                                 'mes' => (int) trim($text[2]),
                                 'ano' => (int) trim($text[1]),
                                 'empresa_id' => $empresa_id
@@ -109,7 +109,7 @@ class LiquidacionesController extends Controller
                         );
                     } catch (\Exception $e) {
                         array_push($errores, [
-                            'rut' => $line['CUIL'],
+                            'rut' => $line['DNI'],
                             'error' => $e->getMessage() . ' -- ' . $e->getLine()
                         ]);
                         return false;
@@ -129,6 +129,26 @@ class LiquidacionesController extends Controller
         }
     }
 
+    public function marcarPagadoMasivo(Request $request)
+    {
+        $data = $request->get('data');
+
+        return response()->json($data);
+
+        $result = Liquidaciones::marcarPagadoMasivo($data);
+
+        if ( isset($result['error']) ) {
+            return response()->json([
+                'message' => $result['error']
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Se actualizaron ' . $result . ' registros',
+            'actualizados' => $result
+        ]);
+    }
+
     public function programarParaPago(Request $request)
     {
         $fecha = $request->get('fecha');
@@ -145,32 +165,6 @@ class LiquidacionesController extends Controller
             'message' => 'Se actualizaron ' . $result . ' registros',
             'actualizados' => $result
         ]);
-    }
-
-    public function testExcel(Request $request)
-    {
-        try {
-            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/BCP.xlsm');
-            $worksheet = $spreadsheet->getActiveSheet();
-
-            $worksheet->getCell('D12')->setValue('72437334');
-            $worksheet->getStyle('D12')->getNumberFormat()->setFormatCode('@');
-            $worksheet->getCell('E12')->setValue('GUERE');
-            $worksheet->getCell('F12')->setValue('CANCHUCAJA');
-            $worksheet->getCell('G12')->setValue('ELIAS');
-
-            /*
-            $worksheet->getCell('D13')->setValue('02437334');
-            $worksheet->getStyle('D13')->getNumberFormat()->setFormatCode('@');
-            $worksheet->getCell('E13')->setValue('GUERE');
-            $worksheet->getCell('F13')->setValue('CANCHUCAJA');
-            $worksheet->getCell('G13')->setValue('ELIAS');*/
-
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsm');
-            $writer->save(storage_path('app/public') . '/archivos-banco/generados/BCP.xlsm');
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage());
-        }
     }
 
     public function generateArchivosBanco(Request $request)

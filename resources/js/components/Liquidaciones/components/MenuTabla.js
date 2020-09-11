@@ -158,6 +158,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                         scotiabank,
                         banbif
                     }}
+                    d={data}
                     filtro={filtro}
                     reloadData={reloadData}
                     setReloadData={setReloadData}

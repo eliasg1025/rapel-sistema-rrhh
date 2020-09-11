@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 
-export const GenerarArchivoBanco = ({ data, filtro, reloadData, setReloadData, setIsVisibleParent, reloadDataAB, setReloadDataAB }) => {
+export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData, setIsVisibleParent, reloadDataAB, setReloadDataAB }) => {
 
     const generarArchivosBanco = () => {
         Axios.post('/api/finiquitos/generar-archivos-banco', { filtro, data })
@@ -15,7 +15,15 @@ export const GenerarArchivoBanco = ({ data, filtro, reloadData, setReloadData, s
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log({ filtro, data });
+        Axios.put('/api/finiquitos/marcar-pagado-masivo', {
+            data: d.map(e => e.id)
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
     const reducer = (p, c) => p + c.monto;

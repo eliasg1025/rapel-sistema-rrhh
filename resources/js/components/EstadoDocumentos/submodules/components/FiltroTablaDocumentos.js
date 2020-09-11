@@ -141,9 +141,13 @@ export const FiltroTablaDocumentos = ({ reloadData, setReloadData, filter, setFi
                                 }
                                 onChange={e => setFilter({ ...filter, zona_labor_id: e })}
                             >
-                                <Select.Option value={0} key={0}>
-                                    {`${0} - TODOS`}
-                                </Select.Option>
+                                {
+                                    usuario.estado_documentos === 2 && (
+                                        <Select.Option value={0} key={0}>
+                                            {`${0} - TODOS`}
+                                        </Select.Option>
+                                    )
+                                }
                                 {
                                     usuario.estado_documentos === 2 ? (
                                         zonasLabores.map(e => (
