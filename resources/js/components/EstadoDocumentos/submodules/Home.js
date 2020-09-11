@@ -8,13 +8,14 @@ import Axios from 'axios';
 
 import { empresa } from '../../../data/default.json';
 import { GraficoBarrasDocumentos } from './components/GraficoBarrasDocumentos';
+import { MostrarUltimaActualizacion } from './components';
 
 export const Home = () => {
 
     return (
         <>
+            <MostrarUltimaActualizacion />
             <h4>Estado de Documentos - TU RECIBO</h4>
-            <br />
             <GraficoDocumentos />
             <br />
             <hr />

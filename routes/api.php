@@ -167,6 +167,10 @@ Route::group(['prefix' => 'documentos-turecibo'], function() {
     Route::get('/{rut}', 'DocumentosTuReciboController@getByTrabajador');
 });
 
+Route::group(['prefix' => 'corte-turecibo'], function() {
+    Route::get('/get-last', 'CorteTureciboController@getLast');
+});
+
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');

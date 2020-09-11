@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2'
 
 import moment from 'moment';
 import Axios from 'axios';
-import {DatePicker, Select} from "antd";
+import {Collapse, DatePicker, Select} from "antd";
 import {empresa} from "../../../../data/default.json";
 
 export const GraficoDocumentos = () => {
@@ -84,6 +84,7 @@ export const GraficoDocumentos = () => {
 
     const options = () => {
         return {
+            responsive: true,
             title: {
                 display: true,
                 text: 'Cantidad de firmas por día'
@@ -121,88 +122,114 @@ export const GraficoDocumentos = () => {
         <>
             <div className="row">
                 <div className="col">
-                    <Line data={data()} options={options()} height={100} />
-                </div>
-            </div>
-            <br />
-            <div className="row">
-                <div className="col">
-                    <div className="card">
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-md-3">
-                                    Empresa:<br />
-                                    <Select
-                                        value={filter.empresa_id} showSearch
-                                        style={{ width: '100%' }} optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children
-                                                .toLowerCase()
-                                                .indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        onChange={e => setFilter({ ...filter, empresa_id: e })}
-                                    >
-                                        {empresa.map(e => (
-                                            <Select.Option value={e.id} key={e.id}>
-                                                {`${e.id} - ${e.name}`}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-                                </div>
-                                <div className="col-md-3">
-                                    Desde - Hasta:<br />
-                                    <DatePicker.RangePicker
-                                        style={{ width: '100%' }}
-                                        placeholder={['Desde', 'Hasta']}
-                                        allowClear={false}
-                                        onChange={(date, dateString) => {
-                                            setFilter({
-                                                ...filter,
-                                                desde: dateString[0],
-                                                hasta: dateString[1],
-                                            });
-                                        }}
-                                        value={[moment(filter.desde), moment(filter.hasta)]}
-                                    />
-                                </div>
-                                {/*
-                                    <div className="col-md-3">
-                                        Período:<br />
-                                        <DatePicker
-                                            style={{ width: '100%' }}
-                                            placeholder={'Período'}
-                                            allowClear={false}
-                                            picker="month"
-                                            onChange={(date, dateString) => setFilter({ ...filter, periodo: dateString })}
-                                            value={moment(filter.periodo)}
-                                        />
+                    <Collapse ghost>
+                        <Collapse.Panel header="Filtros">
+                            <div className="card">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            Empresa:<br />
+                                            <Select
+                                                value={filter.empresa_id} showSearch
+                                                style={{ width: '100%' }} optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.children
+                                                        .toLowerCase()
+                                                        .indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                onChange={e => setFilter({ ...filter, empresa_id: e })}
+                                            >
+                                                {empresa.map(e => (
+                                                    <Select.Option value={e.id} key={e.id}>
+                                                        {`${e.id} - ${e.name}`}
+                                                    </Select.Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-md-3">
+                                            Desde - Hasta:<br />
+                                            <DatePicker.RangePicker
+                                                style={{ width: '100%' }}
+                                                placeholder={['Desde', 'Hasta']}
+                                                allowClear={false}
+                                                onChange={(date, dateString) => {
+                                                    setFilter({
+                                                        ...filter,
+                                                        desde: dateString[0],
+                                                        hasta: dateString[1],
+                                                    });
+                                                }}
+                                                value={[moment(filter.desde), moment(filter.hasta)]}
+                                            />
+                                        </div>
+                                        {/*
+                                            <div className="col-md-3">
+                                                Período:<br />
+                                                <DatePicker
+                                                    style={{ width: '100%' }}
+                                                    placeholder={'Período'}
+                                                    allowClear={false}
+                                                    picker="month"
+                                                    onChange={(date, dateString) => setFilter({ ...filter, periodo: dateString })}
+                                                    value={moment(filter.periodo)}
+                                                />
+                                            </div>
+                                        */}
+                                        <div className="col-md-3">
+                                            Régimen:<br />
+                                            <Select
+                                                value={filter.regimen_id} showSearch
+                                                style={{ width: '100%' }} optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.children
+                                                        .toLowerCase()
+                                                        .indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                onChange={e => setFilter({ ...filter, regimen_id: e })}
+                                            >
+                                                <Select.Option value={0} key={0}>
+                                                    {`${0} - Todos`}
+                                                </Select.Option>
+                                                {regimenes.map(e => (
+                                                    <Select.Option value={e.id} key={e.id}>
+                                                        {`${e.id} - ${e.name}`}
+                                                    </Select.Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-md-3">
+                                            Zona Labor:<br />
+                                            <Select
+                                                value={filter.zona_labor_id} showSearch
+                                                style={{ width: '100%' }} optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.children
+                                                        .toLowerCase()
+                                                        .indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                onChange={e => setFilter({ ...filter, zona_labor_id: e })}
+                                            >
+                                                <Select.Option value={0} key={0}>
+                                                    {`${0} - TODOS`}
+                                                </Select.Option>
+                                                {zonasLabores.map(e => (
+                                                    <Select.Option value={e.id} key={e.id}>
+                                                        {`${e.id} - ${e.name}`}
+                                                    </Select.Option>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
-                                */}
-                                <div className="col-md-3">
-                                    Régimen:<br />
-                                    <Select
-                                        value={filter.regimen_id} showSearch
-                                        style={{ width: '100%' }} optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children
-                                                .toLowerCase()
-                                                .indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        onChange={e => setFilter({ ...filter, regimen_id: e })}
-                                    >
-                                        <Select.Option value={0} key={0}>
-                                            {`${0} - Todos`}
-                                        </Select.Option>
-                                        {regimenes.map(e => (
-                                            <Select.Option value={e.id} key={e.id}>
-                                                {`${e.id} - ${e.name}`}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+
+                        </Collapse.Panel>
+                    </Collapse>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
+                    <Line data={data()} options={options()} height={100} />
                 </div>
             </div>
         </>

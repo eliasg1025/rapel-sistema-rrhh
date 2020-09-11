@@ -180,6 +180,7 @@ class DocumentoTuRecibo extends Model
 
         $result = DB::table('documentos_turecibo as dt')
             ->select(
+                'zl.id',
                 'zl.name as zona_labor',
                 DB::raw('count(case dt.estado when \'FIRMADO CONFORME\' then 1 else null end) as firmados'),
                 DB::raw('count(case dt.estado when \'NO FIRMADO\' then 1 else null end) as no_firmados'),
@@ -196,6 +197,7 @@ class DocumentoTuRecibo extends Model
             ])
             ->where('dt.regimen_id',  1)
             ->where('dt.empresa_id', $empresa_id)
+            ->orderBy('procentaje_firmados', 'DESC')
             ->groupBy('dt.zona_labor_id')
             ->get();
 

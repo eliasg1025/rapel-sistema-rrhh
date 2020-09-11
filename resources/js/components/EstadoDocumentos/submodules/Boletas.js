@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador } from './components'
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador, MostrarUltimaActualizacion } from './components'
 import Axios from 'axios';
 import { message } from 'antd';
 
@@ -87,6 +87,7 @@ export const Boletas = () => {
 
     return (
         <>
+            <MostrarUltimaActualizacion />
             <h4>Boletas <small>{usuario.estado_documentos === 2 ? '(Administrador)' : ''}</small></h4>
             <br />
             <div className="row">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2'
 
 import Axios from 'axios';
-import {DatePicker, Select} from "antd";
+import {Collapse, DatePicker, Select} from "antd";
 import {empresa} from "../../../../data/default.json";
 import moment from "moment";
 
@@ -39,7 +39,7 @@ export const GraficoBarrasDocumentos = () => {
         return {
             title: {
                 display: true,
-                text: 'Cantidad de documentos por área'
+                text: 'Cantidad de documentos por área (% firmados)'
             },
             scales: {
                 yAxes: [{
@@ -71,50 +71,54 @@ export const GraficoBarrasDocumentos = () => {
         <>
             <div className="row">
                 <div className="col">
+                    <Collapse ghost>
+                        <Collapse.Panel header="Filtros">
+                            <div className="card">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            Empresa:<br />
+                                            <Select
+                                                value={filter.empresa_id} showSearch
+                                                style={{ width: '100%' }} optionFilterProp="children"
+                                                filterOption={(input, option) =>
+                                                    option.children
+                                                        .toLowerCase()
+                                                        .indexOf(input.toLowerCase()) >= 0
+                                                }
+                                                onChange={e => setFilter({ ...filter, empresa_id: e })}
+                                            >
+                                                {empresa.map(e => (
+                                                    <Select.Option value={e.id} key={e.id}>
+                                                        {`${e.id} - ${e.name}`}
+                                                    </Select.Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-md-3">
+                                            Período:<br />
+                                            <DatePicker
+                                                style={{ width: '100%' }}
+                                                placeholder={'Período'}
+                                                allowClear={false}
+                                                picker="month"
+                                                onChange={(date, dateString) => setFilter({ ...filter, periodo: dateString })}
+                                                value={moment(filter.periodo)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </Collapse.Panel>
+                    </Collapse>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col">
                     <Bar
                         data={data()} options={options()} height={100}
                     />
-                </div>
-            </div>
-            <br />
-            <div className="row">
-                <div className="col">
-                    <div className="card">
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-md-3">
-                                    Empresa:<br />
-                                    <Select
-                                        value={filter.empresa_id} showSearch
-                                        style={{ width: '100%' }} optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children
-                                                .toLowerCase()
-                                                .indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        onChange={e => setFilter({ ...filter, empresa_id: e })}
-                                    >
-                                        {empresa.map(e => (
-                                            <Select.Option value={e.id} key={e.id}>
-                                                {`${e.id} - ${e.name}`}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-                                </div>
-                                <div className="col-md-3">
-                                    Período:<br />
-                                    <DatePicker
-                                        style={{ width: '100%' }}
-                                        placeholder={'Período'}
-                                        allowClear={false}
-                                        picker="month"
-                                        onChange={(date, dateString) => setFilter({ ...filter, periodo: dateString })}
-                                        value={moment(filter.periodo)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
