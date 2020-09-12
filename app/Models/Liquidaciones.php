@@ -114,7 +114,7 @@ class Liquidaciones extends Model
             return DB::table('liquidaciones')
                 ->whereIn('id', $finiquitos)
                 ->update([
-                    'estado' => 2,
+                    'estado' => 3,
                     'fecha_hora_marca_pagado' => now()->toDateTimeString()
                 ]);
         } catch (\Exception $e) {

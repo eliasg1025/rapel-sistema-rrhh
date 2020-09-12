@@ -133,8 +133,6 @@ class LiquidacionesController extends Controller
     {
         $data = $request->get('data');
 
-        return response()->json($data);
-
         $result = Liquidaciones::marcarPagadoMasivo($data);
 
         if ( isset($result['error']) ) {

@@ -1,32 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
 
 export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData, setIsVisibleParent, reloadDataAB, setReloadDataAB }) => {
 
+    const [loading, setLoading] = useState(false);
+
     const generarArchivosBanco = () => {
+        setLoading(true);
         Axios.post('/api/finiquitos/generar-archivos-banco', { filtro, data })
             .then(res => {
                 console.log(res);
+
+                const { bcp, banbif, scotiabank, bbva, interbank } = res.data;
+
+                setLoading(false);
+                Swal.fire({
+                    title: 'Proceso completado',
+                    html: `
+                        <ul>
+                            <li><b>BCP: </b> ${bcp.message}</li>
+                            <li><b>INTERBANK: </b> ${interbank.message}</li>
+                            <li><b>BBVA: </b> ${bbva.message}</li>
+                            <li><b>SCOTIABANK: </b> ${scotiabank.message}</li>
+                            <li><b>BANBIF: </b> ${banbif.message}</li>
+                        </ul>
+                    `,
+                    icon: 'info'
+                })
+                    .then(res => {
+                        setIsVisibleParent(false);
+                        setReloadDataAB(!reloadDataAB);
+                    });
             })
             .catch(err => {
                 console.error(err);
+                setLoading(false);
+                Swal.fire('Error al actualizar el estado', '', 'error');
             });
     }
 
     const handleSubmit = e => {
         e.preventDefault();
+        setLoading(true);
         Axios.put('/api/finiquitos/marcar-pagado-masivo', {
             data: d.map(e => e.id)
         })
             .then(res => {
-                console.log(res);
+                const { message } = res.data;
+
+                setLoading(false);
+                Swal.fire(message, '', 'success')
+                    .then(res => {
+                        setIsVisibleParent(false);
+                        setReloadData(!reloadData);
+                    });
             })
             .catch(err => {
                 console.error(err);
+                setLoading(false);
+                Swal.fire('Error al actualizar el estado', '', 'error');
             });
     }
 
-    const reducer = (p, c) => p + c.monto;
+    const obtenerMonto = arr => {
+        const reducer = (p, c) => p + c.monto;
+        const monto = arr.reduce(reducer, 0);
+
+        return Math.round(monto * 100) / 100;
+    }
+
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -45,27 +88,27 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                                 <tr>
                                     <td>BCP</td>
                                     <td>{data.bcp.length}</td>
-                                    <td>{data.bcp.reduce(reducer, 0)}</td>
+                                    <td>{obtenerMonto(data.bcp)}</td>
                                 </tr>
                                 <tr>
                                     <td>INTERBANK</td>
                                     <td>{data.interbank.length}</td>
-                                    <td>{data.interbank.reduce(reducer, 0)}</td>
+                                    <td>{obtenerMonto(data.interbank)}</td>
                                 </tr>
                                 <tr>
                                     <td>SCOTIABANK</td>
                                     <td>{data.scotiabank.length}</td>
-                                    <td>{data.scotiabank.reduce(reducer, 0)}</td>
+                                    <td>{obtenerMonto(data.scotiabank)}</td>
                                 </tr>
                                 <tr>
                                     <td>BBVA</td>
                                     <td>{data.bbva.length}</td>
-                                    <td>{data.bbva.reduce(reducer, 0)}</td>
+                                    <td>{obtenerMonto(data.bbva)}</td>
                                 </tr>
                                 <tr>
                                     <td>BANBIF</td>
                                     <td>{data.banbif.length}</td>
-                                    <td>{data.banbif.reduce(reducer, 0)}</td>
+                                    <td>{obtenerMonto(data.banbif)}</td>
                                 </tr>
                                 <tr className="table-primary">
                                     <td>
@@ -79,11 +122,11 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                                     <td className="">
                                         <b>
                                             {
-                                                data.bcp.reduce(reducer, 0) +
-                                                data.interbank.reduce(reducer, 0) +
-                                                data.scotiabank.reduce(reducer, 0) +
-                                                data.bbva.reduce(reducer, 0) +
-                                                data.banbif.reduce(reducer, 0)
+                                                obtenerMonto(data.bcp) +
+                                                obtenerMonto(data.interbank) +
+                                                obtenerMonto(data.scotiabank) +
+                                                obtenerMonto(data.bbva) +
+                                                obtenerMonto(data.banbif)
                                             }
                                         </b>
                                     </td>
@@ -98,10 +141,18 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                     {(filtro.desde !== filtro.hasta) && <span style={{ fontWeight: 'bold', color: 'red' }}>Sólo se puede procesar 1 fecha de pago a la vez</span>}
                     <div className="btn-group" style={{ width: '100%' }}>
                         <button className="btn btn-primary" type="button" disabled={filtro.desde !== filtro.hasta} onClick={generarArchivosBanco}>
-                            Generar archivos
+                            {!loading ? 'Generar archivos' : (
+                                <>
+                                    <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
+                                </>
+                            )}
                         </button>
                         <button className="btn btn-success" type="submit" disabled={filtro.desde !== filtro.hasta}>
-                            Terminar proceso
+                            {!loading ? 'Terminar proceso' : (
+                                <>
+                                    <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
