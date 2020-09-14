@@ -46,6 +46,78 @@ class Liquidaciones extends Model
             ->get();
     }
 
+    public static function getByTrabajador($rut)
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'l.id as key', 'l.id', 'l.rut',
+                'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y %H:%i:%s") fecha_firmado'),
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->where('l.rut', $rut)
+            ->get();
+    }
+
+    public static function getPagados($empresa_id, $fecha_pago, $rut='')
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->whereIn('l.estado', [3, 4])
+            ->where('l.fecha_pago', $fecha_pago)
+            ->where('l.empresa_id', $empresa_id)
+            ->when($rut != '', function($query) use ($rut) {
+                $query->where('l.rut', 'like', $rut . '%');
+            })
+            ->orderBy('l.apellido_paterno', 'ASC')
+            ->get();
+    }
+
+    public static function getRechazados($empresa_id = 9)
+    {
+        return DB::table('liquidaciones_rechazos as l')
+            ->select(
+                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.mes', 'l.ano', 'l.monto', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->where('l.empresa_id', $empresa_id)
+            ->orderBy('l.apellido_paterno', 'ASC')
+            ->get();
+    }
+
+    public static function toggleRechazo(int $tipo, $finiquitos)
+    {
+        try {
+            if ($tipo === 1) {
+                return DB::table('liquidaciones')
+                    ->whereIn('id', $finiquitos)
+                    ->update([
+                        'estado' => 4,
+                        'fecha_hora_marca_rechazado' => now()->toDateTimeString()
+                    ]);
+            } else {
+                return DB::table('liquidaciones')
+                    ->whereIn('id', $finiquitos)
+                    ->update([
+                        'estado' => 3,
+                        'fecha_hora_marca_rechazado' => null
+                    ]);
+            }
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
     public static function forPayment(string $fecha, array $finiquitos)
     {
         try {
@@ -120,6 +192,47 @@ class Liquidaciones extends Model
         } catch (\Exception $e) {
             return [
                 'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    public static function terminarProceso(array $finiquitos)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($finiquitos as $finiquitosId) {
+                $finiquito = Liquidaciones::where('id', $finiquitosId)->first();
+
+                if ($finiquito->estado === 3) {
+                    $finiquito->estado = 5;
+                    $finiquito->fecha_hora_marca_archivado = now()->toDateTimeString();
+                    $finiquito->save();
+                } else {
+
+                    $rechazo = new LiquidacionRechazo();
+                    $rechazo->rut = $finiquito->rut;
+                    $rechazo->nombre = $finiquito->nombre;
+                    $rechazo->apellido_paterno = $finiquito->apellido_paterno;
+                    $rechazo->apellido_materno = $finiquito->apellido_materno;
+                    $rechazo->mes = $finiquito->mes;
+                    $rechazo->ano = $finiquito->ano;
+                    $rechazo->banco = $finiquito->banco;
+                    $rechazo->numero_cuenta = $finiquito->numero_cuenta;
+                    $rechazo->monto = $finiquito->monto;
+                    $rechazo->fecha_pago = $finiquito->fecha_pago;
+                    $rechazo->empresa_id = $finiquito->empresa_id;
+                    $rechazo->liquidacion_id = $finiquitosId;
+                    $rechazo->save();
+
+                    $finiquito->estado = 1;
+                    $finiquito->save();
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
     }

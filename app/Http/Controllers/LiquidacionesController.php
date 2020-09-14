@@ -76,6 +76,40 @@ class LiquidacionesController extends Controller
         return response()->json($result);
     }
 
+    public function getByTrabajador($rut)
+    {
+        $liquidaciones = Liquidaciones::getByTrabajador($rut);
+
+        return response()->json($liquidaciones);
+    }
+
+    public function getPagados(Request $request)
+    {
+        $empresa_id = $request->query('empresa_id');
+        $fecha_pago = $request->query('fecha_pago');
+        $rut = $request->query('rut');
+
+        $result = Liquidaciones::getPagados($empresa_id, $fecha_pago, $rut);
+
+        return response()->json($result);
+    }
+
+    public function getRechazados(Request $request)
+    {
+        $empresa_id = $request->query('empresa_id');
+        $result = Liquidaciones::getRechazados($empresa_id);
+
+        return response()->json($result);
+    }
+
+    public function toggleRechazo($tipo, Request $request)
+    {
+        $finiquitos = $request->get('finiquitos');
+
+        $result = Liquidaciones::toggleRechazo($tipo, $finiquitos);
+        return response()->json($result);
+    }
+
     public function importarTuRecibo(Request $request)
     {
         $file = $request->file('tu-recibo');
@@ -189,5 +223,22 @@ class LiquidacionesController extends Controller
         ];
 
         return response()->json($result);
+    }
+
+    public function terminarProceso(Request $request)
+    {
+        $finiquitos = $request->get('liquidaciones');
+        $result = Liquidaciones::terminarProceso($finiquitos);
+
+        if ( isset($result['error']) ) {
+            return response()->json([
+                'message' => $result['error']
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Se actualizaron ' . $result . ' registros',
+            'actualizados' => $result
+        ]);
     }
 }

@@ -4,7 +4,7 @@ export const Main = () => {
 
     return (
         <>
-            <h3>Pagos de Liquidaciones y Utilidades</h3>
+            <h4>Pagos de Liquidaciones y Utilidades</h4>
             <br />
 
         </>

@@ -61,11 +61,21 @@ Route::group(['middleware' => 'web.auth'], function() {
     });
 
     Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
-        Route::get('/', 'Web\ViewController@liquidaciones');
-        Route::get('/importacion', 'Web\ViewController@liquidacionesImportacion');
-        Route::get('/consulta', 'Web\ViewController@liquidacionesConsulta');
-        Route::get('/l', 'Web\ViewController@liquidacionesL');
-        Route::get('/u', 'Web\ViewController@liquidacionesU');
+        Route::get('/', 'Web\LiquidacionesController@index');
+        //Route::get('/importacion', 'Web\LiquidacionesController@liquidacionesImportacion');
+        Route::get('/consulta', 'Web\LiquidacionesController@consulta');
+
+        Route::group(['prefix' => 'l'], function() {
+            Route::get('/', 'Web\LiquidacionesController@liquidaciones');
+            Route::get('/pagados', 'Web\LiquidacionesController@liquidacionesPagados');
+            Route::get('/rechazos', 'Web\LiquidacionesController@liquidacionesRechazos');
+        });
+
+        Route::group(['prefix' => 'u'], function() {
+            Route::get('/', 'Web\LiquidacionesController@utilidades');
+            Route::get('/pagados', 'Web\LiquidacionesController@utilidadesPagados');
+            Route::get('/rechazos', 'Web\LiquidacionesController@utilidadesRechazos');
+        });
     });
 
     Route::group(['prefix' => 'ficha'], function() {

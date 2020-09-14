@@ -131,6 +131,13 @@ Route::group(['prefix' => 'sancion'], function() {
 
 Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'LiquidacionesController@get');
+
+    Route::get('/{rut}', 'LiquidacionesController@getByTrabajador');
+    Route::get('/get-pagados', 'LiquidacionesController@getPagados');
+    Route::get('/get-rechazados', 'LiquidacionesController@getRechazados');
+    Route::put('/toggle-rechazo/{tipo}', 'LiquidacionesController@toggleRechazo');
+    Route::post('/terminar-proceso', 'LiquidacionesController@terminarProceso');
+
     Route::post('/massive', 'LiquidacionesController@massiveCreate');
     Route::post('/importar', 'LiquidacionesController@importar');
     Route::post('/importar-tu-recibo', 'LiquidacionesController@importarTuRecibo');
