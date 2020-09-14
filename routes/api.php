@@ -132,7 +132,7 @@ Route::group(['prefix' => 'sancion'], function() {
 Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'LiquidacionesController@get');
 
-    Route::get('/{rut}', 'LiquidacionesController@getByTrabajador')->where('id', '[0-9]+');
+    Route::get('/{rut}/trabajador', 'LiquidacionesController@getByTrabajador')->where('id', '[0-9]+');
     Route::get('/get-pagados', 'LiquidacionesController@getPagados');
     Route::get('/get-rechazados', 'LiquidacionesController@getRechazados');
     Route::put('/toggle-rechazo/{tipo}', 'LiquidacionesController@toggleRechazo');

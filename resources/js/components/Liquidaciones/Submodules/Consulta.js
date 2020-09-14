@@ -15,7 +15,7 @@ export const Consulta = () => {
         if (trabajador) {
             console.log(trabajador)
 
-            Axios.get(`/api/finiquitos/${trabajador.rut}`)
+            Axios.get(`/api/finiquitos/${trabajador.rut}/trabajador`)
                 .then(res => {
                     console.log(res);
                     setLiquidaciones(res.data.map(e => {
