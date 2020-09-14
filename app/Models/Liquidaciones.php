@@ -72,9 +72,6 @@ class Liquidaciones extends Model
             ->whereIn('l.estado', [3, 4])
             ->where('l.fecha_pago', $fecha_pago)
             ->where('l.empresa_id', $empresa_id)
-            ->when($rut != '', function($query) use ($rut) {
-                $query->where('l.rut', 'like', $rut . '%');
-            })
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
     }
