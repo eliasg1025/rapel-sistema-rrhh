@@ -233,4 +233,21 @@ class Liquidaciones extends Model
             ];
         }
     }
+
+    public static function montosPorEstado()
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'e.shortname as empresa',
+                DB::raw('round( sum(case l.estado when 5 then l.monto else 0 end), 2 ) as pagados'),
+                DB::raw('round( sum(case l.estado when 2 then l.monto else 0 end), 2 ) as para_pago'),
+                DB::raw('round( sum(case l.estado when 1 then l.monto else 0 end), 2 ) as firmados'),
+                DB::raw('round( sum(case l.estado when 0 then l.monto else 1 end), 2 ) as pendiente'),
+                DB::raw('round( sum(l.monto), 2 ) as total')
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->whereIn('l.empresa_id', [9, 14])
+            ->groupBy('l.empresa_id')
+            ->get();
+    }
 }

@@ -241,4 +241,11 @@ class LiquidacionesController extends Controller
             'actualizados' => $result
         ]);
     }
+
+    public function montosPorEstado(Request $request)
+    {
+        $result = Liquidaciones::montosPorEstado();
+
+        return response()->json($result);
+    }
 }

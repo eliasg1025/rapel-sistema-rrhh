@@ -30,6 +30,7 @@ export const FiltroTabla = ({ filtro, setFiltro, getData }) => {
                                         <option key={2} value={2}>PARA PAGO</option>
                                         <option key={3} value={3}>PAGADO</option>
                                         <option key={4} value={4}>RECHAZADO</option>
+                                        <option key={5} value={5}>ARCHIVADO</option>
                                     </select>
                                 </div>
                             </div>

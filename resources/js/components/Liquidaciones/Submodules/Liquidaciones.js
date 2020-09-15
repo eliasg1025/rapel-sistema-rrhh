@@ -11,8 +11,8 @@ export const Liquidaciones = () => {
 
     const [data, setData] = useState([]);
     const [filtro, setFiltro] = useState({
-        desde: moment().subtract(1, 'M').format('YYYY-MM'),
-        hasta: moment().format('YYYY-MM'),
+        desde: moment().format('YYYY-MM').toString(),
+        hasta: moment().format('YYYY-MM').toString(),
         estado: 0,
         empresa_id: 9
     });
@@ -51,6 +51,14 @@ export const Liquidaciones = () => {
 
         fetchFiniquitos();
     }
+
+    useEffect(() => {
+        setFiltro({
+            ...filtro,
+            desde: moment().format('YYYY-MM-DD').toString(),
+            hasta: moment().format('YYYY-MM-DD').toString()
+        });
+    }, [filtro.estado]);
 
     useEffect(() => {
         getData();
