@@ -4,6 +4,7 @@ import { QuestionCircleOutlined, BookOutlined } from "@ant-design/icons";
 import moment from 'moment';
 import AgregarSancion from "./Submodules/AgregarSancion";
 import { Reportes } from './Submodules/Reportes';
+import { Desvinculaciones } from './Submodules/Desvinculaciones';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -14,12 +15,12 @@ export default function Sanciones() {
     return (
         <Layout>
             <Sider
-                theme="light"
+                theme="dark"
                 breakpoint="lg"
                 collapsedWidth="0"
             >
                 <br />
-                <Menu mode="inline" defaultSelectedKeys={[submodule]}>
+                <Menu mode="inline" defaultSelectedKeys={[submodule]} theme="dark">
                     <Menu.Item key="sanciones" icon={<QuestionCircleOutlined />}>
                         <a href="/sanciones">
                             Sanciones {usuario.sanciones === 2 && '(Admin)'}
@@ -45,6 +46,7 @@ export default function Sanciones() {
                 <Content style={{ margin: '20px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         {submodule === 'sanciones' && <AgregarSancion />}
+                        {submodule === 'desvinculaciones' && <Desvinculaciones />}
                         {submodule === 'reportes' && <Reportes />}
                     </div>
                 </Content>

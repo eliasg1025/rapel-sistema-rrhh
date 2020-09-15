@@ -74,7 +74,7 @@
                 <tr>
                     <td>DE</td>
                     <td>:</td>
-                    <td>DANIEL JOSE EYHERALDE MUNITA<br/>APODERADO</td>
+                    <td>{{ $sancion->empresa->id === 9 ? 'FEDERICO CARRILLO CURAY' : 'DANIEL JOSE EYHERALDE MUNITA'}}<br/>{{ $sancion->empresa_id === 9 ? 'JEFE DE RECURSOS HUMANOS' : 'APODERADO' }}</td>
                 </tr>
                 <tr>
                     <td>ASUNTO</td>
@@ -85,11 +85,42 @@
             <br /><hr /><br />
             <p class="justify">
                 <b>{{ $sancion->empresa->name }}</b> Identificada con RUC Nº {{ $sancion->empresa->ruc }}, debidamente representada por el
-                Sr. Daniel José Eyheralde Munita, identificado con Carnet de Extranjería N° 001555417, domiciliada en el
+                Sr. {{ 'Daniel José Eyheralde Munita, identificado con Carnet de Extranjería N° 001555417' }}, domiciliada en el
                 {{ $sancion->empresa->direccion }}, centro donde usted labora, prestando los servicios de <b>{{ $sancion->oficio->name }}</b>,
                 a usted atentamente dice:
             </p>
-            @if ($sancion->incidencia_id != 5)
+            @if ($sancion->incidencia_id === 7)
+                <ol>
+                    <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
+                </ol>
+                <p class="justify">
+                    Este hecho se produjo el día {{ $sancion->fecha_incidencia_largo }}, donde usted ocasionó daños a la propiedad de la empresa, por lo que se le recomienda ser más cuidadoso al realizar su labor, con la finalidad de evitar perjuicios  a los bienes de la empresa, en tal sentido, se le recomienda cambiar de actitud, y cumplir con sus funciones de manera eficiente.
+                </p>
+                <p class="justify">
+                    Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted, habiendo incumplido lo establecido en el Reglamento Interno de Trabajo.
+                </p>
+                <p>
+                    <b>CAPITULO VII:</b> DERECHOS Y OBLIGACIONES DE LOS TRABAJADORES.
+                </p>
+                <p><b>Artículo 55°.-</b> Son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>
+                </div>
+                <p><b>Artículo 56°.-</b> Todo trabajador debe observar las siguientes prohibiciones</p>
+                <div style="padding-left: 10px;">
+                    <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la Empresa.</p>
+                </div>
+                <br />
+                <p>
+                    Estos artículos han sido vulnerados toda vez que usted ha incurrido en faltas al incumplimiento de las normas y procedimientos de la Empresa. Por lo tanto, se recomienda cambiar de actitud y cumplir con las normas establecidas por la empresa.
+                </p>
+                <p>
+                    Que, ante este acto de inconducta funcional e incumplimiento de obligaciones de trabajo, nos vemos en la lamentable situación de otorgarle la presente amonestación por escrito y <b>LLAMAR LA ATENCIÓN POR IMCUMPLIENTO DE OBLIGACIONES</b>, el presente documento será incorporado a su legajo personal.
+                </p>
+                <p>
+                    Este hecho indica falta de responsabilidad en el cumplimiento de sus obligaciones asumidas por su parte en virtud de la relación de trabajo que mantiene con nosotros. En ese sentido le invocamos a que rectifique su conducta; de tal manera que permita el normal desarrollo de las actividades y evite que la empresa tome otras medidas.
+                </p>
+            @elseif ($sancion->incidencia_id != 5)
                 <ol>
                     <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>
                 </ol>
@@ -142,12 +173,14 @@
                 </p>
             @endif
 
-            <p class="justify">
-                Que, ante este acto de inconducta funcional e incumplimiento de obligaciones de trabajo, nos vemos en la lamentable situación de otorgarle la presente amonestación por escrito y <b>LLAMAR LA ATENCIÓN POR IMCUMPLIENTO DE OBLIGACIONES</b>, el presente documento será incorporado a su legajo personal.
-            </p>
-            <p class="justify">
-                En este sentido, le solicitamos que en lo sucesivo preste el estricto cumplimiento de lo dispuesto en las normas y procedimientos de la empresa, de lo contrario, se adoptarán las medidas pertinentes, por lo cual deseamos que esta carta sirva para la reflexión y se evite reiteración.
-            </p>
+            @if ($sancion->incidencia_id !== 7)
+                <p class="justify">
+                    Que, ante este acto de inconducta funcional e incumplimiento de obligaciones de trabajo, nos vemos en la lamentable situación de otorgarle la presente amonestación por escrito y <b>LLAMAR LA ATENCIÓN POR IMCUMPLIENTO DE OBLIGACIONES</b>, el presente documento será incorporado a su legajo personal.
+                </p>
+                <p class="justify">
+                    En este sentido, le solicitamos que en lo sucesivo preste el estricto cumplimiento de lo dispuesto en las normas y procedimientos de la empresa, de lo contrario, se adoptarán las medidas pertinentes, por lo cual deseamos que esta carta sirva para la reflexión y se evite reiteración.
+                </p>
+            @endif
             <p><b>Atentamente,</b></p>
             <table class="bold w-100" style="text-align: right;">
                 <tr>
@@ -157,10 +190,17 @@
             <table class="bold text-center">
                 <tr>
                     <td>
-                        <img
-                            src="{{ public_path() . '/img/PostFirma - Daniel E  ' . ($sancion->empresa->shortname) . ' SAC.jpg' }}"
-                            alt="" width="200px"
-                        >
+                        @if ($sancion->empresa_id === 9)
+                            <img
+                                src="{{ public_path() . '/img/Firma-Federico.jpg' }}"
+                                alt="" width="200px"
+                            >
+                        @else
+                            <img
+                                src="{{ public_path() . '/img/PostFirma - Daniel E  ' . ($sancion->empresa->shortname) . ' SAC.jpg' }}"
+                                alt="" width="200px"
+                            >
+                        @endif
                     </td>
                 </tr>
                 <tr>

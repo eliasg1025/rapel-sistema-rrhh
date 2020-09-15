@@ -4,36 +4,36 @@ import { Bar } from 'react-chartjs-2';
 
 export const GraficaBarras = () => {
 
-    const [montosPorEstado, setMontosPorEstado] = useState({
-        empresa: '',
-        pagados: 0,
-        para_pago: 0,
-        firmados: 0,
-        pendiente: 0,
-        total: 0
-    });
+    const [montosPorEstado, setMontosPorEstado] = useState({});
 
     const data = () => {
         return {
             labels: ['RAPEL', 'VERFRUT'],
             datasets: [
                 {
-                    label: ['Pagados'],
-                    data: [montosPorEstado.pagados],
+                    label: ['Pendientes'],
+                    data: [montosPorEstado?.rapel?.pendiente || 0, montosPorEstado?.verfrut?.pendiente || 0],
+                    backgroundColor:  'rgba(1,0,102,0.7)',
+                    //yAxisID: 'y-axis-pendientes'
                 },
                 {
                     label: ['Firmados'],
-                    data: [montosPorEstado.firmados]
-                },
-                {
-                    label: ['Pendientes'],
-                    data: [montosPorEstado.pendiente],
-                    backgroundColor:  'rgb(1, 0, 102)',
+                    data: [montosPorEstado?.rapel?.firmados || 0, montosPorEstado?.verfrut?.firmados || 0],
+                    backgroundColor:  'rgba(204,51,0,0.7)',
+                    //yAxisID: 'y-axis-firmados'
                 },
                 {
                     label: ['Para Pago'],
-                    data: [montosPorEstado.para_pago]
-                }
+                    data: [montosPorEstado?.rapel?.para_pago || 0, montosPorEstado?.verfrut?.para_pago || 0],
+                    backgroundColor:  'rgba(244,180,0,0.7)',
+                    //yAxisID: 'y-axis-para-pago'
+                },
+                {
+                    label: ['Pagados'],
+                    data: [montosPorEstado?.rapel?.pagados || 0, montosPorEstado?.verfrut?.pagados || 0],
+                    backgroundColor:  'rgba(64,203,10,0.7)',
+                    //yAxisID: 'y-axis-pagados'
+                },
             ]
         }
     }
@@ -42,21 +42,12 @@ export const GraficaBarras = () => {
         return {
             title: {
                 display: true,
-                text: `Montos (S/.) por estado de liquidación - ${montosPorEstado.empresa}`
+                text: `Montos (S/.) por estado de liquidación`
             },
             scales: {
-                yAxes: [{
-                    //stacked: true,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }],
-                xAxes: [{
-                    //stacked: true,
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
+                yAxes: [
+
+                ],
             }
         }
     }
@@ -80,10 +71,40 @@ export const GraficaBarras = () => {
                 </div>
             </div>
             <div className="row">
-                <div className="col">
+                <div className="col-md-6">
                     <Bar
-                        data={data()} options={options()} height={100}
+                        data={data()} options={options()} height={200}
                     />
+                </div>
+                <div className="col-md-6">
+                    <b><u>Resumen: </u></b><br /><br />
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th> </th>
+                                <th>PENDIENTES</th>
+                                <th>FIRMADOS</th>
+                                <th>PARA PAGO</th>
+                                <th>PAGADOS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>RAPEL</td>
+                                <td>S/. {montosPorEstado?.rapel?.pendiente || 0}</td>
+                                <td>S/. {montosPorEstado?.rapel?.firmados || 0}</td>
+                                <td>S/. {montosPorEstado?.rapel?.para_pago || 0}</td>
+                                <td>S/. {montosPorEstado?.rapel?.pagados || 0}</td>
+                            </tr>
+                            <tr>
+                                <td>VERFRUT</td>
+                                <td>S/. {montosPorEstado?.verfrut?.pendiente || 0}</td>
+                                <td>S/. {montosPorEstado?.verfrut?.firmados || 0}</td>
+                                <td>S/. {montosPorEstado?.verfrut?.para_pago || 0}</td>
+                                <td>S/. {montosPorEstado?.verfrut?.pagados || 0}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </>

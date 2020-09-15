@@ -152,6 +152,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::put('/marcar-pagado-masivo', 'LiquidacionesController@marcarPagadoMasivo');
 
     Route::get('/montos-por-estado', 'LiquidacionesController@montosPorEstado');
+    Route::get('/montos-por-estado-por-anio/{empresa_id}', 'LiquidacionesController@montosPorEstadoPorAnio');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {
