@@ -3,20 +3,36 @@ import { Button, notification, Spin, Card } from 'antd';
 
 import CargasPdf from '../components/Home/CargasPdf';
 import CargasExcel from '../components/Home/CargasExcel';
+import Axios from 'axios';
 
 export default function Home(props) {
     console.log(props)
-    const [upload, setUpload] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const uploadDataEmpresa = () => {
+        setLoading(true);
 
-    useEffect(() => {
-        if (upload) {
-            setLoading(true);
+        Axios.get('http://192.168.60.16/api/data/por-empresa')
+            .then(res => {
+                console.log(res.data.data);
 
-            setUpload(false);
-        }
-    }, [upload]);
+                Axios.post('/api/actualizar-datos/por-empresa', {
+                    ...res.data.data
+                })
+                    .then(res => {
+                        console.log(res);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        setLoading(false);
+                    })
+            })
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            })
+    }
 
     const uploadDataLocalidades = () => {
         setLoading(true);
@@ -31,7 +47,7 @@ export default function Home(props) {
                         <Card>
                             <h5>Opciones de administrador</h5>
                             <br></br>
-                            <Button onClick={() => setUpload(true)}>
+                            <Button onClick={uploadDataEmpresa}>
                                 Sincronizar datos empresa
                             </Button>
                             <Button onClick={uploadDataLocalidades}>

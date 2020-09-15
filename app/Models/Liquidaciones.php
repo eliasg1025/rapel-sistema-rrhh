@@ -234,7 +234,7 @@ class Liquidaciones extends Model
         }
     }
 
-    public static function montosPorEstado()
+    public static function montosPorEstado($empresa_id = 9)
     {
         return DB::table('liquidaciones as l')
             ->select(
@@ -246,8 +246,8 @@ class Liquidaciones extends Model
                 DB::raw('round( sum(l.monto), 2 ) as total')
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
-            ->whereIn('l.empresa_id', [9, 14])
+            ->where('l.empresa_id', [$empresa_id])
             ->groupBy('l.empresa_id')
-            ->get();
+            ->first();
     }
 }

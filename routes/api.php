@@ -55,6 +55,10 @@ Route::group(['prefix' => 'trabajador'], function() {
     });
 });
 
+Route::group(['prefix' => 'zona-labor'], function() {
+    Route::get('/{empresa_id}', 'ZonaLaborController@get');
+});
+
 Route::group(['prefix' => 'oficio'], function() {
     Route::post('/', 'OficioController@create');
     Route::get('/get-with-sctr', 'OficioController@getWithSctr');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ZonaLabor extends Model
 {
@@ -31,5 +32,18 @@ class ZonaLabor extends Model
         } catch(\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public static function get($empresa_id, $habilitados=1)
+    {
+        return DB::table('zona_labores')
+        ->select(
+            'code as id',
+            'empresa_id',
+            'name'
+        )
+        ->where('empresa_id', $empresa_id)
+        ->where('habilitado', '1')
+        ->get();
     }
 }

@@ -22,14 +22,14 @@ class ActualizarController extends Controller
         $tipos_zonas = $request->tipos_zonas;
         $tipos_vias = $request->tipos_vias;
         $zonas_labor = $request->zonas_labor;
+        $regimenes = $request->regimenes;
+        $tipos_contratos = $request->tipos_contratos;
         /*
         $oficios = $request->oficios;
-        $regimenes = $request->regimenes;
         $actividades = $request->actividades;
         $cuarteles = $request->cuarteles;
         $agrupaciones = $request->agrupaciones;
-        $labores = $request->labores;
-        $tipos_contratos = $request->tipos_contratos;*/
+        $labores = $request->labores;*/
 
         try {
             for ($i = 0; $i < sizeof($nacionalidades); $i++) {

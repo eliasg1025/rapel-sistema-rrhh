@@ -244,7 +244,8 @@ class LiquidacionesController extends Controller
 
     public function montosPorEstado(Request $request)
     {
-        $result = Liquidaciones::montosPorEstado();
+        $empresa_id = $request->query('empresa_id');
+        $result = Liquidaciones::montosPorEstado($empresa_id);
 
         return response()->json($result);
     }

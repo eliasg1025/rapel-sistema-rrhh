@@ -74,10 +74,10 @@ const DatosFormularioPermiso = ({
             let intento2 = 0;
             function fetchZonasLabor() {
                 intento2++;
-                Axios.get(`http://192.168.60.16/api/zona-labor/${form.empresa_id}`)
+                Axios.get(`/api/zona-labor/${form.empresa_id}?habilitado=1`)
                     .then(res => {
                         console.log(res);
-                        setZonasLabor(res.data.data);
+                        setZonasLabor(res.data);
                         setLoadingZonasLabor(false);
                     })
                     .catch(err => {

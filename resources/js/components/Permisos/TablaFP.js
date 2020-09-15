@@ -144,6 +144,11 @@ export const TablaFP = ({
                     dataIndex: 'fecha_solicitud'
                 },
                 {
+                    title: 'Con Goce',
+                    dataIndex: 'goce_checkbox',
+                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
+                },
+                {
                     title: 'RUT',
                     dataIndex: 'rut',
 
@@ -179,11 +184,6 @@ export const TablaFP = ({
                 {
                     title: 'Predio',
                     dataIndex: 'zona_labor'
-                },
-                {
-                    title: 'Con Goce',
-                    dataIndex: 'goce_checkbox',
-                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
                 },
                 {
                     title: 'Acciones',
@@ -210,9 +210,13 @@ export const TablaFP = ({
                     dataIndex: 'fecha_solicitud'
                 },
                 {
+                    title: 'Con Goce',
+                    dataIndex: 'goce_checkbox',
+                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
+                },
+                {
                     title: 'RUT',
                     dataIndex: 'rut',
-
                 },
                 {
                     title: 'Trabajador',
@@ -245,11 +249,6 @@ export const TablaFP = ({
                 {
                     title: 'Predio',
                     dataIndex: 'zona_labor'
-                },
-                {
-                    title: 'Con Goce',
-                    dataIndex: 'goce_checkbox',
-                    render: (_, record) => <CheckboxGoce record={record} usuario={usuario} />
                 },
                 {
                     title: 'Cargado por',
@@ -393,7 +392,7 @@ export const TablaFP = ({
                 rowSelection={rowSelection}
                 columns={getColumns(usuario, handleEliminar, handleMarcarFirmado, handleMarcarEnviado, handleMarcarRecepcionado, handleMarcarCargado)}
                 dataSource={data}
-                scroll={{ x: 1200 }}
+                scroll={{ x: 1000 }}
                 size="small"
             />
         </div>
