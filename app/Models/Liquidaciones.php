@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -266,5 +267,47 @@ class Liquidaciones extends Model
             ->where('l.empresa_id', [$empresa_id])
             ->groupBy('l.ano')
             ->get();
+    }
+
+    public static function cantidadPagosPorDia($empresa_id, $desde, $hasta)
+    {
+        $dataset = DB::table('liquidaciones as l')
+            ->select(
+                DB::raw('DATE(l.fecha_pago) as dia'),
+                DB::raw('COUNT(*) as cantidad')
+            )
+            ->where('l.empresa_id', $empresa_id)
+            ->where('l.estado', 5)
+            ->whereDate('l.fecha_pago', '>=', $desde)
+            ->whereDate('l.fecha_pago', '<=', $hasta)
+            ->groupBy('dia')
+            ->get()->toArray();
+
+        //return $dataset;
+
+        $dias = array_column($dataset, 'dia');
+        $cantidades = array_column($dataset, 'cantidad');
+
+        $periodo = CarbonPeriod::create($desde, $hasta);
+        $tmp = [];
+
+        foreach ($periodo as $dia) {
+            $str_dia = $dia->format('Y-m-d');
+            $index = array_search($str_dia, $dias);
+
+            if ( !is_bool($index) ) {
+                array_push($tmp, [
+                    'dia' => $str_dia,
+                    'cantidad' => $cantidades[$index]
+                ]);
+            } else {
+                array_push($tmp, [
+                    'dia' => $str_dia,
+                    'cantidad' => 0
+                ]);
+            }
+        }
+
+        return $tmp;
     }
 }

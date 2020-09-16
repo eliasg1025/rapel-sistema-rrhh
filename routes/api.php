@@ -153,6 +153,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
 
     Route::get('/montos-por-estado', 'LiquidacionesController@montosPorEstado');
     Route::get('/montos-por-estado-por-anio/{empresa_id}', 'LiquidacionesController@montosPorEstadoPorAnio');
+    Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'LiquidacionesController@cantidadPagosPorDia');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {

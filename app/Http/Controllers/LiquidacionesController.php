@@ -255,4 +255,13 @@ class LiquidacionesController extends Controller
 
         return response()->json($result);
     }
+
+    public function cantidadPagosPorDia($empresa_id, Request $request)
+    {
+        $desde = $request->query('desde');
+        $hasta = $request->query('hasta');
+        $result = Liquidaciones::cantidadPagosPorDia($empresa_id, $desde, $hasta);
+
+        return response()->json($result);
+    }
 }

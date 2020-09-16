@@ -15,7 +15,8 @@ export const GraficaBarras = () => {
     const columns = [
         {
             title: 'Año',
-            dataIndex: 'anio'
+            dataIndex: 'anio',
+            record: (_, record) => <b>{ record.anio }</b>
         },
         {
             title: 'Pendientes',
@@ -35,7 +36,8 @@ export const GraficaBarras = () => {
         },
         {
             title: 'Total',
-            dataIndex: 'total'
+            dataIndex: 'total',
+            render: (_, record) => <b>{ record.total }</b>
         },
     ]
 
@@ -73,7 +75,7 @@ export const GraficaBarras = () => {
     useEffect(() => {
         Axios.get(`/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}`)
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 setMontosPorEstado(res.data);
             })
             .catch(err => {
@@ -82,7 +84,7 @@ export const GraficaBarras = () => {
 
         Axios.get(`/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}`)
             .then(res => {
-                console.log(res);
+                //console.log(res);
                 setMontosPorAnio(res.data);
             })
             .catch(err => {
