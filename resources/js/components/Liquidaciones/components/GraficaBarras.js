@@ -1,11 +1,13 @@
 import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import {Select, Table} from "antd";
+import {Card, Select, Table} from "antd";
 import {empresa} from "../../../data/default.json";
 
 export const GraficaBarras = () => {
 
+    const [loadingGrafico, setLoadingGrafico] = useState(false);
+    const [loadingTabla, setLoadingTabla] = useState(false);
     const [montosPorEstado, setMontosPorEstado] = useState({});
     const [montosPorAnio, setMontosPorAnio] = useState([]);
     const [filter, setFilter] = useState({
@@ -77,23 +79,39 @@ export const GraficaBarras = () => {
     }
 
     useEffect(() => {
-        Axios.get(`/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}`)
-            .then(res => {
-                //console.log(res);
-                setMontosPorEstado(res.data);
-            })
-            .catch(err => {
-                console.error(err);
-            });
+        function fetchDatosGrafico() {
+            setLoadingGrafico(true);
+            Axios.get(`/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}`)
+                .then(res => {
+                    //console.log(res);
+                    setMontosPorEstado(res.data);
+                    setLoadingGrafico(false);
+                })
+                .catch(err => {
+                    console.error(err);
 
-        Axios.get(`/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}`)
-            .then(res => {
-                //console.log(res);
-                setMontosPorAnio(res.data);
-            })
-            .catch(err => {
-                console.error(err);
-            })
+                    fetchDatosGrafico();
+                });
+        }
+
+        function fetchDatosTabla() {
+            setLoadingTabla(true);
+            Axios.get(`/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}`)
+                .then(res => {
+                    //console.log(res);
+                    setLoadingTabla(false);
+                    setMontosPorAnio(res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+
+                    fetchDatosTabla();
+                })
+        }
+
+        fetchDatosGrafico();
+        fetchDatosTabla();
+
     }, [filter]);
 
     return (
@@ -105,9 +123,11 @@ export const GraficaBarras = () => {
             </div>
             <div className="row">
                 <div className="col-md-6">
-                    <Bar
-                        data={data()} options={options()} height={200}
-                    />
+                    <Card loading={loadingGrafico}>
+                        <Bar
+                            data={data()} options={options()} height={200}
+                        />
+                    </Card>
                 </div>
                 <div className="col-md-6">
                     <div className="row">
@@ -139,6 +159,7 @@ export const GraficaBarras = () => {
                     <div className="row">
                         <div className="col">
                             <Table
+                                loading={loadingTabla}
                                 dataSource={montosPorAnio}
                                 columns={columns}
                                 size="small"
