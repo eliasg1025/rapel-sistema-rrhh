@@ -17,8 +17,8 @@ export const GraficaBarras = () => {
     const columns = [
         {
             title: 'Año',
-            dataIndex: 'anio',
-            record: (_, record) => <b>{ record.anio }</b>
+            dataIndex: 'id',
+            record: (_, record) => <b>{ record.id }</b>
         },
         {
             title: 'Pendientes',

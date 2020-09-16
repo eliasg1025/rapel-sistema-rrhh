@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Liquidaciones extends Model
@@ -254,9 +255,10 @@ class Liquidaciones extends Model
 
     public static function montosPorEstadoPorAnio($empresa_id)
     {
-        return DB::table('liquidaciones as l')
+        $dataset = DB::table('liquidaciones as l')
             ->select(
                 'l.ano as key',
+                'l.ano as id',
                 'l.ano as anio',
                 DB::raw('round( sum(case l.estado when 5 then l.monto else 0 end), 2 ) as pagados'),
                 DB::raw('round( sum(case l.estado when 2 then l.monto else 0 end), 2 ) as para_pago'),
@@ -267,6 +269,35 @@ class Liquidaciones extends Model
             ->where('l.empresa_id', [$empresa_id])
             ->groupBy('l.ano')
             ->get();
+
+        $dataset->transform(function($item) use ($empresa_id) {
+            $children = DB::table('liquidaciones as l')
+                ->select(
+                    'l.mes as id',
+                    'l.mes as mes',
+                    'l.ano as anio',
+                    DB::raw('round( sum(case l.estado when 5 then l.monto else 0 end), 2 ) as pagados'),
+                    DB::raw('round( sum(case l.estado when 2 then l.monto else 0 end), 2 ) as para_pago'),
+                    DB::raw('round( sum(case l.estado when 1 then l.monto else 0 end), 2 ) as firmados'),
+                    DB::raw('round( sum(case l.estado when 0 then l.monto else 1 end), 2 ) as pendiente'),
+                    DB::raw('round( sum(l.monto), 2 ) as total')
+                )
+                ->where('l.empresa_id', [$empresa_id])
+                ->where('l.ano', $item->anio)
+                ->groupBy('l.mes')
+                ->get();
+
+            if ($children->count()) {
+                foreach ($children as &$child) {
+                    $child->key = $child->mes . '-' . $child->anio;
+                }
+                $item->children = $children;
+            }
+
+            return $item;
+        });
+
+        return $dataset;
     }
 
     public static function cantidadPagosPorDia($empresa_id, $desde, $hasta)
