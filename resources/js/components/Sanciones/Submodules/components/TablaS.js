@@ -164,10 +164,30 @@ export const TablaS = ({
             </div>
             <Table
                 rowSelection={rowSelection}
+                rowClassName={(record, index) => record.horas === 40 ? 'table-row-warning' : ( record.desvinculacion === 1 ? 'table-row-danger' : ( record.horas === 16 && 'table-row-red') )}
                 columns={getColumns(usuario, handleEliminar, handleMarcarEnviado, handleMarcarSubido)}
                 dataSource={sanciones}
                 scroll={{ x: 1000 }}
                 size="small"
+                title={() => (
+                    <div>
+                        <b>Leyenda</b>:&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="table-row-red d-inline-block">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>&nbsp;
+                        Primera incidencia
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="table-row-warning d-inline-block">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>&nbsp;
+                        Segunda incidencia
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span className="table-row-danger d-inline-block">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>&nbsp;
+                        Tercera incidencia (Desvinculación)
+                    </div>
+                )}
             />
         </>
     );

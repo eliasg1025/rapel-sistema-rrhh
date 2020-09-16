@@ -244,10 +244,7 @@ class LiquidacionesController extends Controller
 
     public function montosPorEstado(Request $request)
     {
-        $result = [
-            'rapel' => Liquidaciones::montosPorEstado(9),
-            'verfrut' => Liquidaciones::montosPorEstado(14)
-        ];
+        $result = Liquidaciones::montosPorEstado(9);
 
         return response()->json($result);
     }

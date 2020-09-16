@@ -8,7 +8,7 @@ export const GraficaBarras = () => {
 
     const data = () => {
         return {
-            labels: ['RAPEL', 'VERFRUT'],
+            labels: ['Pendientes', 'Firmados', 'Para Pago', 'Pagados'],
             datasets: [
                 {
                     label: ['Pendientes'],
@@ -75,36 +75,6 @@ export const GraficaBarras = () => {
                     <Bar
                         data={data()} options={options()} height={200}
                     />
-                </div>
-                <div className="col-md-6">
-                    <b><u>Resumen: </u></b><br /><br />
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th> </th>
-                                <th>PENDIENTES</th>
-                                <th>FIRMADOS</th>
-                                <th>PARA PAGO</th>
-                                <th>PAGADOS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>RAPEL</td>
-                                <td>S/. {montosPorEstado?.rapel?.pendiente || 0}</td>
-                                <td>S/. {montosPorEstado?.rapel?.firmados || 0}</td>
-                                <td>S/. {montosPorEstado?.rapel?.para_pago || 0}</td>
-                                <td>S/. {montosPorEstado?.rapel?.pagados || 0}</td>
-                            </tr>
-                            <tr>
-                                <td>VERFRUT</td>
-                                <td>S/. {montosPorEstado?.verfrut?.pendiente || 0}</td>
-                                <td>S/. {montosPorEstado?.verfrut?.firmados || 0}</td>
-                                <td>S/. {montosPorEstado?.verfrut?.para_pago || 0}</td>
-                                <td>S/. {montosPorEstado?.verfrut?.pagados || 0}</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </>

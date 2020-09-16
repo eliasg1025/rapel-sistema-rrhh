@@ -14,7 +14,18 @@
 }
 
 .table-row-red {
-    background-color: rgba(0, 255, 34, 0.42);
+    background-color: rgba(0, 255, 34, 0.3);
+    border: rgba(0, 255, 34, 1);
+}
+
+.table-row-warning {
+    background-color: rgba(255, 200, 0, 0.3);
+    border: rgba(255, 200, 0, 1);
+}
+
+.table-row-danger {
+    background-color: rgba(255, 0, 0, 0.3);
+    border: rgba(255, 0, 0, 1);
 }
 
 .sign-in {
