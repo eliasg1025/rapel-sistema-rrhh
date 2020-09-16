@@ -20,24 +20,28 @@ export const GraficaBarras = () => {
         },
         {
             title: 'Pendientes',
-            dataIndex: 'pendiente'
+            dataIndex: 'pendiente',
+            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         },
         {
             title: 'Firmados',
-            dataIndex: 'firmados'
+            dataIndex: 'firmados',
+            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         },
         {
             title: 'Para Pago',
-            dataIndex: 'para_pago'
+            dataIndex: 'para_pago',
+            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         },
         {
             title: 'Pagados',
-            dataIndex: 'pagados'
+            dataIndex: 'pagados',
+            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
         },
         {
             title: 'Total',
             dataIndex: 'total',
-            render: (_, record) => <b>{ record.total }</b>
+            render: (value, record) => <b>{ `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</b>
         },
     ]
 
