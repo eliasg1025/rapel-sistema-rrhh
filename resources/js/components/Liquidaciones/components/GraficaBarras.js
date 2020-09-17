@@ -11,8 +11,14 @@ export const GraficaBarras = () => {
     const [montosPorEstado, setMontosPorEstado] = useState({});
     const [montosPorAnio, setMontosPorAnio] = useState([]);
     const [filter, setFilter] = useState({
-        empresa_id: 9
+        empresa_id: 9,
+        tipo: 'MONTO (S/.)'
     });
+
+    const tipos = [
+        { id: 'MONTO (S/.)' },
+        { id: 'CANTIDAD' }
+    ];
 
     const columns = [
         {
@@ -23,27 +29,27 @@ export const GraficaBarras = () => {
         {
             title: 'Pendientes',
             dataIndex: 'pendiente',
-            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            render: (value, record) => filter.tipo !== 'CANTIDAD' ? `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : value
         },
         {
             title: 'Firmados',
             dataIndex: 'firmados',
-            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            render: (value, record) => filter.tipo !== 'CANTIDAD' ? `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : value
         },
         {
             title: 'Para Pago',
             dataIndex: 'para_pago',
-            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            render: (value, record) => filter.tipo !== 'CANTIDAD' ? `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : value
         },
         {
             title: 'Pagados',
             dataIndex: 'pagados',
-            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            render: (value, record) => filter.tipo !== 'CANTIDAD' ? `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : value
         },
         {
             title: 'Total',
             dataIndex: 'total',
-            render: (value, record) => <b>{ `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</b>
+            render: (value, record) => <b>{ filter.tipo !== 'CANTIDAD' ? `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : value }</b>
         },
     ]
 
@@ -130,10 +136,10 @@ export const GraficaBarras = () => {
                     </Card>
                 </div>
                 <div className="col-md-6">
-                    <div className="row">
-                        <div className="col">
-                            <div className="card">
-                                <div className="card-body">
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="row">
+                                <div className="col-md-6">
                                     Empresa:<br />
                                     <Select
                                         value={filter.empresa_id} showSearch
@@ -148,6 +154,25 @@ export const GraficaBarras = () => {
                                         {empresa.map(e => (
                                             <Select.Option value={e.id} key={e.id}>
                                                 {`${e.id} - ${e.name}`}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                                <div className="col-md-6">
+                                    Tipo:<br />
+                                    <Select
+                                        value={filter.tipo} showSearch
+                                        style={{ width: '100%' }} optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={e => setFilter({ ...filter, tipo: e })}
+                                    >
+                                        {tipos.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id}`}
                                             </Select.Option>
                                         ))}
                                     </Select>

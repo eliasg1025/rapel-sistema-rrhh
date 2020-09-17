@@ -6,6 +6,13 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
     const [loading, setLoading] = useState(false);
 
     const generarArchivosBanco = () => {
+        Swal.fire({
+            title: 'Generando archivos',
+            onBeforeOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
         setLoading(true);
         Axios.post('/api/finiquitos/generar-archivos-banco', { filtro, data })
             .then(res => {
@@ -16,6 +23,7 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                 setLoading(false);
                 Swal.fire({
                     title: 'Proceso completado',
+                    icon: 'info',
                     html: `
                         <ul>
                             <li><b>BCP: </b> ${bcp.message}</li>
@@ -24,12 +32,22 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                             <li><b>SCOTIABANK: </b> ${scotiabank.message}</li>
                             <li><b>BANBIF: </b> ${banbif.message}</li>
                         </ul>
+                        <br />
+                        <b>¿Desea pasar los registros al estado PAGADO?</b>
                     `,
-                    icon: 'info'
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'Cancelar'
                 })
                     .then(res => {
-                        setIsVisibleParent(false);
-                        setReloadDataAB(!reloadDataAB);
+                        if (res.value) {
+                            handleSubmit();
+                        } else {
+                            setIsVisibleParent(false);
+                            setReloadDataAB(!reloadDataAB);
+                        }
                     });
             })
             .catch(err => {
@@ -39,8 +57,7 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
             });
     }
 
-    const handleSubmit = e => {
-        e.preventDefault();
+    const handleSubmit = () => {
         setLoading(true);
         Axios.put('/api/finiquitos/marcar-pagado-masivo', {
             data: d.map(e => e.id)
@@ -140,20 +157,22 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                 <div className="col text-center">
                     {(filtro.desde !== filtro.hasta) && <span style={{ fontWeight: 'bold', color: 'red' }}>Sólo se puede procesar 1 fecha de pago a la vez</span>}
                     <div className="btn-group" style={{ width: '100%' }}>
-                        <button className="btn btn-primary" type="button" disabled={filtro.desde !== filtro.hasta} onClick={generarArchivosBanco}>
+                        <button className="btn btn-primary" type="button" disabled={(filtro.desde !== filtro.hasta) || loading} onClick={generarArchivosBanco}>
                             {!loading ? 'Generar archivos' : (
                                 <>
                                     <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
                                 </>
                             )}
                         </button>
-                        <button className="btn btn-success" type="submit" disabled={filtro.desde !== filtro.hasta}>
-                            {!loading ? 'Terminar proceso' : (
-                                <>
-                                    <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
-                                </>
-                            )}
-                        </button>
+                        {/*
+                            <button className="btn btn-success" type="submit" disabled={filtro.desde !== filtro.hasta}>
+                                {!loading ? 'Terminar proceso' : (
+                                    <>
+                                        <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
+                                    </>
+                                )}
+                            </button>
+                         */}
                     </div>
                 </div>
             </div>

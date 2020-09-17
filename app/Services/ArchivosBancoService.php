@@ -32,13 +32,19 @@ class ArchivosBancoService
 
     public function archivosBcp()
     {
-        try {
-            $bcp = $this->data['bcp'];
+        $bcp = $this->data['bcp'];
 
+        if (sizeof($bcp) === 0) {
+            return [
+                'message' => 'No hay registros para este banco'
+            ];
+        }
+
+        try {
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/BCP.xlsm');
             $worksheet = $spreadsheet->getActiveSheet();
 
-
+            $numero_cuenta = $this->empresa->id === 9 ? '4752274893094' : '4752467084018';
             $cantidad_abonos = '000000' . ((string) sizeof($bcp));
             $cantidad_abonos = substr($cantidad_abonos, -6);
             $fecha_proceso = Carbon::parse($this->fecha_pago)->format('Ymd');
@@ -52,8 +58,9 @@ class ArchivosBancoService
             $worksheet->getStyle('C7')->getNumberFormat()->setFormatCode('@');
             $worksheet->getCell('C7')->setValueExplicit($fecha_proceso, DataType::TYPE_STRING);
 
+            $worksheet->getCell('F7')->setValueExplicit($numero_cuenta, DataType::TYPE_STRING);
             $worksheet->getCell('G7')->setValue($monto_total);
-            $worksheet->getCell('H7')->setValue('FINIQUITOS ' . Carbon::parse($this->fecha_pago)->format('Y') );
+            $worksheet->getCell('H7')->setValue('FINIQUITOS ' . Carbon::parse($this->fecha_pago)->format('m-Y') );
 
             for ($i = 0; $i < sizeof($bcp); $i++) {
                 $numero_celda = $i + 11;
@@ -94,8 +101,14 @@ class ArchivosBancoService
 
     public function archivosBanbif()
     {
+        $banbif = $this->data['banbif'];
+
+        if (sizeof($banbif) === 0) {
+            return [
+                'message' => 'No hay registros para este banco'
+            ];
+        }
         try {
-            $banbif = $this->data['banbif'];
 
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/BANBIF.xlsm');
             $worksheet = $spreadsheet->getActiveSheet();
@@ -143,8 +156,13 @@ class ArchivosBancoService
 
     public function archivosScotiabank()
     {
+        $scotiabank = $this->data['scotiabank'];
+        if (sizeof($scotiabank) === 0) {
+            return [
+                'message' => 'No hay registros para este banco'
+            ];
+        }
         try {
-            $scotiabank = $this->data['scotiabank'];
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/SCOTIABANK.xlsm');
             $worksheet = $spreadsheet->getActiveSheet();
 
@@ -179,10 +197,17 @@ class ArchivosBancoService
 
     public function archivosBbva()
     {
+        $data = $this->data['bbva'];
+        if (sizeof($data) === 0) {
+            return [
+                'message' => 'No hay registros para este banco'
+            ];
+        }
         try {
-            $data = $this->data['bbva'];
             $content = '';
+            $numero_cuenta = $this->empresa->id === 9 ? '00110245880100004456' : '00110278000100019135';
 
+            $content .= '|' . $numero_cuenta . '|PEN|' . '|A|' . now()->format('m-Y') . '|N' . "\n";
             foreach ($data as $row) {
                 $nombre_completo = $row['apellido_paterno'] . ' ' .$row['apellido_materno'] . ' ' . $row['nombre'];
 
@@ -208,8 +233,13 @@ class ArchivosBancoService
 
     public function archivosInterbank()
     {
+        $data = $this->data['interbank'];
+        if (sizeof($data) === 0) {
+            return [
+                'message' => 'No hay registros para este banco'
+            ];
+        }
         try {
-            $data = $this->data['interbank'];
             $content = '';
 
             foreach ($data as $row) {

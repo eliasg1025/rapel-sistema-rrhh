@@ -22,13 +22,20 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
     const [bbva, setBbva] = useState([]);
     const [banbif, setBanbif] = useState([]);
 
+    const sincronizarSeleccionados = () => {
+        console.log('hi');
+    }
+
     const consultarSincronizacion = () => {
+
+        const text = parseInt(filtro.estado) === 0 ? `
+            <b>Periodos: ${moment(filtro.desde).format('MMMM YYYY').toUpperCase()} - ${moment(filtro.hasta).format('MMMM YYYY').toUpperCase()}</b><br />
+            Este proceso se realiza <b><u>automáticamente cada semana</u></b>, si lo desea puede realizar una sincronización manual.
+        ` : `Se actualizarán ${data.length} registros`;
+
         Swal.fire({
             title: `Sincronización ${parseInt(filtro.empresa_id) === 9 ? 'RAPEL' : 'VERFRUT'}`,
-            html: `
-                <b>Periodos: ${moment(filtro.desde).format('MMMM YYYY').toUpperCase()} - ${moment(filtro.hasta).format('MMMM YYYY').toUpperCase()}</b><br />
-                Este proceso se realiza <b><u>automáticamente cada semana</u></b>, si lo desea puede realizar una sincronización manual.
-            `,
+            html: text,
             icon: 'info',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -51,15 +58,29 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
             }
         });
 
-        Axios.get(`http://192.168.60.16/api/finiquitos?empresa_id=${filtro.empresa_id}&desde=${filtro.desde}&hasta=${filtro.hasta}`)
-            .then(res => {
-                const { data } = res;
+        if (parseInt(filtro.estado) === 0) {
+            Axios.get(`http://192.168.60.16/api/finiquitos?empresa_id=${filtro.empresa_id}&desde=${filtro.desde}&hasta=${filtro.hasta}`)
+                .then(res => {
+                    const { data } = res;
 
-                insertarDatos(data);
+                    insertarDatos(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        } else {
+            Axios.post(`http://192.168.60.16/api/finiquitos/get/one-by-one`, {
+                finiquitosId: data.map(e => e.id)
             })
-            .catch(err => {
-                console.log(err);
-            });
+                .then(res => {
+                    const { data } = res;
+
+                    insertarDatos(data);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
     }
 
     const insertarDatos = data => {
@@ -93,11 +114,11 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
 
     useEffect(() => {
         if (parseInt(filtro.estado) === 2) {
-            setBcp(data.filter(liq => liq.banco === 'BANCO DE CREDITO'));
-            setInterbank(data.filter(liq => liq.banco === 'INTERBANK'));
-            setBbva(data.filter(liq => liq.banco === 'BBVA BANCO CONTINENTAL'));
-            setBanbif(data.filter(liq => liq.banco === 'INTERAMERICANO FINANZAS'));
-            setScotiabank(data.filter(liq => liq.banco === 'SCOTIABANK PERU'));
+            setBcp(data.filter(liq => liq.banco === 'BANCO DE CREDITO' && liq.monto !== 0));
+            setInterbank(data.filter(liq => liq.banco === 'INTERBANK' && liq.monto !== 0));
+            setBbva(data.filter(liq => liq.banco === 'BBVA BANCO CONTINENTAL' && liq.monto !== 0));
+            setBanbif(data.filter(liq => liq.banco === 'INTERAMERICANO FINANZAS' && liq.monto !== 0));
+            setScotiabank(data.filter(liq => liq.banco === 'SCOTIABANK PERU' && liq.monto !== 0));
         }
     }, [data]);
 
@@ -105,7 +126,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
         <>
             <div style={{ marginBottom: 16 }}>
                 <div className="btn-group">
-                    <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 0} onClick={consultarSincronizacion}>
+                    <button className="btn btn-primary" onClick={consultarSincronizacion}>
                         <i className="fas fa-sync" />&nbsp;Sincronizar DB
                     </button>
                     <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 0} onClick={() => setIsVisibleImportarFirmados(true)}>
