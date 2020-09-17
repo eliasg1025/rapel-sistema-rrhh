@@ -179,6 +179,41 @@ class Liquidaciones extends Model
         ];
     }
 
+    public static function insertarTuRecibo(array $liquidaciones)
+    {
+        $count = 0;
+        $total = sizeof($liquidaciones);
+        $errors = [];
+
+        foreach($liquidaciones as $liquidacion)
+        {
+            try {
+                DB::table('liquidaciones')->updateOrInsert(
+                    [
+                        'id' => $liquidacion['id']
+                    ],
+                    [
+                        'estado' => 1,
+                        'fecha_hora_marca_firmado' => $liquidacion['fecha_firma']
+                    ]
+                );
+
+                $count++;
+            } catch (\Exception $e) {
+                array_push($errors, [
+                    'id' => $liquidacion['id'],
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return [
+            'total' => $total,
+            'completados' => $count,
+            'errores' => $errors
+        ];
+    }
+
     public static function marcarPagadoMasivo(array $finiquitos)
     {
         try {

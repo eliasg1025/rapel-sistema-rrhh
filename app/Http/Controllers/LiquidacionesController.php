@@ -116,6 +116,8 @@ class LiquidacionesController extends Controller
         try {
             $file = $request->file('tu-recibo');
             $empresa_id = $request->get('empresa_id');
+            $desde = $request->get('desde');
+            $hasta = $request->get('hasta');
 
             $name = '/tu-recibo/' . now()->unix() . '.' . $file->getClientOriginalExtension();
 
@@ -155,38 +157,51 @@ class LiquidacionesController extends Controller
             }
 
             $errores = [];
-            $correctos = 0;
+
+            $arr = [];
 
             foreach ($contents_arr as $key => $value) {
                 $data = str_getcsv($value, "\t");
 
+                foreach ($data as $k => $v) {
+                    $data[$k] = mb_convert_encoding($v, 'UTF-8', 'UTF-8');
+                }
+
+                $contents_arr[$key] = $data;
+
+                if (!is_numeric($data[0])) {
+                    continue;
+                }
+
+                $fecha_desde = Carbon::parse($desde);
+                $fecha_hasta = Carbon::parse($hasta);
+                $fecha_firma = Carbon::createFromFormat('d/m/Y H:i', $data[12]);
+
+                if ( !$fecha_firma->between($fecha_desde, $fecha_hasta) ) {
+                    continue;
+                }
+
+                $nombre_archivo = explode('_', $data[4]);
+                $periodo = explode('-', $data[1]);
+
                 try {
-                    foreach ($data as $k => $v) {
-                        $data[$k] = mb_convert_encoding($v, 'UTF-8', 'UTF-8');
-                    }
-
-                    $contents_arr[$key] = $data;
-
-                    if (!is_numeric($data[0])) {
-                        continue;
-                    }
-
-                    $nombre_archivo = explode('_', $data[4]);
-                    $periodo = explode('-', $data[1]);
-
-                    DB::table('liquidaciones')
+                    $liquidacion = DB::table('liquidaciones')
                         ->where([
                             'rut' => $nombre_archivo[0],
                             'ano' => 2000 + $periodo[1],
                             'mes' => getMes($periodo[0]),
-                            'empresa_id' => $empresa_id
+                            'empresa_id' => $empresa_id,
+                            'estado' => 0
                         ])
-                        ->update([
-                            'estado' => 1,
-                            'fecha_hora_marca_firmado' => DateTime::createFromFormat('d/m/Y H:i', $data[12])
-                        ]);
+                        ->first();
 
-                    $correctos++;
+                    if ($liquidacion) {
+                        array_push($arr, [
+                            'id' => $liquidacion->id,
+                            'fecha_firma' => $fecha_firma->toDateTimeString()
+                        ]);
+                    }
+
                 } catch (\Exception $e) {
                     array_push($errores, [
                         'rut' => $nombre_archivo,
@@ -197,7 +212,7 @@ class LiquidacionesController extends Controller
 
             return response()->json([
                 'message' => 'Actualización completada',
-                'correctos' => $correctos,
+                'liquidaciones' => $arr,
                 'errores' => $errores
             ]);
         } catch (\Exception $e) {
@@ -206,6 +221,15 @@ class LiquidacionesController extends Controller
                 'error' => $e->getMessage()
             ], 400);
         }
+    }
+
+    public function insertarTuRecibo(Request $request)
+    {
+        $liquidaciones = $request->get('liquidaciones');
+
+        $result = Liquidaciones::insertarTuRecibo($liquidaciones);
+
+        return response()->json($result);
     }
 
     public function marcarPagadoMasivo(Request $request)
