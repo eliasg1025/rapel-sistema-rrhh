@@ -47,9 +47,6 @@ class DocumentosTuReciboController extends Controller
                 return response()->json(['message' => 'Error al guardar el archivo'], 400);
             }
 
-            $correctos = 0;
-            $errores = [];
-
             $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
 
             function getMes($text) {

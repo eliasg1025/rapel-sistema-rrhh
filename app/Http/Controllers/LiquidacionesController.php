@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\Liquidaciones;
 use App\Services\ArchivosBancoService;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -112,43 +113,87 @@ class LiquidacionesController extends Controller
 
     public function importarTuRecibo(Request $request)
     {
-        $file = $request->file('tu-recibo');
-        $empresa_id = $request->get('empresa_id');
-
-        $name = '/tu-recibo/' . now()->unix() . '.' . $file->getClientOriginalExtension();
-
-        if (!\Storage::disk('public')->put($name, \File::get($file))) {
-            return response()->json(['message' => 'Error al guardar el archivo'], 400);
-        }
-
-        $correctos = 0;
-        $errores = [];
-
         try {
-            (new FastExcel)
-                ->import(storage_path('app/public') . $name, function($line) use ($empresa_id, $correctos, $errores) {
-                    $text = explode('_', $line['Archivo']);
-                    try {
-                        return DB::table('liquidaciones')->updateOrInsert(
-                            [
-                                'rut' => $line['DNI'],
-                                'mes' => (int) trim($text[2]),
-                                'ano' => (int) trim($text[1]),
-                                'empresa_id' => $empresa_id
-                            ],
-                            [
-                                'estado' => 1,
-                                'fecha_hora_marca_firmado' => Carbon::parse($line['Fecha Firma'])
-                            ]
-                        );
-                    } catch (\Exception $e) {
-                        array_push($errores, [
-                            'rut' => $line['DNI'],
-                            'error' => $e->getMessage() . ' -- ' . $e->getLine()
-                        ]);
-                        return false;
+            $file = $request->file('tu-recibo');
+            $empresa_id = $request->get('empresa_id');
+
+            $name = '/tu-recibo/' . now()->unix() . '.' . $file->getClientOriginalExtension();
+
+            if (!\Storage::disk('public')->put($name, \File::get($file))) {
+                return response()->json(['message' => 'Error al guardar el archivo'], 400);
+            }
+
+            $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
+
+            function getMes($text) {
+                switch ($text) {
+                    case 'Ene':
+                        return 1;
+                    case 'Feb':
+                        return 2;
+                    case 'Mar':
+                        return 3;
+                    case 'Abr':
+                        return 4;
+                    case 'May':
+                        return 5;
+                    case 'Jun':
+                        return 6;
+                    case 'Jul':
+                        return 7;
+                    case 'Ago':
+                        return 8;
+                    case 'Set':
+                        return 9;
+                    case 'Oct':
+                        return 10;
+                    case 'Nov':
+                        return 11;
+                    case 'Dic':
+                        return 12;
+                }
+            }
+
+            $errores = [];
+            $correctos = 0;
+
+            foreach ($contents_arr as $key => $value) {
+                $data = str_getcsv($value, "\t");
+
+                try {
+                    foreach ($data as $k => $v) {
+                        $data[$k] = mb_convert_encoding($v, 'UTF-8', 'UTF-8');
                     }
-                });
+
+                    $contents_arr[$key] = $data;
+
+                    if (!is_numeric($data[0])) {
+                        continue;
+                    }
+
+                    $nombre_archivo = explode('_', $data[4]);
+                    $periodo = explode('-', $data[1]);
+
+                    DB::table('liquidaciones')
+                        ->where([
+                            'rut' => $nombre_archivo[0],
+                            'ano' => 2000 + $periodo[1],
+                            'mes' => getMes($periodo[0]),
+                            'empresa_id' => $empresa_id
+                        ])
+                        ->update([
+                            'estado' => 1,
+                            'fecha_hora_marca_firmado' => DateTime::createFromFormat('d/m/Y H:i', $data[12])
+                        ]);
+
+                    $correctos++;
+                } catch (\Exception $e) {
+                    array_push($errores, [
+                        'rut' => $nombre_archivo,
+                        'error' => $e->getMessage() . ' -- ' . $e->getLine()
+                    ]);
+                }
+            }
 
             return response()->json([
                 'message' => 'Actualización completada',
