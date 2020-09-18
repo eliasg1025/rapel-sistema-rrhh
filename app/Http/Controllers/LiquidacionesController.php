@@ -190,7 +190,7 @@ class LiquidacionesController extends Controller
                 }
 
                 $fecha_desde = Carbon::parse($desde);
-                $fecha_hasta = Carbon::parse($hasta);
+                $fecha_hasta = Carbon::parse($hasta)->addDay();
                 $fecha_firma = Carbon::createFromFormat('d/m/Y H:i', $data[12]);
 
                 if ( !$fecha_firma->between($fecha_desde, $fecha_hasta) ) {
