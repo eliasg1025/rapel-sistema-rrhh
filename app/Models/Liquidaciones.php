@@ -65,7 +65,7 @@ class Liquidaciones extends Model
 
     public static function getResumenPorFechaPago($fecha_pago)
     {
-        return DB::table('liquidaciones as l')
+        $dataset = DB::table('liquidaciones as l')
             ->select(
                 'l.banco', 'l.empresa_id',
                 DB::raw('COUNT(DISTINCT l.rut) as cantidad_personas'),
@@ -75,6 +75,22 @@ class Liquidaciones extends Model
             ->whereIn('l.estado', [3, 5])
             ->groupBy('l.empresa_id', 'l.banco')
             ->get();
+
+        $rapel = [];
+        $verfrut = [];
+
+        foreach ($dataset as $value) {
+            if ($value->empresa_id === 9) {
+                array_push($rapel, $value);
+            } else if ($value->empresa_id === 14) {
+                array_push($verfrut, $value);
+            }
+        }
+
+        return [
+            'rapel' => $rapel,
+            'verfrut' => $verfrut
+        ];
     }
 
     public static function getByTrabajador($rut)
