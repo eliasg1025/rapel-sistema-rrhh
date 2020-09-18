@@ -48,6 +48,35 @@ class Liquidaciones extends Model
             ->get();
     }
 
+    public static function getFechas()
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'l.fecha_pago as key',
+                'l.fecha_pago',
+                DB::raw('COUNT(*) as cantidad_liquidaciones')
+            )
+            ->whereNotNull('l.fecha_pago')
+            ->whereIn('l.estado', [3, 5])
+            ->groupBy('l.fecha_pago')
+            ->orderBy('l.fecha_pago', 'DESC')
+            ->get();
+    }
+
+    public static function getResumenPorFechaPago($fecha_pago)
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'l.banco', 'l.empresa_id',
+                DB::raw('COUNT(DISTINCT l.rut) as cantidad_personas'),
+                DB::raw('SUM(l.monto) as monto')
+            )
+            ->where('l.fecha_pago', $fecha_pago)
+            ->whereIn('l.estado', [3, 5])
+            ->groupBy('l.empresa_id', 'l.banco')
+            ->get();
+    }
+
     public static function getByTrabajador($rut)
     {
         return DB::table('liquidaciones as l')
@@ -343,7 +372,7 @@ class Liquidaciones extends Model
                 DB::raw('COUNT(*) as cantidad')
             )
             ->where('l.empresa_id', $empresa_id)
-            ->where('l.estado', 5)
+            ->whereIn('l.estado', [3, 5])
             ->whereDate('l.fecha_pago', '>=', $desde)
             ->whereDate('l.fecha_pago', '<=', $hasta)
             ->groupBy('dia')

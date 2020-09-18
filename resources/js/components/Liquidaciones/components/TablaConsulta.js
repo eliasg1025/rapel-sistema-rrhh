@@ -57,6 +57,8 @@ export const TablaConsulta = ({ data }) => {
                 return <Tag color="success" icon={<CheckCircleOutlined />}>PAGADO</Tag>;
             case 4:
                 return <Tag color="error" icon={<CloseCircleOutlined />}>RECHAZADO</Tag>;
+            case 5:
+                return <Tag color="success" icon={<CheckCircleOutlined />}>PAGADO</Tag>;
             default:
                 return null;
         }

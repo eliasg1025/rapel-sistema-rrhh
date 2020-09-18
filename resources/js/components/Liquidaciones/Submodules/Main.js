@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArchivosAprobacion } from '../components/ArchivosAprobacion';
 import { GraficaBarras } from '../components/GraficaBarras';
 import { GraficaLinea } from '../components/GraficasLinea';
 
@@ -11,6 +12,8 @@ export const Main = () => {
             <GraficaBarras />
             <br />
             <GraficaLinea />
+            <br />
+            <ArchivosAprobacion />
         </>
     );
 }

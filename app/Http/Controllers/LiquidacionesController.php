@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresa;
 use App\Models\Liquidaciones;
+use App\Services\ArchivosAprobacionService;
 use App\Services\ArchivosBancoService;
 use Carbon\Carbon;
 use DateTime;
@@ -20,6 +21,21 @@ class LiquidacionesController extends Controller
         $result = Liquidaciones::massiveCreate($data);
 
         return response()->json($result);
+    }
+
+    public function reprogramarParaPago(Request $request)
+    {
+        $finiquito_id = $request->get('id');
+        $fecha_pago = $request->get('fecha_pago');
+
+        $finiquito = Liquidaciones::where('id', $finiquito_id)->first();
+
+        $finiquito->fecha_pago = $fecha_pago;
+        $finiquito->save();
+
+        return response()->json([
+            'message' => 'Actualizado correctamente'
+        ]);
     }
 
     public function importar(Request $request)
@@ -332,5 +348,30 @@ class LiquidacionesController extends Controller
         $result = Liquidaciones::cantidadPagosPorDia($empresa_id, $desde, $hasta);
 
         return response()->json($result);
+    }
+
+    public function getFechasPago()
+    {
+        $result = Liquidaciones::getFechas();
+
+        return response()->json($result);
+    }
+
+    public function descargarArchivosAprobacion(Request $request)
+    {
+        $service = new ArchivosAprobacionService($request->get('fecha_pago'));
+
+        $result = $service->generate();
+
+        if (isset($result['error'])) {
+            return response()->json($result, 400);
+        }
+
+        return response()->download($result['ruta']);
+    }
+
+    public function test()
+    {
+        return response()->json(Liquidaciones::getResumenPorFechaPago('2020-09-18'));
     }
 }

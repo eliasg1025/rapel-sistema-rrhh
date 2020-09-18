@@ -135,6 +135,7 @@ Route::group(['prefix' => 'sancion'], function() {
 
 Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'LiquidacionesController@get');
+    Route::get('/test', 'LiquidacionesController@test');
 
     Route::get('/{rut}/trabajador', 'LiquidacionesController@getByTrabajador')->where('id', '[0-9]+');
     Route::get('/get-pagados', 'LiquidacionesController@getPagados');
@@ -147,8 +148,14 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/importar-tu-recibo', 'LiquidacionesController@importarTuRecibo');
     Route::post('/importar-tu-recibo/insertar', 'LiquidacionesController@insertarTuRecibo');
     Route::post('/programar-para-pago', 'LiquidacionesController@programarParaPago');
+    Route::put('/programar-para-pago/reprogramar', 'LiquidacionesController@reprogramarParaPago');
     Route::get('/excel-banco', 'LiquidacionesController@testExcel');
     Route::post('/generar-archivos-banco', 'LiquidacionesController@generateArchivosBanco');
+
+    Route::group(['prefix' => 'fechas-pagos'], function() {
+        Route::get('/', 'LiquidacionesController@getFechasPago');
+        Route::post('/descargar', 'LiquidacionesController@descargarArchivosAprobacion');
+    });
 
     Route::put('/marcar-pagado-masivo', 'LiquidacionesController@marcarPagadoMasivo');
 

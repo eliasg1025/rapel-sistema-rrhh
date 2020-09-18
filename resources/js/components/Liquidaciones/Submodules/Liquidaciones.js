@@ -85,6 +85,8 @@ export const Liquidaciones = () => {
                 data={data}
                 loading={loading}
                 estado={filtro.estado}
+                reloadData={reloadData}
+                setReloadData={setReloadData}
             />
             <hr /><br />
             <h5>Archivos Banco</h5>
