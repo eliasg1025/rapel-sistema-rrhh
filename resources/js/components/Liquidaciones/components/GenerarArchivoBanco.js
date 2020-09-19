@@ -32,22 +32,11 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                             <li><b>SCOTIABANK: </b> ${scotiabank.message}</li>
                             <li><b>BANBIF: </b> ${banbif.message}</li>
                         </ul>
-                        <br />
-                        <b>¿Desea pasar los registros al estado PAGADO?</b>
                     `,
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si',
-                    cancelButtonText: 'Cancelar'
                 })
                     .then(res => {
-                        if (res.value) {
-                            handleSubmit();
-                        } else {
-                            setIsVisibleParent(false);
-                            setReloadDataAB(!reloadDataAB);
-                        }
+                        setIsVisibleParent(false);
+                        setReloadDataAB(!reloadDataAB);
                     });
             })
             .catch(err => {

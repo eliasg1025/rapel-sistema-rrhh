@@ -64,9 +64,9 @@ export const ArchivosAprobacion = () => {
             title: 'Descargar',
             dataIndex: 'descargar',
             render: (_, record) => (
-                <button className="btn btn-light btn-sm" onClick={() => descargarArchivoBanco(record.fecha_pago)}>
+                <a className="btn btn-light btn-sm" href={`/storage/formato-aprobacion/generados/FORMATO-APROBACION-${record.fecha_pago}.xlsx`} target="_blank">
                     <i className="fas fa-download"></i>
-                </button>
+                </a>
             )
         }
     ];

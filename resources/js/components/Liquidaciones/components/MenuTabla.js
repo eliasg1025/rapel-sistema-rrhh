@@ -112,6 +112,46 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
             });
     }
 
+    const cerrarFecha = fecha_pago => {
+        Swal.fire({
+            title: '¿Desea cerrar la fecha?',
+            html: `Los registros con FECHA DE PAGO <b>${fecha_pago}</b> pasarán al estado <b><u>PAGADO</u></b>`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'Cancelar'
+        })
+            .then(res => {
+                if (res.value) {
+                    Swal.fire({
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    Axios.put('/api/finiquitos/marcar-pagado-masivo', {
+                        //data: d.map(e => e.id),
+                        empresa_id: filtro.empresa_id,
+                        fecha_pago: filtro.desde
+                    })
+                        .then(res => {
+                            const { message } = res.data;
+
+                            Swal.fire(message, '', 'success')
+                                .then(res => {
+                                    setReloadData(!reloadData);
+                                });
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire('Error al actualizar el estado', '', 'error');
+                        });
+                }
+            });
+    }
+
     useEffect(() => {
         if (parseInt(filtro.estado) === 2) {
             setBcp(data.filter(liq => liq.banco === 'BANCO DE CREDITO' && liq.monto !== 0));
@@ -138,6 +178,11 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 2} onClick={() => setIsVisibleGenerarArchivoBanco(true)}>
                         <i className="fas fa-file-invoice" />&nbsp;Generar archivos banco
                     </button>
+                    {parseInt(filtro.estado) === 2 && (
+                        <button className="btn btn-warning" disabled={filtro.desde !== filtro.hasta} onClick={() => cerrarFecha(filtro.desde)}>
+                            <i className="fas fa-save"></i>&nbsp;Cerrar Fecha
+                        </button>
+                    )}
                 </div>
             </div>
 

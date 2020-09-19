@@ -250,9 +250,10 @@ class LiquidacionesController extends Controller
 
     public function marcarPagadoMasivo(Request $request)
     {
-        $data = $request->get('data');
+        $empresa_id = $request->get('empresa_id');
+        $fecha_pago = $request->get('fecha_pago');
 
-        $result = Liquidaciones::marcarPagadoMasivo($data);
+        $result = Liquidaciones::marcarPagadoMasivo($empresa_id, $fecha_pago);
 
         if ( isset($result['error']) ) {
             return response()->json([
@@ -260,8 +261,12 @@ class LiquidacionesController extends Controller
             ], 400);
         }
 
+        $service = new ArchivosAprobacionService($fecha_pago);
+
+        $generation = $service->generate();
+
         return response()->json([
-            'message' => 'Se actualizaron ' . $result . ' registros',
+            'message' => 'Se actualizaron ' . $result . ' registros en estado PAGADO. <br />Se ha generado el FORMATO DE APROBACIÓN en la siguiente <a target="_blank" href="/storage/formato-aprobacion/generados/FORMATO-APROBACION-' . $fecha_pago . '">ruta</a>',
             'actualizados' => $result
         ]);
     }
@@ -359,15 +364,18 @@ class LiquidacionesController extends Controller
 
     public function descargarArchivosAprobacion(Request $request)
     {
+        /*
         $service = new ArchivosAprobacionService($request->get('fecha_pago'));
 
         $result = $service->generate();
 
         if (isset($result['error'])) {
             return response()->json($result, 400);
-        }
+        }*/
 
-        return response()->download($result['ruta']);
+        $ruta = storage_path() . '/formato-aprobacion/generados/FORMATO-APROBACION-' . $request->get('fecha_pago') . '.xlsx';
+
+        return response()->download($ruta);
     }
 
     public function test()

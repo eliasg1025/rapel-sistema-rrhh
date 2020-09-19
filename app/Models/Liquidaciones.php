@@ -259,11 +259,12 @@ class Liquidaciones extends Model
         ];
     }
 
-    public static function marcarPagadoMasivo(array $finiquitos)
+    public static function marcarPagadoMasivo($empresa_id, $fecha_pago)
     {
         try {
             return DB::table('liquidaciones')
-                ->whereIn('id', $finiquitos)
+                ->where('empresa_id', $empresa_id)
+                ->where('fecha_pago', $fecha_pago)
                 ->update([
                     'estado' => 3,
                     'fecha_hora_marca_pagado' => now()->toDateTimeString()

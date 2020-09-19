@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 import Axios from 'axios';
 import { split } from 'lodash';
 
@@ -17,12 +17,16 @@ export const TablaArchivosBanco = ({ reloadData }) => {
             dataIndex: 'fecha_pago'
         },
         {
-            title: 'Descargar',
-            dataIndex: 'descargar',
+            title: 'Acciones',
+            dataIndex: 'acciones',
             render: (_, record) => (
-                <button  className="btn" type="button" onClick={() => descargar(record.link)}>
-                    <i className="fas fa-download"></i>
-                </button>
+                <div className="btn-group">
+                    <Tooltip title="Descargar">
+                        <button  className="btn btn-light" type="button" onClick={() => descargar(record.link)}>
+                            <i className="fas fa-download"></i>
+                        </button>
+                    </Tooltip>
+                </div>
             )
         },
     ];
