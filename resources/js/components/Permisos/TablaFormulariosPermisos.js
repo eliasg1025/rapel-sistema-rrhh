@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message } from 'antd';
+import { DatePicker, Input, message } from 'antd';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { TablaFP } from './TablaFP';
@@ -312,7 +312,9 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 });
         }
 
-        fetchFormulariosPermisos();
+        if (filtro.rut === '' || filtro.rut.length >= 8) {
+            fetchFormulariosPermisos();
+        }
     }, [ filtro.desde, filtro.hasta, filtro.estado, filtro.goce, filtro.usuario_carga_id, filtro.rut, reloadDatos ]);
 
     useEffect(() => {
@@ -369,11 +371,12 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 </div>
                 <div className="col-md-4">
                     Busqueda por DNI:<br />
-                    <input
-                        type="text"
-                        className="form-control"
+                    <Input
+                        size="small"
+                        placeholder="Mínimo 8 caracteres"
                         value={filtro.rut}
                         onChange={e => setFiltro({ ...filtro, rut: e.target.value })}
+                        allowClear
                     />
                 </div>
             </div>
