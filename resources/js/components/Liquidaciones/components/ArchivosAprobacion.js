@@ -53,14 +53,6 @@ export const ArchivosAprobacion = () => {
             dataIndex: 'fecha_pago'
         },
         {
-            title: '# Liquidaciones',
-            dataIndex: 'cantidad_liquidaciones',
-        },
-        {
-            title: '# Utilidades',
-            dataIndex: 'cantidad_utilidades'
-        },
-        {
             title: 'Descargar',
             dataIndex: 'descargar',
             render: (_, record) => (

@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 class LiquidacionesController extends Controller
@@ -357,9 +358,22 @@ class LiquidacionesController extends Controller
 
     public function getFechasPago()
     {
-        $result = Liquidaciones::getFechas();
+        $path = '/formato-aprobacion/generados';
 
-        return response()->json($result);
+        $directories = Storage::disk('public')->files($path);
+
+        $directories = array_map(function($v) {
+            $arr = explode("/", $v);
+            $file = $arr[sizeof($arr) - 1];
+            $exploded_str = explode("_", $file);
+            return [
+                'key' => $v,
+                'fecha_pago' => explode(".", $exploded_str[1])[0],
+                'link' => $v
+            ];
+        }, $directories);
+
+        return response()->json($directories);
     }
 
     public function descargarArchivosAprobacion(Request $request)

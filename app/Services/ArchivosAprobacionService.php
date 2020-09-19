@@ -84,7 +84,7 @@ class ArchivosAprobacionService
             }
 
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $path = storage_path('app/public') . '/formato-aprobacion/generados/FORMATO-APROBACION-' . $this->fecha_pago . '.xlsx';
+            $path = storage_path('app/public') . '/formato-aprobacion/generados/FORMATO-APROBACION_' . $this->fecha_pago . '.xlsx';
             $writer->save($path);
 
             return [
