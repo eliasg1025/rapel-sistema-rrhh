@@ -90,6 +90,7 @@ Route::get('/cargas-excel', 'CargaExcelController@get');
 
 Route::group(['prefix' => 'cuenta'], function() {
     Route::post('/', 'CuentasController@create');
+    Route::get('/{id}', 'CuentasController@show');
     Route::delete('/{id}', 'CuentasController@delete');
     Route::post('/get-all', 'CuentasController@getAll');
 });

@@ -61,6 +61,7 @@ class Cuenta extends Model
 
             $cuentas = DB::table('cuentas as c')
                 ->select(
+                    'c.id as key',
                     'c.id as id',
                     'c.fecha_solicitud',
                     't.rut',
@@ -79,6 +80,7 @@ class Cuenta extends Model
                     $join->on('usuario.id', '=', 'c.usuario_id');
                 })
                 ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->orderBy('c.created_at', 'DESC')
                 ->get();
             return $cuentas;
         } else if ($usuario->cuentas == 1) {
@@ -98,6 +100,7 @@ class Cuenta extends Model
                 ->join('empresas as e', 'e.id', '=', 'c.empresa_id')
                 ->where('c.usuario_id', $usuario->id)
                 ->whereBetween('c.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
+                ->orderBy('c.created_at', 'DESC')
                 ->get();
         } else {
             return [];
@@ -178,7 +181,6 @@ class Cuenta extends Model
             if ( !$data['apertura'] ) {
                 $cuenta_repetido = Cuenta::where([
                     'numero_cuenta' => $data['numero_cuenta'],
-                    'banco_id' => $banco_id
                 ])->first();
 
                 if ( $cuenta_repetido && $cuenta_repetido->trabajador_id !== $trabajador_id ) {

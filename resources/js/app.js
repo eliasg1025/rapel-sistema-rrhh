@@ -6,7 +6,6 @@
 
 import ReactDOM from "react-dom";
 import React from "react";
-import AgregarCuenta from "./components/Cuentas/AgregarCuenta";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
@@ -17,6 +16,7 @@ import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTra
 import Sanciones from "./components/Sanciones/Sanciones";
 import Sctr from "./components/Sctr/Sctr";
 import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
+import Cuentas from "./components/Cuentas";
 
 require('./bootstrap');
 
@@ -32,9 +32,7 @@ require('./layouts/TrabajadoresLayout');
 require('./layouts/UsuariosLayout');
 require('./layouts/RegistroIndividualLayout');
 require('./layouts/RegistroMasivoLayout');
-require('./components/Cuentas/AgregarCuenta');
-require('./components/Cuentas/TablaCuentas');
-require('./components/Cuentas/TablaCuentasAdmin');
+require('./components/Cuentas/components/AgregarCuenta');
 require('./components/Afp/AgregarAfp');
 require('./components/Permisos/AgregarPermiso');
 require('./components/Sanciones/Submodules/AgregarSancion');
@@ -51,6 +49,12 @@ require('./components/Sanciones/Sanciones');
 require('./components/Sctr/Sctr');
 
 //
+if (document.getElementById("cuentas")) {
+    const element = document.getElementById("cuentas");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Cuentas {...props} />, document.getElementById("cuentas"));
+}
+
 if (document.getElementById("estado-documentos")) {
     const element = document.getElementById("estado-documentos");
     const props = Object.assign({}, element.dataset);

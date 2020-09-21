@@ -166,66 +166,6 @@ class ViewController extends Controller
         return view('pages.registro-individual', compact('data'));
     }
 
-    public function cuentas(Request $request)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        $empresas = DB::table('empresas')->get();
-
-        switch ($usuario->cuentas) {
-            case 1:
-                $cuentas = Cuenta::_getByUsuario($usuario->id);
-
-                $data = [
-                    'usuario'  => $usuario,
-                    'empresas' => $empresas,
-                    'cuentas'  => $cuentas,
-                ];
-
-                return view('pages.cuentas.user', compact('data'));
-            case 2:
-                $data = [
-                    'usuario'  => $usuario,
-                    'empresas' => $empresas,
-                ];
-
-                return view('pages.cuentas.admin', compact('data'));
-            default:
-                $nombre_modulo = 'cuentas';
-                return view('pages.no-acceso', compact('nombre_modulo'));
-        }
-    }
-
-    public function editarCuenta(Request $request, int $id)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        $empresas = DB::table('empresas')->get();
-
-        $cuenta = Cuenta::_get($id);
-        switch ($usuario->cuentas) {
-            case 1:
-                $data = [
-                    'usuario'  => $usuario,
-                    'empresas' => $empresas,
-                    'cuenta'   => $cuenta,
-                ];
-
-                return view('pages.cuentas.user', compact('data'));
-            case 2:
-                $data = [
-                    'usuario'  => $usuario,
-                    'empresas' => $empresas,
-                    'cuenta'   => $cuenta
-                ];
-
-                return view('pages.cuentas.admin', compact('data'));
-            default:
-                $nombre_modulo = 'cuentas';
-                return view('pages.no-acceso', compact('nombre_modulo'));
-        }
-    }
-
     public function afp(Request $request)
     {
         $usuario = $request->session()->get('usuario');

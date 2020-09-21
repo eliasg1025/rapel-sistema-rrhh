@@ -29,8 +29,8 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
     Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
     Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
-    Route::get('/cuentas', 'Web\ViewController@cuentas');
-    Route::get('/cuentas/editar/{id}', 'Web\ViewController@editarCuenta');
+    Route::get('/cuentas', 'Web\CuentasController@index');
+    Route::get('/cuentas/editar/{id}', 'Web\CuentasController@editarCuenta');
     Route::get('/eleccion-afp', 'Web\ViewController@afp');
     Route::get('/formularios-permisos', 'Web\ViewController@permisos');
     Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');

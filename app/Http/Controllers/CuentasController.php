@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class CuentasController extends Controller
 {
+    public function show($id)
+    {
+        $result = Cuenta::_get($id);
+
+        return response()->json($result);
+    }
+
     public function create(Request $request)
     {
         $result = Cuenta::_create($request->all());

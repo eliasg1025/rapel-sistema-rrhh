@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-6">
                     <a class="btn btn-block btn-light" href="/cuentas" {{ $data['usuario']->cuentas === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-money-check"></i> Cambios/Aperturas Cuentas
+                        <i class="fas fa-money-check"></i> Cambios/Aperturas Index
                     </a>
                 </div>
             </div>
