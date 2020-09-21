@@ -36,7 +36,7 @@ export default function main() {
                             Consulta
                         </a>
                     </Menu.Item>
-                    <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Liquidaciones">
+                    <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
                         <Menu.Item key="l" icon={<HomeOutlined />}>
                             <a href="/liquidaciones-utilidades/l">
                                 Principal
@@ -53,23 +53,6 @@ export default function main() {
                             </a>
                         </Menu.Item>
                     </SubMenu>
-                    <SubMenu key="sub2" icon={<FileDoneOutlined />} title="Utilidades">
-                        <Menu.Item key="u" icon={<HomeOutlined />}>
-                            <a href="/liquidaciones-utilidades/u">
-                                Principal
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item key="u-pagados" icon={<BankOutlined />}>
-                            <a href="/liquidaciones-utilidades/u/pagados">
-                                Pagados
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item key="u-rechazos" icon={<StopOutlined />}>
-                            <a href="/liquidaciones-utilidades/u/rechazos">
-                                Rechazos
-                            </a>
-                        </Menu.Item>
-                    </SubMenu>
                 </Menu>
             </Sider>
             <Layout>
@@ -78,13 +61,10 @@ export default function main() {
                         {submodule === 'main' && <Main />}
                         {submodule === 'consulta' && <Consulta />}
                         {submodule === 'l' && <Liquidaciones />}
-                        {submodule === 'u' && <Utilidades />}
 
                         {submodule === 'l-pagados' && <Pagados />}
-                        {submodule === 'u-pagados' && <Pagados />}
 
                         {submodule === 'l-rechazos' && <Rechazos />}
-                        {submodule === 'u-rechazos' && <Rechazos />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>

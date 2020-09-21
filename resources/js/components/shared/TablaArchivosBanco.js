@@ -46,7 +46,7 @@ export const TablaArchivosBanco = ({ reloadData }) => {
                 let blob = new Blob([response.data], { type: 'application/zip' })
                 let link = document.createElement('a')
                 link.href = window.URL.createObjectURL(blob)
-                link.download = `ARCHIVOS-BANCO_${separated[2].toUpperCase()}_${separated[separated.length - 1]}.zip`
+                link.download = `ARCHIVOS-BANCO_${separated[separated.length - 1]}.zip`
                 link.click();
             })
     }

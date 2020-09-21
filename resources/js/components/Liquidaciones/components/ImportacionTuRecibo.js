@@ -6,6 +6,8 @@ import {SubirArchivo} from "../../shared/SubirArchivo";
 
 export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisibleParent }) => {
 
+    const { tipo_pago_id } = JSON.parse(sessionStorage.getItem('data'));
+
     const [loading, setLoading] = useState(false);
 
     const [form, setForm] = useState({
@@ -23,6 +25,7 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
         formData.append('empresa_id', form.empresa_id);
         formData.append('desde', form.desde);
         formData.append('hasta', form.hasta);
+        formData.append('tipo_pago_id', tipo_pago_id);
 
         const config = {
             headers: {

@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Empresa;
-use App\Models\Liquidaciones;
+use App\Models\Pago;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 class ArchivosAprobacionService
 {
@@ -28,7 +25,7 @@ class ArchivosAprobacionService
             $worksheet->getCell('C5')->setValue(Carbon::parse($this->fecha_pago)->format('m-Y'));
 
             // Obtener data
-            $resumen = Liquidaciones::getResumenPorFechaPago($this->fecha_pago);
+            $resumen = Pago::getResumenPorFechaPago($this->fecha_pago);
 
             $rapel = $resumen['rapel'];
             $verfrut = $resumen['verfrut'];

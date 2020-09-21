@@ -12,6 +12,8 @@ moment.locale('es');
 
 export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataAB, setReloadDataAB }) => {
 
+    const { tipo_pago_id } = JSON.parse(sessionStorage.getItem('data'));
+
     const [isVisibleImportarFirmados, setIsVisibleImportarFirmados] = useState(false);
     const [isVisibleProgramarParaPago, setIsVisibleProgramarParaPago] = useState(false);
     const [isVisibleGenerarArchivoBanco, setIsVisibleGenerarArchivoBanco] = useState(false);
@@ -93,7 +95,8 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
         });
 
         Axios.post(`/api/finiquitos/massive`, {
-            data
+            data,
+            tipo_pago_id
         })
             .then(res => {
                 const { data } = res;
@@ -134,7 +137,8 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     Axios.put('/api/finiquitos/marcar-pagado-masivo', {
                         //data: d.map(e => e.id),
                         empresa_id: filtro.empresa_id,
-                        fecha_pago: filtro.desde
+                        fecha_pago: filtro.desde,
+                        tipo_pago_id: tipo_pago_id
                     })
                         .then(res => {
                             const { message } = res.data;

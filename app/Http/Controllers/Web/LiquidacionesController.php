@@ -42,7 +42,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
-            'submodule' => 'l'
+            'submodule' => 'l',
+            'tipo_pago_id' => 1
         ];
 
         return view('pages.liquidaciones', compact('data'));
@@ -55,7 +56,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
-            'submodule' => 'l-pagados'
+            'submodule' => 'l-pagados',
+            'tipo_pago_id' => 1
         ];
 
         return view('pages.liquidaciones', compact('data'));
@@ -68,7 +70,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
-            'submodule' => 'l-rechazos'
+            'submodule' => 'l-rechazos',
+            'tipo_pago_id' => 1
         ];
 
         return view('pages.liquidaciones', compact('data'));
@@ -85,7 +88,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub2',
-            'submodule' => 'u'
+            'submodule' => 'u',
+            'tipo_pago_id' => 2
         ];
 
         return view('pages.liquidaciones', compact('data'));
@@ -98,7 +102,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub2',
-            'submodule' => 'u-pagados'
+            'submodule' => 'u-pagados',
+            'tipo_pago_id' => 2
         ];
 
         return view('pages.liquidaciones', compact('data'));
@@ -111,7 +116,8 @@ class LiquidacionesController extends Controller
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub2',
-            'submodule' => 'u-rechazos'
+            'submodule' => 'u-rechazos',
+            'tipo_pago_id' => 2
         ];
 
         return view('pages.liquidaciones', compact('data'));

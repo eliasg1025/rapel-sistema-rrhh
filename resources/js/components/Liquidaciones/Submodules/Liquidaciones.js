@@ -66,7 +66,7 @@ export const Liquidaciones = () => {
 
     return (
         <>
-            <h4>Liquidaciones</h4>
+            <h4>Liquidaciones - Utilidades</h4>
             <FiltroTabla
                 getData={getData}
                 filtro={filtro}

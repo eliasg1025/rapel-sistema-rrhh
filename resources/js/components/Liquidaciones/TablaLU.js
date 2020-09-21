@@ -37,6 +37,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
             case 0:
                 return [
                     {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
+                    {
                         title: 'Empresa',
                         dataIndex: 'empresa',
                     },
@@ -70,6 +74,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
 
             case 1:
                 return [
+                    {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
                     {
                         title: 'Empresa',
                         dataIndex: 'empresa',
@@ -108,6 +116,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
 
             case 2:
                 return [
+                    {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
                     {
                         title: 'Empresa',
                         dataIndex: 'empresa',
@@ -170,6 +182,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
             case 3:
                 return [
                     {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
+                    {
                         title: 'Empresa',
                         dataIndex: 'empresa',
                     },
@@ -216,6 +232,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
             case 4:
                 return [
                     {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
+                    {
                         title: 'Empresa',
                         dataIndex: 'empresa',
                     },
@@ -253,6 +273,10 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
 
             default:
                 return [
+                    {
+                        title: 'Tipo',
+                        dataIndex: 'tipo_pago'
+                    },
                     {
                         title: 'Empresa',
                         dataIndex: 'empresa',

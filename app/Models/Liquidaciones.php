@@ -72,7 +72,7 @@ class Liquidaciones extends Model
                 DB::raw('SUM(l.monto) as monto')
             )
             ->where('l.fecha_pago', $fecha_pago)
-            ->whereIn('l.estado', [3, 5])
+            ->whereIn('l.estado', [3])
             ->groupBy('l.empresa_id', 'l.banco')
             ->get();
 

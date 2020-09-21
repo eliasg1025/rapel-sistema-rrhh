@@ -20,6 +20,10 @@ export const Pagados = () => {
 
     const columns = [
         {
+            title: 'Tipo',
+            'dataIndex': 'tipo_pago'
+        },
+        {
             title: 'Empresa',
             dataIndex: 'empresa'
         },

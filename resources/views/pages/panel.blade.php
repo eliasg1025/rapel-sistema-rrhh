@@ -49,7 +49,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <a class="btn btn-block btn-light" href="/liquidaciones-utilidades" {{ $data['usuario']->liquidaciones === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-money-bill-wave"></i> Pagos Liquidaciones y Utilidades
+                        <i class="fas fa-money-bill-wave"></i> Pagos
                     </a>
                 </div>
                 <div class="col-md-6">
