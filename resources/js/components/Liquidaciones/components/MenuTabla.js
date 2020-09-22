@@ -121,15 +121,16 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
         Swal.fire({
             title: '¿Desea cerrar la fecha?',
             html: `Los registros con FECHA DE PAGO <b>${fecha_pago}</b> pasarán al estado <b><u>PAGADO</u></b>`,
-            icon: 'info',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Si',
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
         })
             .then(res => {
-                if (res.value) {
+                if (res.isConfirmed) {
                     Swal.fire({
                         onBeforeOpen: () => {
                             Swal.showLoading();
@@ -185,12 +186,14 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                         <i className="fas fa-file-invoice" />&nbsp;Generar archivos banco
                     </button>
                     {parseInt(filtro.estado) === 0 && (
-                        <button className="btn btn-success" disabled={filtro.desde !== filtro.hasta} onClick={() => setIsVisibleImportarUtilidades(true)}>
+                        <button className="btn btn-success" disabled={parseInt(filtro.estado) !== 0} onClick={() => setIsVisibleImportarUtilidades(true)}>
                             <i className="fas fa-file-upload" />&nbsp;Importar Utilidades
                         </button>
                     )}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
                     {parseInt(filtro.estado) === 2 && (
-                        <button className="btn btn-warning" disabled={filtro.desde !== filtro.hasta} onClick={() => cerrarFecha(filtro.desde)}>
+                        <button className="btn btn-danger" disabled={(filtro.desde !== filtro.hasta) && data.length === 0} onClick={() => cerrarFecha(filtro.desde)}>
                             <i className="fas fa-save"></i>&nbsp;Cerrar Fecha
                         </button>
                     )}

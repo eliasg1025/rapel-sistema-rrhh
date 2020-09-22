@@ -32,6 +32,9 @@ class Pago extends Model
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
             ->join('tipos_pago as tp', 'tp.id', '=', 'tipo_pago_id')
             ->where('l.estado', $estado)
+            ->orderBy('l.ano', 'DESC')
+            ->orderBy('l.mes', 'DESC')
+            ->orderBy('l.apellido_paterno', 'ASC')
             ->when($empresa_id !== 0, function($query) use($empresa_id) {
                 $query->where('l.empresa_id', $empresa_id);
             })
