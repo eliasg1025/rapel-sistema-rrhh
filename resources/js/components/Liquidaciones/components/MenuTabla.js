@@ -7,6 +7,7 @@ import Modal from '../../Modal';
 import { ImportacionTuRecibo } from './ImportacionTuRecibo';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+import { ImportacionUtilidades } from './ImportacionUtilidades';
 
 moment.locale('es');
 
@@ -17,6 +18,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
     const [isVisibleImportarFirmados, setIsVisibleImportarFirmados] = useState(false);
     const [isVisibleProgramarParaPago, setIsVisibleProgramarParaPago] = useState(false);
     const [isVisibleGenerarArchivoBanco, setIsVisibleGenerarArchivoBanco] = useState(false);
+    const [isVisibleImportarUtilidades, setIsVisibleImportarUtilidades] = useState(false);
 
     const [bcp, setBcp] = useState([]);
     const [interbank, setInterbank] = useState([]);
@@ -182,6 +184,11 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 2} onClick={() => setIsVisibleGenerarArchivoBanco(true)}>
                         <i className="fas fa-file-invoice" />&nbsp;Generar archivos banco
                     </button>
+                    {parseInt(filtro.estado) === 0 && (
+                        <button className="btn btn-success" disabled={filtro.desde !== filtro.hasta} onClick={() => setIsVisibleImportarUtilidades(true)}>
+                            <i className="fas fa-file-upload" />&nbsp;Importar Utilidades
+                        </button>
+                    )}
                     {parseInt(filtro.estado) === 2 && (
                         <button className="btn btn-warning" disabled={filtro.desde !== filtro.hasta} onClick={() => cerrarFecha(filtro.desde)}>
                             <i className="fas fa-save"></i>&nbsp;Cerrar Fecha
@@ -235,6 +242,18 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     reloadDataAB={reloadDataAB}
                     setReloadDataAB={setReloadDataAB}
                     setIsVisibleParent={setIsVisibleGenerarArchivoBanco}
+                />
+            </Modal>
+
+            <Modal
+                title="Importar Utilidades"
+                isVisible={isVisibleImportarUtilidades}
+                setIsVisible={setIsVisibleImportarUtilidades}
+            >
+                <ImportacionUtilidades
+                    reloadData={reloadData}
+                    setReloadData={setReloadData}
+                    setIsVisibleParent={setIsVisibleImportarUtilidades}
                 />
             </Modal>
         </>
