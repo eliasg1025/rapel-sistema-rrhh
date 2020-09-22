@@ -9,7 +9,7 @@ use App\Services\ArchivosBancoService;
 use App\Services\ImportarPagosService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB, File, Storage };
+use Illuminate\Support\Facades\{DB, File, Storage};
 
 
 class PagosController extends Controller
@@ -53,7 +53,7 @@ class PagosController extends Controller
         $service = new ImportarPagosService($name, $tipo_pago_id);
         $result = $service->execute();
 
-        if ( $result['error'] ) {
+        if ($result['error']) {
             return response()->json($result, 400);
         }
 
@@ -68,8 +68,9 @@ class PagosController extends Controller
             'hasta' => $estado == 0 ? Carbon::parse($request->hasta)->lastOfMonth() : Carbon::parse($request->hasta)
         ];
         $empresa_id = $request->empresa_id;
+        $tipo_pago_id = $request->tipo_pago_id;
 
-        $result = Pago::get($fechas, $estado, $empresa_id);
+        $result = Pago::get($fechas, $estado, $empresa_id, $tipo_pago_id);
 
         return response()->json($result);
     }
@@ -124,7 +125,8 @@ class PagosController extends Controller
 
             $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
 
-            function getMes($text) {
+            function getMes($text)
+            {
                 switch ($text) {
                     case 'Ene':
                         return 1;
@@ -174,7 +176,7 @@ class PagosController extends Controller
                 $fecha_hasta = Carbon::parse($hasta)->addDay();
                 $fecha_firma = Carbon::createFromFormat('d/m/Y H:i', $data[12]);
 
-                if ( !$fecha_firma->between($fecha_desde, $fecha_hasta) ) {
+                if (!$fecha_firma->between($fecha_desde, $fecha_hasta)) {
                     continue;
                 }
 
@@ -199,7 +201,6 @@ class PagosController extends Controller
                             'fecha_firma' => $fecha_firma->toDateTimeString()
                         ]);
                     }
-
                 } catch (\Exception $e) {
                     array_push($errores, [
                         'rut' => $nombre_archivo,
@@ -237,7 +238,7 @@ class PagosController extends Controller
 
         $result = Pago::marcarPagadoMasivo($empresa_id, $fecha_pago);
 
-        if ( isset($result['error']) ) {
+        if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
@@ -259,7 +260,7 @@ class PagosController extends Controller
         $finiquitos = $request->get('finiquitos');
         $result = Pago::forPayment($fecha, $finiquitos);
 
-        if ( isset($result['error']) ) {
+        if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
@@ -302,7 +303,7 @@ class PagosController extends Controller
         $finiquitos = $request->get('liquidaciones');
         $result = Pago::terminarProceso($finiquitos);
 
-        if ( isset($result['error']) ) {
+        if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
@@ -316,14 +317,20 @@ class PagosController extends Controller
 
     public function montosPorEstado(Request $request)
     {
-        $result = Pago::montosPorEstado($request->query('empresa_id'));
+        $result = Pago::montosPorEstado(
+            $request->query('empresa_id'),
+            $request->query('tipo_pago_id')
+        );
 
         return response()->json($result);
     }
 
-    public function montosPorEstadoPorAnio($empresa_id)
+    public function montosPorEstadoPorAnio(Request $request, $empresa_id)
     {
-        $result = Pago::montosPorEstadoPorAnio($empresa_id);
+        $result = Pago::montosPorEstadoPorAnio(
+            $empresa_id,
+            $request->query('tipo_pago_id')
+        );
 
         return response()->json($result);
     }
@@ -343,7 +350,7 @@ class PagosController extends Controller
 
         $directories = Storage::disk('public')->files($path);
 
-        $directories = array_map(function($v) {
+        $directories = array_map(function ($v) {
             $arr = explode("/", $v);
             $file = $arr[sizeof($arr) - 1];
             $exploded_str = explode("_", $file);

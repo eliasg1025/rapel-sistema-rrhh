@@ -64,6 +64,7 @@ class Cuenta extends Model
                     'c.id as key',
                     'c.id as id',
                     'c.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(c.created_at, "%H:%i") hora'),
                     't.rut',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     'b.name as banco_name',
@@ -88,6 +89,7 @@ class Cuenta extends Model
                 ->select(
                     'c.id as id',
                     'c.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(c.created_at, "%H:%i") hora'),
                     't.rut',
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
                     'b.name as banco_name',

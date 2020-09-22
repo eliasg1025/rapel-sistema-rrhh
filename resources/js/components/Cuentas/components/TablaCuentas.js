@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, DatePicker, Tag, Tooltip } from "antd";
+import { Table, DatePicker, Tag, Tooltip, message } from "antd";
 import Axios from "axios";
 import moment from 'moment';
 
@@ -18,6 +18,10 @@ export const TablaCuentas = ({ reloadData, setReloadData }) => {
             {
                 title: "Fecha Solicitud",
                 dataIndex: "fecha_solicitud"
+            },
+            {
+                title: 'Hora',
+                dataIndex: 'hora'
             },
             {
                 title: "Empresa",
@@ -121,7 +125,12 @@ export const TablaCuentas = ({ reloadData, setReloadData }) => {
                 hasta: filtro.hasta,
             })
                 .then(res => {
-                    console.log(res);
+                    //console.log(res);
+
+                    message['success']({
+                        content: `Se encontraron ${res.data.length} registros`
+                    });
+
                     setCuentas(res.data);
                 })
                 .catch(err => {

@@ -14,7 +14,8 @@ export const Liquidaciones = () => {
         desde: moment().format('YYYY-MM').toString(),
         hasta: moment().format('YYYY-MM').toString(),
         estado: 0,
-        empresa_id: 9
+        empresa_id: 9,
+        tipo_pago_id: 0,
     });
     const [reloadData, setReloadData] = useState(false);
     const [reloadDataAB, setReloadDataAB] = useState(false);
@@ -26,7 +27,7 @@ export const Liquidaciones = () => {
 
         function fetchFiniquitos() {
             intentos++;
-            Axios.get(`/api/finiquitos?desde=${filtro.desde}&hasta=${filtro.hasta}&estado=${filtro.estado}&empresa_id=${filtro.empresa_id}`)
+            Axios.get(`/api/finiquitos?desde=${filtro.desde}&hasta=${filtro.hasta}&estado=${filtro.estado}&empresa_id=${filtro.empresa_id}&tipo_pago_id=${filtro.tipo_pago_id}`)
                 .then(res => {
                     message['success']({
                         content: `Se encontraron ${res.data.length} registros`

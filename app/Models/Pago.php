@@ -16,7 +16,7 @@ class Pago extends Model
 
     public $fillable = ['code', 'finiquito_id', 'rut', 'mes', 'ano', 'monto', 'empresa_id', 'fecha_emision'];
 
-    public static function get(array $fechas, int $estado, int $empresa_id)
+    public static function get(array $fechas, int $estado, int $empresa_id, int $tipo_pago_id)
     {
         return DB::table('pagos as l')
             ->select(
@@ -34,6 +34,9 @@ class Pago extends Model
             ->where('l.estado', $estado)
             ->when($empresa_id !== 0, function($query) use($empresa_id) {
                 $query->where('l.empresa_id', $empresa_id);
+            })
+            ->when($tipo_pago_id !== 0, function ($query) use ($tipo_pago_id) {
+                $query->where('l.tipo_pago_id', $tipo_pago_id);
             })
             ->when($estado === 0, function($query) use ($fechas) {
                 $query->whereBetween('l.fecha_emision', [$fechas['desde'], $fechas['hasta']]);
@@ -304,7 +307,7 @@ class Pago extends Model
         }
     }
 
-    public static function montosPorEstado($empresa_id = 9)
+    public static function montosPorEstado(int $empresa_id = 9, int $tipo_pago_id = 0)
     {
         return DB::table('pagos as l')
             ->select(
@@ -317,11 +320,14 @@ class Pago extends Model
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
             ->where('l.empresa_id', [$empresa_id])
+            ->when($tipo_pago_id !== 0, function($query) use($tipo_pago_id) {
+                $query->where('l.tipo_pago_id', $tipo_pago_id);
+            })
             ->groupBy('l.empresa_id')
             ->first();
     }
 
-    public static function montosPorEstadoPorAnio($empresa_id)
+    public static function montosPorEstadoPorAnio(int $empresa_id, int $tipo_pago_id)
     {
         $dataset = DB::table('pagos as l')
             ->select(
@@ -335,10 +341,13 @@ class Pago extends Model
                 DB::raw('round( sum(l.monto), 2 ) as total')
             )
             ->where('l.empresa_id', [$empresa_id])
+            ->when($tipo_pago_id !== 0, function($query) use ($tipo_pago_id) {
+                $query->where('tipo_pago_id', $tipo_pago_id);
+            })
             ->groupBy('l.ano')
             ->get();
 
-        $dataset->transform(function($item) use ($empresa_id) {
+        $dataset->transform(function($item) use ($empresa_id, $tipo_pago_id) {
             $children = DB::table('pagos as l')
                 ->select(
                     'l.mes as id',
@@ -352,6 +361,9 @@ class Pago extends Model
                 )
                 ->where('l.empresa_id', [$empresa_id])
                 ->where('l.ano', $item->anio)
+                ->when($tipo_pago_id !== 0, function($query) use ($tipo_pago_id) {
+                    $query->where('tipo_pago_id', $tipo_pago_id);
+                })
                 ->groupBy('l.mes')
                 ->get();
 
