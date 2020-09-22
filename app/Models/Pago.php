@@ -95,7 +95,7 @@ class Pago extends Model
             ->get();
     }
 
-    public static function getPagados($empresa_id, $fecha_pago, $rut='')
+    public static function getPagados($empresa_id, $fecha_pago, $rut='', $banco='TODOS')
     {
         return DB::table('pagos as l')
             ->select(
@@ -108,6 +108,9 @@ class Pago extends Model
             ->whereIn('l.estado', [3, 4])
             ->where('l.fecha_pago', $fecha_pago)
             ->where('l.empresa_id', $empresa_id)
+            ->when($banco !== 'TODOS', function($query) use ($banco) {
+                $query->where('l.banco', $banco);
+            })
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
     }

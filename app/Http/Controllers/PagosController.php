@@ -86,8 +86,9 @@ class PagosController extends Controller
         $empresa_id = $request->query('empresa_id');
         $fecha_pago = $request->query('fecha_pago');
         $rut = $request->query('rut');
+        $banco = $request->query('banco');
 
-        $result = Pago::getPagados($empresa_id, $fecha_pago, $rut);
+        $result = Pago::getPagados($empresa_id, $fecha_pago, $rut, $banco);
 
         return response()->json($result);
     }

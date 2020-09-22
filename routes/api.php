@@ -55,6 +55,10 @@ Route::group(['prefix' => 'trabajador'], function() {
     });
 });
 
+Route::group(['prefix' => 'banco'], function() {
+    Route::get('/{empresa_id}', 'BancosController@get');
+});
+
 Route::group(['prefix' => 'zona-labor'], function() {
     Route::get('/{empresa_id}', 'ZonaLaborController@get');
 });

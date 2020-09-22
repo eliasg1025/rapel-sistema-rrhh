@@ -9,7 +9,9 @@ import Axios from 'axios';
 export const Pagados = () => {
 
     const [liquidaciones, setLiquidaciones] = useState([]);
+    const [bancos, setBancos] = useState([]);
     const [filter, setFilter] = useState({
+        banco: 'TODOS',
         empresa_id: 9,
         fecha_pago: moment().format('YYYY-MM-DD').toString(),
         rut: '',
@@ -65,7 +67,7 @@ export const Pagados = () => {
     ];
 
     useEffect(() => {
-        Axios.get(`/api/finiquitos/get-pagados?empresa_id=${filter.empresa_id}&fecha_pago=${filter.fecha_pago}&rut=${filter.rut}`)
+        Axios.get(`/api/finiquitos/get-pagados?empresa_id=${filter.empresa_id}&fecha_pago=${filter.fecha_pago}&rut=${filter.rut}&banco=${filter.banco}`)
             .then(res => {
                 setLiquidaciones(res.data);
             })
@@ -73,6 +75,17 @@ export const Pagados = () => {
                 console.error(err);
             })
     }, [filter, reloadData]);
+
+    useEffect(() => {
+        Axios.get(`/api/banco/${filter.empresa_id}`)
+            .then(res => {
+                // console.log(res);
+                setBancos(res.data);
+            })
+            .catch(err => {
+                console.error(err);
+            })
+    }, [filter.empresa_id]);
 
     function renderTags(estado) {
         switch (estado) {
@@ -198,6 +211,28 @@ export const Pagados = () => {
                                     onChange={(date, dateString) => setFilter({ ...filter, fecha_pago: dateString })}
                                     value={moment(filter.fecha_pago)}
                                 />
+                            </div>
+                            <div className="col-md-3">
+                                Banco:<br />
+                                <Select
+                                    value={filter.banco} showSearch
+                                    style={{ width: '100%' }} optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        option.children
+                                            .toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    }
+                                    onChange={e => setFilter({ ...filter, banco: e })}
+                                >
+                                    <Select.Option value={0} key={0}>
+                                        {`TODOS`}
+                                    </Select.Option>
+                                    {bancos.map(e => (
+                                        <Select.Option value={e.name} key={e.name}>
+                                            {`${e.name}`}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
                             </div>
                             {/*
                             <div className="col-md-3">
