@@ -26,7 +26,7 @@ export default function main() {
             >
                 <br />
                 <Menu mode="inline" theme="dark" defaultSelectedKeys={[submodule]} defaultOpenKeys={[submenu]}>
-                    {(usuario.liquidaciones === 2 && usuario.liquidaciones === 1) && (
+                    {(usuario.liquidaciones === 2 || usuario.liquidaciones === 1) && (
                         <Menu.Item key="main" icon={<HomeOutlined />}>
                             <a href="/liquidaciones-utilidades">
                                 Inicio
@@ -39,7 +39,7 @@ export default function main() {
                         </a>
                     </Menu.Item>
                     {
-                        (usuario.liquidaciones === 1 && usuario.liquidaciones === 2) && (
+                        (usuario.liquidaciones === 1 || usuario.liquidaciones === 2) && (
                             <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
                                 {usuario.liquidaciones === 2 && (
                                     <Menu.Item key="l" icon={<HomeOutlined />}>
