@@ -16,10 +16,11 @@ class PagosController extends Controller
 {
     public function massiveCreate(Request $request)
     {
-        $data = $request->get('data');
+        $data         = $request->get('data');
         $tipo_pago_id = $request->get('tipo_pago_id');
+        $empresa_id   = $request->get('empresa_id');
 
-        $result = Pago::massiveCreate($data, $tipo_pago_id);
+        $result = Pago::massiveCreate($data, $tipo_pago_id, $empresa_id);
 
         return response()->json($result);
     }

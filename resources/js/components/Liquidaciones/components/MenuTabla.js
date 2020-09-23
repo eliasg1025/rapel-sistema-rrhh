@@ -98,7 +98,8 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
 
         Axios.post(`/api/finiquitos/massive`, {
             data,
-            tipo_pago_id
+            tipo_pago_id,
+            empresa_id: filtro.empresa_id
         })
             .then(res => {
                 const { data } = res;
