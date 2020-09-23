@@ -212,23 +212,21 @@ class Pago extends Model
 
                 DB::table('pagos')->updateOrInsert(
                     [
-                        'code' => $liquidacion['IdLiquidacion']
+                        'rut' => $liquidacion['RutTrabajador'],
+                        'ano' => $liquidacion['Ano'],
+                        'mes' => $liquidacion['Mes'],
+                        'empresa_id' => $empresa_id,
+                        'tipo_pago_id' => $tipo_pago_id,
                     ],
                     [
                         'finiquito_id' => $liquidacion['IdFiniquito'],
-                        'rut' => $liquidacion['RutTrabajador'],
                         'nombre' => $liquidacion['Nombre'],
                         'apellido_paterno' => $liquidacion['ApellidoPaterno'],
                         'apellido_materno' => $liquidacion['ApellidoMaterno'],
-                        'ano' => $liquidacion['Ano'],
-                        'mes' => $liquidacion['Mes'],
                         'monto' => $liquidacion['MontoAPagar'],
-                        'empresa_id' => $liquidacion['IdEmpresa'],
                         'fecha_emision' => date($liquidacion['FechaEmision']),
                         'banco' => $liquidacion['Banco'],
                         'numero_cuenta' => $liquidacion['NumeroCuentaBancaria'],
-                        'tipo_pago_id' => $tipo_pago_id,
-                        'empresa_id' => $empresa_id
                     ]
                 );
 
