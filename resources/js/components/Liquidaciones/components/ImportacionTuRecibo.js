@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { DatePicker } from 'antd';
+import { DatePicker, Select } from 'antd';
 import moment from 'moment';
 import Axios from 'axios';
 import {SubirArchivo} from "../../shared/SubirArchivo";
+
+import {empresa} from "../../../data/default.json";
 
 export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisibleParent }) => {
 
@@ -13,7 +15,7 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
     const [form, setForm] = useState({
         desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
-        empresa_id: '9',
+        empresa_id: '',
     });
 
     const handleSubmit = e => {
@@ -88,6 +90,25 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
     return (
         <form onSubmit={handleSubmit}>
             <div className="form-row">
+                <div className="col-md-12">
+                    Empresa:<br />
+                    <Select
+                        value={form.empresa_id} showSearch
+                        style={{ width: '100%' }} optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setForm({ ...form, empresa_id: e })}
+                    >
+                        {empresa.map(e => (
+                            <Select.Option value={e.id} key={e.id}>
+                                {`${e.id} - ${e.name}`}
+                            </Select.Option>
+                        ))}
+                    </ Select>
+                </div>
                 <div className="col-md-12">
                     Desde - Hasta:<br />
                     <DatePicker.RangePicker
