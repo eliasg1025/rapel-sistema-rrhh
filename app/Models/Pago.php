@@ -183,7 +183,7 @@ class Pago extends Model
         foreach($pagos as $liquidacion)
         {
             try {
-
+                /*
                 $p = Pago::where([
                     'rut' => $liquidacion['RutTrabajador'],
                     'mes' => $liquidacion['Mes'],
@@ -208,8 +208,8 @@ class Pago extends Model
                     $p->numero_cuenta = $liquidacion['NumeroCuentaBancaria'];
                     $p->save();
                     $count++;
-                }
-                /*
+                }*/
+
                 DB::table('pagos')->updateOrInsert(
                     [
                         'code' => $liquidacion['IdLiquidacion']
@@ -230,7 +230,7 @@ class Pago extends Model
                         'tipo_pago_id' => $tipo_pago_id,
                         'empresa_id' => $empresa_id
                     ]
-                );*/
+                );
 
             } catch (\Exception $e) {
                 array_push($errors, [
