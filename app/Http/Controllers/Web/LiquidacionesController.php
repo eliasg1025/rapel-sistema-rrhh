@@ -11,6 +11,15 @@ class LiquidacionesController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        if ( $usuario->liquidaciones == 1 || $usuario->liquidaciones === 3 ) {
+            return redirect('/liquidaciones-utilidades/consulta');
+        }
+
         $data = [
             'usuario' => $usuario,
             'submodule' => 'main'
@@ -22,6 +31,11 @@ class LiquidacionesController extends Controller
     public function consulta(Request $request)
     {
         $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
 
         $data = [
             'usuario' => $usuario,
@@ -39,6 +53,15 @@ class LiquidacionesController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        if ( $usuario->liquidaciones == 1 || $usuario->liquidaciones === 3 ) {
+            return redirect('/liquidaciones-utilidades/l/pagados');
+        }
+
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
@@ -52,6 +75,11 @@ class LiquidacionesController extends Controller
     public function liquidacionesPagados(Request $request)
     {
         $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
 
         $data = [
             'usuario' => $usuario,
@@ -67,57 +95,16 @@ class LiquidacionesController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
             'submodule' => 'l-rechazos',
             'tipo_pago_id' => 1
-        ];
-
-        return view('pages.liquidaciones', compact('data'));
-    }
-
-    /*
-    * Utilidades
-    */
-
-    public function utilidades(Request $request)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        $data = [
-            'usuario' => $usuario,
-            'submenu' => 'sub2',
-            'submodule' => 'u',
-            'tipo_pago_id' => 2
-        ];
-
-        return view('pages.liquidaciones', compact('data'));
-    }
-
-    public function utilidadesPagados(Request $request)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        $data = [
-            'usuario' => $usuario,
-            'submenu' => 'sub2',
-            'submodule' => 'u-pagados',
-            'tipo_pago_id' => 2
-        ];
-
-        return view('pages.liquidaciones', compact('data'));
-    }
-
-    public function utilidadesRechazos(Request $request)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        $data = [
-            'usuario' => $usuario,
-            'submenu' => 'sub2',
-            'submodule' => 'u-rechazos',
-            'tipo_pago_id' => 2
         ];
 
         return view('pages.liquidaciones', compact('data'));

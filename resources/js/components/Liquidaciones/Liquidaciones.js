@@ -15,7 +15,7 @@ const { Content, Footer, Sider } = Layout;
 
 export default function main() {
 
-    const { submenu, submodule } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario, submenu, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
     return (
         <Layout>
@@ -26,33 +26,41 @@ export default function main() {
             >
                 <br />
                 <Menu mode="inline" theme="dark" defaultSelectedKeys={[submodule]} defaultOpenKeys={[submenu]}>
-                    <Menu.Item key="main" icon={<HomeOutlined />}>
-                        <a href="/liquidaciones-utilidades">
-                            Inicio
-                        </a>
-                    </Menu.Item>
+                    {(usuario.liquidaciones === 2 && usuario.liquidaciones === 1) && (
+                        <Menu.Item key="main" icon={<HomeOutlined />}>
+                            <a href="/liquidaciones-utilidades">
+                                Inicio
+                            </a>
+                        </Menu.Item>
+                    )}
                     <Menu.Item key="consulta" icon={<QuestionCircleOutlined />}>
                         <a href="/liquidaciones-utilidades/consulta">
                             Consulta
                         </a>
                     </Menu.Item>
-                    <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
-                        <Menu.Item key="l" icon={<HomeOutlined />}>
-                            <a href="/liquidaciones-utilidades/l">
-                                Principal
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item key="l-pagados" icon={<BankOutlined />}>
-                            <a href="/liquidaciones-utilidades/l/pagados">
-                                Pagados
-                            </a>
-                        </Menu.Item>
-                        <Menu.Item key="l-rechazos" icon={<StopOutlined />}>
-                            <a href="/liquidaciones-utilidades/l/rechazos">
-                                Rechazos
-                            </a>
-                        </Menu.Item>
-                    </SubMenu>
+                    {
+                        (usuario.liquidaciones === 1 && usuario.liquidaciones === 2) && (
+                            <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
+                                {usuario.liquidaciones === 2 && (
+                                    <Menu.Item key="l" icon={<HomeOutlined />}>
+                                        <a href="/liquidaciones-utilidades/l">
+                                            Principal
+                                        </a>
+                                    </Menu.Item>
+                                )}
+                                <Menu.Item key="l-pagados" icon={<BankOutlined />}>
+                                    <a href="/liquidaciones-utilidades/l/pagados">
+                                        Pagados
+                                    </a>
+                                </Menu.Item>
+                                <Menu.Item key="l-rechazos" icon={<StopOutlined />}>
+                                    <a href="/liquidaciones-utilidades/l/rechazos">
+                                        Rechazos
+                                    </a>
+                                </Menu.Item>
+                            </SubMenu>
+                        )
+                    }
                 </Menu>
             </Sider>
             <Layout>
