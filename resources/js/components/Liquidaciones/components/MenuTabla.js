@@ -74,7 +74,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                 });
         } else {
             Axios.post(`http://192.168.60.16/api/finiquitos/get/one-by-one`, {
-                finiquitosId: data.map(e => e.id)
+                finiquitosId: data.map(e => e.code)
             })
                 .then(res => {
                     const { data } = res;
