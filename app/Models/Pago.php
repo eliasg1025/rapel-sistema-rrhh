@@ -183,26 +183,55 @@ class Pago extends Model
         foreach($pagos as $liquidacion)
         {
             try {
+
+                $p = Pago::where([
+                    'rut' => $liquidacion['RutTrabajador'],
+                    'mes' => $liquidacion['Mes'],
+                    'ano' => $liquidacion['Ano'],
+                    'empresa_id' => $empresa_id,
+                    'tipo_pago_id' => $tipo_pago_id,
+                ])->first();
+
+                if ( !$p ) {
+                    $p = new Pago();
+                    $p->rut = $liquidacion['RutTrabajador'];
+                    $p->mes = $liquidacion['Mes'];
+                    $p->ano = $liquidacion['Ano'];
+                    $p->empresa_id = $empresa_id;
+                    $p->tipo_pago_id = $tipo_pago_id;
+                    $p->nombre = $liquidacion['Nombre'];
+                    $p->apellido_paterno = $liquidacion['ApellidoPaterno'];
+                    $p->apellido_materno = $liquidacion['ApellidoMaterno'];
+                    $p->monto = $liquidacion['MontoAPagar'];
+                    $p->fecha_emision = date($liquidacion['FechaEmision']);
+                    $p->banco = $liquidacion['Banco'];
+                    $p->numero_cuenta = $liquidacion['NumeroCuentaBancaria'];
+                    $p->save();
+                    $count++;
+                }
+                /*
                 DB::table('pagos')->updateOrInsert(
                     [
-                        'rut' => $liquidacion['RutTrabajador'],
-                        'mes' => $liquidacion['Mes'],
-                        'ano' => $liquidacion['Ano'],
-                        'empresa_id' => $empresa_id,
-                        'tipo_pago_id' => $tipo_pago_id
+                        'code' => $liquidacion['IdLiquidacion']
                     ],
                     [
+                        'finiquito_id' => $liquidacion['IdFiniquito'],
+                        'rut' => $liquidacion['RutTrabajador'],
                         'nombre' => $liquidacion['Nombre'],
                         'apellido_paterno' => $liquidacion['ApellidoPaterno'],
                         'apellido_materno' => $liquidacion['ApellidoMaterno'],
+                        'ano' => $liquidacion['Ano'],
+                        'mes' => $liquidacion['Mes'],
                         'monto' => $liquidacion['MontoAPagar'],
+                        'empresa_id' => $liquidacion['IdEmpresa'],
                         'fecha_emision' => date($liquidacion['FechaEmision']),
                         'banco' => $liquidacion['Banco'],
                         'numero_cuenta' => $liquidacion['NumeroCuentaBancaria'],
+                        'tipo_pago_id' => $tipo_pago_id,
+                        'empresa_id' => $empresa_id
                     ]
-                );
+                );*/
 
-                $count++;
             } catch (\Exception $e) {
                 array_push($errors, [
                     'code' => $liquidacion['IdLiquidacion'],
