@@ -20,7 +20,7 @@ class Pago extends Model
     {
         return DB::table('pagos as l')
             ->select(
-                'l.id', 'tp.name as tipo_pago', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.id', 'l.code', 'tp.name as tipo_pago', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_para_pago, "%d/%m/%Y") fecha_para_pago'),
