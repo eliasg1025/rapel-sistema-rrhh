@@ -49,10 +49,14 @@ Route::group(['middleware' => 'web.auth'], function() {
     });
 
     Route::group(['prefix' => 'sanciones'], function() {
-        Route::get('/', 'Web\ViewController@sanciones');
-        Route::get('/editar/{id}', 'Web\ViewController@editarSancion');
-        Route::get('/reportes', 'Web\ViewController@sancionesReportes');
-        Route::get('/desvinculaciones', 'Web\ViewController@sancionesDesvinculaciones');
+        Route::get('/', 'Web\SancionesController@index');
+        Route::get('/editar/{id}', 'Web\SancionesController@editar');
+        Route::get('/reportes', 'Web\SancionesController@reportes');
+        Route::get('/desvinculaciones', 'Web\SancionesController@desvinculaciones');
+        Route::group(['prefix' => 'sst'], function() {
+            Route::get('/supervisor', 'Web\SancionesController@supervisorSst');
+            Route::get('/analista', 'Web\SancionesController@analistaSst');
+        });
     });
 
     Route::group(['prefix' => 'consulta-trabajadores'], function() {
