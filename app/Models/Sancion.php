@@ -127,11 +127,19 @@ class Sancion extends Model
         try {
             $incidencia = Incidencia::find($data['incidencia_id']);
             $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
-            $cuartel_id        = Cuartel::findOrCreate($data['cuartel'], $zona_labor_id);
+            $cuartel_id        = isset($data['cuartel']) ? Cuartel::findOrCreate($data['cuartel'], $zona_labor_id) : null;
 
             if ( !isset($data['id']) ) {
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
-                $regimen_id        = Regimen::findOrCreate($data['regimen']);
+                $regimen_id        = isset($data['regimen']) ? Regimen::findOrCreate($data['regimen']) : null;
+
+                if (!isset($data['oficio'])) {
+                    DB::rollBack();
+                    return [
+                        'rut' => $data['trabajador']['rut'],
+                        'error' => 'Este trabajador no tiene un contrato activo'
+                    ];
+                }
                 $ofico_id          = Oficio::findOrCreate($data['oficio']);
 
                 // TODO: Comentado temporalmente para pruebas
@@ -143,6 +151,7 @@ class Sancion extends Model
                 if ( $registro_mismo_dia ) {
                     DB::rollBack();
                     return [
+                        'rut' => $data['trabajador']['rut'],
                         'error' => 'Ya existe una sanción por para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $registro_mismo_dia->usuario->trabajador->nombre_completo
                     ];
                 }
@@ -156,6 +165,7 @@ class Sancion extends Model
                 if ( $suspencion_actual ) {
                     DB::rollBack();
                     return [
+                        'rut' => $data['trabajador']['rut'],
                         'error' => 'El trabajador se encuentra suspendido desde ' . $suspencion_actual['fecha_salida'] . ' hasta ' . $suspencion_actual['fecha_regreso']
                     ];
                 }
@@ -225,6 +235,7 @@ class Sancion extends Model
                 DB::commit();
                 return [
                     'error'   => false,
+                    'rut' => $data['trabajador']['rut'],
                     'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . '<br />' . $message,
                     'id'      => $sancion->id,
                     'desvinculacion' => $sancion->desvinculacion
@@ -311,7 +322,7 @@ class Sancion extends Model
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
-                ->join('regimenes as re', 're.id', '=', 'f.regimen_id')
+                ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
@@ -359,7 +370,7 @@ class Sancion extends Model
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
-                ->join('regimenes as re', 're.id', '=', 'f.regimen_id')
+                ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
                 ->joinSub($usuarios, 'usuario', function($join) {
                     $join->on('usuario.id', '=', 'f.usuario_id');

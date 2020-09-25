@@ -136,6 +136,19 @@ Route::group(['prefix' => 'sancion'], function() {
     Route::put('/marcar-enviado/{id}', 'SancionesController@marcarEnviado');
     Route::put('/marcar-subido/{id}', 'SancionesController@marcarSubido');
     Route::delete('/{id}', 'SancionesController@delete');
+
+});
+
+Route::group(['prefix' => 'covid'], function() {
+    Route::get('/', 'CovidController@get');
+    Route::get('/supervisores-sst', 'CovidController@getSupervisoresSst');
+    Route::get('/estados', 'CovidController@getEstados');
+    Route::get('/estados/analista', 'CovidController@getEstadosAnalista');
+
+    Route::post('/generar-sanciones', 'CovidController@generarSanciones');
+    Route::post('/sincronizar', 'CovidController@sync');
+    Route::post('/terminar-proceso', 'CovidController@terminarProceso');
+    Route::put('/toggle-valido/{tipo}', 'CovidController@toggleValido');
 });
 
 Route::group(['prefix' => 'finiquitos'], function() {
