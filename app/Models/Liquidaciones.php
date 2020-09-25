@@ -32,6 +32,9 @@ class Liquidaciones extends Model
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
             ->where('l.estado', $estado)
+            ->orderBy('l.ano', 'DESC')
+            ->orderBy('l.mes', 'DESC')
+            ->orderBy('l.apellido_paterno', 'ASC')
             ->when($empresa_id !== 0, function($query) use($empresa_id) {
                 $query->where('l.empresa_id', $empresa_id);
             })
@@ -107,7 +110,7 @@ class Liquidaciones extends Model
             ->get();
     }
 
-    public static function getPagados($empresa_id, $fecha_pago, $rut='')
+    public static function getPagados($empresa_id, $fecha_pago, $rut='', $banco='TODOS')
     {
         return DB::table('liquidaciones as l')
             ->select(
@@ -119,6 +122,9 @@ class Liquidaciones extends Model
             ->whereIn('l.estado', [3, 4])
             ->where('l.fecha_pago', $fecha_pago)
             ->where('l.empresa_id', $empresa_id)
+            ->when($banco !== 'TODOS', function($query) use ($banco) {
+                $query->where('l.banco', $banco);
+            })
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
     }
@@ -334,7 +340,7 @@ class Liquidaciones extends Model
             ->first();
     }
 
-    public static function montosPorEstadoPorAnio($empresa_id)
+    public static function montosPorEstadoPorAnio(int $empresa_id)
     {
         $dataset = DB::table('liquidaciones as l')
             ->select(

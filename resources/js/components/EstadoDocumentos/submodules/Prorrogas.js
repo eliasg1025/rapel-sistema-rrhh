@@ -41,7 +41,47 @@ export const Prorrogas = () => {
         }
 
         fetchTipoDocumentosTurecibo();
-    }, [filter, reloadData])
+    }, [filter, reloadData]);
+
+    const exportar = () => {
+        console.log(documentos);
+        const headings = [
+            'Empresa',
+            'Periodo',
+            'RUT',
+            'Nombre Completo',
+            'Regimen',
+            'Zona Labor',
+            'Estado'
+        ];
+
+        const data = documentos.map(d => {
+            return {
+                empresa: d.empresa,
+                periodo: d.periodo,
+                rut: d.rut,
+                nombre_completo: d.nombre_completo,
+                regimen: d.regimen,
+                zona_labor: d.zona_labor,
+                estado: d.estado
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `${filter.estado}.xlsx`
+                link.click();
+            })
+    }
 
     return (
         <>
@@ -64,7 +104,7 @@ export const Prorrogas = () => {
                             setLoading={setLoading}
                         />
                     )}
-                    <button className="btn btn-success">
+                    <button className="btn btn-success" onClick={() => exportar()}>
                         <i className="fas fa-file-export"></i> Exportar Registros
                     </button>
                 </div>
