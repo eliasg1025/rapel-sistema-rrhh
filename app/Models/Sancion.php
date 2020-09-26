@@ -115,7 +115,7 @@ class Sancion extends Model
                 $join->on('trabajador.id', 'f.trabajador_id');
             })
             ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
-            ->join('cuarteles as c', 'c.id', '=', 'f.cuartel_id')
+            ->leftJoin('cuarteles as c', 'c.id', '=', 'f.cuartel_id')
             ->where('f.id', $id)
             ->first();
     }
@@ -125,7 +125,7 @@ class Sancion extends Model
         DB::beginTransaction();
         $message = '';
         try {
-            $incidencia = Incidencia::find($data['incidencia_id']);
+            $incidencia        = Incidencia::find($data['incidencia_id']);
             $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
             $cuartel_id        = isset($data['cuartel']) ? Cuartel::findOrCreate($data['cuartel'], $zona_labor_id) : null;
 
@@ -199,6 +199,7 @@ class Sancion extends Model
                     'trabajador_id' => $trabajador_id,
                     'incidencia_id' => $data['incidencia_id']
                 ])->whereBetween('fecha_incidencia', $rango_fechas)
+                    ->where('id', '<>', $sancion->id)
                     ->orderBy('fecha_incidencia', 'DESC')
                     ->first();
 
@@ -235,7 +236,7 @@ class Sancion extends Model
                 DB::commit();
                 return [
                     'error'   => false,
-                    'rut' => $data['trabajador']['rut'],
+                    'rut' => $sancion->trabajador->rut,
                     'message' => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . '<br />' . $message,
                     'id'      => $sancion->id,
                     'desvinculacion' => $sancion->desvinculacion

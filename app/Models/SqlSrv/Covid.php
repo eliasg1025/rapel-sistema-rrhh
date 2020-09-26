@@ -192,8 +192,11 @@ class Covid extends Model
         $registro = [];
         foreach($dataset as $row)
         {
-            //dd($row);
-            $result = Sancion::_create($row);
+            if ( isset($row['error']) ) {
+                $result = $row['error'];
+            } else {
+                $result = Sancion::_create($row);
+            }
 
             if ( is_bool($result['error']) ) {
                 DB::table('estados_covid')
@@ -229,58 +232,88 @@ class Covid extends Model
                     break;
             }
 
-            $trabajador = DB::connection('sqlsrv')
-                ->table('dbo.trabajador')
-                ->select(
-                    'apellidopaterno as apellido_paterno',
-                    'apellidomaterno as apellido_materno',
-                    'idtrabajador as code',
-                    'direccion as direccion',
-                    'mail as email',
-                    'idempresa as empresa_id',
-                    'EstadoCivil as estado_civil_id',
-                    'FechaNacimiento as fecha_nacimiento',
-                    'IdNacionalidad as nacionalidad_id',
-                    'nombre as nombre',
-                    'NombreVia as nombre_via',
-                    'NombreZona as nombre_zona',
-                    'Sexo as sexo',
-                    'RutTrabajador as rut',
-                    'IdTipoVia as tipo_via_id',
-                    'IdTipoZona as tipo_zona_id',
-                    'COD_COM as distrito_id'
-                )
-                ->where('rutTrabajador', $row['rut'])
-                ->where('idEmpresa', $row['empresa_id'])
-                ->first();
+            try {
+                $trabajador = DB::connection('sqlsrv')
+                    ->table('dbo.trabajador')
+                    ->select(
+                        'apellidopaterno as apellido_paterno',
+                        'apellidomaterno as apellido_materno',
+                        'idtrabajador as code',
+                        'direccion as direccion',
+                        'mail as email',
+                        'idempresa as empresa_id',
+                        'EstadoCivil as estado_civil_id',
+                        'FechaNacimiento as fecha_nacimiento',
+                        'IdNacionalidad as nacionalidad_id',
+                        'nombre as nombre',
+                        'NombreVia as nombre_via',
+                        'NombreZona as nombre_zona',
+                        'Sexo as sexo',
+                        'RutTrabajador as rut',
+                        'IdTipoVia as tipo_via_id',
+                        'IdTipoZona as tipo_zona_id',
+                        'COD_COM as distrito_id'
+                    )
+                    ->where('rutTrabajador', $row['rut'])
+                    ->where('idEmpresa', $row['empresa_id'])
+                    ->first();
 
-            $oficio = DB::connection('sqlsrv')
-                ->table('dbo.Contratos as c')
-                ->select(
-                    'o.idOficio as id',
-                    'o.descripcion as name',
-                    'o.idEmpresa as empresa_id'
-                )
-                ->where('c.ruttrabajador', $row['rut'])
-                ->where('c.idempresa', $row['empresa_id'])
-                ->where('c.indicadorVigencia', '1')
-                ->join('dbo.Oficio as o', 'o.idempresa', '=', 'c.idempresa')
-                ->first();
+                $oficio = DB::connection('sqlsrv')
+                    ->table('dbo.Contratos as c')
+                    ->select(
+                        'o.idOficio as id',
+                        'o.descripcion as name',
+                        'o.idEmpresa as empresa_id'
+                    )
+                    ->where('c.ruttrabajador', $row['rut'])
+                    ->where('c.idempresa', $row['empresa_id'])
+                    ->where('c.indicadorVigencia', '1')
+                    ->join('dbo.Oficio as o', 'o.idempresa', '=', 'c.idempresa')
+                    ->first();
 
-            $zona_labor = DB::connection('mysql')->table('zona_labores')->where('name', $row['zona_labor'])->first();
+                $zona_labor = DB::connection('sqlsrv')
+                    ->table('dbo.Zona')
+                    ->select(
+                        'IdZona as id',
+                        'IdEmpresa as empresa_id',
+                        'Nombre as name'
+                    )
+                    ->where('Nombre', $row['zona_labor'])
+                    ->where('idEmpresa', $row['empresa_id'])
+                    ->first();
 
-            array_push($result, [
-                'key' => $row['key'],
-                'incidencia_id' => $incidencia_id,
-                'trabajador' => json_decode(json_encode($trabajador), true),
-                'zona_labor' => json_decode(json_encode($zona_labor), true),
-                'oficio' => json_decode(json_encode($oficio), true),
-                'fecha_incidencia' => $row['fecha_incidencia'],
-                'observacion' => $row['observacion'],
-                'usuario_id' => $row['usuario_id'],
-                'empresa_id' => $row['empresa_id'],
-                'fecha_solicitud' => now()->toDateString(),
-            ]);
+                if ( !$zona_labor ) {
+                    $zona_labor = DB::connection('sqlsrv')
+                        ->table('dbo.Zona')
+                        ->select(
+                            'IdZona as id',
+                            'IdEmpresa as empresa_id',
+                            'Nombre as name'
+                        )
+                        ->where('Nombre', 'TERCEROS')
+                        ->where('idEmpresa', $row['empresa_id'])
+                        ->first();
+                }
+
+                array_push($result, [
+                    'key' => $row['key'],
+                    'incidencia_id' => $incidencia_id,
+                    'trabajador' => json_decode(json_encode($trabajador), true),
+                    'zona_labor' => json_decode(json_encode($zona_labor), true),
+                    'oficio' => json_decode(json_encode($oficio), true),
+                    'fecha_incidencia' => $row['fecha_incidencia'],
+                    'observacion' => $row['observacion'],
+                    'usuario_id' => $row['usuario_id'],
+                    'empresa_id' => $row['empresa_id'],
+                    'fecha_solicitud' => now()->toDateString(),
+                ]);
+
+            } catch (\Exception $e) {
+                array_push($result, [
+                    'rut'   => $row['rut'],
+                    'error' => $e->getMessage() . ' -- ' . $e->getLine()
+                ]);
+            }
         }
 
         return $result;

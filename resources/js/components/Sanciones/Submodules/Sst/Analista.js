@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, message, Select, Table, Tag, Tooltip } from 'antd';
 import Axios from 'axios';
+import { GraficoBarras } from '../components/GraficoBarras';
 
 export const Analista = () => {
 
@@ -193,7 +194,7 @@ export const Analista = () => {
         Swal.fire({
             title: `Terminar proceso`,
             html: `
-                Estos registros pasarán a <b>RR.HH.</b>. Es proceso <b>NO ES REVESIBLE</b> ¿Ésta seguro que desea realizarlo?
+                Estos registros pasarán a <b>RR.HH.</b>. Es proceso <b>NO ES REVERSIBLE</b> ¿Ésta seguro que desea realizarlo?
             `,
             icon: 'info',
             showCancelButton: true,
@@ -299,6 +300,15 @@ export const Analista = () => {
                 size="small" columns={columns}
                 dataSource={covid}
             />
+            <hr />
+            <br />
+            <h4>Reportes</h4>
+            <div className="row">
+                <div className="col-md-6">
+                    <GraficoBarras />
+                </div>
+                <div className="col-md-6"></div>
+            </div>
         </>
     );
 }
