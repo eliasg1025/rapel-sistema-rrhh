@@ -32,7 +32,7 @@ export default function Sanciones() {
                     </Menu.Item>
                     {[2, 3, 4].includes(usuario.sanciones) && (
                         <SubMenu key="sub1" icon={<FileDoneOutlined />} title="SST">
-                            {[2, 3].includes(usuario.sanciones) && (
+                            {[2, 3, 4].includes(usuario.sanciones) && (
                                 <Menu.Item key="supervisor-sst" icon={<FileDoneOutlined />}>
                                     <a href="/sanciones/sst/supervisor">Supervisor SST</a>
                                 </Menu.Item>
