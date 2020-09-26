@@ -119,6 +119,7 @@ class Covid extends Model
                 $query->where('usuario_id', '=', $usuario_id);
             })
             ->whereIn('estado', $estados)
+            ->orderBy('covid_id', 'DESC')
             ->get();
 
         $dataset->transform(function($item) {

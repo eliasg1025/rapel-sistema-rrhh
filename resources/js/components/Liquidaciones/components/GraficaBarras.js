@@ -12,7 +12,7 @@ export const GraficaBarras = () => {
     const [montosPorAnio, setMontosPorAnio] = useState([]);
     const [filter, setFilter] = useState({
         empresa_id: 9,
-        tipo_pago_id: 0
+        tipo_pago_id: 1
     });
 
     const columns = [
@@ -169,7 +169,6 @@ export const GraficaBarras = () => {
                                                 }
                                                 onChange={e => setFilter({ ...filter, tipo_pago_id: e })}
                                             >
-                                                    <Select.Option value={0} key={0}>0 - TODOS</Select.Option>
                                                     <Select.Option value={1} key={1}>1 - LIQUIDACION</Select.Option>
                                                     <Select.Option value={2} key={2}>2 - UTILIDAD</Select.Option>
                                             </Select>

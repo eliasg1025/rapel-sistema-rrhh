@@ -138,7 +138,7 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
             <br />
             <div className="form-row">
                 <div className="col">
-                    <button type="submit" className="btn btn-primary btn-block">
+                    <button type="submit" className="btn btn-primary btn-block" disabled={form.empresa_id === ''}>
                         {!loading ? 'Importar' : (
                             <>
                                 <i className="fas fa-spinner fa-spin" />&nbsp;Cargando
