@@ -38,7 +38,7 @@ class CovidController extends Controller
 
         if ( $usuario->sanciones === 2 ) {
             $casos = Covid::get();
-        } else if ( $usuario->sanciones === 3 ) {
+        } else if ( $usuario->sanciones === 3 || $usuario->sanciones === 4 ) {
             $casos = Covid::get($usuario->username);
         }
 
