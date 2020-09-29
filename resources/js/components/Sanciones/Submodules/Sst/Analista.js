@@ -241,7 +241,7 @@ export const Analista = () => {
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         <span className="sr-only">Cargando...</span>
                     </>
-                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR A RR.HH.</span>}
+                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR <b><u>TODOS</u></b> A RR.HH.</span>}
             </button>
         </div>
     );

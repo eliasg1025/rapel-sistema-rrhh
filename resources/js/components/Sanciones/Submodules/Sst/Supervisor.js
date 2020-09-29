@@ -157,9 +157,11 @@ export const Supervisor = () => {
             })
     }
 
-    const terminarProceso = () => {
+    const terminarProceso = todos => {
+        const sendedKeys = todos ? covid.map(e => e.key) : selectedRowKeys;
+
         Axios.post(`/api/covid/terminar-proceso`, {
-            ids: covid.map(e => e.key)
+            ids: sendedKeys
         })
             .then(res => {
                 Swal.fire('Proceso completado', '', 'info')
@@ -170,10 +172,10 @@ export const Supervisor = () => {
             })
             .catch(err => {
                 console.log(err);
-            })
+            });
     }
 
-    const handleMassiveTerminar = () => {
+    const handleMassiveTerminar = todos => {
         Swal.fire({
             title: `Terminar proceso`,
             html: `
@@ -188,7 +190,7 @@ export const Supervisor = () => {
         })
             .then(res => {
                 if (res.value) {
-                    terminarProceso();
+                    terminarProceso(todos);
                 }
             })
             .catch(err => {
@@ -222,17 +224,27 @@ export const Supervisor = () => {
                     </>
                 ) : <span><i className="fas fa-times"></i> Invalidar</span>}
             </button>
+            {hasSelected && (
+                <button className="btn btn-success" onClick={() => handleMassiveTerminar(false)}>
+                    {loading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span className="sr-only">Cargando...</span>
+                        </>
+                    ) : <span><i className="fas fa-flag-checkered"></i> Enviar SELECCIONADOS</span>}
+                </button>
+            )}
             <span style={{ marginLeft: 8 }}>
                 {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
             </span>
 
-            <button className="btn btn-success" onClick={handleMassiveTerminar} style={{ float: 'right' }}>
+            <button className="btn btn-success" onClick={() => handleMassiveTerminar(true)} style={{ float: 'right' }}>
                 {loading ? (
                     <>
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         <span className="sr-only">Cargando...</span>
                     </>
-                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR AL ANALISTA</span>}
+                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR <b><u>TODOS</u></b> AL ANALISTA</span>}
             </button>
         </div>
     );
