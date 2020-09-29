@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../../Modal';
 import moment from 'moment';
 import Axios from 'axios';
-import { message } from 'antd';
+import { DatePicker, message } from 'antd';
 
 export const ModalRepogramarPago = ({ liquidacion, isVisible, setIsVisible, reloadData, setReloadData }) => {
 
@@ -13,7 +13,7 @@ export const ModalRepogramarPago = ({ liquidacion, isVisible, setIsVisible, relo
     const handleSubmit = e => {
         e.preventDefault();
 
-        Axios.put(`/api/finiquitos/programar-para-pago/reprogramar`, {
+        Axios.put(`/api/pagos/programar-para-pago/reprogramar`, {
             id: liquidacion.id,
             fecha_pago: form.fecha_pago,
         })
@@ -53,11 +53,18 @@ export const ModalRepogramarPago = ({ liquidacion, isVisible, setIsVisible, relo
                     </div>
                 </div>
                 <div className="form-row">
-                    <div className="col">
+                    <div className="col-md-6">
                         Fecha de Pago:<br />
                         <input
                             type="date" className="form-control" value={form.fecha_pago}
                             onChange={e => setForm({ ...form, fecha_pago: e.target.value })}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        Tipo Pago:<br />
+                        <input
+                            className="form-control" value={`${liquidacion?.tipo_pago}`}
+                            readOnly={true}
                         />
                     </div>
                 </div>

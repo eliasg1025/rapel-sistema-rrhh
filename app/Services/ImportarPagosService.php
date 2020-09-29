@@ -23,7 +23,7 @@ class ImportarPagosService
                 ->import($this->path, function($line) {
                     return DB::table('pagos')->updateOrInsert(
                         [
-                            'code' => $line['IdLiquidacion']
+                            'id' => $line['IdLiquidacion']
                         ],
                         [
                             'finiquito_id' => $line['IdFiniquito'],
@@ -34,8 +34,7 @@ class ImportarPagosService
                             'empresa_id' => $line['IdEmpresa'],
                             'fecha_emision' => date($line['FechaEmision']),
                             'banco' => $line['Banco'],
-                            'numero_cuenta' => $line['NumeroCuentaBancaria'],
-                            'tipo_pago_id' => $this->tipo_pago_id
+                            'numero_cuenta' => $line['NumeroCuentaBancaria']
                         ]
                     );
                 });

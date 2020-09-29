@@ -82,7 +82,11 @@ export const GraficaBarras = () => {
     useEffect(() => {
         function fetchDatosGrafico() {
             setLoadingGrafico(true);
-            Axios.get(`/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`)
+            let url = filter.tipo_pago_id === 1
+                ? `/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`
+                : `/api/utilidades/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`;
+
+            Axios.get(url)
                 .then(res => {
                     //console.log(res);
                     setMontosPorEstado(res.data);
@@ -97,7 +101,11 @@ export const GraficaBarras = () => {
 
         function fetchDatosTabla() {
             setLoadingTabla(true);
-            Axios.get(`/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`)
+            let url = filter.tipo_pago_id === 1
+                ? `/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`
+                : `/api/utilidades/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`;
+
+            Axios.get(url)
                 .then(res => {
                     //console.log(res);
                     setLoadingTabla(false);

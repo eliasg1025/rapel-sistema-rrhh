@@ -23,6 +23,7 @@ class Liquidaciones extends Model
             ->select(
                 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw("'LIQUIDACION' AS tipo_pago"),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_para_pago, "%d/%m/%Y") fecha_para_pago'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_pagado, "%d/%m/%Y") fecha_pagado'),
@@ -48,7 +49,7 @@ class Liquidaciones extends Model
             ->when($estado === 2, function($query) use ($fechas) {
                 $query->whereBetween('l.fecha_pago', [$fechas['desde'], $fechas['hasta']]);
             })
-            ->get();
+            ->get()->toArray();
     }
 
     public static function getFechas()
@@ -110,13 +111,14 @@ class Liquidaciones extends Model
             ->get();
     }
 
-    public static function getPagados($empresa_id, $fecha_pago, $rut='', $banco='TODOS')
+    public static function getPagados($empresa_id, $fecha_pago, $banco='TODOS')
     {
         return DB::table('liquidaciones as l')
             ->select(
                 'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
-                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
+                DB::raw("'LIQUIDACION' AS tipo_pago")
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
             ->whereIn('l.estado', [3, 4])

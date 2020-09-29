@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empresa;
+use App\Models\Liquidaciones;
 use App\Models\Pago;
+use App\Models\Utilidad;
 use App\Services\ArchivosAprobacionService;
 use App\Services\ArchivosBancoService;
 use App\Services\ImportarPagosService;
@@ -18,22 +20,31 @@ class PagosController extends Controller
     {
         $data         = $request->get('data');
         $tipo_pago_id = $request->get('tipo_pago_id');
-        $empresa_id   = $request->get('empresa_id');
 
-        $result = Pago::massiveCreate($data, $tipo_pago_id, $empresa_id);
+        switch ( $tipo_pago_id ) {
+            case 1:
+                $result = Liquidaciones::massiveCreate($data);
+                break;
+            case 2:
+                $result = Liquidaciones::massiveCreate($data);
+                break;
+        }
 
         return response()->json($result);
     }
 
     public function reprogramarParaPago(Request $request)
     {
-        $finiquito_id = $request->get('id');
+        $pago_id = $request->get('id');
+        $tipo_pago_id = $request->get('tipo_pago_id');
         $fecha_pago = $request->get('fecha_pago');
 
-        $finiquito = Pago::where('id', $finiquito_id)->first();
+        $pago = $tipo_pago_id === 1
+            ? Liquidaciones::where('id', $pago_id)->first()
+            : Utilidad::where('id', $pago_id)->first();
 
-        $finiquito->fecha_pago = $fecha_pago;
-        $finiquito->save();
+        $pago->fecha_pago = $fecha_pago;
+        $pago->save();
 
         return response()->json([
             'message' => 'Actualizado correctamente'
@@ -71,43 +82,62 @@ class PagosController extends Controller
         $empresa_id = $request->empresa_id;
         $tipo_pago_id = $request->tipo_pago_id;
 
-        $result = Pago::get($fechas, $estado, $empresa_id, $tipo_pago_id);
+        switch ( $tipo_pago_id ) {
+            case 1:
+                $result = Liquidaciones::get($fechas, $estado, $empresa_id);
+                break;
+            case 2:
+                $result = Utilidad::get($fechas, $estado, $empresa_id);
+                break;
+            default:
+                $a = Liquidaciones::get($fechas, $estado, $empresa_id);
+                $b = Utilidad::get($fechas, $estado, $empresa_id);
+
+                $result = [ ...$b, ...$a ];
+                break;
+        }
 
         return response()->json($result);
     }
     public function getByTrabajador($rut)
     {
-        $liquidaciones = Pago::getByTrabajador($rut);
+        $liquidaciones = Liquidaciones::getByTrabajador($rut);
+        $utilidades = Utilidad::getByTrabajador($rut);
 
-        return response()->json($liquidaciones);
+        $result = [ ...$utilidades, ...$liquidaciones ];
+
+        return response()->json($result);
     }
 
     public function getPagados(Request $request)
     {
         $empresa_id = $request->query('empresa_id');
         $fecha_pago = $request->query('fecha_pago');
-        $rut = $request->query('rut');
         $banco = $request->query('banco');
 
-        $result = Pago::getPagados($empresa_id, $fecha_pago, $rut, $banco);
+        $liquidaciones = Liquidaciones::getPagados($empresa_id, $fecha_pago, $banco);
+        $utilidades = Utilidad::getPagados($empresa_id, $fecha_pago, $banco);
 
-        return response()->json($result);
+        return response()->json([ ...$utilidades, ...$liquidaciones ]);
     }
 
     public function getRechazados(Request $request)
     {
         $empresa_id = $request->query('empresa_id');
-        $result = Pago::getRechazados($empresa_id);
+        $liquidaciones = Liquidaciones::getRechazados($empresa_id);
 
-        return response()->json($result);
+        return response()->json([ ...$liquidaciones ]);
     }
 
     public function toggleRechazo($tipo, Request $request)
     {
-        $finiquitos = $request->get('finiquitos');
+        $liquidaciones = $request->get('finiquitos');
+        $utilidades = $request->get('utilidades');
 
-        $result = Pago::toggleRechazo($tipo, $finiquitos);
-        return response()->json($result);
+        $result = Liquidaciones::toggleRechazo($tipo, $liquidaciones);
+        $result2 = Utilidad::toggleRechazo($tipo, $utilidades);
+
+        return response()->json($result + $result2);
     }
 
     public function importarTuRecibo(Request $request)
@@ -115,20 +145,18 @@ class PagosController extends Controller
         try {
             $file = $request->file('tu-recibo');
             $empresa_id = $request->get('empresa_id');
-            $tipo_pago_id = $request->get('tipo_pago_id');
             $desde = $request->get('desde');
             $hasta = $request->get('hasta');
 
             $name = '/tu-recibo/' . now()->unix() . '.' . $file->getClientOriginalExtension();
 
-            if (!Storage::disk('public')->put($name, File::get($file))) {
+            if (!\Storage::disk('public')->put($name, \File::get($file))) {
                 return response()->json(['message' => 'Error al guardar el archivo'], 400);
             }
 
             $contents_arr = file(storage_path('app/public') . $name, FILE_IGNORE_NEW_LINES);
 
-            function getMes($text)
-            {
+            function getMes($text) {
                 switch ($text) {
                     case 'Ene':
                         return 1;
@@ -178,7 +206,7 @@ class PagosController extends Controller
                 $fecha_hasta = Carbon::parse($hasta)->addDay();
                 $fecha_firma = Carbon::createFromFormat('d/m/Y H:i', $data[12]);
 
-                if (!$fecha_firma->between($fecha_desde, $fecha_hasta)) {
+                if ( !$fecha_firma->between($fecha_desde, $fecha_hasta) ) {
                     continue;
                 }
 
@@ -186,13 +214,12 @@ class PagosController extends Controller
                 $periodo = explode('-', $data[1]);
 
                 try {
-                    $liquidacion = DB::table('pagos')
+                    $liquidacion = DB::table('liquidaciones')
                         ->where([
                             'rut' => $nombre_archivo[0],
                             'ano' => 2000 + $periodo[1],
                             'mes' => getMes($periodo[0]),
                             'empresa_id' => $empresa_id,
-                            'tipo_pago_id' => $tipo_pago_id,
                             'estado' => 0
                         ])
                         ->first();
@@ -203,6 +230,7 @@ class PagosController extends Controller
                             'fecha_firma' => $fecha_firma->toDateTimeString()
                         ]);
                     }
+
                 } catch (\Exception $e) {
                     array_push($errores, [
                         'rut' => $nombre_archivo,
@@ -219,7 +247,7 @@ class PagosController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al importar',
-                'error' => $e->getMessage() . ' -- ' . $e->getLine() . ' -- ' . $e->getTraceAsString()
+                'error' => $e->getMessage()
             ], 400);
         }
     }
@@ -228,7 +256,7 @@ class PagosController extends Controller
     {
         $liquidaciones = $request->get('liquidaciones');
 
-        $result = Pago::insertarTuRecibo($liquidaciones);
+        $result = Liquidaciones::insertarTuRecibo($liquidaciones);
 
         return response()->json($result);
     }
@@ -238,17 +266,17 @@ class PagosController extends Controller
         $empresa_id = $request->get('empresa_id');
         $fecha_pago = $request->get('fecha_pago');
 
-        $result = Pago::marcarPagadoMasivo($empresa_id, $fecha_pago);
+        $result = Liquidaciones::marcarPagadoMasivo($empresa_id, $fecha_pago);
+        $result2 = Utilidad::marcarPagadoMasivo($empresa_id, $fecha_pago);
 
-        if (isset($result['error'])) {
+        if ( isset($result['error']) || isset($result2['error']) ) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
         }
 
-        $service = new ArchivosAprobacionService($fecha_pago);
-
-        $generation = $service->generate();
+        $service = new ArchivosAprobacionService($fecha_pago); // TODO
+        $service->generate();
 
         return response()->json([
             'message' => 'Se actualizaron ' . $result . ' registros en estado PAGADO. <br />Se ha generado el FORMATO DE APROBACIÓN en la siguiente <a target="_blank" href="/storage/formato-aprobacion/generados/FORMATO-APROBACION-' . $fecha_pago . '">ruta</a>',

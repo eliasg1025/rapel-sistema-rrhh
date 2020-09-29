@@ -27,7 +27,7 @@ export const Liquidaciones = () => {
 
         function fetchFiniquitos() {
             intentos++;
-            Axios.get(`/api/finiquitos?desde=${filtro.desde}&hasta=${filtro.hasta}&estado=${filtro.estado}&empresa_id=${filtro.empresa_id}&tipo_pago_id=${filtro.tipo_pago_id}`)
+            Axios.get(`/api/pagos?desde=${filtro.desde}&hasta=${filtro.hasta}&estado=${filtro.estado}&empresa_id=${filtro.empresa_id}&tipo_pago_id=${filtro.tipo_pago_id}`)
                 .then(res => {
                     message['success']({
                         content: `Se encontraron ${res.data.length} registros`

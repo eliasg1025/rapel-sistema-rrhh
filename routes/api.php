@@ -181,6 +181,17 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'LiquidacionesController@cantidadPagosPorDia');
 });
 
+Route::group(['prefix' => 'utilidades'], function() {
+    Route::get('/montos-por-estado', 'UtilidadesController@montosPorEstado');
+    Route::get('/montos-por-estado-por-anio/{empresa_id}', 'UtilidadesController@montosPorEstadoPorAnio');
+    Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'UtilidadesController@cantidadPagosPorDia');
+});
+
+Route::group(['prefix' => 'pagos'], function() {
+    Route::get('/', 'PagosController@get');
+    Route::get('/{rut}/trabajador', 'PagosController@getByTrabajador')->where('id', '[0-9]+');
+});
+
 Route::group(['prefix' => 'consulta-trabajador'], function() {
     Route::get('/', 'ConsultaTrabajadorController@get');
     Route::post('/', 'ConsultaTrabajadorController@create');
