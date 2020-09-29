@@ -67,7 +67,7 @@ export const Pagados = () => {
     ];
 
     useEffect(() => {
-        Axios.get(`/api/finiquitos/get-pagados?empresa_id=${filter.empresa_id}&fecha_pago=${filter.fecha_pago}&rut=${filter.rut}&banco=${filter.banco}`)
+        Axios.get(`/api/pagos/get-pagados?empresa_id=${filter.empresa_id}&fecha_pago=${filter.fecha_pago}&rut=${filter.rut}&banco=${filter.banco}`)
             .then(res => {
                 setLiquidaciones(res.data);
             })
@@ -109,8 +109,9 @@ export const Pagados = () => {
     };
 
     const terminarProceso = () => {
-        Axios.post(`/api/finiquitos/terminar-proceso`, {
-            liquidaciones: liquidaciones.map(e => e.id)
+        Axios.post(`/api/pagos/terminar-proceso`, {
+            liquidaciones: liquidaciones.filter(e => e.tipo_pago === 'LIQUIDACION').map(e => e.id),
+            utilidades: liquidaciones.filter(e => e.tipo_pago === 'UTILIDAD').map(e => e.id)
         })
             .then(res => {
                 console.log(res);
@@ -148,8 +149,13 @@ export const Pagados = () => {
     }
 
     const toggleRechazo = (tipo = 0) => {
-        Axios.put(`/api/finiquitos/toggle-rechazo/${tipo}`,{
-            finiquitos: selectedRowKeys
+
+        const liq = liquidaciones.filter(e => e.tipo_pago === 'LIQUIDACION').map(e => e.id);
+        const uti = liquidaciones.filter(e => e.tipo_pago === 'UTILIDAD').map(e => e.id);
+
+        Axios.put(`/api/pagos/toggle-rechazo/${tipo}`,{
+            liquidaciones: selectedRowKeys.filter(e => liq.includes(e)),
+            utilidades: selectedRowKeys.filter(e => uti.includes(e)),
         })
             .then(res => {
                 console.log(res);
@@ -249,21 +255,13 @@ export const Pagados = () => {
             </div>
             <br />
             <div style={{ marginBottom: 16 }}>
-                <button className="btn btn-primary" onClick={handleMassiveTerminar}>
-                    {loading ? (
-                        <>
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            <span className="sr-only">Cargando...</span>
-                        </>
-                    ) : 'Terminar proceso'}
-                </button>
                 <button className="btn btn-danger" disabled={!hasSelected} onClick={handleMassiveMarcarRechazo}>
                     {loading ? (
                         <>
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             <span className="sr-only">Cargando...</span>
                         </>
-                    ) : 'Marcar como RECHAZO'}
+                    ) : <span><i className="fas fa-times"></i> RECHAZO</span>}
                 </button>
                 <button className="btn btn-primary" disabled={!hasSelected} onClick={handleMassiveDesmarcarRechazo}>
                     {loading ? (
@@ -271,11 +269,20 @@ export const Pagados = () => {
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             <span className="sr-only">Cargando...</span>
                         </>
-                    ) : 'Desmarcar como RECHAZO'}
+                    ) : <span><i className="fas fa-check"></i> NO RECHAZO</span>}
                 </button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `${selectedRowKeys.length} item(s) seleccionados` : ''}
                 </span>
+
+                <button className="btn btn-success" onClick={handleMassiveTerminar} style={{ float: 'right' }}>
+                    {loading ? (
+                        <>
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span className="sr-only">Cargando...</span>
+                        </>
+                    ) : <span><i className="fas fa-flag-checkered"></i> <b>TERMINAR PROCESO</b></span>}
+                </button>
             </div>
             <Table
                 dataSource={liquidaciones} rowSelection={rowSelection}

@@ -164,4 +164,105 @@ class Utilidad extends Model
             ];
         }
     }
+
+    public static function getPagados($empresa_id, $fecha_pago, $banco='TODOS')
+    {
+        return DB::table('utilidades as l')
+            ->select(
+                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
+                DB::raw("'UTILIDAD' AS tipo_pago")
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->whereIn('l.estado', [3, 4])
+            ->where('l.fecha_pago', $fecha_pago)
+            ->where('l.empresa_id', $empresa_id)
+            ->when($banco !== 'TODOS', function($query) use ($banco) {
+                $query->where('l.banco', $banco);
+            })
+            ->orderBy('l.apellido_paterno', 'ASC')
+            ->get();
+    }
+
+    public static function toggleRechazo(int $tipo, $finiquitos)
+    {
+        try {
+            if ($tipo === 1) {
+                return DB::table('utilidades')
+                    ->whereIn('id', $finiquitos)
+                    ->update([
+                        'estado' => 4,
+                        'fecha_hora_marca_rechazado' => now()->toDateTimeString()
+                    ]);
+            } else {
+                return DB::table('utilidades')
+                    ->whereIn('id', $finiquitos)
+                    ->update([
+                        'estado' => 3,
+                        'fecha_hora_marca_rechazado' => null
+                    ]);
+            }
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    public static function terminarProceso(array $finiquitos)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($finiquitos as $finiquitosId) {
+                $finiquito = Utilidad::where('id', $finiquitosId)->first();
+
+                if ($finiquito->estado === 3) {
+                    $finiquito->estado = 5;
+                    $finiquito->fecha_hora_marca_archivado = now()->toDateTimeString();
+                    $finiquito->save();
+                } else {
+
+                    $rechazo = new UtilidadRechazo();
+                    $rechazo->rut = $finiquito->rut;
+                    $rechazo->nombre = $finiquito->nombre;
+                    $rechazo->apellido_paterno = $finiquito->apellido_paterno;
+                    $rechazo->apellido_materno = $finiquito->apellido_materno;
+                    $rechazo->mes = $finiquito->mes;
+                    $rechazo->ano = $finiquito->ano;
+                    $rechazo->banco = $finiquito->banco;
+                    $rechazo->numero_cuenta = $finiquito->numero_cuenta;
+                    $rechazo->monto = $finiquito->monto;
+                    $rechazo->fecha_pago = $finiquito->fecha_pago;
+                    $rechazo->empresa_id = $finiquito->empresa_id;
+                    $rechazo->utilidad_id = $finiquitosId;
+                    $rechazo->save();
+
+                    $finiquito->estado = 1;
+                    $finiquito->save();
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ];
+        }
+    }
+
+    public static function getRechazados($empresa_id = 9)
+    {
+        return DB::table('utilidades_rechazos as l')
+            ->select(
+                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.mes', 'l.ano', 'l.monto', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
+                DB::raw("'UTILIDAD' AS tipo_pago")
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            //->where('l.empresa_id', $empresa_id)
+            ->orderBy('l.apellido_paterno', 'ASC')
+            ->get();
+    }
 }

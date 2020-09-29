@@ -7,6 +7,10 @@ export const Rechazos = () => {
 
     const columns = [
         {
+            title: 'Tipo Pago',
+            dataIndex: 'tipo_pago'
+        },
+        {
             title: 'Empresa',
             dataIndex: 'empresa'
         },
@@ -34,11 +38,16 @@ export const Rechazos = () => {
         {
             title: 'Monto',
             dataIndex: 'monto'
+        },
+        {
+            title: 'Estado',
+            dataIndex: 'estado',
+            render: (value, record) => `hi`
         }
     ];
 
     useEffect(() => {
-        Axios.get(`/api/finiquitos/get-rechazados?empresa_id=${9}`)
+        Axios.get(`/api/pagos/get-rechazados?empresa_id=${9}`)
             .then(res => {
                 setRechazos(res.data);
             })

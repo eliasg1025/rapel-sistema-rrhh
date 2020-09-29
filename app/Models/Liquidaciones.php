@@ -137,10 +137,11 @@ class Liquidaciones extends Model
             ->select(
                 'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
-                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
+                DB::raw("'LIQUIDACION' AS tipo_pago")
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
-            ->where('l.empresa_id', $empresa_id)
+            //->where('l.empresa_id', $empresa_id)
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
     }

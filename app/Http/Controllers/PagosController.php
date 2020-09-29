@@ -129,13 +129,14 @@ class PagosController extends Controller
     {
         $empresa_id = $request->query('empresa_id');
         $liquidaciones = Liquidaciones::getRechazados($empresa_id);
+        $utilidades = Utilidad::getRechazados($empresa_id);
 
-        return response()->json([ ...$liquidaciones ]);
+        return response()->json([ ...$utilidades, ...$liquidaciones ]);
     }
 
     public function toggleRechazo($tipo, Request $request)
     {
-        $liquidaciones = $request->get('finiquitos');
+        $liquidaciones = $request->get('liquidaciones');
         $utilidades = $request->get('utilidades');
 
         $result = Liquidaciones::toggleRechazo($tipo, $liquidaciones);
@@ -346,18 +347,27 @@ class PagosController extends Controller
 
     public function terminarProceso(Request $request)
     {
-        $finiquitos = $request->get('liquidaciones');
-        $result = Pago::terminarProceso($finiquitos);
+        $liquidaciones = $request->get('liquidaciones');
+        $utilidades = $request->get('utilidades');
 
-        if (isset($result['error'])) {
+        $result = Liquidaciones::terminarProceso($liquidaciones);
+        $result2 = Utilidad::terminarProceso($utilidades);
+
+        if ( isset($result['error']) ) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
         }
 
+        if ( isset($result2['error']) ) {
+            return response()->json([
+                'message' => $result2['error']
+            ], 400);
+        }
+
         return response()->json([
-            'message' => 'Se actualizaron ' . $result . ' registros',
-            'actualizados' => $result
+            'message' => 'Se actualizaron ' . ( $result + $result2 ) . ' registros',
+            'actualizados' => $result + $result2
         ]);
     }
 
