@@ -27,34 +27,34 @@ class ArchivosAprobacionService
             // Obtener data
             $resumen = Pago::getResumenPorFechaPago($this->fecha_pago);
 
-            $rapel = $resumen['rapel'];
-            $verfrut = $resumen['verfrut'];
+            $rapel = $resumen['liquidaciones']['rapel'];
+            $verfrut = $resumen['liquidaciones']['verfrut'];
 
             // RAPEL
             foreach ($rapel as $value) {
                 switch ($value->banco) {
                     case 'BANCO DE CREDITO':
-                        $worksheet->getCell('C19')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('C19')->setValue($value->cantidad);
                         $worksheet->getCell('D19')->setValue($value->monto);
                         break;
 
                     case 'INTERBANK':
-                        $worksheet->getCell('C24')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('C24')->setValue($value->cantidad);
                         $worksheet->getCell('D24')->setValue($value->monto);
                         break;
 
                     case 'BBVA BANCO CONTINENTAL':
-                        $worksheet->getCell('C29')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('C29')->setValue($value->cantidad);
                         $worksheet->getCell('D29')->setValue($value->monto);
                         break;
 
                     case 'SCOTIABANK PERU':
-                        $worksheet->getCell('C34')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('C34')->setValue($value->cantidad);
                         $worksheet->getCell('D34')->setValue($value->monto);
                         break;
 
                     case 'INTERAMERICANO FINANZAS':
-                        $worksheet->getCell('C39')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('C39')->setValue($value->cantidad);
                         $worksheet->getCell('D39')->setValue($value->monto);
                         break;
                 }
@@ -64,18 +64,50 @@ class ArchivosAprobacionService
             foreach ($verfrut as $value) {
                 switch ($value->banco) {
                     case 'BANCO DE CREDITO':
-                        $worksheet->getCell('I19')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('I19')->setValue($value->cantidad);
                         $worksheet->getCell('I19')->setValue($value->monto);
                         break;
 
                     case 'INTERBANK':
-                        $worksheet->getCell('I24')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('I24')->setValue($value->cantidad);
                         $worksheet->getCell('J24')->setValue($value->monto);
                         break;
 
                     case 'BBVA BANCO CONTINENTAL':
-                        $worksheet->getCell('I29')->setValue($value->cantidad_personas);
+                        $worksheet->getCell('I29')->setValue($value->cantidad);
                         $worksheet->getCell('J29')->setValue($value->monto);
+                        break;
+                }
+            }
+
+            $rapel1 = $resumen['utilidades']['rapel'];
+
+            // RAPEL
+            foreach ($rapel1 as $value) {
+                switch ($value->banco) {
+                    case 'BANCO DE CREDITO':
+                        $worksheet->getCell('C20')->setValue($value->cantidad);
+                        $worksheet->getCell('D20')->setValue($value->monto);
+                        break;
+
+                    case 'INTERBANK':
+                        $worksheet->getCell('C25')->setValue($value->cantidad);
+                        $worksheet->getCell('D25')->setValue($value->monto);
+                        break;
+
+                    case 'BBVA BANCO CONTINENTAL':
+                        $worksheet->getCell('C30')->setValue($value->cantidad);
+                        $worksheet->getCell('D30')->setValue($value->monto);
+                        break;
+
+                    case 'SCOTIABANK PERU':
+                        $worksheet->getCell('C35')->setValue($value->cantidad);
+                        $worksheet->getCell('D35')->setValue($value->monto);
+                        break;
+
+                    case 'INTERAMERICANO FINANZAS':
+                        $worksheet->getCell('C40')->setValue($value->cantidad);
+                        $worksheet->getCell('D40')->setValue($value->monto);
                         break;
                 }
             }

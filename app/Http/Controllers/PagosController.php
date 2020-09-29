@@ -285,7 +285,7 @@ class PagosController extends Controller
         $service = new ArchivosAprobacionService($fecha_pago); // TODO
         $generation = $service->generate();
 
-        if ( $generation['error'] ) {
+        if ( isset($generation['error']) ) {
             return response()->json([
                 'message' => $generation['error']
             ], 400);
@@ -461,8 +461,8 @@ class PagosController extends Controller
         return response()->json($count);
     }
 
-    public function test()
+    public function test($fecha_pago)
     {
-        return response()->json(Pago::getResumenPorFechaPago('2020-09-18'));
+        return response()->json(Pago::getResumenPorFechaPago($fecha_pago));
     }
 }

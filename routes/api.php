@@ -180,6 +180,8 @@ Route::group(['prefix' => 'pagos'], function() {
     Route::get('/montos-por-estado', 'PagosController@montosPorEstado');
     Route::get('/montos-por-estado-por-anio/{empresa_id}', 'PagosController@montosPorEstadoPorAnio');
     Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'PagosController@cantidadPagosPorDia');
+
+    Route::get('/test/{fecha_pago}', 'PagosController@test');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {
