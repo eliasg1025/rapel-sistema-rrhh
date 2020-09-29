@@ -151,45 +151,35 @@ Route::group(['prefix' => 'covid'], function() {
     Route::put('/toggle-valido/{tipo}', 'CovidController@toggleValido');
 });
 
-Route::group(['prefix' => 'finiquitos'], function() {
-    Route::get('/', 'LiquidacionesController@get');
-
-    Route::get('/{rut}/trabajador', 'LiquidacionesController@getByTrabajador')->where('id', '[0-9]+');
-    Route::get('/get-pagados', 'LiquidacionesController@getPagados');
-    Route::get('/get-rechazados', 'LiquidacionesController@getRechazados');
-    Route::put('/toggle-rechazo/{tipo}', 'LiquidacionesController@toggleRechazo');
-    Route::post('/terminar-proceso', 'LiquidacionesController@terminarProceso');
-
-    Route::post('/massive', 'LiquidacionesController@massiveCreate');
-    Route::post('/importar', 'LiquidacionesController@importar');
-    Route::post('/importar-tu-recibo', 'LiquidacionesController@importarTuRecibo');
-    Route::post('/importar-tu-recibo/insertar', 'LiquidacionesController@insertarTuRecibo');
-    Route::post('/programar-para-pago', 'LiquidacionesController@programarParaPago');
-    Route::put('/programar-para-pago/reprogramar', 'LiquidacionesController@reprogramarParaPago');
-    Route::get('/excel-banco', 'LiquidacionesController@testExcel');
-    Route::post('/generar-archivos-banco', 'LiquidacionesController@generateArchivosBanco');
-
-    Route::group(['prefix' => 'fechas-pagos'], function() {
-        Route::get('/', 'LiquidacionesController@getFechasPago');
-        Route::post('/descargar', 'LiquidacionesController@descargarArchivosAprobacion');
-    });
-
-    Route::put('/marcar-pagado-masivo', 'LiquidacionesController@marcarPagadoMasivo');
-
-    Route::get('/montos-por-estado', 'LiquidacionesController@montosPorEstado');
-    Route::get('/montos-por-estado-por-anio/{empresa_id}', 'LiquidacionesController@montosPorEstadoPorAnio');
-    Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'LiquidacionesController@cantidadPagosPorDia');
-});
-
-Route::group(['prefix' => 'utilidades'], function() {
-    Route::get('/montos-por-estado', 'UtilidadesController@montosPorEstado');
-    Route::get('/montos-por-estado-por-anio/{empresa_id}', 'UtilidadesController@montosPorEstadoPorAnio');
-    Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'UtilidadesController@cantidadPagosPorDia');
-});
-
 Route::group(['prefix' => 'pagos'], function() {
     Route::get('/', 'PagosController@get');
     Route::get('/{rut}/trabajador', 'PagosController@getByTrabajador')->where('id', '[0-9]+');
+
+    Route::get('/get-pagados', 'PagosController@getPagados');
+    Route::get('/get-rechazados', 'PagosController@getPagados');
+    Route::put('/toggle-rechazo/{tipo}', 'PagosController@toggleRechazo');
+    Route::post('/terminar-proceso', 'PagosController@terminarProceso');
+
+    Route::group(['prefix' => 'utilidades'], function() {
+        Route::put('/sincronizar', 'PagosController@sincronizarDatosUtilidades');
+    });
+
+    Route::post('/massive', 'PagosController@massiveCreate');
+    Route::post('/importar', 'PagosController@importar');
+    Route::post('/importar-tu-recibo', 'PagosController@importarTuRecibo');
+    Route::post('/importar-tu-recibo/insertar', 'PagosController@insertarTuRecibo');
+    Route::post('/programar-para-pago', 'PagosController@programarParaPago');
+    Route::put('/programar-para-pago/reprogramar', 'PagosController@reprogramarParaPago');
+    Route::get('/excel-banco', 'PagosController@testExcel');
+    Route::post('/generar-archivos-banco', 'PagosController@generateArchivosBanco');
+    Route::group(['prefix' => 'fechas-pagos'], function() {
+        Route::get('/', 'PagosController@getFechasPago');
+        Route::post('/descargar', 'PagosController@descargarArchivosAprobacion');
+    });
+    Route::put('/marcar-pagado-masivo', 'PagosController@marcarPagadoMasivo');
+    Route::get('/montos-por-estado', 'PagosController@montosPorEstado');
+    Route::get('/montos-por-estado-por-anio/{empresa_id}', 'PagosController@montosPorEstadoPorAnio');
+    Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'PagosController@cantidadPagosPorDia');
 });
 
 Route::group(['prefix' => 'consulta-trabajador'], function() {

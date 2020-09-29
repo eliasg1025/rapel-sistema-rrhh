@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Empresa;
 use App\Models\Liquidaciones;
 use App\Models\Pago;
+use App\Models\SqlSrv\Trabajador;
 use App\Models\Utilidad;
 use App\Services\ArchivosAprobacionService;
 use App\Services\ArchivosBancoService;
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\{DB, File, Storage};
 
 class PagosController extends Controller
 {
+    /**
+     * Solo disponible para liquidaciones
+     */
     public function massiveCreate(Request $request)
     {
         $data         = $request->get('data');
@@ -140,6 +144,9 @@ class PagosController extends Controller
         return response()->json($result + $result2);
     }
 
+    /**
+     * Actualizacion de documentos firmados
+     */
     public function importarTuRecibo(Request $request)
     {
         try {
@@ -271,15 +278,21 @@ class PagosController extends Controller
 
         if ( isset($result['error']) || isset($result2['error']) ) {
             return response()->json([
-                'message' => $result['error']
+                'message' => '' . $result['error']
             ], 400);
         }
 
         $service = new ArchivosAprobacionService($fecha_pago); // TODO
-        $service->generate();
+        $generation = $service->generate();
+
+        if ( $generation['error'] ) {
+            return response()->json([
+                'message' => $generation['error']
+            ], 400);
+        }
 
         return response()->json([
-            'message' => 'Se actualizaron ' . $result . ' registros en estado PAGADO. <br />Se ha generado el FORMATO DE APROBACIÓN en la siguiente <a target="_blank" href="/storage/formato-aprobacion/generados/FORMATO-APROBACION-' . $fecha_pago . '">ruta</a>',
+            'message' => 'Se actualizaron ' . ( $result + $result2 ) . ' registros en estado PAGADO. Se ha generado el FORMATO DE APROBACIÓN en la siguiente <a target="_blank" href="/storage/formato-aprobacion/generados/FORMATO-APROBACION-' . $fecha_pago . '">ruta</a>',
             'actualizados' => $result
         ]);
     }
@@ -287,10 +300,13 @@ class PagosController extends Controller
     public function programarParaPago(Request $request)
     {
         $fecha = $request->get('fecha');
-        $finiquitos = $request->get('finiquitos');
-        $result = Pago::forPayment($fecha, $finiquitos);
+        $liquidaciones = $request->get('liquidaciones');
+        $utilidades = $request->get('utilidades');
 
-        if (isset($result['error'])) {
+        $result = Liquidaciones::forPayment($fecha, $liquidaciones);
+        $result2 = Utilidad::forPayment($fecha, $utilidades);
+
+        if ( isset($result['error']) || isset($result2['error']) ) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
@@ -347,20 +363,36 @@ class PagosController extends Controller
 
     public function montosPorEstado(Request $request)
     {
-        $result = Pago::montosPorEstado(
-            $request->query('empresa_id'),
-            $request->query('tipo_pago_id')
-        );
+        $tipo_pago_id = $request->query('tipo_pago_id');
+
+        switch ( $tipo_pago_id ) {
+            case 1:
+                $result = Liquidaciones::montosPorEstado(
+                    $request->query('empresa_id'),
+                );
+                break;
+            case 2:
+                $result = Utilidad::montosPorEstado(
+                    $request->query('empresa_id'),
+                );
+                break;
+        }
 
         return response()->json($result);
     }
 
     public function montosPorEstadoPorAnio(Request $request, $empresa_id)
     {
-        $result = Pago::montosPorEstadoPorAnio(
-            $empresa_id,
-            $request->query('tipo_pago_id')
-        );
+        $tipo_pago_id = $request->query('tipo_pago_id');
+
+        switch ( $tipo_pago_id ) {
+            case 1:
+                $result = Liquidaciones::montosPorEstadoPorAnio($empresa_id);
+                break;
+            case 2:
+                $result = Utilidad::montosPorEstadoPorAnio($empresa_id);
+                break;
+        }
 
         return response()->json($result);
     }
@@ -369,7 +401,7 @@ class PagosController extends Controller
     {
         $desde = $request->query('desde');
         $hasta = $request->query('hasta');
-        $result = Pago::cantidadPagosPorDia($empresa_id, $desde, $hasta);
+        $result = Liquidaciones::cantidadPagosPorDia($empresa_id, $desde, $hasta);
 
         return response()->json($result);
     }
@@ -380,7 +412,7 @@ class PagosController extends Controller
 
         $directories = Storage::disk('public')->files($path);
 
-        $directories = array_map(function ($v) {
+        $directories = array_map(function($v) {
             $arr = explode("/", $v);
             $file = $arr[sizeof($arr) - 1];
             $exploded_str = explode("_", $file);
@@ -408,6 +440,25 @@ class PagosController extends Controller
         $ruta = storage_path() . '/formato-aprobacion/generados/FORMATO-APROBACION-' . $request->get('fecha_pago') . '.xlsx';
 
         return response()->download($ruta);
+    }
+
+    public function sincronizarDatosUtilidades(Request $request)
+    {
+        $ruts = $request->get('ruts');
+
+        $count = 0;
+        foreach ($ruts as $rut) {
+            $info = Trabajador::getInfoCuenta($rut);
+
+            DB::table('utilidades')->where('rut', $rut)->update([
+                'numero_cuenta' => $info->numero_cuenta,
+                'banco' => $info->banco
+            ]);
+
+            $count++;
+        }
+
+        return response()->json($count);
     }
 
     public function test()

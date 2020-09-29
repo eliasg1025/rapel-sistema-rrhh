@@ -14,7 +14,7 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
         });
 
         setLoading(true);
-        Axios.post('/api/finiquitos/generar-archivos-banco', { filtro, data })
+        Axios.post('/api/pagos/generar-archivos-banco', { filtro, data })
             .then(res => {
                 console.log(res);
 
@@ -74,8 +74,6 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
 
         return Math.round(monto * 100) / 100;
     }
-
-
 
     return (
         <form onSubmit={handleSubmit}>
@@ -140,6 +138,7 @@ export const GenerarArchivoBanco = ({ d, data, filtro, reloadData, setReloadData
                             </tbody>
                         </table>
                     </div>
+                    <small>No se cuentan las liquidaciones/utildades con monto igual a 0</small>
                 </div>
             </div>
             <div className="form-row">

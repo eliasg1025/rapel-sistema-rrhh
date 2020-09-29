@@ -56,7 +56,10 @@ class Pago extends Model
 
     public static function getResumenPorFechaPago($fecha_pago)
     {
-        $dataset = DB::table('pagos as l')
+        $rapel = [];
+        $verfrut = [];
+
+        $dataset = DB::table('liquidaciones as l')
             ->select(
                 'l.banco', 'l.empresa_id',
                 DB::raw('COUNT(DISTINCT l.rut) as cantidad_personas'),
@@ -65,10 +68,18 @@ class Pago extends Model
             ->where('l.fecha_pago', $fecha_pago)
             ->whereIn('l.estado', [3])
             ->groupBy('l.empresa_id', 'l.banco')
-            ->get();
+            ->get()->toArray();
 
-        $rapel = [];
-        $verfrut = [];
+        $dataset2 = DB::table('utilidades as l')
+            ->select(
+                'l.banco', 'l.empresa_id',
+                DB::raw('COUNT(DISTINCT l.rut) as cantidad_personas'),
+                DB::raw('SUM(l.monto) as monto')
+            )
+            ->where('l.fecha_pago', $fecha_pago)
+            ->whereIn('l.estado', [3])
+            ->groupBy('l.empresa_id', 'l.banco')
+            ->get()->toArray();
 
         foreach ($dataset as $value) {
             if ($value->empresa_id === 9) {
@@ -76,6 +87,27 @@ class Pago extends Model
             } else if ($value->empresa_id === 14) {
                 array_push($verfrut, $value);
             }
+        }
+
+        if ( !isset($rapel['BANCO DE CREDITO']) ) {
+            array_push($rapel, $dataset2['BANCO DE CREDITO']);
+        } else {
+            $rapel['BANCO DE CREDITO']['cantidad_personas'] = $rapel['BANCO DE CREDITO']['cantidad_personas'] + $dataset2['BANCO DE CREDITO']['cantidad_personas'];
+            $rapel['BANCO DE CREDITO']['monto'] = $rapel['BANCO DE CREDITO']['monto'] + $dataset2['BANCO DE CREDITO']['monto'];
+        }
+
+        if ( !isset($rapel['INTERBANK']) ) {
+            array_push($rapel, $dataset2['INTERBANK']);
+        } else {
+            $rapel['INTERBANK']['cantidad_personas'] = $rapel['INTERBANK']['cantidad_personas'] + $dataset2['INTERBANK']['cantidad_personas'];
+            $rapel['INTERBANK']['monto'] = $rapel['INTERBANK']['monto'] + $dataset2['INTERBANK']['monto'];
+        }
+
+        if ( !isset($rapel['BBVA BANCO CONTINENTAL']) ) {
+            array_push($rapel, $dataset2['BBVA BANCO CONTINENTAL']);
+        } else {
+            $rapel['BBVA BANCO CONTINENTAL']['cantidad_personas'] = $rapel['BBVA BANCO CONTINENTAL']['cantidad_personas'] + $dataset2['BBVA BANCO CONTINENTAL']['cantidad_personas'];
+            $rapel['BBVA BANCO CONTINENTAL']['monto'] = $rapel['BBVA BANCO CONTINENTAL']['monto'] + $dataset2['BBVA BANCO CONTINENTAL']['monto'];
         }
 
         return [

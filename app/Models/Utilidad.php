@@ -130,4 +130,38 @@ class Utilidad extends Model
 
         return $tmp;
     }
+
+    public static function forPayment(string $fecha, array $utilidades)
+    {
+        try {
+            return DB::table('utilidades')
+                ->whereIn('id', $utilidades)
+                ->update([
+                    'estado' => 2,
+                    'fecha_pago' => date($fecha),
+                    'fecha_hora_marca_para_pago' => now()->toDateTimeString()
+                ]);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    public static function marcarPagadoMasivo($empresa_id, $fecha_pago)
+    {
+        try {
+            return DB::table('utilidades')
+                ->where('empresa_id', $empresa_id)
+                ->where('fecha_pago', $fecha_pago)
+                ->update([
+                    'estado' => 3,
+                    'fecha_hora_marca_pagado' => now()->toDateTimeString()
+                ]);
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage()
+            ];
+        }
+    }
 }

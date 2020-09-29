@@ -16,9 +16,10 @@ export const ParaPago = ({ data, reloadData, setReloadData, setIsVisibleParent }
     const handleSubmit = e => {
         e.preventDefault();
         setLoading(true);
-        Axios.post('/api/finiquitos/programar-para-pago', {
+        Axios.post('/api/pagos/programar-para-pago', {
             fecha: form.fecha,
-            finiquitos: data.map(e => e.id )
+            liquidaciones: data.filter(e => e.tipo_pago === 'LIQUIDACION').map(e => e.id),
+            utilidades: data.filter(e => e.tipo_pago === 'UTILIDAD').map(e => e.id)
         })
             .then(res => {
                 const { message } = res.data;

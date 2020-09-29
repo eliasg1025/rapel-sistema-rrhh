@@ -21,7 +21,7 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
     const handleSubmit = e => {
         e.preventDefault();
 
-        const url = `/api/finiquitos/importar-tu-recibo`;
+        const url = `/api/pagos/importar-tu-recibo`;
         const formData = new FormData();
         formData.append('tu-recibo', form.file);
         formData.append('empresa_id', form.empresa_id);
@@ -63,7 +63,7 @@ export const ImportacionTuRecibo = ({ reloadData, setReloadData, setIsVisiblePar
             }
         });
 
-        Axios.post('/api/finiquitos/importar-tu-recibo/insertar', {
+        Axios.post('/api/pagos/importar-tu-recibo/insertar', {
             liquidaciones
         })
             .then(res => {

@@ -32,6 +32,7 @@ const DatosCuenta = ({ handleSubmit, form, setForm, bancos, setBancos, loadingSu
                     parseInt(numero_cuenta.substring(3, numero_cuenta.length - 1)) >= 100000000
                 );
             case '38':
+                return numero_cuenta.length >= 10 && numero_cuenta.length <= 20;
             case '09':
                 return numero_cuenta.length === 10;
             case '11':

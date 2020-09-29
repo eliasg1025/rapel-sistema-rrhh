@@ -82,40 +82,42 @@ export const GraficaBarras = () => {
     useEffect(() => {
         function fetchDatosGrafico() {
             setLoadingGrafico(true);
-            let url = filter.tipo_pago_id === 1
-                ? `/api/finiquitos/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`
-                : `/api/utilidades/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`;
 
-            Axios.get(url)
-                .then(res => {
-                    //console.log(res);
-                    setMontosPorEstado(res.data);
-                    setLoadingGrafico(false);
-                })
-                .catch(err => {
-                    console.error(err);
+            let count = 0;
+            const query = () => {
+                count++;
+                Axios.get(`/api/pagos/montos-por-estado?empresa_id=${filter.empresa_id}&tipo_pago_id=${filter.tipo_pago_id}`)
+                    .then(res => {
+                        //console.log(res);
+                        setMontosPorEstado(res.data);
+                        setLoadingGrafico(false);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            }
 
-                    fetchDatosGrafico();
-                });
+            query();
         }
 
         function fetchDatosTabla() {
             setLoadingTabla(true);
-            let url = filter.tipo_pago_id === 1
-                ? `/api/finiquitos/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`
-                : `/api/utilidades/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`;
 
-            Axios.get(url)
-                .then(res => {
-                    //console.log(res);
-                    setLoadingTabla(false);
-                    setMontosPorAnio(res.data);
-                })
-                .catch(err => {
-                    console.error(err);
+            let count = 0;
+            const query = () => {
+                count++;
+                Axios.get(`/api/pagos/montos-por-estado-por-anio/${filter.empresa_id}?tipo_pago_id=${filter.tipo_pago_id}`)
+                    .then(res => {
+                        //console.log(res);
+                        setLoadingTabla(false);
+                        setMontosPorAnio(res.data);
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
+            }
 
-                    fetchDatosTabla();
-                })
+            query();
         }
 
         fetchDatosGrafico();

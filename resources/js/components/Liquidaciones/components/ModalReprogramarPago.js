@@ -16,6 +16,7 @@ export const ModalRepogramarPago = ({ liquidacion, isVisible, setIsVisible, relo
         Axios.put(`/api/pagos/programar-para-pago/reprogramar`, {
             id: liquidacion.id,
             fecha_pago: form.fecha_pago,
+            tipo_pago_id: liquidacion.tipo_pago === 'LIQUIDACION' ? 1 : 2
         })
             .then(res => {
                 message['success']({

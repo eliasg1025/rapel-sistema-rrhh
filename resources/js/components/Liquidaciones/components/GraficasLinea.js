@@ -56,14 +56,13 @@ export const GraficaLinea = () => {
 
     useEffect(() => {
         function fetchCantidadPagos() {
-            Axios.get(`/api/finiquitos/cantidad-pagos-por-dia/${filter.empresa_id}?desde=${filter.desde}&hasta=${filter.hasta}`)
+            Axios.get(`/api/pagos/cantidad-pagos-por-dia/${filter.empresa_id}?desde=${filter.desde}&hasta=${filter.hasta}`)
                 .then(res => {
                     //console.log(res);
                     setCantidadPagosPorDia(res.data);
                 })
                 .catch(err => {
                     console.error(err);
-                    fetchCantidadPagos();
                 })
         }
 

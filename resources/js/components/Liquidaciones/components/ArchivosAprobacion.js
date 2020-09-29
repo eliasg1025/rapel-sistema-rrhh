@@ -10,7 +10,7 @@ export const ArchivosAprobacion = () => {
     const [fechasPagos, setFechasPagos] = useState([]);
 
     useEffect(() => {
-        Axios.get('/api/finiquitos/fechas-pagos')
+        Axios.get('/api/pagos/fechas-pagos')
             .then(res => {
                 //console.log(res);
                 setFechasPagos(res.data);

@@ -26,10 +26,6 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
     const [bbva, setBbva] = useState([]);
     const [banbif, setBanbif] = useState([]);
 
-    const sincronizarSeleccionados = () => {
-        console.log('hi');
-    }
-
     const consultarSincronizacion = () => {
 
         const text = parseInt(filtro.estado) === 0 ? `
@@ -73,8 +69,14 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     console.log(err);
                 });
         } else {
+            Axios.put('/api/pagos/utilidades/sincronizar', {
+                ruts: data.filter(e => e.tipo_pago === 'UTILIDAD').map(e => e.rut)
+            })
+                .then(res => console.log(res))
+                .catch(err =>  console.error(err));
+
             Axios.post(`http://192.168.60.16/api/finiquitos/get/one-by-one`, {
-                finiquitosId: data.map(e => e.code)
+                finiquitosId: data.filter(e => e.tipo_pago === 'LIQUIDACION').map(e => e.id)
             })
                 .then(res => {
                     const { data } = res;
@@ -96,7 +98,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
             }
         });
 
-        Axios.post(`/api/finiquitos/massive`, {
+        Axios.post(`/api/pagos/massive`, {
             data,
             tipo_pago_id,
             empresa_id: filtro.empresa_id
@@ -138,7 +140,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                         }
                     });
 
-                    Axios.put('/api/finiquitos/marcar-pagado-masivo', {
+                    Axios.put('/api/pagos/marcar-pagado-masivo', {
                         //data: d.map(e => e.id),
                         empresa_id: filtro.empresa_id,
                         fecha_pago: filtro.desde,
