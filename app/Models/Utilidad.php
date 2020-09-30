@@ -165,6 +165,22 @@ class Utilidad extends Model
         }
     }
 
+    public static function getByTrabajador($rut)
+    {
+        return DB::table('utilidades as l')
+            ->select(
+                'l.id', 'l.rut',
+                DB::raw("CONCAT(l.id, '@', 2) AS _id"),
+                DB::raw("'UTILIDAD' as tipo_pago"),
+                'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y %H:%i:%s") fecha_firmado'),
+                DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
+            )
+            ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->where('l.rut', $rut)
+            ->get();
+    }
+
     public static function getPagados($empresa_id, $fecha_pago, $banco='TODOS')
     {
         return DB::table('utilidades as l')
@@ -253,10 +269,12 @@ class Utilidad extends Model
 
     public static function getRechazados($empresa_id = 9)
     {
-        return DB::table('utilidades_rechazos as l')
+        $dataset = DB::table('utilidades_rechazos as l')
             ->select(
-                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                'l.utilidad_id',
+                DB::raw("CONCAT(l.id, '@', 2) as _id"),
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
                 DB::raw("'UTILIDAD' AS tipo_pago")
             )
@@ -264,5 +282,19 @@ class Utilidad extends Model
             //->where('l.empresa_id', $empresa_id)
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
+
+        $dataset->transform(function($item) {
+            $children = DB::table('utilidades as l')
+                ->where('l.id', $item->utilidad_id)
+                ->first();
+
+            if ( $children ) {
+                $item->estado = $children->estado;
+            }
+
+            return $item;
+        });
+
+        return $dataset;
     }
 }

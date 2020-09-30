@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
+import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import Axios from 'axios';
 
 export const Rechazos = () => {
@@ -42,23 +43,41 @@ export const Rechazos = () => {
         {
             title: 'Estado',
             dataIndex: 'estado',
-            render: (value, record) => (
-                <>
-
-                </>
-            )
+            render: (_, record) => renderTags(record.estado)
         }
     ];
 
     useEffect(() => {
         Axios.get(`/api/pagos/get-rechazados?empresa_id=${9}`)
             .then(res => {
-                setRechazos(res.data);
+                setRechazos(res.data.map(item => {
+                    return {
+                        ...item,
+                        key: item._id
+                    }
+                }));
             })
             .catch(err => {
                 console.error(err);
             })
     }, []);
+
+    function renderTags(estado) {
+        switch (estado) {
+            case 0:
+                return <Tag color="default" icon={<ClockCircleOutlined />}>PENDIENTE</Tag>;
+            case 1:
+                return <Tag color="warning" icon={<ClockCircleOutlined />}>FIRMADO</Tag>;
+            case 2:
+                return <Tag color="processing" icon={<SyncOutlined spin/>}>PARA PAGO</Tag>;
+            case 3:
+                return <Tag color="success" icon={<CheckCircleOutlined />}>PAGADO</Tag>;
+            case 4:
+                return <Tag color="error" icon={<CloseCircleOutlined />}>RECHAZADO</Tag>;
+            default:
+                return null;
+        }
+    }
 
     return (
         <>

@@ -19,6 +19,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
     const [isVisibleProgramarParaPago, setIsVisibleProgramarParaPago] = useState(false);
     const [isVisibleGenerarArchivoBanco, setIsVisibleGenerarArchivoBanco] = useState(false);
     const [isVisibleImportarUtilidades, setIsVisibleImportarUtilidades] = useState(false);
+    const [isVisiblePagoIndividual, setIsVisiblePagoIndividual] = useState(false);
 
     const [bcp, setBcp] = useState([]);
     const [interbank, setInterbank] = useState([]);
@@ -188,6 +189,9 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     <button className="btn btn-primary" disabled={parseInt(filtro.estado) !== 2} onClick={() => setIsVisibleGenerarArchivoBanco(true)}>
                         <i className="fas fa-file-invoice" />&nbsp;Generar archivos banco
                     </button>
+                    <button className="btn btn-primary" onClick={() => setIsVisiblePagoIndividual(true)}>
+                        <i className="far fa-clock" />&nbsp;Pago Individual
+                    </button>
                     {parseInt(filtro.estado) === 0 && (
                         <button className="btn btn-success" disabled={parseInt(filtro.estado) !== 0} onClick={() => setIsVisibleImportarUtilidades(true)}>
                             <i className="fas fa-file-upload" />&nbsp;Importar Utilidades
@@ -261,6 +265,14 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                     setReloadData={setReloadData}
                     setIsVisibleParent={setIsVisibleImportarUtilidades}
                 />
+            </Modal>
+
+            <Modal
+                title="Buscar Pago"
+                isVisible={isVisiblePagoIndividual}
+                setIsVisible={setIsVisiblePagoIndividual}
+            >
+                hi
             </Modal>
         </>
     );

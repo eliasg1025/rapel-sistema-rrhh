@@ -101,7 +101,9 @@ class Liquidaciones extends Model
     {
         return DB::table('liquidaciones as l')
             ->select(
-                'l.id as key', 'l.id', 'l.rut',
+                'l.id', 'l.rut',
+                DB::raw("CONCAT(l.id, '@', 1) AS _id"),
+                DB::raw("'LIQUIDACION' as tipo_pago"),
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y %H:%i:%s") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
@@ -133,10 +135,12 @@ class Liquidaciones extends Model
 
     public static function getRechazados($empresa_id = 9)
     {
-        return DB::table('liquidaciones_rechazos as l')
+        $dataset = DB::table('liquidaciones_rechazos as l')
             ->select(
-                'l.id as key', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                'l.liquidacion_id',
+                DB::raw("CONCAT(l.id, '@', 1) as _id"),
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago'),
                 DB::raw("'LIQUIDACION' AS tipo_pago")
             )
@@ -144,6 +148,20 @@ class Liquidaciones extends Model
             //->where('l.empresa_id', $empresa_id)
             ->orderBy('l.apellido_paterno', 'ASC')
             ->get();
+
+        $dataset->transform(function($item) {
+            $children = DB::table('liquidaciones as l')
+                ->where('l.id', $item->liquidacion_id)
+                ->first();
+
+            if ( $children ) {
+                $item->estado = $children->estado;
+            }
+
+            return $item;
+        });
+
+        return $dataset;
     }
 
     public static function toggleRechazo(int $tipo, $finiquitos)

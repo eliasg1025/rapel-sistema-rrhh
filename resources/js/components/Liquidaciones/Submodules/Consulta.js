@@ -15,13 +15,13 @@ export const Consulta = () => {
         if (trabajador) {
             console.log(trabajador)
 
-            Axios.get(`/api/finiquitos/${trabajador.rut}/trabajador`)
+            Axios.get(`/api/pagos/${trabajador.rut}/trabajador`)
                 .then(res => {
                     console.log(res);
-                    setLiquidaciones(res.data.map(e => {
+                    setLiquidaciones(res.data.map(item => {
                         return {
-                            tipo: 'LIQUIDACIÓN',
-                            ...e
+                            ...item,
+                            key: item._id
                         }
                     }));
                 })
