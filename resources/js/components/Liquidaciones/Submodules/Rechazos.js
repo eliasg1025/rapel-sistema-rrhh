@@ -42,7 +42,11 @@ export const Rechazos = () => {
         {
             title: 'Estado',
             dataIndex: 'estado',
-            render: (value, record) => `hi`
+            render: (value, record) => (
+                <>
+
+                </>
+            )
         }
     ];
 

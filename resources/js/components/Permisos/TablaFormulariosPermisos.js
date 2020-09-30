@@ -39,7 +39,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
             'CARGADO POR',
             'FECHA SOLICITUD',
             'HORA SOLICITUD',
-            'FECHA HORA ENVIADO',
             'FECHA HORA RECEPCIONADO'
         ];
 
@@ -69,7 +68,6 @@ export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
                 cargado_por: item.nombre_completo_usuario || '',
                 fecha_solicitud: item.fecha_solicitud,
                 hora_solicitud: item.hora,
-                fecha_hora_enviado: item.fecha_hora_enviado,
                 fecha_hora_recepcionado: item.fecha_hora_recepcionado,
             };
         });
