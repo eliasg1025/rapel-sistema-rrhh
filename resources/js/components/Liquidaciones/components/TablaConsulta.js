@@ -7,7 +7,7 @@ export const TablaConsulta = ({ data }) => {
     const columns = [
         {
             title: 'Tipo',
-            dataIndex: 'tipo'
+            dataIndex: 'tipo_pago'
         },
         {
             title: 'Empresa',

@@ -85,6 +85,7 @@ class PagosController extends Controller
             : Utilidad::where('id', $pago_id)->first();
 
         $pago->fecha_pago = $fecha_pago;
+        $pago->estado = 2;
         $pago->save();
 
         return response()->json([
