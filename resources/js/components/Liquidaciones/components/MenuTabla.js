@@ -8,7 +8,7 @@ import { ImportacionTuRecibo } from './ImportacionTuRecibo';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { ImportacionUtilidades } from './ImportacionUtilidades';
-import { PagoIndividual } from './PagoIndividual';
+import { EditarPago } from './EditarPago';
 
 moment.locale('es');
 
@@ -191,7 +191,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                         <i className="fas fa-file-invoice" />&nbsp;Generar archivos banco
                     </button>
                     <button className="btn btn-primary" onClick={() => setIsVisiblePagoIndividual(true)}>
-                        <i className="far fa-clock" />&nbsp;Pago Individual
+                        <i className="far fa-edit" />&nbsp;Editar Pago
                     </button>
                     {parseInt(filtro.estado) === 0 && (
                         <button className="btn btn-success" disabled={parseInt(filtro.estado) !== 0} onClick={() => setIsVisibleImportarUtilidades(true)}>
@@ -269,11 +269,12 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
             </Modal>
 
             <Modal
-                title="Buscar Pago"
+                title="Editar Pago"
                 isVisible={isVisiblePagoIndividual}
                 setIsVisible={setIsVisiblePagoIndividual}
+                width={700}
             >
-                <PagoIndividual />
+                <EditarPago />
             </Modal>
         </>
     );
