@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use App\Models\Liquidaciones;
 use App\Models\Pago;
 use App\Models\SqlSrv\Trabajador;
+use App\Models\TipoPago;
 use App\Models\Utilidad;
 use App\Services\ArchivosAprobacionService;
 use App\Services\ArchivosBancoService;
@@ -17,6 +18,42 @@ use Illuminate\Support\Facades\{DB, File, Storage};
 
 class PagosController extends Controller
 {
+    private function getPago($key)
+    {
+        [$id, $tipoPagoId] = explode("@", $key);
+
+        $tipo_pago = TipoPago::find($tipoPagoId);
+
+        return DB::table($tipo_pago->table)->where('id', $id);
+    }
+
+    public function update(string $id, Request $request)
+    {
+        try {
+            $pago = $this->getPago($id);
+
+            $fecha_pago = $request->get('fecha_pago');
+            $estado = $request->get('estado');
+
+            $updated = $pago->update([
+                'fecha_pago' => isset($fecha_pago) ? Carbon::parse($fecha_pago) : null,
+                'estado' => $estado,
+            ]);
+
+            if ( $updated ) {
+                return response()->json([
+                    'message' => 'Actualización completada correctamente'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ]);
+        }
+
+    }
+
+
     /**
      * Solo disponible para liquidaciones
      */

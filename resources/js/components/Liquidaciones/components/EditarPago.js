@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Form, Input, InputNumber, Table, Tag } from "antd";
+import {
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    Popconfirm,
+    Select,
+    Table,
+    Tag
+} from "antd";
 import {
     CheckCircleOutlined,
     SyncOutlined,
@@ -16,7 +25,10 @@ export const EditarPago = () => {
 
     const handleSubmit = event => {
         event.preventDefault();
+        fetchPagos();
+    };
 
+    const fetchPagos = () => {
         Axios.get(`/api/pagos/${form.rut}/trabajador`)
             .then(res => {
                 setPagos(
@@ -69,54 +81,11 @@ export const EditarPago = () => {
         }
     ];
 
-    const renderTags = estado => {
-        switch (estado) {
-            case 0:
-                return (
-                    <Tag color="default" icon={<ClockCircleOutlined />}>
-                        PENDIENTE
-                    </Tag>
-                );
-            case 1:
-                return (
-                    <Tag color="warning" icon={<ClockCircleOutlined />}>
-                        FIRMADO
-                    </Tag>
-                );
-            case 2:
-                return (
-                    <Tag color="processing" icon={<SyncOutlined spin />}>
-                        PARA PAGO
-                    </Tag>
-                );
-            case 3:
-                return (
-                    <Tag color="success" icon={<CheckCircleOutlined />}>
-                        PAGADO
-                    </Tag>
-                );
-            case 4:
-                return (
-                    <Tag color="error" icon={<CloseCircleOutlined />}>
-                        RECHAZADO
-                    </Tag>
-                );
-            case 5:
-                return (
-                    <Tag color="success" icon={<CheckCircleOutlined />}>
-                        PAGADO
-                    </Tag>
-                );
-            default:
-                return null;
-        }
-    };
-
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <div className="form-row">
-                    <div className="col-md-6">
+                    <div className="col-md-12 input-group">
                         <input
                             type="text"
                             name="rut"
@@ -124,18 +93,71 @@ export const EditarPago = () => {
                             placeholder="Buscar por RUT"
                             onChange={handleChange}
                         />
-                    </div>
-                    <div className="col-md-6">
-                        <button type="submit" className="btn btn-primary">
-                            Buscar
-                        </button>
+                        <div className="input-group-append">
+                            <button
+                                className="btn btn-primary"
+                                type="submit"
+                                disabled={
+                                    !(
+                                        form.rut.length >= 8 &&
+                                        form.rut.length <= 12
+                                    )
+                                }
+                            >
+                                <i className="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
             <br />
             {/* <Table columns={columns} size="small" dataSource={pagos} /> */}
+            <EditableTable data={pagos} fetchPagos={fetchPagos} />
         </>
     );
+};
+
+const renderTags = estado => {
+    switch (estado) {
+        case 0:
+            return (
+                <Tag color="default" icon={<ClockCircleOutlined />}>
+                    PENDIENTE
+                </Tag>
+            );
+        case 1:
+            return (
+                <Tag color="warning" icon={<ClockCircleOutlined />}>
+                    FIRMADO
+                </Tag>
+            );
+        case 2:
+            return (
+                <Tag color="processing" icon={<SyncOutlined spin />}>
+                    PARA PAGO
+                </Tag>
+            );
+        case 3:
+            return (
+                <Tag color="success" icon={<CheckCircleOutlined />}>
+                    PAGADO
+                </Tag>
+            );
+        case 4:
+            return (
+                <Tag color="error" icon={<CloseCircleOutlined />}>
+                    RECHAZADO
+                </Tag>
+            );
+        case 5:
+            return (
+                <Tag color="success" icon={<CheckCircleOutlined />}>
+                    PAGADO.
+                </Tag>
+            );
+        default:
+            return null;
+    }
 };
 
 const EditableCell = ({
@@ -148,7 +170,19 @@ const EditableCell = ({
     children,
     ...restProps
 }) => {
-    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
+    const inputNode =
+        inputType === "date" ? (
+            <input type="date" className="form-control" />
+        ) : (
+            <Select>
+                <Select.Option value={0} key={0}>PENDIENTE</Select.Option>
+                <Select.Option value={1} key={1}>FIRMADO</Select.Option>
+                <Select.Option value={2} key={2}>PARA PAGO</Select.Option>
+                <Select.Option value={3} key={3}>PAGADO</Select.Option>
+                <Select.Option value={4} key={4}>RECHAZADO</Select.Option>
+                <Select.Option value={5} key={5}>PAGADO.</Select.Option>
+            </Select>
+        );
 
     return (
         <td {...restProps}>
@@ -158,8 +192,8 @@ const EditableCell = ({
                     style={{ margin: 0 }}
                     rules={[
                         {
-                            required: true,
-                            message: `Please Input ${title}!`
+                            required: dataIndex !== "fecha_pago",
+                            message: `Completar ${title}!`
                         }
                     ]}
                 >
@@ -172,128 +206,154 @@ const EditableCell = ({
     );
 };
 
-const originData = [];
-const EditableTable = () => {
+const EditableTable = ({ data, fetchPagos }) => {
     const [form] = Form.useForm();
-    const [data, setData] = useState(originData);
-    const [editingKey, setEditingKey] = useState('');
+    const [editingKey, setEditingKey] = useState("");
 
-    const isEditing = (record) => record.key === editingKey;
+    const isEditing = record => record.key === editingKey;
 
-    const edit = (record) => {
+    const edit = record => {
+        console.log(record);
         form.setFieldsValue({
-          name: '',
-          age: '',
-          address: '',
-          ...record,
+            fecha_pago: "",
+            estado: "",
+            ...record
         });
         setEditingKey(record.key);
     };
 
     const cancel = () => {
-        setEditingKey('');
+        setEditingKey("");
     };
 
-    const save = async (key) => {
+    const save = async key => {
         try {
-          const row = await form.validateFields();
-          const newData = [...data];
-          const index = newData.findIndex((item) => key === item.key);
+            const row = await form.validateFields();
+            const newData = [...data];
 
-          if (index > -1) {
-            const item = newData[index];
-            newData.splice(index, 1, { ...item, ...row });
-            setData(newData);
-            setEditingKey('');
-          } else {
-            newData.push(row);
-            setData(newData);
-            setEditingKey('');
-          }
+            const index = newData.findIndex(item => key === item.key);
+
+            if (index > -1) {
+                //const item = newData[index];
+
+                console.log(key, row);
+
+                Axios.put(`/api/pagos/${key}`, { ...row })
+                    .then(res => {
+                        console.log(res);
+                        fetchPagos();
+                    })
+                    .catch(err => console.error(err));
+                setEditingKey("");
+            } else {
+                //newData.push(row);
+                //setData(newData);
+                console.log(newData);
+                setEditingKey("");
+            }
         } catch (errInfo) {
-          console.log('Validate Failed:', errInfo);
+            console.log("Validación Fallida:", errInfo);
         }
     };
 
     const columns = [
         {
-          title: 'name',
-          dataIndex: 'name',
-          width: '25%',
-          editable: true,
+            title: "Tipo",
+            dataIndex: "tipo_pago"
         },
         {
-          title: 'age',
-          dataIndex: 'age',
-          width: '15%',
-          editable: true,
+            title: "Empresa",
+            dataIndex: "empresa"
         },
         {
-          title: 'address',
-          dataIndex: 'address',
-          width: '40%',
-          editable: true,
+            title: "Periodo",
+            dataIndex: "periodo",
+            render: (_, record) => `${record.mes} -  ${record.ano}`
         },
         {
-          title: 'operation',
-          dataIndex: 'operation',
-          render: (_, record) => {
-            const editable = isEditing(record);
-            return editable ? (
-              <span>
-                <a
-                  href="javascript:;"
-                  onClick={() => save(record.key)}
-                  style={{
-                    marginRight: 8,
-                  }}
-                >
-                  Save
-                </a>
-                <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                  <a>Cancel</a>
-                </Popconfirm>
-              </span>
-            ) : (
-              <a disabled={editingKey !== ''} onClick={() => edit(record)}>
-                Edit
-              </a>
-            );
-          },
+            title: "Monto",
+            dataIndex: "monto"
         },
-      ];
-      const mergedColumns = columns.map((col) => {
+        {
+            title: "Fecha pago",
+            dataIndex: "fecha_pago",
+            editable: true
+        },
+        {
+            title: "Estado",
+            dataIndex: "estado",
+            render: (_, record) => renderTags(record.estado),
+            editable: true
+        },
+        {
+            title: "Acciones",
+            dataIndex: "operation",
+            render: (_, record) => {
+                const editable = isEditing(record);
+                return editable ? (
+                    <span>
+                        <Popconfirm
+                            title="¿Deseas Guardar?"
+                            onConfirm={() => save(record.key)}
+                        >
+                            <a
+                                href="#"
+                                style={{
+                                    marginRight: 8
+                                }}
+                            >
+                                Guardar
+                            </a>
+                        </Popconfirm>
+                        <a href="#" onClick={cancel}>
+                            Cancelar
+                        </a>
+                    </span>
+                ) : (
+                    <a
+                        href="#"
+                        disabled={editingKey !== ""}
+                        onClick={() => edit(record)}
+                    >
+                        Editar
+                    </a>
+                );
+            }
+        }
+    ];
+    const mergedColumns = columns.map(col => {
         if (!col.editable) {
-          return col;
+            return col;
         }
 
         return {
-          ...col,
-          onCell: (record) => ({
-            record,
-            inputType: col.dataIndex === 'age' ? 'number' : 'text',
-            dataIndex: col.dataIndex,
-            title: col.title,
-            editing: isEditing(record),
-          }),
+            ...col,
+            onCell: record => ({
+                record,
+                inputType: col.dataIndex === "fecha_pago" ? "date" : "text",
+                dataIndex: col.dataIndex,
+                title: col.title,
+                editing: isEditing(record)
+            })
         };
-      });
-      return (
+    });
+    return (
         <Form form={form} component={false}>
-          <Table
-            components={{
-              body: {
-                cell: EditableCell,
-              },
-            }}
-            bordered
-            dataSource={data}
-            columns={mergedColumns}
-            rowClassName="editable-row"
-            pagination={{
-              onChange: cancel,
-            }}
-          />
+            <Table
+                components={{
+                    body: {
+                        cell: EditableCell
+                    }
+                }}
+                bordered
+                dataSource={data}
+                columns={mergedColumns}
+                rowClassName="editable-row"
+                pagination={{
+                    onChange: cancel
+                }}
+                size="small"
+            />
         </Form>
-      );
-}
+    );
+};

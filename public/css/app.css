@@ -183,6 +183,12 @@
   width: 90%;
 }
 
+.editable-row .ant-form-item-explain {
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}
+
 @media (min-width: 700px) {
   .login {
     width: 500px;

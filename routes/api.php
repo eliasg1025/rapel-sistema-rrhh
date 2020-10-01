@@ -153,7 +153,8 @@ Route::group(['prefix' => 'covid'], function() {
 
 Route::group(['prefix' => 'pagos'], function() {
     Route::get('/', 'PagosController@get');
-    Route::get('/{rut}/trabajador', 'PagosController@getByTrabajador')->where('id', '[0-9]+');
+    Route::put('/{id}', 'PagosController@update');
+    Route::get('/{rut}/trabajador', 'PagosController@getByTrabajador')->where('rut', '[0-9]+');
 
     Route::get('/get-pagados', 'PagosController@getPagados');
     Route::get('/get-rechazados', 'PagosController@getRechazados');
