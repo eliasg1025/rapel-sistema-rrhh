@@ -39,7 +39,7 @@ export default function main() {
                         </a>
                     </Menu.Item>
                     {
-                        (usuario.liquidaciones === 1 || usuario.liquidaciones === 2) && (
+                        (usuario.liquidaciones === 3 || usuario.liquidaciones === 2) && (
                             <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
                                 {usuario.liquidaciones === 2 && (
                                     <Menu.Item key="l" icon={<HomeOutlined />}>

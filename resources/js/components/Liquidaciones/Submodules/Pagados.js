@@ -230,7 +230,7 @@ export const Pagados = () => {
                                     }
                                     onChange={e => setFilter({ ...filter, banco: e })}
                                 >
-                                    <Select.Option value={0} key={0}>
+                                    <Select.Option value="TODOS" key="TODOS">
                                         {`TODOS`}
                                     </Select.Option>
                                     {bancos.map(e => (

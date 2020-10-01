@@ -8,6 +8,7 @@ import { ImportacionTuRecibo } from './ImportacionTuRecibo';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { ImportacionUtilidades } from './ImportacionUtilidades';
+import { PagoIndividual } from './PagoIndividual';
 
 moment.locale('es');
 
@@ -272,7 +273,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                 isVisible={isVisiblePagoIndividual}
                 setIsVisible={setIsVisiblePagoIndividual}
             >
-                hi
+                <PagoIndividual />
             </Modal>
         </>
     );
