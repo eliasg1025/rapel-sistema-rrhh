@@ -142,7 +142,7 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
                         }
                     });
 
-                    Axios.put('/api/pagos/marcar-pagado-masivo', {
+                    Axios.put('/api/pagos/marcar/pagado-masivo', {
                         //data: d.map(e => e.id),
                         empresa_id: filtro.empresa_id,
                         fecha_pago: filtro.desde,

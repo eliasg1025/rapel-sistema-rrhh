@@ -178,7 +178,7 @@ Route::group(['prefix' => 'pagos'], function() {
         Route::get('/', 'PagosController@getFechasPago');
         Route::post('/descargar', 'PagosController@descargarArchivosAprobacion');
     });
-    Route::put('/marcar-pagado-masivo', 'PagosController@marcarPagadoMasivo');
+    Route::put('/marcar/pagado-masivo', 'PagosController@marcarPagadoMasivo');
     Route::get('/montos-por-estado', 'PagosController@montosPorEstado');
     Route::get('/montos-por-estado-por-anio/{empresa_id}', 'PagosController@montosPorEstadoPorAnio');
     Route::get('/cantidad-pagos-por-dia/{empresa_id}', 'PagosController@cantidadPagosPorDia');
