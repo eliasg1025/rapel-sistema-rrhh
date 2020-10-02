@@ -163,6 +163,21 @@ class PagosController extends Controller
         return response()->json([ ...$utilidades, ...$liquidaciones ]);
     }
 
+    public function getPagadosTabla(Request $request)
+    {
+        $empresa_id = $request->query('empresa_id');
+        $fecha_pago = $request->query('fecha_pago');
+        $banco = $request->query('banco');
+
+        $liquidaciones = Liquidaciones::getPagadosTabla($empresa_id, $fecha_pago, $banco);
+        $utilidades = Utilidad::getPagadosTabla($empresa_id, $fecha_pago, $banco);
+
+        return response()->json([
+            'liquidaciones' => $liquidaciones,
+            'utilidades' => $utilidades
+        ]);
+    }
+
     public function getRechazados(Request $request)
     {
         $empresa_id = $request->query('empresa_id');

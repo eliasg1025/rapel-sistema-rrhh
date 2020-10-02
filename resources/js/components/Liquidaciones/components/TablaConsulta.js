@@ -71,6 +71,7 @@ export const TablaConsulta = ({ data }) => {
                 columns={columns}
                 size="small"
                 dataSource={data}
+                bordered
             />
         </>
     );

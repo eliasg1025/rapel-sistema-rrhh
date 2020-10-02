@@ -157,6 +157,7 @@ Route::group(['prefix' => 'pagos'], function() {
     Route::get('/{rut}/trabajador', 'PagosController@getByTrabajador')->where('rut', '[0-9]+');
 
     Route::get('/get-pagados', 'PagosController@getPagados');
+    Route::get('/get-pagados/tabla', 'PagosController@getPagadosTabla');
     Route::get('/get-rechazados', 'PagosController@getRechazados');
     Route::put('/toggle-rechazo/{tipo}', 'PagosController@toggleRechazo');
     Route::post('/terminar-proceso', 'PagosController@terminarProceso');

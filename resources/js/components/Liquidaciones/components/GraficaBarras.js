@@ -195,7 +195,7 @@ export const GraficaBarras = () => {
                                 loading={loadingTabla}
                                 dataSource={montosPorAnio}
                                 columns={columns}
-                                size="small"
+                                size="small" bordered
                             />
                         </div>
                     </div>

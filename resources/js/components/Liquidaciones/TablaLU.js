@@ -355,6 +355,7 @@ export const TablaLU = ({ data, loading, estado, reloadData, setReloadData }) =>
             <Table
                 columns={getColumns(data, estado)} dataSource={data} size="small" scroll={{ x: 500 }}
                 pagination={{ pageSize: 20 }} loading={loading}
+                bordered
             />
         </>
     );

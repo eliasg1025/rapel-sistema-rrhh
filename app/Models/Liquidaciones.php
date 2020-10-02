@@ -133,6 +133,24 @@ class Liquidaciones extends Model
             ->get();
     }
 
+    public static function getPagadosTabla($empresa_id, $fecha_pago, $banco='TODOS')
+    {
+        return DB::table('liquidaciones as l')
+            ->select(
+                'l.banco',
+                DB::raw('COUNT(*) AS cantidad'),
+                DB::raw('SUM(l.monto) AS monto')
+            )
+            ->groupBy('l.banco')
+            ->whereIn('l.estado', [3, 4])
+            ->where('l.fecha_pago', $fecha_pago)
+            ->where('l.empresa_id', $empresa_id)
+            ->when($banco !== 'TODOS', function($query) use ($banco) {
+                $query->where('l.banco', $banco);
+            })
+            ->get();
+    }
+
     public static function getRechazados($empresa_id = 9)
     {
         $dataset = DB::table('liquidaciones_rechazos as l')
