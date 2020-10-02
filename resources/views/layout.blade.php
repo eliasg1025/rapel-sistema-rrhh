@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" style="z-index: 2">
         <a class="navbar-brand" href="/">
             <img src="/img/logo-grupo-verfrut.png" alt="" width="100px">
         </a>
