@@ -330,6 +330,7 @@ class Liquidaciones extends Model
 
                 if ($finiquito->estado === 3) {
                     $finiquito->estado = 5;
+                    $finiquito->devengado = $finiquito->monto;
                     $finiquito->fecha_hora_marca_archivado = now()->toDateTimeString();
                     $finiquito->save();
                 } else {

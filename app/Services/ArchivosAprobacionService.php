@@ -65,7 +65,7 @@ class ArchivosAprobacionService
                 switch ($value->banco) {
                     case 'BANCO DE CREDITO':
                         $worksheet->getCell('I19')->setValue($value->cantidad);
-                        $worksheet->getCell('I19')->setValue($value->monto);
+                        $worksheet->getCell('J19')->setValue($value->monto);
                         break;
 
                     case 'INTERBANK':
