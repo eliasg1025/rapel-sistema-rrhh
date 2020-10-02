@@ -122,7 +122,7 @@ class ArchivosAprobacionService
             ];
         } catch (\Exception $e) {
             return [
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage() . ' -- ' . $e->getLine(),
                 'message' => 'Error al generar el archivo'
             ];
         }

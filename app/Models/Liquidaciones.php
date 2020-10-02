@@ -316,7 +316,7 @@ class Liquidaciones extends Model
                 ]);
         } catch (\Exception $e) {
             return [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
     }
