@@ -8,13 +8,14 @@ export const Consulta = () => {
 
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState([]);
-
+    const [loading, setLoading] = useState(false);
     const [liquidaciones, setLiquidaciones] = useState([]);
 
     useEffect(() => {
         if (trabajador) {
             console.log(trabajador)
 
+            setLoading(true);
             Axios.get(`/api/pagos/${trabajador.rut}/trabajador`)
                 .then(res => {
                     console.log(res);
@@ -24,9 +25,12 @@ export const Consulta = () => {
                             key: item._id
                         }
                     }));
+
+                    setLoading(false);
                 })
                 .catch(err => {
                     console.error(err);
+                    setLoading(false);
                 });
             setLiquidaciones();
         } else {
@@ -48,6 +52,7 @@ export const Consulta = () => {
             />
             <br />
             <TablaConsulta
+                loading={loading}
                 data={liquidaciones}
             />
         </>

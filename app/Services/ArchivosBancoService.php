@@ -6,6 +6,7 @@ use App\Models\Empresa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use Ramsey\Collection\Set;
 
 class ArchivosBancoService
 {
@@ -41,6 +42,7 @@ class ArchivosBancoService
         }
 
         try {
+
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/BCP.xlsm');
             $worksheet = $spreadsheet->getActiveSheet();
 
@@ -86,8 +88,14 @@ class ArchivosBancoService
             }
 
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save(storage_path('app/public') . $this->directory . '/BCP.xlsm');
+            $writer->save(storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_BCP_' . $this->fecha_pago . '.xlsm');
 
+            /*
+            copy(
+                storage_path('app/public') . '/archivos-banco/base/BCP.xlsm',
+                storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_BCP_' . $this->fecha_pago . '.xlsm'
+            );
+            */
             return [
                 'message' => 'Archivo generado correctamente'
             ];
@@ -141,7 +149,7 @@ class ArchivosBancoService
             }
 
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save(storage_path('app/public') . $this->directory . '/BANBIF.xlsm');
+            $writer->save(storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_BANBIF_' . $this->fecha_pago . '.xlsm');
 
             return [
                 'message' => 'Archivo generado correctamente'
@@ -182,7 +190,7 @@ class ArchivosBancoService
             }
 
             $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->save(storage_path('app/public') . $this->directory . '/SCOTIABANK.xlsm');
+            $writer->save(storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_SCOTIABANK_' . $this->fecha_pago . '.xlsm');
 
             return [
                 'message' => 'Archivo generado correctamente'
@@ -204,21 +212,32 @@ class ArchivosBancoService
             ];
         }
         try {
-            $content = '';
             $numero_cuenta = $this->empresa->id === 9 ? '00110245880100004456' : '00110278000100019135';
 
-            $content .= '|' . $numero_cuenta . '|PEN|' . '|A|' . now()->format('m-Y') . '|N' . "\n";
-            foreach ($data as $row) {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/blank.xlsx');
+            $worksheet = $spreadsheet->getActiveSheet();
+
+            $worksheet->getCell('A1')->setValue($numero_cuenta, DataType::TYPE_STRING);
+            $worksheet->getCell('B1')->setValue('PEN');
+            $worksheet->getCell('C1')->setValue('A');
+            $worksheet->getCell('D1')->setValue(now()->format('m-Y'));
+            $worksheet->getCell('E1')->setValue('N');
+
+            foreach ($data as $key => $row) {
+                $i = $key + 2;
+
                 $nombre_completo = $row['apellido_paterno'] . ' ' .$row['apellido_materno'] . ' ' . $row['nombre'];
 
-                $content .= '|' . (strlen($row['rut']) === 8 ? 'L' : 'E');
-                $content .= '|' . $row['rut'] . '|P';
-                $content .= '|' . $row['numero_cuenta'];
-                $content .= '|' . $nombre_completo;
-                $content .= '|' . $row['monto'];
-                $content .= "\n";
+                $worksheet->getCell('A' . $i)->setValue(strlen($row['rut']) === 8 ? 'L' : 'E');
+                $worksheet->getCell('B' . $i)->setValueExplicit($row['rut'], DataType::TYPE_STRING);
+                $worksheet->getCell('C' . $i)->setValue('P');
+                $worksheet->getCell('D' . $i)->setValueExplicit($row['numero_cuenta'], DataType::TYPE_STRING);
+                $worksheet->getCell('E' . $i)->setValue($nombre_completo);
+                $worksheet->getCell('F' . $i)->setValue($row['monto']);
             }
-            Storage::disk('public')->put($this->directory . '/BBVA.txt', $content);
+
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save(storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_BBVA_' . $this->fecha_pago . '.xlsx');
 
             return [
                 'message' => 'Archivo generado correctamente'
@@ -242,6 +261,32 @@ class ArchivosBancoService
         try {
             $content = '';
 
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(storage_path('app/public') . '/archivos-banco/base/blank.xlsx');
+            $worksheet = $spreadsheet->getActiveSheet();
+
+            $ruts = array_unique(
+                array_map(function($item) {
+                    return $item['rut'];
+                }, $data)
+            );
+
+            foreach ($datos as $key => $row) {
+                $i = $key + 1;
+
+                $worksheet->getCell('B' . $i)->setValueExplicit( $row['rut'], DataType::TYPE_STRING );
+                $worksheet->getCell('C' . $i)->setValue( '1' );
+                $worksheet->getCell('D' . $i)->setValue( $row['monto'] );
+                $worksheet->getCell('H' . $i)->setValue( '09' );
+                $worksheet->getCell('I' . $i)->setValue( '002' );
+                $worksheet->getCell('J' . $i)->setValue( '01' );
+                $worksheet->getCell('K' . $i)->setValueExplicit( substr($row['numero_cuenta'], 0, 3), DataType::TYPE_STRING );
+                $worksheet->getCell('L' . $i)->setValueExplicit( substr($row['numero_cuenta'], 3), DataType::TYPE_STRING );
+                $worksheet->getCell('M' . $i)->setValue( 'P' );
+                $worksheet->getCell('N' . $i)->setValue( strlen($row['rut']) === 8 ? '01' : '03' );
+                $worksheet->getCell('O' . $i)->setValue( $row['rut'] );
+                $worksheet->getCell('P' . $i)->setValue( $row['apellido_paterno'] . ';' . $row['apellido_materno'] . ';' . $row['nombre'] );
+            }
+            /*
             foreach ($data as $row) {
                 $content .= '|' . $row['rut'] . '|01';
                 $content .= '|' . $row['monto'] . '|';
@@ -253,7 +298,11 @@ class ArchivosBancoService
                 $content .= "\n";
             }
 
-            Storage::disk('public')->put($this->directory . '/INTERBANK.txt', $content);
+            Storage::disk('public')->put($this->directory . '/INTERBANK' . '.txt', $content);
+            */
+
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save(storage_path('app/public') . $this->directory . '/' . $this->empresa->shortname . '_INTERBANK_' . $this->fecha_pago . '.xlsx');
 
             return [
                 'message' => 'Archivo generado correctamente'

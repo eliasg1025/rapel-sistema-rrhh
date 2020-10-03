@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Tag } from 'antd';
 import { CheckCircleOutlined, SyncOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-export const TablaConsulta = ({ data }) => {
+export const TablaConsulta = ({ data, loading }) => {
 
     const columns = [
         {
@@ -72,6 +72,7 @@ export const TablaConsulta = ({ data }) => {
                 size="small"
                 dataSource={data}
                 bordered
+                loading={loading}
             />
         </>
     );
