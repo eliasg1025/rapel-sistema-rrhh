@@ -270,7 +270,7 @@ class ArchivosBancoService
                 }, $data)
             );
 
-            foreach ($datos as $key => $row) {
+            foreach ($data as $key => $row) {
                 $i = $key + 1;
 
                 $worksheet->getCell('B' . $i)->setValueExplicit( $row['rut'], DataType::TYPE_STRING );

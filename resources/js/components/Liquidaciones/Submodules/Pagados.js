@@ -452,7 +452,7 @@ const TablaBancos = ({ filter }) => {
                     <tr className="table-primary">
                         <td><b>TOTAL</b></td>
                         <td><b>{ tabla.reduce((acc, cur) => acc + cur.cantidad, 0) }</b></td>
-                        <td><b>{ Math( tabla.reduce((acc, cur) => acc + cur.monto, 0) * 100 ) / 100 }</b></td>
+                        <td><b>{ Math.round( tabla.reduce((acc, cur) => acc + cur.monto, 0) * 100 ) / 100 }</b></td>
                     </tr>
                 </tbody>
             </table>
