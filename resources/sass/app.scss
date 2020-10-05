@@ -190,6 +190,29 @@
     font-size: 12px;
 }
 
+.fixed-widgets {
+    position: fixed;
+    right: 32px;
+    top: 70px;
+    z-index: 2147483640;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    cursor: pointer;
+
+    .fixed-widgets-avatar {
+        color: #000;
+        background-color: #fff;
+        -webkit-box-shadow: 0 3px 6px -4px rgba(0,0,0,.12), 0 6px 16px 0 rgba(0,0,0,.08), 0 9px 28px 8px rgba(0,0,0,.05);
+        box-shadow: 0 3px 6px -4px rgba(0,0,0,.12), 0 6px 16px 0 rgba(0,0,0,.08), 0 9px 28px 8px rgba(0,0,0,.05);
+        -webkit-transition: color .3s;
+        transition: color .3s;
+    }
+}
+
+
 @media (min-width: 700px) {
     .login {
         width: 500px;

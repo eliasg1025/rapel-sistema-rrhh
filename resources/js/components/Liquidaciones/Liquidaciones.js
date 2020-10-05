@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import {BankOutlined, CloudUploadOutlined, FileDoneOutlined, HomeOutlined, QuestionCircleOutlined, StopOutlined} from "@ant-design/icons";
+import {BankOutlined, FileDoneOutlined, HomeOutlined, QuestionCircleOutlined, StopOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import { Main } from './Submodules/Main';
 import { Consulta } from './Submodules/Consulta';
 import { Liquidaciones } from './Submodules/Liquidaciones';
-import { Utilidades } from './Submodules/Utilidades';
-import SubMenu from 'antd/lib/menu/SubMenu';
 import { Pagados } from './Submodules/Pagados';
 import { Rechazos } from './Submodules/Rechazos';
+import { FloatingButton } from '../shared/FloatingButton';
 
 const { Content, Footer, Sider } = Layout;
+const { SubMenu } = Menu;
 
 export default function main() {
 
@@ -75,6 +75,7 @@ export default function main() {
                         {submodule === 'l-rechazos' && <Rechazos />}
                     </div>
                 </Content>
+                <FloatingButton />
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>
             </Layout>
         </Layout>

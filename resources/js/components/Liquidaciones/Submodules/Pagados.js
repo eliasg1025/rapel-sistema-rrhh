@@ -209,6 +209,43 @@ export const Pagados = () => {
         toggleRechazo(1);
     };
 
+    const handleExport = () => {
+        const headings = [
+            'TIPO', 'EMPRESA', 'MES', 'AÑO', 'RUT', 'NOMBRE COMPLETO', 'MONTO',
+            'BANCO', 'NUMERO CUENTA', 'ESTADO'
+        ];
+
+        const d = liquidaciones.map(item => {
+            return {
+                tipo: item.tipo_pago,
+                empresa: item.empresa,
+                mes: item.mes,
+                anio: item.ano,
+                rut: item.rut,
+                nombre_completo: `${item.apellido_paterno} ${item.apellido_materno} ${item.nombre}`,
+                monto: item.monto,
+                banco: item.banco,
+                numero_cuenta: item.numero_cuenta,
+                estado: item.estado === 3 ? 'PAGADO' : 'RECHAZADO'
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data: d},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `PAGADOS.xlsx`
+                link.click();
+            });
+    }
+
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange
@@ -355,6 +392,25 @@ export const Pagados = () => {
                         </span>
                     )}
                 </button>
+                <button
+                    className="btn btn-success"
+                    onClick={handleExport}
+                >
+                    {loading ? (
+                        <>
+                        <span
+                            className="spinner-border spinner-border-sm"
+                            role="status"
+                            aria-hidden="true"
+                        ></span>
+                        <span className="sr-only">Cargando...</span>
+                    </>
+                    ) : (
+                        <span>
+                            <i className="fas fa-file-excel"></i> Exportar
+                        </span>
+                    )}
+                </button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected
                         ? `${selectedRowKeys.length} item(s) seleccionados`
@@ -362,7 +418,7 @@ export const Pagados = () => {
                 </span>
 
                 <button
-                    className="btn btn-success"
+                    className="btn btn-warning"
                     onClick={handleMassiveTerminar}
                     style={{ float: "right" }}
                 >
