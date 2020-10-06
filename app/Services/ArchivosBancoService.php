@@ -270,7 +270,30 @@ class ArchivosBancoService
                 }, $data)
             );
 
-            foreach ($data as $key => $row) {
+            $arr = array_map(function($rut) use ($data) {
+
+                $liquidaciones = array_filter($data, function($liq) use ($rut) {
+                    return $liq['rut'] !== $rut;
+                });
+
+                $curr = current($liquidaciones);
+                $monto = array_reduce($liquidaciones, function($acc, $item) {
+                    $acc = $acc + $item['monto'];
+                    return $acc;
+                }, 0);
+
+                return [
+                    'rut' => $curr['rut'],
+                    'apellido_paterno' => $curr['apellido_paterno'],
+                    'apellido_materno' => $curr['apellido_materno'],
+                    'nombre' => $curr['nombre'],
+                    'numero_cuenta' => $curr['numero_cuenta'],
+                    'monto' => round($monto, 2)
+                ];
+
+            }, $ruts);
+
+            foreach ($arr as $key => $row) {
                 $i = $key + 1;
 
                 $worksheet->getCell('B' . $i)->setValueExplicit( $row['rut'], DataType::TYPE_STRING );

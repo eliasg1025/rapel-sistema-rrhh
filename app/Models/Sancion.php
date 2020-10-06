@@ -296,7 +296,7 @@ class Sancion extends Model
             ];
         }
 
-        if ( $usuario->sanciones == 1 ) {
+        if ( $usuario->sanciones == 1 || $usuario->sanciones == 3 ) {
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
@@ -343,6 +343,60 @@ class Sancion extends Model
                     DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo_usuario')
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+            return DB::table('sanciones as f')
+                ->select(
+                    'f.id',
+                    DB::raw('DATE_FORMAT(f.fecha_solicitud, "%d/%m/%Y") fecha_solicitud'),
+                    'f.observacion',
+                    'f.desvinculacion',
+                    't.rut',
+                    't.code',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'),
+                    'i.documento as documento',
+                    'z.code as zona_labor_id',
+                    'z.name as zona_labor',
+                    'i.name as incidencia',
+                    DB::raw('DATE_FORMAT(f.fecha_incidencia, "%d/%m/%Y") fecha_incidencia'),
+                    DB::raw('DATE_FORMAT(f.fecha_salida, "%d/%m/%Y") desde'),
+                    DB::raw('DATE_FORMAT(f.fecha_regreso, "%d/%m/%Y") hasta'),
+                    'f.total_horas as horas',
+                    'e.shortname as empresa',
+                    'f.estado',
+                    're.name as regimen',
+                    'o.name  as oficio',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
+                )
+                ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
+                ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
+                ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
+                ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
+                ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'f.usuario_id');
+                })
+                ->where('f.estado', $estado)
+                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                    $query->where('i.documento', $incidencia_id);
+                })
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
+                })
+                ->when($estado == 2, function($query) use ($fechas) {
+                    $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->orderBy('f.id', 'ASC')
+                ->get();
+        } else if ( $usuario->sanciones == 4 ) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id')
+                ->whereIn('u.sanciones', [3, 4]);
 
             return DB::table('sanciones as f')
                 ->select(

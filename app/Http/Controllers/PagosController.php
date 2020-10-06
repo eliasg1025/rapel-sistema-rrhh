@@ -11,6 +11,7 @@ use App\Models\Utilidad;
 use App\Services\ArchivosAprobacionService;
 use App\Services\ArchivosBancoService;
 use App\Services\ImportarPagosService;
+use App\Services\TxtBancoService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, File, Storage};
@@ -394,6 +395,14 @@ class PagosController extends Controller
             'bbva' => $archivos_banco->archivosBbva(),
             'interbank' => $archivos_banco->archivosInterbank()
         ];
+
+        $txt = new TxtBancoService($empresa, $fecha_pago, $data);
+
+        $resultTxt = [
+            'bbva' => $txt->bbva()
+        ];
+
+        $result['txt'] = $resultTxt;
 
         return response()->json($result);
     }
