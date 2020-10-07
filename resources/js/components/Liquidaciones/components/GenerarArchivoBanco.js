@@ -35,11 +35,14 @@ export const GenerarArchivoBanco = ({
         }
 
         arr.push({
-            key: 'TOTAL',
+            key: "TOTAL",
             total: 1,
-            banco: 'TOTAL',
+            banco: "TOTAL",
             cantidad: arr.reduce((acc, item) => acc + item.cantidad, 0),
-            monto: Math.round( arr.reduce((acc, item) => acc + item.monto, 0) * 100 ) / 100
+            monto:
+                Math.round(
+                    arr.reduce((acc, item) => acc + item.monto, 0) * 100
+                ) / 100
         });
         setBancos(arr);
     }, []);
@@ -308,7 +311,9 @@ const TableErrors = ({ errors }) => {
     return (
         <Table
             columns={columns}
-            rowClassName={(record, index) => record.total ? 'table-row-primary' : ''}
+            rowClassName={(record, index) =>
+                record.total ? "table-row-primary" : ""
+            }
             dataSource={errors}
             pagination={false}
             size="small"
