@@ -315,6 +315,7 @@ const TableErrors = ({ errors }) => {
             columns={columns}
             dataSource={errors}
             pagination={false}
+            size="small"
         />
     );
 }
