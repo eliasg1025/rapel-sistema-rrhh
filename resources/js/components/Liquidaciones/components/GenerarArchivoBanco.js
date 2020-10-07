@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { Table } from "antd";
 
-import Modal from '../../Modal';
+import Modal from "../../Modal";
 import { isEmpty } from "lodash";
 
 export const GenerarArchivoBanco = ({
@@ -34,6 +34,13 @@ export const GenerarArchivoBanco = ({
             });
         }
 
+        arr.push({
+            key: 'TOTAL',
+            total: 1,
+            banco: 'TOTAL',
+            cantidad: arr.reduce((acc, item) => acc + item.cantidad, 0),
+            monto: Math.round( arr.reduce((acc, item) => acc + item.monto, 0) * 100 ) / 100
+        });
         setBancos(arr);
     }, []);
 
@@ -94,14 +101,14 @@ export const GenerarArchivoBanco = ({
             .then(res => {
                 const result = res.data;
 
-                setBancos(bancos.map(item => {
+                let tmp = bancos.map(item => {
                     return {
                         ...item,
                         resultados: result[item.banco],
                         errors: result[item.banco]?.errors
-                    }
-                }));
-
+                    };
+                });
+                setBancos(tmp);
                 setLoadingTable(false);
                 setCanGenerate(true);
             })
@@ -112,7 +119,7 @@ export const GenerarArchivoBanco = ({
         {
             title: "Banco",
             dataIndex: "banco",
-            render: (value) => `${value.toUpperCase()}`
+            render: value => `${value.toUpperCase()}`
         },
         {
             title: "Cantidad",
@@ -122,7 +129,8 @@ export const GenerarArchivoBanco = ({
         {
             title: "Monto",
             dataIndex: "monto",
-            render: (value, record) => `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            render: (value, record) =>
+                `S/. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
             align: "right"
         },
         {
@@ -133,18 +141,29 @@ export const GenerarArchivoBanco = ({
                 return (
                     <span>
                         {value?.errors.length === 0 ? (
-                            <i className="fas fa-check" style={{ color: 'green' }}></i>
+                            <i
+                                className="fas fa-check"
+                                style={{ color: "green" }}
+                            ></i>
                         ) : (
                             <>
-                                <i className="fas fa-times" style={{ color: 'red' }}></i>
+                                <i
+                                    className="fas fa-times"
+                                    style={{ color: "red" }}
+                                ></i>
                             </>
-                        )}{" "}{value?.message || ''}{" "}
+                        )}{" "}
+                        {value?.message || ""}{" "}
                         {value?.errors.length > 0 && (
-                            <button className="btn btn-sm btn-light" type="button" onClick={e => {
-                                e.preventDefault();
-                                setErrors(record.errors);
-                                setIsVisibleErrors(true);
-                            }}>
+                            <button
+                                className="btn btn-sm btn-light"
+                                type="button"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    setErrors(record.errors);
+                                    setIsVisibleErrors(true);
+                                }}
+                            >
                                 <b>+</b>
                             </button>
                         )}
@@ -171,43 +190,11 @@ export const GenerarArchivoBanco = ({
                                     <b>
                                         <u>Nota:</u>
                                     </b>{" "}
-                                    No se cuentan las liquidaciones/utilidades con
-                                    monto igual a 0
+                                    No se cuentan las liquidaciones/utilidades
+                                    con monto igual a 0
                                 </small>
                             )}
                         />
-                        {/*
-                            <tr className="table-primary">
-                                <td>
-                                    <b>TOTAL</b>
-                                </td>
-                                <td>
-                                    <b>
-                                        {data.banbif.length +
-                                            data.bbva.length +
-                                            data.bcp.length +
-                                            data.scotiabank.length +
-                                            data.interbank.length}
-                                    </b>
-                                </td>
-                                <td className="">
-                                    <b>
-                                        {Math.round(
-                                            (obtenerMonto(data.bcp) +
-                                                obtenerMonto(
-                                                    data.interbank
-                                                ) +
-                                                obtenerMonto(
-                                                    data.scotiabank
-                                                ) +
-                                                obtenerMonto(data.bbva) +
-                                                obtenerMonto(data.banbif)) *
-                                                100
-                                        ) / 100}
-                                    </b>
-                                </td>
-                            </tr>
-                        */}
                     </div>
                 </div>
                 <br />
@@ -222,12 +209,15 @@ export const GenerarArchivoBanco = ({
                             <button
                                 className="btn btn-primary"
                                 type="button"
-                                disabled={filtro.desde !== filtro.hasta || loading}
+                                disabled={
+                                    filtro.desde !== filtro.hasta || loading
+                                }
                                 onClick={validar}
                             >
                                 {!loading ? (
                                     <span>
-                                        <i className="fas fa-tasks"></i> Validar pagos
+                                        <i className="fas fa-tasks"></i> Validar
+                                        pagos
                                     </span>
                                 ) : (
                                     <>
@@ -239,7 +229,11 @@ export const GenerarArchivoBanco = ({
                             <button
                                 className="btn btn-primary"
                                 type="button"
-                                disabled={filtro.desde !== filtro.hasta || loading || !canGenerate}
+                                disabled={
+                                    filtro.desde !== filtro.hasta ||
+                                    loading ||
+                                    !canGenerate
+                                }
                                 onClick={generarArchivosBanco}
                             >
                                 {!loading ? (
@@ -257,13 +251,17 @@ export const GenerarArchivoBanco = ({
                             <button
                                 className="btn btn-primary"
                                 type="button"
-                                disabled={filtro.desde !== filtro.hasta || loading || !canGenerate}
+                                disabled={
+                                    filtro.desde !== filtro.hasta ||
+                                    loading ||
+                                    !canGenerate
+                                }
                                 onClick={validar}
                             >
                                 {!loading ? (
                                     <span>
-                                        <i className="far fa-file-alt"></i> Generar
-                                        TXT
+                                        <i className="far fa-file-alt"></i>{" "}
+                                        Generar TXT
                                     </span>
                                 ) : (
                                     <>
@@ -281,41 +279,39 @@ export const GenerarArchivoBanco = ({
                 isVisible={isVisibleErrors}
                 setIsVisible={setIsVisibleErrors}
             >
-                <TableErrors
-                    errors={errors}
-                />
+                <TableErrors errors={errors} />
             </Modal>
         </>
     );
 };
 
 const TableErrors = ({ errors }) => {
-
     const columns = [
         {
-            title: 'RUT',
-            dataIndex: 'rut'
+            title: "RUT",
+            dataIndex: "rut"
         },
         {
-            title: 'Mes',
-            dataIndex: 'mes'
+            title: "Mes",
+            dataIndex: "mes"
         },
         {
-            title: 'Año',
-            dataIndex: 'año'
+            title: "Año",
+            dataIndex: "año"
         },
         {
-            title: 'Número Cuenta',
-            dataIndex: 'numero_cuenta'
+            title: "Número Cuenta",
+            dataIndex: "numero_cuenta"
         }
     ];
 
     return (
         <Table
             columns={columns}
+            rowClassName={(record, index) => record.total ? 'table-row-primary' : ''}
             dataSource={errors}
             pagination={false}
             size="small"
         />
     );
-}
+};

@@ -28,6 +28,11 @@
     border: rgba(255, 0, 0, 1);
 }
 
+.table-row-primary {
+    background-color: rgba(96, 162, 248, 0.3);
+    border: rgb(96, 162, 248);
+}
+
 .sign-in {
     &__content {
         display: flex;

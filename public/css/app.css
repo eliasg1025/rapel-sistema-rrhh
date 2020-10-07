@@ -33,6 +33,11 @@
   border: red;
 }
 
+.table-row-primary {
+  background-color: rgba(96, 162, 248, 0.3);
+  border: #60a2f8;
+}
+
 .sign-in__content {
   display: flex;
   flex-direction: column;
