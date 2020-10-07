@@ -166,6 +166,10 @@ Route::group(['prefix' => 'pagos'], function() {
         Route::put('/sincronizar', 'PagosController@sincronizarDatosUtilidades');
     });
 
+    Route::group(['prefix' => 'archivos-banco'], function() {
+        Route::post('/validar', 'PagosController@validarArchivosBanco');
+    });
+
     Route::post('/massive', 'PagosController@massiveCreate');
     Route::post('/importar', 'PagosController@importar');
     Route::post('/importar-tu-recibo', 'PagosController@importarTuRecibo');

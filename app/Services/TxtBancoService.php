@@ -31,7 +31,7 @@ class TxtBancoService
         );
     }
 
-    private function getCantidad($arr)
+    private function getCantidad(array $arr)
     {
         return sizeof($arr);
     }
@@ -82,11 +82,75 @@ class TxtBancoService
 
         $result = array_reduce( $data, fn($acc, $item) => $acc . getRow( $item ) . "\n", $cabecera . "\n" );
 
-        // Validacion
-
-
         Storage::disk('public')->put('/archivos-banco/' . $this->empresa->shortname . '_BBVAHABE_' . $this->fecha_pago->format('Y-m-d') . '.txt', $result);
 
         return $result;
+    }
+
+    public function validar(string $banco)
+    {
+        $arr = $this->data[$banco];
+        $validator = fn() => false;
+
+        switch ( $banco ) {
+            case 'bcp':
+                $validator = function($item) {
+                    return !(
+                        (
+                            strlen($item['numero_cuenta']) === 14
+                        ) && (
+                            substr( $item['numero_cuenta'], strlen( $item['numero_cuenta'] ) - 3, 1 ) == 0 ||
+                            substr( $item['numero_cuenta'], strlen( $item['numero_cuenta'] ) - 3, 1 ) == 1
+                        )
+                    );
+                };
+                break;
+            case 'interbank':
+                $validator = function($item) {
+                    return !(
+                        (
+                            (int) substr( $item['numero_cuenta'], 3, strlen($item['numero_cuenta']) - 1 ) >= 100000000
+                        )
+                    );
+                };
+                break;
+            case 'bbva':
+                $validator = function($item) {
+                    return !(
+                        (
+                            strlen($item['numero_cuenta']) === 18 || strlen($item['numero_cuenta']) === 20
+                        ) && (
+                            substr($item['numero_cuenta'], 0, 4) === '0011'
+                        )
+                    );
+                };
+                break;
+            case 'banbif':
+                $validator = function($item) {
+                    return !(
+                        strlen($item['numero_cuenta']) >= 10 && strlen($item['numero_cuenta']) <= 20
+                    );
+                };
+                break;
+            case 'scotiabank':
+                $validator = function($item) {
+                    return !(
+                        strlen($item['numero_cuenta']) === 10
+                    );
+                };
+                break;
+        }
+
+        $errors = array_filter($arr, $validator);
+        $result = array_values(array_map(fn($item) => [
+            'key' => $item['rut'],
+            'rut' => $item['rut'], 'mes' => $item['mes'], 'año' => $item['ano'], 'numero_cuenta' => $item['numero_cuenta']
+        ], $errors));
+
+        return [
+            'message' => sizeof( $result ) === 0 ? 'Válido' : 'Hay ' . sizeof( $result ) . ' error(es) de validación',
+            'amount' => sizeof( $result ),
+            'errors' => $result,
+        ];
     }
 }

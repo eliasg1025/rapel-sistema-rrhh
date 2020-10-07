@@ -396,16 +396,37 @@ class PagosController extends Controller
             'interbank' => $archivos_banco->archivosInterbank()
         ];
 
-        $txt = new TxtBancoService($empresa, $fecha_pago, $data);
+        return response()->json($result);
+    }
 
-        $resultTxt = [
-            'bbva' => $txt->bbva()
+    public function validarArchivosBanco(Request $request)
+    {
+        $data = $request->get('data');
+
+        $fecha_pago = $request->get('filtro')['desde'] === $request->get('filtro')['hasta'] ? $request->get('filtro')['desde'] : false;
+        $empresa = Empresa::find(
+            $request->get('filtro')['empresa_id']
+        );
+
+        if (!$fecha_pago) {
+            return response()->json([
+                'message' => 'Solo se procesa 1 fecha de pago a la vez'
+            ], 400);
+        }
+
+        $archivosTxt = new TxtBancoService($empresa, $fecha_pago, $data);
+
+        $result = [
+            'bcp' => $archivosTxt->validar('bcp'),
+            'banbif' => $archivosTxt->validar('banbif'),
+            'scotiabank' => $archivosTxt->validar('scotiabank'),
+            'bbva' => $archivosTxt->validar('bbva'),
+            'interbank' => $archivosTxt->validar('interbank')
         ];
-
-        $result['txt'] = $resultTxt;
 
         return response()->json($result);
     }
+
 
     public function terminarProceso(Request $request)
     {
