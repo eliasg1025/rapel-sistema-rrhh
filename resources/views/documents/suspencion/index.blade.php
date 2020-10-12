@@ -82,7 +82,7 @@
             </ol>
             <p class="justify">
                 El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos
-                , el cual indica que al {{ $texto[0] }}, se detectó que no usaba su implemento de bioseguridad ({{ $texto[1] }})
+                , el cual indica que al {{ $texto[1] }}, se detectó que no usaba su implemento de bioseguridad <b>({{ $texto[0] }})</b>
                 para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
             </p>
             <p class="justify">

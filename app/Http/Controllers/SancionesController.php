@@ -67,52 +67,24 @@ class SancionesController extends Controller
     public function verFicha(Sancion $sancion)
     {
         try {
-            $texto = [];
-            switch ( $sancion->incidencia_id ) {
-                case 1:
-                    $texto = [
-                        'realizar las labores correspondientes de campo',
-                        'Mascarilla'
-                    ];
-                    break;
-                case 2:
-                    $texto = [
-                        'traladarse en el bus',
-                        'Careta Facial'
-                    ];
-                    break;
-                case 3:
-                    $texto = [
-                        'Lentes de seguridad'
-                    ];
-                    break;
-                case 4:
-                    $texto = [
-                        'Casco'
-                    ];
-                    break;
-                case 6:
-                    $texto = [
-                        'Alcohol'
-                    ];
-                    break;
-                case 8:
-                    $texto = [
-                        'Respirador'
-                    ];
-                    break;
-            }
-
             $data = [
                 'sancion'        => $sancion,
-                'texto'          => $texto,
+                'texto'          => json_decode($sancion->incidencia->texto)->texto,
                 'trabajador'     => $sancion->trabajador,
                 'codigo'         => 4 . '@' . $sancion->id,
             ];
 
+            if ( $sancion->incidencia->documento === 'MIXTO' ) {
+                $documentType = $sancion->reiterativo === 1 ? 'MEMORANDUM' : 'SUSPENCION';
+            } else {
+                $documentType = $sancion->incidencia->documento;
+            }
+
+            $template = 'documents.' . strtolower($documentType) . '.index';
+
             $pdf = \PDF::setOptions([
                 'images' => true
-            ])->loadView('documents.' . strtolower($sancion->incidencia->documento) . '.index', $data);
+            ])->loadView($template, $data);
 
             $filename = $sancion->trabajador->apellido_paterno . '-' . $sancion->trabajador->apellido_materno . '-' . $sancion->trabajador->rut . '-' . $sancion->empresa->nombre_corto . '-' . $sancion->documento . '.pdf';
 
@@ -143,7 +115,7 @@ class SancionesController extends Controller
         $usuario_id = $request->usuario_id;
         $result = Sancion::marcarSubido($usuario_id, $id);
 
-        if ( isset($result['error']) ) {
+        if (isset($result['error'])) {
             return response()->json([
                 'message' => $result['error']
             ], 400);
@@ -156,7 +128,7 @@ class SancionesController extends Controller
     {
         $form = Sancion::find($id);
 
-        if ( $form->delete() ) {
+        if ($form->delete()) {
             return response()->json([
                 'message' => 'Registro borrado correctamente'
             ]);

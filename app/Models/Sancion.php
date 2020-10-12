@@ -11,6 +11,58 @@ class Sancion extends Model
 {
     protected $table = 'sanciones';
 
+    /**
+     * @param array $data
+     * @param $trabajador_id
+     * @param Sancion $sancion
+     * @return mixed
+     */
+    public static function isRecidivist(array $data, $trabajador_id, Sancion $sancion)
+    {
+        // Detectar si hay faltas reiterativas sobre la misma incidencia
+        $rango_fechas = [
+            Carbon::parse($data['fecha_incidencia'])->subDays(90),
+            Carbon::parse($data['fecha_incidencia'])
+        ];
+
+        $suspencion = Sancion::where([
+            'trabajador_id' => $trabajador_id,
+            'incidencia_id' => $data['incidencia_id']
+        ])->whereBetween('fecha_incidencia', $rango_fechas)
+            ->where('id', '<>', $sancion->id)
+            ->orderBy('fecha_incidencia', 'DESC')
+            ->first();
+        return $suspencion;
+    }
+
+    /**
+     * @param array $data
+     * @param Sancion $sancion
+     * @return array
+     */
+    public static function penalizarAsMemo(array $data, Sancion $sancion): array
+    {
+        $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
+        $sancion->fecha_salida = null;
+        $sancion->fecha_regreso = null;
+        $sancion->total_horas = 0;
+        return $data;
+    }
+
+    /**
+     * @param string $message
+     * @param $observacion
+     * @param Sancion $sancion
+     * @param DiasSancion $dias_sancion
+     */
+    public static function penalizeAsSanction(string $message, $observacion, Sancion $sancion, DiasSancion $dias_sancion): void
+    {
+        $sancion->observacion = $message . ' ' . $observacion;
+        $sancion->fecha_salida = $dias_sancion->getDiaIncio();
+        $sancion->fecha_regreso = $dias_sancion->getDiaTermino();
+        $sancion->total_horas = $dias_sancion->getCantidadHotasEfectivas();
+    }
+
     public function empresa()
     {
         return $this->belongsTo('App\Models\Empresa');
@@ -75,7 +127,6 @@ class Sancion extends Model
 
     public static function getDiasSancion($incio, int $cantidad_dias)
     {
-
     }
 
     public function getCorrelativo($fecha_incidencia)
@@ -98,7 +149,7 @@ class Sancion extends Model
         $trabajadores = DB::table('trabajadores as t')
             ->select('t.id', 't.rut', DB::raw('CONCAT(t.apellido_paterno, " ", t.apellido_materno, " ", t.nombre) as nombre_completo'));
 
-            return DB::table('sanciones as f')
+        return DB::table('sanciones as f')
             ->select(
                 'f.id',
                 'trabajador.rut',
@@ -111,7 +162,7 @@ class Sancion extends Model
                 'z.code as zona_labor_id',
                 'c.code as cuartel_id'
             )
-            ->joinSub($trabajadores, 'trabajador', function($join) {
+            ->joinSub($trabajadores, 'trabajador', function ($join) {
                 $join->on('trabajador.id', 'f.trabajador_id');
             })
             ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
@@ -129,7 +180,13 @@ class Sancion extends Model
             $zona_labor_id     = ZonaLabor::findOrCreate($data['zona_labor']);
             $cuartel_id        = isset($data['cuartel']) ? Cuartel::findOrCreate($data['cuartel'], $zona_labor_id) : null;
 
-            if ( !isset($data['id']) ) {
+            if ($zona_labor_id === 11)
+            {
+                $incidencia = Incidencia::getCounterpartIncidence($incidencia, 'PLANTA');
+                $data['incidencia_id'] = $incidencia->id;
+            }
+
+            if (!isset($data['id'])) {
                 $trabajador_id     = Trabajador::findOrCreate($data['trabajador']);
                 $regimen_id        = isset($data['regimen']) ? Regimen::findOrCreate($data['regimen']) : null;
 
@@ -148,7 +205,7 @@ class Sancion extends Model
                     ->where('incidencia_id', $data['incidencia_id'])
                     ->first();
 
-                if ( $registro_mismo_dia ) {
+                if ($registro_mismo_dia) {
                     DB::rollBack();
                     return [
                         'rut' => $data['trabajador']['rut'],
@@ -162,7 +219,7 @@ class Sancion extends Model
                     ->where('fecha_regreso', '>=', date($data['fecha_incidencia']))
                     ->first();
 
-                if ( $suspencion_actual ) {
+                if ($suspencion_actual) {
                     DB::rollBack();
                     return [
                         'rut' => $data['trabajador']['rut'],
@@ -185,29 +242,37 @@ class Sancion extends Model
             $sancion->cuartel_id      = $cuartel_id;
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
-            $sancion->incidencia_id   = $data['incidencia_id'];
+            $sancion->incidencia_id   = $incidencia->id;
 
-            if ( $incidencia->documento == 'SUSPENCION' ) {
-
-                // Detectar si hay faltas reiterativas sobre la misma incidencia
-                $rango_fechas = [
-                    Carbon::parse($data['fecha_incidencia'])->subDays(90),
-                    Carbon::parse($data['fecha_incidencia'])
-                ];
-
-                $suspencion = Sancion::where([
-                    'trabajador_id' => $trabajador_id,
-                    'incidencia_id' => $data['incidencia_id']
-                ])->whereBetween('fecha_incidencia', $rango_fechas)
-                    ->where('id', '<>', $sancion->id)
-                    ->orderBy('fecha_incidencia', 'DESC')
-                    ->first();
+            if ($incidencia->documento == 'SUSPENCION') {
+                $suspencion = self::isRecidivist($data, $trabajador_id, $sancion);
 
                 $dias_suspencion = 0;
-                //dd($suspencion);
+
                 if (!$suspencion) {
                     $dias_suspencion = $incidencia->dias;
                 } else {
+                    if ($suspencion->reiterativo === 1) {
+                        $dias_suspencion = $incidencia->dias_reiterativo;
+                        $sancion->reiterativo = 2;
+                        $message = 'Esta es una falta reiterativa se suspenderá por ' . $dias_suspencion . ' días.';
+                    } elseif ($suspencion->reiterativo === 2) {
+                        $sancion->reiterativo = 3;
+                        $sancion->desvinculacion = true;
+                        $message = 'Este trabajador ya tiene 2 suspenciones anteriores. Se procederá a registrar una DESVINCULACIÓN.';
+                    }
+                }
+
+                $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
+
+                self::penalizeAsSanction($message, $data['observacion'], $sancion, $dias_sancion);
+            } else if ($incidencia->documento == 'MEMORANDUM') {
+                $data = self::penalizarAsMemo($data, $sancion);
+            } else {
+                $suspencion = self::isRecidivist($data, $trabajador_id, $sancion);
+
+                if ($suspencion) {
+                    $dias_suspencion = 0;
                     if ($suspencion->reiterativo === 1) {
                         $dias_suspencion = $incidencia->dias_reiterativo;
                         $sancion->reiterativo = 2;
@@ -217,22 +282,16 @@ class Sancion extends Model
                         $sancion->desvinculacion = true;
                         $message = 'Este trabajador ya tiene 2 suspenciones anteriores. Se procederá a registrar una DESVINCULACIÓN.';
                     }
+
+                    $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
+
+                    self::penalizeAsSanction($message, $data['observacion'], $sancion, $dias_sancion);
+                } else {
+                    $data = self::penalizarAsMemo($data, $sancion);
                 }
-
-                $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
-
-                $sancion->observacion = $message . ' ' . $data['observacion'];
-                $sancion->fecha_salida  = $dias_sancion->getDiaIncio();
-                $sancion->fecha_regreso = $dias_sancion->getDiaTermino();
-                $sancion->total_horas   = $dias_sancion->getCantidadHotasEfectivas();
-            } else {
-                $sancion->observacion = isset($data['observacion']) ? $data['observacion'] : null;
-                $sancion->fecha_salida = null;
-                $sancion->fecha_regreso = null;
-                $sancion->total_horas = 0;
             }
 
-            if ( $sancion->save() ) {
+            if ($sancion->save()) {
                 DB::commit();
                 return [
                     'error'   => false,
@@ -245,7 +304,7 @@ class Sancion extends Model
 
             DB::rollBack();
             return 0;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return [
                 'error' => $e->getMessage() . ' -- ' . $e->getLine()
@@ -269,11 +328,11 @@ class Sancion extends Model
                 'usuario.username as usuario',
                 'usuario.nombre_completo_usuario as nombre_completo'
             )
-            ->joinSub($usuarios, 'usuario', function($join) {
+            ->joinSub($usuarios, 'usuario', function ($join) {
                 $join->on('usuario.id', '=', 'f.usuario_id');
             })
             ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
-            ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+            ->when($incidencia_id != "0", function ($query) use ($incidencia_id) {
                 $query->where('i.documento', $incidencia_id);
             })
             ->where('f.estado', $estado)
@@ -289,14 +348,14 @@ class Sancion extends Model
             $incidencia_id = $incidencia_id == "1" ? 'MEMORANDUM' : 'SUSPENCION';
         }
 
-        if ( !$usuario ) {
+        if (!$usuario) {
             return [
                 'error' => true,
                 'message' => 'No se encontro el usuario'
             ];
         }
 
-        if ( $usuario->sanciones == 1 || $usuario->sanciones == 3 ) {
+        if ($usuario->sanciones == 1 || $usuario->sanciones == 3) {
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
@@ -327,15 +386,15 @@ class Sancion extends Model
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
                 ->where('f.usuario_id', $usuario->id)
                 ->where('f.estado', $estado)
-                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                ->when($incidencia_id != "0", function ($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
                 })
-                ->when($estado == 2, function($query) use ($fechas) {
+                ->when($estado == 2, function ($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();
-        } else if ( $usuario->sanciones == 2 ) {
+        } elseif ($usuario->sanciones == 2) {
             $usuarios = DB::table('usuarios as u')
                 ->select(
                     'u.id',
@@ -373,22 +432,22 @@ class Sancion extends Model
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
                 ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
-                ->joinSub($usuarios, 'usuario', function($join) {
+                ->joinSub($usuarios, 'usuario', function ($join) {
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
                 ->where('f.estado', $estado)
-                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                ->when($incidencia_id != "0", function ($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
                 })
-                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                ->when($usuario_carga_id !== 0, function ($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
                 })
-                ->when($estado == 2, function($query) use ($fechas) {
+                ->when($estado == 2, function ($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
                 ->get();
-        } else if ( $usuario->sanciones == 4 ) {
+        } elseif ($usuario->sanciones == 4) {
             $usuarios = DB::table('usuarios as u')
                 ->select(
                     'u.id',
@@ -427,17 +486,17 @@ class Sancion extends Model
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
                 ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
-                ->joinSub($usuarios, 'usuario', function($join) {
+                ->joinSub($usuarios, 'usuario', function ($join) {
                     $join->on('usuario.id', '=', 'f.usuario_id');
                 })
                 ->where('f.estado', $estado)
-                ->when($incidencia_id != "0", function($query) use ($incidencia_id) {
+                ->when($incidencia_id != "0", function ($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);
                 })
-                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                ->when($usuario_carga_id !== 0, function ($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
                 })
-                ->when($estado == 2, function($query) use ($fechas) {
+                ->when($estado == 2, function ($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
                 ->orderBy('f.id', 'ASC')
@@ -452,7 +511,7 @@ class Sancion extends Model
         $sancion = Sancion::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ( $usuario->id !== $sancion->usuario_id ) {
+        if ($usuario->id !== $sancion->usuario_id) {
             return [
                 'error'   => true,
                 'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
@@ -462,7 +521,7 @@ class Sancion extends Model
         $sancion->estado = 1;
         $sancion->fecha_hora_enviado = now()->toDateTimeString();
 
-        if ( $sancion->save() ) {
+        if ($sancion->save()) {
             return [
                 'message' => 'Estado actualizado correctamente'
             ];
@@ -479,7 +538,7 @@ class Sancion extends Model
         $sancion = Sancion::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ( $usuario->sanciones < 2 ) {
+        if ($usuario->sanciones < 2) {
             return [
                 'error' => 'Solo un usuario administrador puede marcar este formulario como CARGADO'
             ];
@@ -488,7 +547,7 @@ class Sancion extends Model
         $sancion->estado = 2;
         $sancion->fecha_hora_subido = now()->toDateTimeString();
 
-        if ( $sancion->save() ) {
+        if ($sancion->save()) {
             return [
                 'message' => 'Sancion actualizada correctamente'
             ];
