@@ -231,7 +231,7 @@ export const Supervisor = () => {
                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             <span className="sr-only">Cargando...</span>
                         </>
-                    ) : <span><i className="fas fa-flag-checkered"></i> Enviar SELECCIONADOS</span>}
+                    ) : <span><i className="fas fa-flag-checkered"></i> Enviar <b><u>SELECCIONADOS</u></b></span>}
                 </button>
             )}
             <span style={{ marginLeft: 8 }}>
@@ -244,7 +244,7 @@ export const Supervisor = () => {
                         <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         <span className="sr-only">Cargando...</span>
                     </>
-                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR <b><u>TODOS</u></b> AL ANALISTA</span>}
+                ) : <span><i className="fas fa-flag-checkered"></i> ENVIAR <b><u>TODOS</u></b></span>}
             </button>
         </div>
     );
@@ -252,15 +252,22 @@ export const Supervisor = () => {
     return (
         <>
             <Spin spinning={sync} size="large" tip="Sincronizando con los registros de la app...">
-                <h4>Supervisor SST</h4>
+                <h4>{[3, 4].includes(usuario.sanciones) ? 'Supervisor SST' : 'Registros APP'}</h4>
                 {usuario.sanciones === 2 && (
                     <div className="alert alert-warning" role="alert">
-                        Como es usuario <b>ADMINISTRADOR</b> puede visualizar <b>todos</b> los registros de los Supervisores de SST
+                        Como es usuario <b>ADMINISTRADOR</b> puede visualizar <b>todos</b> los registros de la APP
                     </div>
                 )}
-                <div className="alert alert-primary" role="alert">
-                    <i className="fas fa-info"></i>&nbsp;&nbsp;Valide que registros <u>serán enviados al Analista de SST.</u> Al terminar presione el botón <b>ENVIAR AL ANALISTA</b>
-                </div>
+                {[3, 4].includes(usuario.sanciones) && (
+                    <div className="alert alert-primary" role="alert">
+                        <i className="fas fa-info"></i>&nbsp;&nbsp;Valide que registros <u>serán enviados al Analista de SST.</u> Al terminar presione el botón <b>ENVIAR AL ANALISTA</b>
+                    </div>
+                )}
+                {[1, 2].includes(usuario.sanciones) && (
+                    <div className="alert alert-primary" role="alert">
+                        <i className="fas fa-info"></i>{"  "}Valide que registros <u>antes de generar los documentos</u> Al terminar presione el botón <b>ENVIAR</b>
+                    </div>
+                )}
                 <br />
 
                 <Buttons />

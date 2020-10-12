@@ -133,7 +133,7 @@ export const Analista = () => {
             case 2:
                 return <Tag color="error">ELIMINADO</Tag>;
             case 3:
-                return <Tag color="processing" >PARA ANALISTA</Tag>;
+                return <Tag color="processing" >RECEPCIONADO</Tag>;
             case 4:
                 return <Tag color="error" >INVALIDO</Tag>;
             default:
@@ -248,7 +248,7 @@ export const Analista = () => {
 
     return (
         <>
-            <h4>Analista SST</h4>
+            <h4>{[3, 4].includes(usuario.sanciones) ? 'Aanalista SST' : 'Revisión'}</h4>
             <div className="alert alert-primary" role="alert">
                 <i className="fas fa-info"></i>&nbsp;&nbsp;Valide que registros <u>serán enviados a RR.HH.</u> Al terminar presione el botón <b>ENVIAR A RR.HH.</b>
             </div>
@@ -257,7 +257,7 @@ export const Analista = () => {
                 <div className="form">
                     <div className="form-row">
                         <div className="col-md-4">
-                            Supervisor:<br />
+                            Emisor Sanción:<br />
                             <Select
                                 loading={loadingSupervisores}
                                 value={filter.usuario_id} showSearch

@@ -57,6 +57,9 @@ Route::group(['middleware' => 'web.auth'], function() {
             Route::get('/supervisor', 'Web\SancionesController@supervisorSst');
             Route::get('/analista', 'Web\SancionesController@analistaSst');
         });
+        Route::group(['prefix' => 'rrhh'], function() {
+            Route::get('/supervisor', 'Web\SancionesController@supervisorRrhh');
+        });
     });
 
     Route::group(['prefix' => 'consulta-trabajadores'], function() {

@@ -30,16 +30,16 @@ export default function Sanciones() {
                             Sanciones {usuario.sanciones === 2 && '(Admin)'}
                         </a>
                     </Menu.Item>
-                    {[2, 3, 4].includes(usuario.sanciones) && (
-                        <SubMenu key="sub1" icon={<FileDoneOutlined />} title="SST">
-                            {[2, 3, 4].includes(usuario.sanciones) && (
+                    {[1, 2, 3, 4].includes(usuario.sanciones) && (
+                        <SubMenu key="sub1" icon={<FileDoneOutlined />} title={[3 ,4].includes(usuario.sanciones) ? 'SST' : 'Sanciones APP'}>
+                            {[1, 2, 3, 4].includes(usuario.sanciones) && (
                                 <Menu.Item key="supervisor-sst" icon={<FileDoneOutlined />}>
-                                    <a href="/sanciones/sst/supervisor">Supervisor SST</a>
+                                    <a href="/sanciones/sst/supervisor">{[3, 4].includes(usuario.sanciones) ? 'Supervisor SST' : 'Registros APP'}</a>
                                 </Menu.Item>
                             )}
-                            {[2, 4].includes(usuario.sanciones) && (
+                            {[1, 2, 4].includes(usuario.sanciones) && (
                                 <Menu.Item key="analista-sst" icon={<FileDoneOutlined />}>
-                                    <a href="/sanciones/sst/analista">Analista SST</a>
+                                    <a href="/sanciones/sst/analista">{[3, 4].includes(usuario.sanciones) ? 'Analista SST' : 'Revisión'}</a>
                                 </Menu.Item>
                             )}
                         </SubMenu>

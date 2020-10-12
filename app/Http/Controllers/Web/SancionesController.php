@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class SancionesController extends Controller
 {
+    public $nombre_modulo;
+
+    public function __construct()
+    {
+        $this->nombre_modulo = 'sanciones';
+    }
+
     public function index(Request $request)
     {
         $usuario = $request->session()->get('usuario');
@@ -114,6 +121,25 @@ class SancionesController extends Controller
             'submenu' => 'sub1'
         ];
 
+        return view('pages.sanciones', compact('data'));
+    }
+
+    public function supervisorRrhh(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ($usuario->sanciones == 0)
+        {
+            $nombre_modulo = $this->nombre_modulo;
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario'   => $usuario,
+            'editar'    => 0,
+            'submodule' => 'supervisor-rrhh',
+            'submenu'   => 'sub3'
+        ];
         return view('pages.sanciones', compact('data'));
     }
 }

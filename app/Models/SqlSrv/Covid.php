@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class Covid extends Model
 {
-    public static function get($usuario = '')
+    public static function get($usuarios = [])
     {
         $result = DB::connection('sqlsrv')
             ->table('dbo.Covid as co')
@@ -34,14 +34,30 @@ class Covid extends Model
             ->whereDate('co.fecha', '>=', '2020-09-28')
             ->whereIn('co.IdEmpresa', [9, 14])
             ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL'])
-            ->when($usuario, function($query) use ($usuario) {
-                $query->where('co.usuario', $usuario);
+            ->when(sizeof($usuarios) > 0, function($query) use ($usuarios) {
+                $query->whereIn('co.usuario', $usuarios);
             })
             ->orderBy('fecha_incidencia', 'DESC')
             ->orderBy('co.hora', 'DESC')
             ->get();
 
         return $result;
+    }
+
+    public static function getSlavesUsername(Usuario $usuario)
+    {
+        $usuarios_sanciones = DB::table('usuarios_sanciones as us')
+                ->join('usuarios as u', 'u.id', '=', 'us.usuario2_id')
+                ->where([
+                    'usuario_id' => $usuario->id,
+                ])
+                ->get();
+
+        $usuarios_sanciones->transform(function ($item) {
+            return $item->username;
+        });
+
+        return [ $usuario->username, ...$usuarios_sanciones ];
     }
 
     public static function getOne($id)
@@ -107,17 +123,28 @@ class Covid extends Model
             ->insert([
                 'created_at' => now()->toDateString(),
                 'updated_at' => now()->toDateString(),
-                'covid_id' => $row->id,
+                'covid_id'   => $row->id,
                 'usuario_id' => $usuario->id
             ]);
     }
 
     public static function getEstadosCovid($usuario_id, $estados)
     {
+        $userSlavesId = DB::table('usuarios_sanciones as us')
+            ->join('usuarios as u', 'u.id', '=', 'us.usuario2_id')
+            ->where([
+                'usuario_id' => $usuario_id,
+            ])
+            ->get();
+
+        $userSlavesId->transform(function ($item) {
+            return $item->id;
+        });
+
         $dataset = DB::connection('mysql')
             ->table('estados_covid')
-            ->when($usuario_id, function($query) use ($usuario_id) {
-                $query->where('usuario_id', '=', $usuario_id);
+            ->when($usuario_id, function ($query) use ($usuario_id, $userSlavesId) {
+                $query->whereIn('usuario_id', [$usuario_id, ...$userSlavesId]);
             })
             ->whereIn('estado', $estados)
             ->orderBy('covid_id', 'DESC')
@@ -297,16 +324,16 @@ class Covid extends Model
                 }
 
                 array_push($result, [
-                    'key' => $row['key'],
-                    'incidencia_id' => $incidencia_id,
-                    'trabajador' => json_decode(json_encode($trabajador), true),
-                    'zona_labor' => json_decode(json_encode($zona_labor), true),
-                    'oficio' => json_decode(json_encode($oficio), true),
+                    'key'              => $row['key'],
+                    'incidencia_id'    => $incidencia_id,
+                    'trabajador'       => json_decode(json_encode($trabajador), true),
+                    'zona_labor'       => json_decode(json_encode($zona_labor), true),
+                    'oficio'           => json_decode(json_encode($oficio), true),
                     'fecha_incidencia' => $row['fecha_incidencia'],
-                    'observacion' => $row['observacion'],
-                    'usuario_id' => $row['usuario_id'],
-                    'empresa_id' => $row['empresa_id'],
-                    'fecha_solicitud' => now()->toDateString(),
+                    'observacion'      => $row['observacion'],
+                    'usuario_id'       => $row['usuario_id'],
+                    'empresa_id'       => $row['empresa_id'],
+                    'fecha_solicitud'  => now()->toDateString(),
                 ]);
 
             } catch (\Exception $e) {
