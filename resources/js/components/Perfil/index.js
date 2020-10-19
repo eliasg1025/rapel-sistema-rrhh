@@ -108,8 +108,6 @@ export default function Perfil() {
 
 const RightSide = ({ usuario, setIsVisible }) => {
 
-    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
-
     const [rolesUsuario, setRolesUsuario] = useState([]);
 
     useEffect(() => {
@@ -141,7 +139,7 @@ const RightSide = ({ usuario, setIsVisible }) => {
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={}
+                                title={'hi'}
                             />
                         </List.Item>
                     )}
@@ -153,7 +151,6 @@ const RightSide = ({ usuario, setIsVisible }) => {
 
 const LeftSide = () => {
 
-    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
     return (
         <div className="col-md-6">
             <div className="text-center">
