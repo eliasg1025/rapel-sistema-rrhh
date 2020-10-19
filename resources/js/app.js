@@ -17,6 +17,7 @@ import Sanciones from "./components/Sanciones/Sanciones";
 import Sctr from "./components/Sctr/Sctr";
 import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
 import Cuentas from "./components/Cuentas";
+import Perfil from "./components/Perfil";
 
 require('./bootstrap');
 
@@ -49,6 +50,12 @@ require('./components/Sanciones/Sanciones');
 require('./components/Sctr/Sctr');
 
 //
+if (document.getElementById("perfil")) {
+    const element = document.getElementById("perfil");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Perfil {...props} />, document.getElementById("perfil"));
+}
+
 if (document.getElementById("cuentas")) {
     const element = document.getElementById("cuentas");
     const props = Object.assign({}, element.dataset);
