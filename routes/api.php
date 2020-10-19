@@ -28,6 +28,7 @@ Route::group(['prefix' => 'auth'], function() {
 Route::group(['prefix' => 'usuario'], function() {
     Route::get('/', 'UserController@get');
     Route::post('/', 'UserController@store');
+    Route::get('/{usuario}/roles', 'UserController@roles');
     Route::put('/{usuario}/toggle-activate', 'UserController@toggleActivate');
     Route::put('/{usuario}', 'UserController@update');
 });

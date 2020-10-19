@@ -44,4 +44,9 @@ class UserController extends Controller
             'message' => "Usuario " . $message . " correctamente"
         ], 200);
     }
+
+    public function roles(Usuario $usuario)
+    {
+        return response()->json($usuario);
+    }
 }

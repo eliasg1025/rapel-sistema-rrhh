@@ -1,12 +1,12 @@
-import { Button, notification } from 'antd';
+import { Button, notification, Card, Divider, List } from 'antd';
 import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 import Modal from '../Modal';
 
-const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
 export default function Perfil() {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
     const [isVisible, setIsVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -66,6 +66,7 @@ export default function Perfil() {
             <div className="container p-5">
                 <div className="row">
                     <RightSide
+                        usuario={usuario}
                         setIsVisible={setIsVisible}
                     />
                     <LeftSide />
@@ -105,22 +106,54 @@ export default function Perfil() {
     );
 }
 
-const RightSide = ({ setIsVisible }) => {
+const RightSide = ({ usuario, setIsVisible }) => {
+
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
+    const [rolesUsuario, setRolesUsuario] = useState([]);
+
+    useEffect(() => {
+        Axios.get('/api/usuario/{usuario}/roles')
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <div className="col-md-6">
-            <div className="card">
-                <div className="card-body">
-                    <h3>{ `${usuario.trabajador.nombre} ${usuario.trabajador.apellido_paterno} ${usuario.trabajador.apellido_materno}` }<br /><small>{ usuario.username }</small></h3>
-                    <button className="btn btn-sm btn-primary" onClick={() => setIsVisible(true)}>
-                        Cambiar contraseña
-                    </button>
-                </div>
-            </div>
+            <Card>
+                <h3>{ `${usuario.trabajador.nombre} ${usuario.trabajador.apellido_paterno} ${usuario.trabajador.apellido_materno}` }<br /><small>{ usuario.username }</small></h3>
+                <button className="btn btn-sm btn-primary" onClick={() => setIsVisible(true)}>
+                    Cambiar contraseña
+                </button>
+            </Card>
+            <br />
+            <Divider orientation="left">
+                <h3>Permisos de usuario</h3>
+            </Divider>
+            <Card>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={[]}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                title={}
+                            />
+                        </List.Item>
+                    )}
+                />
+            </Card>
         </div>
     );
 }
 
 const LeftSide = () => {
+
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
     return (
         <div className="col-md-6">
             <div className="text-center">
