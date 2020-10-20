@@ -45,6 +45,11 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\AplicacionController@index');
     });
 
+    Route::group(['prefix' => 'descansos-medicos'], function () {
+        Route::get('/', 'Web\DescansosMedicosController@index');
+        Route::get('/registrar-informes', 'Web\DescansosMedicosController@registrarInformes');
+    });
+
     Route::group(['prefix' => 'estado-documentos'], function() {
         Route::get('/', 'Web\EstadoDocumentosController@index');
         Route::get('/boletas', 'Web\EstadoDocumentosController@boletas');

@@ -47,6 +47,20 @@ class UserController extends Controller
 
     public function roles(Usuario $usuario)
     {
-        return response()->json($usuario);
+        $roles = $usuario->makeHidden(['id', 'created_at', 'updated_at', 'username', 'password', 'activo', 'rol', 'trabajador_id'])->toArray();
+        //dd($roles);
+        $keys = array_keys($roles);
+        $columns = array_values($roles);
+
+        $arr = [];
+        for ($i = 0; $i < sizeof($keys); $i++)
+        {
+            array_push($arr, [
+                'modulo' => $keys[$i],
+                'nivel'  => $columns[$i]
+            ]);
+        }
+
+        return response()->json($arr);
     }
 }

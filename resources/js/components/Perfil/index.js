@@ -3,6 +3,7 @@ import Axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 import Modal from '../Modal';
+import Estadisticas from './components/Estadisticas';
 
 
 export default function Perfil() {
@@ -14,6 +15,19 @@ export default function Perfil() {
         password: '',
         confirmPassword: '',
     });
+
+    const [rolesUsuario, setRolesUsuario] = useState([]);
+
+    useEffect(() => {
+        Axios.get(`/api/usuario/${usuario.id}/roles`)
+            .then(res => {
+                //console.log(res);
+                setRolesUsuario(res.data.filter(item => item.nivel > 0));
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -68,8 +82,12 @@ export default function Perfil() {
                     <RightSide
                         usuario={usuario}
                         setIsVisible={setIsVisible}
+                        rolesUsuario={rolesUsuario}
                     />
-                    <LeftSide />
+                    <LeftSide
+                        usuario={usuario}
+                        rolesUsuario={rolesUsuario}
+                    />
                 </div>
             </div>
 
@@ -106,19 +124,18 @@ export default function Perfil() {
     );
 }
 
-const RightSide = ({ usuario, setIsVisible }) => {
+const RightSide = ({ rolesUsuario, usuario, setIsVisible }) => {
 
-    const [rolesUsuario, setRolesUsuario] = useState([]);
-
-    useEffect(() => {
-        Axios.get('/api/usuario/{usuario}/roles')
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, []);
+    const getNivelUsuario = (nivel) => {
+        switch (nivel) {
+            case 1:
+                return 'SUPERVISOR';
+            case 2:
+                return 'ADMINISTRADOR';
+            default:
+                return nivel;
+        }
+    }
 
     return (
         <div className="col-md-6">
@@ -130,16 +147,17 @@ const RightSide = ({ usuario, setIsVisible }) => {
             </Card>
             <br />
             <Divider orientation="left">
-                <h3>Permisos de usuario</h3>
+                <h4>Permisos de usuario</h4>
             </Divider>
             <Card>
                 <List
                     itemLayout="horizontal"
-                    dataSource={[]}
+                    dataSource={rolesUsuario}
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta
-                                title={'hi'}
+                                title={item.modulo.toUpperCase()}
+                                description={getNivelUsuario(item.nivel)}
                             />
                         </List.Item>
                     )}
@@ -149,14 +167,17 @@ const RightSide = ({ usuario, setIsVisible }) => {
     );
 }
 
-const LeftSide = () => {
+const LeftSide = ({ usuario, rolesUsuario }) => {
 
     return (
         <div className="col-md-6">
             <div className="text-center">
                 <h3>Estadísticas</h3>
                 <br />
-                <div id="estadisticas-usuarios"></div>
+                <Estadisticas
+                    usuario={usuario}
+                    rolesUsuario={rolesUsuario}
+                />
             </div>
         </div>
     );

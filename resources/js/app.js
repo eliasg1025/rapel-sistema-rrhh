@@ -18,6 +18,7 @@ import Sctr from "./components/Sctr/Sctr";
 import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
 import Cuentas from "./components/Cuentas";
 import Perfil from "./components/Perfil";
+import DescansosMedicos from "./components/DescansosMedicos";
 
 require('./bootstrap');
 
@@ -50,6 +51,12 @@ require('./components/Sanciones/Sanciones');
 require('./components/Sctr/Sctr');
 
 //
+if (document.getElementById("descansos-medicos")) {
+    const element = document.getElementById("descansos-medicos");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<DescansosMedicos {...props} />, document.getElementById("descansos-medicos"));
+}
+
 if (document.getElementById("perfil")) {
     const element = document.getElementById("perfil");
     const props = Object.assign({}, element.dataset);
