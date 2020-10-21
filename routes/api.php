@@ -36,6 +36,18 @@ Route::group(['prefix' => 'usuario'], function() {
 Route::get('/empresa', 'EmpresasController@all');
 Route::get('/incidencia', 'IncidenciaController@all');
 
+Route::group(['prefix' => 'informes-descansos'], function () {
+    Route::get('/', 'InformesDescansosController@get');
+    Route::post('/', 'InformesDescansosController@store');
+    Route::get('/{id}', 'InformesDescansosController@show');
+    Route::put('/{id}', 'InformesDescansosController@update');
+});
+
+Route::group(['prefix' => 'registros-descansos'], function () {
+    Route::post('/', 'RegistrosDescansosController@store');
+    Route::delete('/{id}', 'RegistrosDescansosController@delete');
+});
+
 Route::group(['prefix' => 'actualizar-datos'], function() {
     Route::post('/por-empresa', 'ActualizarController@porEmpresa');
     Route::post('/por-empresa-2', 'ActualizarController@porEmpresa2');
@@ -221,6 +233,14 @@ Route::group(['prefix' => 'documentos-turecibo'], function() {
 
 Route::group(['prefix' => 'corte-turecibo'], function() {
     Route::get('/get-last', 'CorteTureciboController@getLast');
+});
+
+Route::group(['prefix' => 'tipo-licencia'], function () {
+    Route::get('/{empresaId}', 'TipoLicenciaController@get');
+});
+
+Route::group(['prefix' => 'sqlsrv'], function () {
+    Route::get('/trabajador/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador');
 });
 
 /*

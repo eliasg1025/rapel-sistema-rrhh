@@ -2,6 +2,7 @@
 
 namespace App\Models\SqlSrv;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -28,5 +29,35 @@ class Trabajador extends Model
             ])
             ->where('t.RutTrabajador', $rut)
             ->first();
+    }
+
+    public static function getObtenerTrabajador($rut, $empresaId)
+    {
+        $t = DB::connection('sqlsrv')
+            ->table('dbo.Trabajador')
+            ->where('RutTrabajador', $rut)
+            ->whereIn('IdEmpresa', [$empresaId])
+            ->first();
+
+        return [
+            'rut' => $rut,
+            'code' => $t->IdTrabajador,
+            'nombre' => $t->Nombre,
+            'apellido_paterno' => $t->ApellidoPaterno,
+            'apellido_materno' => $t->ApellidoMaterno,
+            'fecha_nacimiento' => Carbon::parse($t->FechaNacimiento)->format('Y-m-d'),
+            'sexo' => $t->Sexo,
+            'email' => $t->Mail,
+            'tipo_zona_id' => $t->IdTipoZona,
+            'nombre_zona' => $t->NombreZona,
+            'tipo_via_id' => $t->IdTipoVia,
+            'nombre_via' => $t->NombreVia,
+            'direccion' => $t->Direccion,
+            'distrito_id' => $t->COD_COM,
+            'estado_civil_id' => $t->EstadoCivil,
+            'nacionalidad_id' => $t->IdNacionalidad,
+            'empresa_id' => $empresaId,
+            'numero_cuenta' => $t->NumeroCuentaBancaria,
+        ];
     }
 }

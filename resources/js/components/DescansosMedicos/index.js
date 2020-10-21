@@ -24,18 +24,12 @@ export default function DescansosMedicos() {
                             Principal
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="registrar-informes" icon={<FileOutlined />}>
-                        <a href="/descansos-medicos/registrar-informes">
-                            Registrar Informes
-                        </a>
-                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
-                        {submodule === 'main' && <Home />}
-                        {submodule === 'registrar-informes' && <RegistrarInformes />}
+                        {submodule === 'main' && <RegistrarInformes />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>

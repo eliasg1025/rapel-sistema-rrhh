@@ -48,6 +48,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::group(['prefix' => 'descansos-medicos'], function () {
         Route::get('/', 'Web\DescansosMedicosController@index');
         Route::get('/registrar-informes', 'Web\DescansosMedicosController@registrarInformes');
+        Route::get('/registrar-informes/{id}', 'Web\DescansosMedicosController@registrarInformesRegistros');
     });
 
     Route::group(['prefix' => 'estado-documentos'], function() {
@@ -105,6 +106,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/eleccion-afp/{eleccion_afp}', 'EleccionAfpController@verFicha');
         Route::get('/formulario-permiso/{formularioPermiso}', 'FormularioPermisoController@verFicha');
         Route::get('/sancion/{sancion}', 'SancionesController@verFicha');
+        Route::get('/descanso-medico/{informe}', 'InformesDescansosController@verFicha');
     });
 
     Route::group(['prefix' => 'descargar'], function() {
