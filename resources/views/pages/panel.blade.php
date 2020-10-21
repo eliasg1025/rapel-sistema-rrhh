@@ -73,7 +73,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <a class="btn btn-block btn-light" href="/descansos-medicos" {{ $data['usuario']->descansos_medicos === 0 ? 'disabled' : '' }}>
-                        <i class="fas fa-user-md"></i> Descansos Médicos
+                        <i class="fas fa-user-md"></i> Informes Bienestar Social
                     </a>
                 </div>
             </div>

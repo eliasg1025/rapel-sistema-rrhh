@@ -67,14 +67,14 @@
                 <td><b>PARA:</b></td>
                 <td>
                     <b>FEDERICO CARRILLO CURAY</b><br />
-                    Jefe de RRHH -  Sociedad Agrícola Rapel SAC
+                    Jefe de RRHH -  {{ $informe->empresa_id === 9 ? 'Sociedad Agrícola Rapel SAC' : 'Sociedad Exportadora Verfrut SAC' }}
                 </td>
             </tr>
             <tr>
                 <td><b>DE:</b></td>
                 <td>
                     <b>{{ $informe->trabajador }}</b><br />
-                    Asistente(a) Social - Sociedad Agrícola Rapel SAC
+                    Asistente(a) Social - {{ $informe->empresa_id === 9 ? 'Sociedad Agrícola Rapel SAC' : 'Sociedad Exportadora Verfrut SAC' }}
                 </td>
             </tr>
             <tr>
@@ -90,7 +90,7 @@
         </table>
         <hr />
         <p>
-            A través del presente informe se da a conocer la relación de descansos médicos y justificaciones de los trabajadores de Sociedad Agrícola Rapel SAC
+            A través del presente informe se da a conocer la relación de descansos médicos y justificaciones de los trabajadores de {{ $informe->empresa_id === 9 ? 'Sociedad Agrícola Rapel SAC' : 'Sociedad Exportadora Verfrut SAC' }}
         </p>
         <br />
         <table style="font-size: 10.5px" class="table">

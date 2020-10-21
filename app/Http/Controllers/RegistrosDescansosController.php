@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RegistroDescanso;
 use App\Models\Trabajador;
 use App\Models\ZonaLabor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RegistrosDescansosController extends Controller
@@ -17,8 +18,8 @@ class RegistrosDescansosController extends Controller
             $trabajadorId = Trabajador::findOrCreate($request->get('trabajador'));
         }
 
-        $fechaInicio = $request->get('fecha_inicio');
-        $fechaFin = $request->get('fecha_fin');
+        $fechaInicio = Carbon::parse($request->get('fecha_inicio'));
+        $fechaFin = Carbon::parse($request->get('fecha_fin'));
         $empresaId = $request->get('empresa_id');
         $observacion = $request->get('observacion');
         $tipoLicenciaId = $request->get('tipo_licencia_medica_id');
@@ -28,6 +29,12 @@ class RegistrosDescansosController extends Controller
         ])->first();
         $usuarioId = $request->get('usuario_id');
         $infomeMedicoId = $request->get('informe_id');
+
+        if ($fechaFin->lessThan($fechaInicio)) {
+            return response()->json([
+                'message' => 'La fecha de regreso es menor que la fecha de salida'
+            ], 400);
+        }
 
         if (!$request->get('id')) {
             $registroDescanso = new RegistroDescanso();

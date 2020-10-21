@@ -8,8 +8,10 @@ use App\Models\RegistroDescanso;
 use App\Models\SqlSrv\Trabajador as SqlSrvTrabajador;
 use App\Models\Trabajador;
 use App\Models\Usuario;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class InformesDescansosController extends Controller
 {
@@ -34,14 +36,19 @@ class InformesDescansosController extends Controller
                 'registros.cantidad_registros',
                 'idm.fecha_inicio',
                 'idm.estado',
+                DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
             )
             ->join('empresas as e', 'e.id', '=', 'idm.empresa_id')
+            ->join('usuarios as u', 'u.id', '=', 'idm.usuario_id')
+            ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id')
             ->leftJoinSub($registros, 'registros', function ($join) {
                 $join->on('registros.id', '=', 'idm.id');
             })
+            ->orderBy('idm.id', 'DESC')
+            /*
             ->when($usuario->descansos_medicos !== 2, function ($query) use ($usuario) {
                 $query->where('idm.usuario_id', $usuario->id);
-            })
+            })*/
             ->get();
 
         $results->transform(function ($item) {
@@ -75,15 +82,21 @@ class InformesDescansosController extends Controller
             ], 400);
         }
 
-        $result = InformeDescanso::create([
-            'usuario_id' => $usuarioId,
-            'fecha_inicio' => $fechaInicio,
-            'empresa_id' => $empresaId
-        ]);
+        try {
+            $result = InformeDescanso::create([
+                'usuario_id' => $usuarioId,
+                'fecha_inicio' => $fechaInicio,
+                'empresa_id' => $empresaId
+            ]);
 
-        return response()->json([
-            'message' => 'Informe creado correctamente',
-        ], 201);
+            return response()->json([
+                'message' => 'Informe creado correctamente',
+            ], 201);
+        } catch (QueryException $e) {
+            return response()->json([
+                'message' => 'Faltan parámetros'
+            ], 400);
+        }
     }
 
     public function show(Request $request, $id)
@@ -113,6 +126,13 @@ class InformesDescansosController extends Controller
     public function getTrabajador($rut, $empresaId)
     {
         $result = SqlSrvTrabajador::getObtenerTrabajador($rut, $empresaId);
+
+        if (!$result) {
+            return response()->json([
+                'message' => 'Trabajador no encontrado'
+            ], 404);
+        }
+
         return response()->json($result);
     }
 
@@ -121,11 +141,44 @@ class InformesDescansosController extends Controller
         $informe = InformeDescanso::find($id);
         $informe->estado = $request->get('estado');
 
+        $registros = RegistroDescanso::getByInforme($id);
+
+        if (sizeof($registros) === 0) {
+            return response()->json([
+                'message' => 'No tiene registros en este informe'
+            ], 400);
+        }
+
         $informe->save();
 
-        return [
+        return response()->json([
             'message' => 'Informe terminado'
-        ];
+        ]);
+    }
+
+    public function export($id)
+    {
+        $informe = InformeDescanso::find($id);
+        $informe->informe  = InformeDescanso::obtenerCorrelativo(
+            $informe->id,
+            $informe->empresa_id,
+            $informe->fecha_incio
+        );
+        $registros = RegistroDescanso::getByInforme($id);
+
+        return (new FastExcel($registros))->download($informe->informe . '.xlsx', function ($registro) {
+            return [
+                'CODIGO' => $registro->code,
+                'DNI' => $registro->rut,
+                'APELLIDOS Y NOMBRES' => $registro->nombre_completo_trabajador,
+                'CONTINGENCIA' => $registro->contingencia,
+                'FUNDO' => $registro->zona_labor,
+                'DEL' => $registro->fecha_inicio,
+                'AL' => $registro->fecha_fin,
+                'TOTAL' => $registro->total_dias,
+                'OBSERVACION(ES)' => $registro->observacion,
+            ];
+        });
     }
 
     public function verFicha(InformeDescanso $informe)

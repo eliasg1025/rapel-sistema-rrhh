@@ -116,6 +116,15 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
         console.log(descanso);
     }
 
+    useEffect(() => {
+        if (trabajador) {
+            setDescanso({
+                ...descanso,
+                zona_labor_id: trabajador.zona_labor_id
+            });
+        }
+    }, [trabajador]);
+
     const handleSubmit = e => {
         e.preventDefault();
         Axios.post(`/api/registros-descansos`, {
@@ -138,7 +147,7 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
             .catch(err => {
                 console.error(err);
                 notification['error']({
-                    message: 'Error al ingresar registro'
+                    message: err.response.data.message
                 });
             });
     }
@@ -156,7 +165,7 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
             .catch(err => {
                 console.error(err);
                 notification['error']({
-                    message: 'Error al buscar trabajador'
+                    message: err.response.data.message
                 });
             });
     }

@@ -109,6 +109,9 @@ export const RegistrarInformes = () => {
                         })
                         .catch(err => {
                             console.error(err);
+                            notification['error']({
+                                message: err.response.data.message
+                            });
                         });
                 }
             })
@@ -118,7 +121,7 @@ export const RegistrarInformes = () => {
         <>
             {editar === 0 ? (
                 <>
-                    <h4>Informes Descansos Médico</h4>
+                    <h4>Informes Bienestar Social</h4>
                     <br />
                     <DatosInforme
                         reloadData={reloadData}
@@ -135,7 +138,7 @@ export const RegistrarInformes = () => {
                         <i className="fas fa-backward"></i> Atrás
                     </button>
                     <h4>
-                        Registrar Descansos: {informe?.informe || ''}{" "} {informe?.estado === 0 && <button className="btn btn-danger btn-sm" onClick={() => terminarInforme()}>Terminar Informe</button>}
+                        Registrar: {informe?.informe || ''}{" "} {informe?.estado === 0 && <button className="btn btn-danger btn-sm" onClick={() => terminarInforme()}>Terminar Informe</button>}
                     </h4>
                     <DatosDescansos
                         informe={informe}

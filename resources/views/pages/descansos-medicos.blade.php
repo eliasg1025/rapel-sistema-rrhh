@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Descansos Médicos | Grupo Verfrut
+    Informes Bienestar Social | Grupo Verfrut
 @endsection
 
 @section('contenido')

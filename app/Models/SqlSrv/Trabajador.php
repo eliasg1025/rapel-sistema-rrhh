@@ -34,10 +34,19 @@ class Trabajador extends Model
     public static function getObtenerTrabajador($rut, $empresaId)
     {
         $t = DB::connection('sqlsrv')
-            ->table('dbo.Trabajador')
-            ->where('RutTrabajador', $rut)
-            ->whereIn('IdEmpresa', [$empresaId])
+            ->table('dbo.Trabajador as t')
+            ->join('dbo.Contratos as c', [
+                'c.IdEmpresa' => 't.IdEmpresa',
+                'c.IdTrabajador' => 't.IdTrabajador'
+            ])
+            ->where('t.RutTrabajador', $rut)
+            ->where('c.IndicadorVigencia', true)
+            ->whereIn('t.IdEmpresa', [$empresaId])
             ->first();
+
+        if (!$t) {
+            return null;
+        }
 
         return [
             'rut' => $rut,
@@ -58,6 +67,7 @@ class Trabajador extends Model
             'nacionalidad_id' => $t->IdNacionalidad,
             'empresa_id' => $empresaId,
             'numero_cuenta' => $t->NumeroCuentaBancaria,
+            'zona_labor_id' => $t->IdZonaLabores
         ];
     }
 }

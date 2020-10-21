@@ -41,6 +41,7 @@ Route::group(['prefix' => 'informes-descansos'], function () {
     Route::post('/', 'InformesDescansosController@store');
     Route::get('/{id}', 'InformesDescansosController@show');
     Route::put('/{id}', 'InformesDescansosController@update');
+    Route::get('/{id}/exportar', 'InformesDescansosController@export');
 });
 
 Route::group(['prefix' => 'registros-descansos'], function () {

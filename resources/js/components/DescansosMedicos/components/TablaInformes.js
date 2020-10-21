@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Table, Tag } from 'antd';
+import Axios from 'axios';
 
 const columns = [
     {
@@ -21,6 +22,10 @@ const columns = [
         render: (_, record) => record.cantidad_registros ? record.cantidad_registros : 0,
     },
     {
+        title: 'Creado por',
+        dataIndex: 'nombre_completo_usuario',
+    },
+    {
         title: 'Estado',
         dataIndex: 'estado',
         render: (_, record) => renderTag(_)
@@ -36,6 +41,9 @@ const columns = [
                     </button>
                     <a type="button" className="btn btn-primary btn-sm" target="_blank" href={`/ficha/descanso-medico/${record.id}`}>
                         <i className="fas fa-file-alt"></i>
+                    </a>
+                    <a type="button" className="btn btn-success btn-sm" href={`/api/informes-descansos/${record.id}/exportar`}>
+                        <i className="fas fa-file-excel"></i>
                     </a>
                 </div>
             );
