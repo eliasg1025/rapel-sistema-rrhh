@@ -95,7 +95,7 @@ class InformesDescansosController extends Controller
                 DB::raw("CONCAT(t.nombre, ' ', t.apellido_paterno, ' ', t.apellido_materno) as nombre_completo")
             )
             ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id')
-            ->where('t.id', $informe->usuario_id)
+            ->where('u.id', $informe->usuario_id)
             ->first();
 
         $informe->empresa = $empresa;
