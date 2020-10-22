@@ -40,12 +40,21 @@ class Trabajador extends Model
                 'c.IdTrabajador' => 't.IdTrabajador'
             ])
             ->where('t.RutTrabajador', $rut)
-            ->where('c.IndicadorVigencia', true)
+            //->where('c.IndicadorVigencia', true)
             ->whereIn('t.IdEmpresa', [$empresaId])
+            ->orderBy('c.IdContrato', 'DESC')
             ->first();
 
         if (!$t) {
-            return null;
+            return [
+                'error' => 'Trabajador no encontrado'
+            ];
+        }
+
+        if (!$t->IndicadorVigencia) {
+            return [
+                'error' => 'Trabajador cesado. FECHA TERMINO: ' . Carbon::parse($t->FechaTermino)->format('d/m/Y'),
+            ];
         }
 
         return [

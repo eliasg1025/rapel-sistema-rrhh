@@ -274,7 +274,12 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
             <br />
             <div className="row">
                 <div className="col-md-12">
-                    <button className="btn btn-primary btn-block" type="button" onClick={handleSubmit}>
+                    <button
+                        className="btn btn-primary btn-block"
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={descanso?.zona_labor_id == '' || descanso?.tipo_licencia_medica_id == '' || descanso?.fecha_inicio == '' || descanso?.fecha_fin == ''}
+                    >
                         Ingresar
                     </button>
                 </div>

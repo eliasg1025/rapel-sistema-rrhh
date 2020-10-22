@@ -7,6 +7,7 @@ use App\Models\Trabajador;
 use App\Models\ZonaLabor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegistrosDescansosController extends Controller
 {
@@ -36,6 +37,37 @@ class RegistrosDescansosController extends Controller
             ], 400);
         }
 
+        $observaciones = [
+            'permisos' => [],
+            'asistencias' => [],
+        ];
+
+        $permisosInasistencias = DB::connection('sqlsrv')
+            ->table('dbo.PermisosInasistencias as p')
+            ->where([
+                'p.RutTrabajador' => $request->get('trabajador')['rut']
+            ])
+            ->whereDate('p.FechaInicio', '>=', $fechaInicio)
+            ->whereDate('p.FechaInicio', '<=', $fechaFin)
+            ->get();
+
+        $asistencias = DB::connection('sqlsrv')
+            ->table('dbo.ActividadTrabajador as a')
+            ->where([
+                'a.RutTrabajador' => $request->get('trabajador')['rut']
+            ])
+            ->whereDate('a.FechaActividad', '>=', $fechaInicio)
+            ->whereDate('a.FechaActividad', '<=', $fechaFin)
+            ->get();
+
+        foreach ($permisosInasistencias as $permiso) {
+            array_push($observaciones['permisos'], 'El trabajador tiene ' . $permiso->MotivoAusencia . ' el dia ' . Carbon::parse($permiso->FechaInicio)->format('d/m/Y'));
+        }
+
+        foreach ($asistencias as $asistencia) {
+            array_push($observaciones['asistencias'], 'El trabajador tiene ASISTENCIA el dia ' . Carbon::parse($asistencia->FechaActividad)->format('d/m/Y'));
+        }
+
         if (!$request->get('id')) {
             $registroDescanso = new RegistroDescanso();
         } else {
@@ -53,7 +85,8 @@ class RegistrosDescansosController extends Controller
         $registroDescanso->save();
 
         return response()->json([
-            'message' => 'Registro creado correctamente'
+            'message' => 'Registro creado correctamente',
+            'observaciones' => $observaciones
         ]);
     }
 

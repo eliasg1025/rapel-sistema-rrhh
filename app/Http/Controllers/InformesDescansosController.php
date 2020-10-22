@@ -17,7 +17,7 @@ class InformesDescansosController extends Controller
 {
     public function get (Request $request)
     {
-        //RAPEL: 186
+        //RAPEL: 187
         //VERFRUT: 192
         $usuario = Usuario::find($request->get('usuarioId'));
 
@@ -127,9 +127,9 @@ class InformesDescansosController extends Controller
     {
         $result = SqlSrvTrabajador::getObtenerTrabajador($rut, $empresaId);
 
-        if (!$result) {
+        if (isset($result['error'])) {
             return response()->json([
-                'message' => 'Trabajador no encontrado'
+                'message' => $result['error']
             ], 404);
         }
 
