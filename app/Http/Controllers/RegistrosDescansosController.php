@@ -30,6 +30,8 @@ class RegistrosDescansosController extends Controller
         ])->first();
         $usuarioId = $request->get('usuario_id');
         $infomeMedicoId = $request->get('informe_id');
+        $numeroRegistro = $request->get('numero_registro');
+        $fechaEmision = Carbon::parse($request->get('fecha_emision'));
 
         if ($fechaFin->lessThan($fechaInicio)) {
             return response()->json([
@@ -81,6 +83,8 @@ class RegistrosDescansosController extends Controller
         $registroDescanso->informe_descanso_medico_id = $infomeMedicoId;
         $registroDescanso->zona_labor_id = $zonaLabor->id;
         $registroDescanso->usuario_id = $usuarioId;
+        $registroDescanso->numero_registro = $numeroRegistro;
+        $registroDescanso->fecha_emision = $fechaEmision;
         if (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) {
             $registroDescanso->consideracion = json_encode($observaciones);
         } else {

@@ -120,6 +120,28 @@
                 <p>
                     Este hecho indica falta de responsabilidad en el cumplimiento de sus obligaciones asumidas por su parte en virtud de la relación de trabajo que mantiene con nosotros. En ese sentido le invocamos a que rectifique su conducta; de tal manera que permita el normal desarrollo de las actividades y evite que la empresa tome otras medidas.
                 </p>
+            @elseif ($sancion->incidencia_id === 10)
+                <ol>
+                    <li>Que Ud. Ha incurrido en falta al mal comportamiento en el sentido siguiente:</li>
+                </ol>
+                <p class="justify">
+                    El hecho se produce el día {{ $sancion->fecha_incidencia_largo }} cuando se encontraba realizando sus labores, adopto una actitud inadecuada con la persona encargada, por lo que se recomienda cambiar de actitud y en adelante, evitar ese tipo de comportamiento, limitándose a cumplir eficientemente con las políticas, normas y procedimientos que la empresa disponga; absteniéndose de realizar actos de indisciplina o falta de respeto al resto de colaboradores.
+                </p>
+                <p>Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted, habiendo incumplido lo establecido en el Reglamento Interno de  Seguridad y salud en el sentido de lo siguiente:</p>
+                <p><b>Artículo 54°.–</b> Todo trabajador tiene derecho a:</p>
+                <div style="padding-left: 10px;">
+                    <p>d) Ser tratado con justicia, dignidad y respeto.</p>
+                </div>
+                <p><b>Artículo 55°.-</b> Son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>a) Realizar las labores a su cargo de manera eficiente.</p>
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>
+                    <p>t) Mantener en todo momento respeto, lealtad y consideración por sus compañeros de trabajo, superiores y colaboradores de menor jerarquía.</p>
+                </div>
+                <p><b>Artículo 56°.-</b> Todo trabajador de la empresa debe observar las siguientes prohibiciones:</p>
+                <div style="padding-left: 10px;">
+                    <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la empresa.</p>
+                </div>
             @elseif ($sancion->incidencia_id != 5)
                 <ol>
                     <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>

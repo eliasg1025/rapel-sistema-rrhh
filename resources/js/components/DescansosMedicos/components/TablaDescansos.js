@@ -42,6 +42,10 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
             dataIndex: 'observacion'
         },
         {
+            title: 'ALERTA',
+            dataIndex: 'consideracion'
+        },
+        {
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (_, record) => {

@@ -152,7 +152,7 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
                         message: (
                             <>
                                 <h4>Alertas:</h4>
-                                <ul style={{ marginRight: '-15px' }}>
+                                <ul style={{ padding: '0' }}>
                                     {res.data.observaciones.permisos.map(item => {
                                         return <li key={item}>{item}</li>
                                     })}
@@ -278,6 +278,25 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
                         className="form-control" type="date"
                         value={descanso?.fecha_fin || ''}
                         onChange={e => setDescanso({ ...descanso, fecha_fin: e.target.value })}
+                    />
+                </div>
+            </div>
+            <br />
+            <div className="row">
+                <div className="col-md-4">
+                    N° de registro:<br />
+                    <input
+                        className="form-control" type="text"
+                        value={descanso?.numero_registro || ''}
+                        onChange={e => setDescanso({ ...descanso, numero_registro: e.target.value })}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Fecha emisión:<br />
+                    <input
+                        className="form-control" type="date"
+                        value={descanso?.fecha_emision || ''}
+                        onChange={e => setDescanso({ ...descanso, fecha_emision: e.target.value })}
                     />
                 </div>
             </div>
