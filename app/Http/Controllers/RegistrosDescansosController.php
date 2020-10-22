@@ -45,7 +45,7 @@ class RegistrosDescansosController extends Controller
         $permisosInasistencias = DB::connection('sqlsrv')
             ->table('dbo.PermisosInasistencias as p')
             ->where([
-                'p.RutTrabajador' => $request->get('trabajador')['rut']
+                'p.RutTrabajador' => $request->get('rut')
             ])
             ->whereDate('p.FechaInicio', '>=', $fechaInicio)
             ->whereDate('p.FechaInicio', '<=', $fechaFin)
@@ -54,7 +54,7 @@ class RegistrosDescansosController extends Controller
         $asistencias = DB::connection('sqlsrv')
             ->table('dbo.ActividadTrabajador as a')
             ->where([
-                'a.RutTrabajador' => $request->get('trabajador')['rut']
+                'a.RutTrabajador' => $request->get('rut')
             ])
             ->whereDate('a.FechaActividad', '>=', $fechaInicio)
             ->whereDate('a.FechaActividad', '<=', $fechaFin)
@@ -81,12 +81,16 @@ class RegistrosDescansosController extends Controller
         $registroDescanso->informe_descanso_medico_id = $infomeMedicoId;
         $registroDescanso->zona_labor_id = $zonaLabor->id;
         $registroDescanso->usuario_id = $usuarioId;
-
+        if (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) {
+            $registroDescanso->consideracion = json_encode($observaciones);
+        } else {
+            $registroDescanso->consideracion = null;
+        }
         $registroDescanso->save();
 
         return response()->json([
             'message' => 'Registro creado correctamente',
-            'observaciones' => $observaciones
+            'observaciones' => (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) ? $observaciones : null
         ]);
     }
 

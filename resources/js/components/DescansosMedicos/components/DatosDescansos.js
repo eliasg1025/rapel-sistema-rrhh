@@ -3,6 +3,7 @@ import { Card, notification, Select } from 'antd';
 
 import Modal from '../../Modal';
 import Axios from 'axios';
+import { isNull } from 'lodash';
 
 export const DatosDescansos = ({
     informe,
@@ -143,6 +144,26 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
                 notification['success']({
                     message: res.data.message
                 });
+
+                if (res.data.observaciones) {
+                    //console.log(res.data.observaciones);
+
+                    notification['warning']({
+                        message: (
+                            <>
+                                <h4>Alertas:</h4>
+                                <ul style={{ marginRight: '-15px' }}>
+                                    {res.data.observaciones.permisos.map(item => {
+                                        return <li key={item}>{item}</li>
+                                    })}
+                                    {res.data.observaciones.asistencias.map(item => {
+                                        return <li key={item}>{item}</li>
+                                    })}
+                                </ul>
+                            </>
+                        )
+                    });
+                }
             })
             .catch(err => {
                 console.error(err);
@@ -278,7 +299,7 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
                         className="btn btn-primary btn-block"
                         type="button"
                         onClick={handleSubmit}
-                        disabled={descanso?.zona_labor_id == '' || descanso?.tipo_licencia_medica_id == '' || descanso?.fecha_inicio == '' || descanso?.fecha_fin == ''}
+                        disabled={(descanso?.zona_labor_id == '' || descanso?.tipo_licencia_medica_id == '' || descanso?.fecha_inicio == '' || descanso?.fecha_fin == '')}
                     >
                         Ingresar
                     </button>
