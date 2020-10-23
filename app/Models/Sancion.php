@@ -356,6 +356,18 @@ class Sancion extends Model
         }
 
         if ($usuario->sanciones == 1 || $usuario->sanciones == 3) {
+
+            $userSlavesId = DB::table('usuarios_sanciones as us')
+            ->join('usuarios as u', 'u.id', '=', 'us.usuario2_id')
+            ->where([
+                'usuario_id' => $usuario_id,
+            ])
+            ->get();
+
+            $userSlavesId->transform(function ($item) {
+                return $item->id;
+            });
+
             return DB::table('sanciones as f')
                 ->select(
                     'f.id',
@@ -384,7 +396,7 @@ class Sancion extends Model
                 ->join('incidencias as i', 'i.id', '=', 'f.incidencia_id')
                 ->leftJoin('regimenes as re', 're.id', '=', 'f.regimen_id')
                 ->join('oficios as o', 'o.id', '=', 'f.oficio_id')
-                ->where('f.usuario_id', $usuario->id)
+                ->whereIn('f.usuario_id', [ $usuario->id, ...$userSlavesId ])
                 ->where('f.estado', $estado)
                 ->when($incidencia_id != "0", function ($query) use ($incidencia_id) {
                     $query->where('i.documento', $incidencia_id);

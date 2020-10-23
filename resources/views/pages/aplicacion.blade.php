@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Controlador Aplicación Movil | Verfrut
+    Panel Aplicación Movil | Verfrut
 @endsection
 
 @section('contenido')

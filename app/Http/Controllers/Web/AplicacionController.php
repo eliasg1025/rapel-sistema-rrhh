@@ -18,7 +18,7 @@ class AplicacionController extends Controller
 
         $data = [
             'usuario' => $usuario,
-            'submodule' => 'aplicacion',
+            'submodule' => 'main',
             '_token' => $request->session()->token(),
             'editar' => 0
         ];
