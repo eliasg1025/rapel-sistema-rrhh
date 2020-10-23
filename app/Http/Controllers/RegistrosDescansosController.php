@@ -39,6 +39,29 @@ class RegistrosDescansosController extends Controller
             ], 400);
         }
 
+        $estaDeVacaciones = DB::connection('sqlsrv')
+            ->table('Vacaciones as v')
+            ->where(function ($query) use ($fechaInicio, $empresaId) {
+                $query->where('v.IdEmpresa', $empresaId);
+                $query->whereDate('v.FechaInicio', '<=', $fechaInicio);
+                $query->whereDate('v.FechaFinal', '>=', $fechaInicio);
+            })
+            ->orWhere(function ($query) use ($fechaFin, $empresaId) {
+                $query->where('v.IdEmpresa', $empresaId);
+                $query->whereDate('v.FechaInicio', '<=', $fechaFin);
+                $query->whereDate('v.FechaFinal', '>=', $fechaFin);
+            })
+            ->orderBy('v.FechaInicio', 'DESC')
+            ->first();
+
+        //dd($estaDeVacaciones);
+
+        if ($estaDeVacaciones) {
+            return response()->json([
+                'message' => 'El trabajador esta de VACACIONES en desde ' . Carbon::parse($estaDeVacaciones->FechaInicio)->format('d/m/Y') . ' hasta el ' . Carbon::parse($estaDeVacaciones->FechaFinal)->format('d/m/Y')
+            ], 400);
+        }
+
         $observaciones = [
             'permisos' => [],
             'asistencias' => [],
@@ -50,7 +73,7 @@ class RegistrosDescansosController extends Controller
                 'p.RutTrabajador' => $request->get('rut')
             ])
             ->whereDate('p.FechaInicio', '>=', $fechaInicio)
-            ->whereDate('p.FechaInicio', '<=', $fechaFin)
+            ->whereDate('p.FechaTermino', '<=', $fechaFin)
             ->get();
 
         $asistencias = DB::connection('sqlsrv')

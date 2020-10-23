@@ -43,7 +43,16 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
         },
         {
             title: 'ALERTA',
-            dataIndex: 'consideracion'
+            dataIndex: 'consideracion',
+            render: (value) => {
+                const consideracion = JSON.parse(value);
+                return value && (
+                    <>
+                        {consideracion.permisos.map(item => <div key={item}>- {item}</div>)}
+                        {consideracion.asistencias.map(item => <div key={item}>- {item}</div>)}
+                    </>
+                )
+            }
         },
         {
             title: 'Acciones',

@@ -179,9 +179,9 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
             .then(res => {
                 //console.log(res);
                 notification['success']({
-                    message: 'Trabajador encontrado'
+                    message: res.data.message
                 });
-                setTrabajador(res.data);
+                setTrabajador(res.data.trabajador);
             })
             .catch(err => {
                 console.error(err);
