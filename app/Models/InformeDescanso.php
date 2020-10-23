@@ -34,7 +34,7 @@ class InformeDescanso extends Model
 
         $desfase = 0;
         if ($anio == 2020 && $empresaId == 9) {
-            $desfase = 187;
+            $desfase = 188;
         } else if ($anio == 2020 && $empresaId == 14) {
             $desfase = 192;
         }
