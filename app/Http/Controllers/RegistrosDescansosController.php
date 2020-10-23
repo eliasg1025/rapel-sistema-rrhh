@@ -41,12 +41,14 @@ class RegistrosDescansosController extends Controller
 
         $estaDeVacaciones = DB::connection('sqlsrv')
             ->table('Vacaciones as v')
-            ->where(function ($query) use ($fechaInicio, $empresaId) {
+            ->where(function ($query) use ($fechaInicio, $request, $empresaId) {
+                $query->where('v.RutTrabajador', $request->get('rut'));
                 $query->where('v.IdEmpresa', $empresaId);
                 $query->whereDate('v.FechaInicio', '<=', $fechaInicio);
                 $query->whereDate('v.FechaFinal', '>=', $fechaInicio);
             })
-            ->orWhere(function ($query) use ($fechaFin, $empresaId) {
+            ->orWhere(function ($query) use ($fechaFin, $request, $empresaId) {
+                $query->where('v.RutTrabajador', $request->get('rut'));
                 $query->where('v.IdEmpresa', $empresaId);
                 $query->whereDate('v.FechaInicio', '<=', $fechaFin);
                 $query->whereDate('v.FechaFinal', '>=', $fechaFin);
