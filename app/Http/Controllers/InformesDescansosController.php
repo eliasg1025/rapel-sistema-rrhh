@@ -179,6 +179,8 @@ class InformesDescansosController extends Controller
                 'AL' => $registro->fecha_fin,
                 'TOTAL' => $registro->total_dias,
                 'OBSERVACION(ES)' => $registro->observacion,
+                'N° REGISTRO' => $registro->numero_registro,
+                'FECHA EMISION' => $registro->fecha_emision,
             ];
         });
     }
