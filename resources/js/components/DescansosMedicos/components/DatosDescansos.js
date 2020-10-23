@@ -130,6 +130,7 @@ const FormDescanso = ({ informe, tiposLicencias, zonasLabores, descanso, setDesc
         e.preventDefault();
         Axios.post(`/api/registros-descansos`, {
             ...descanso,
+            rut: rut,
             trabajador: trabajador,
             usuario_id: usuario.id,
             informe_id: informe.id,

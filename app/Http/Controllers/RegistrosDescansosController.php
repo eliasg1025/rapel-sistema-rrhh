@@ -19,6 +19,7 @@ class RegistrosDescansosController extends Controller
             $trabajadorId = Trabajador::findOrCreate($request->get('trabajador'));
         }
 
+        $rut = $request->get('rut');
         $fechaInicio = Carbon::parse($request->get('fecha_inicio'));
         $fechaFin = Carbon::parse($request->get('fecha_fin'));
         $empresaId = $request->get('empresa_id');
@@ -41,14 +42,14 @@ class RegistrosDescansosController extends Controller
 
         $estaDeVacaciones = DB::connection('sqlsrv')
             ->table('Vacaciones as v')
-            ->where(function ($query) use ($fechaInicio, $request, $empresaId) {
-                $query->where('v.RutTrabajador', $request->get('rut'));
+            ->where(function ($query) use ($fechaInicio, $rut, $empresaId) {
+                $query->where('v.RutTrabajador', $rut);
                 $query->where('v.IdEmpresa', $empresaId);
                 $query->whereDate('v.FechaInicio', '<=', $fechaInicio);
                 $query->whereDate('v.FechaFinal', '>=', $fechaInicio);
             })
-            ->orWhere(function ($query) use ($fechaFin, $request, $empresaId) {
-                $query->where('v.RutTrabajador', $request->get('rut'));
+            ->orWhere(function ($query) use ($fechaFin, $rut, $empresaId) {
+                $query->where('v.RutTrabajador', $rut);
                 $query->where('v.IdEmpresa', $empresaId);
                 $query->whereDate('v.FechaInicio', '<=', $fechaFin);
                 $query->whereDate('v.FechaFinal', '>=', $fechaFin);
@@ -72,7 +73,7 @@ class RegistrosDescansosController extends Controller
         $permisosInasistencias = DB::connection('sqlsrv')
             ->table('dbo.PermisosInasistencias as p')
             ->where([
-                'p.RutTrabajador' => $request->get('rut')
+                'p.RutTrabajador' => $rut
             ])
             ->whereDate('p.FechaInicio', '>=', $fechaInicio)
             ->whereDate('p.FechaTermino', '<=', $fechaFin)
@@ -81,7 +82,7 @@ class RegistrosDescansosController extends Controller
         $asistencias = DB::connection('sqlsrv')
             ->table('dbo.ActividadTrabajador as a')
             ->where([
-                'a.RutTrabajador' => $request->get('rut')
+                'a.RutTrabajador' => $rut
             ])
             ->whereDate('a.FechaActividad', '>=', $fechaInicio)
             ->whereDate('a.FechaActividad', '<=', $fechaFin)
