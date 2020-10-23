@@ -103,7 +103,10 @@ export const MenuTabla = ({ filtro, data, reloadData, setReloadData, reloadDataA
         Axios.post(`/api/pagos/massive`, {
             data,
             tipo_pago_id,
-            empresa_id: filtro.empresa_id
+            empresa_id: filtro.empresa_id,
+            desde: filtro.desde,
+            hasta: filtro.hasta,
+            estado: filtro.estado
         })
             .then(res => {
                 const { data } = res;

@@ -62,13 +62,19 @@ class PagosController extends Controller
     {
         $data         = $request->get('data');
         $tipo_pago_id = $request->get('tipo_pago_id');
+        $estado = $request->estado;
+        $fechas = [
+            'desde' => Carbon::parse($request->desde),
+            'hasta' => $estado == 0 ? Carbon::parse($request->hasta)->lastOfMonth() : Carbon::parse($request->hasta)
+        ];
+        $empresa_id = $request->empresa_id;
 
         switch ( $tipo_pago_id ) {
             case 1:
-                $result = Liquidaciones::massiveCreate($data);
+                $result = Liquidaciones::massiveCreate($data, $fechas, $estado, $empresa_id);
                 break;
             case 2:
-                $result = Liquidaciones::massiveCreate($data);
+                $result = Liquidaciones::massiveCreate($data, $fechas, $estado, $empresa_id);
                 break;
         }
 

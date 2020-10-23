@@ -33,9 +33,11 @@ class Liquidaciones extends Model
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
             ->where('l.estado', $estado)
+            ->where('l.borrado', false)
             ->orderBy('l.ano', 'DESC')
             ->orderBy('l.mes', 'DESC')
             ->orderBy('l.apellido_paterno', 'ASC')
+            ->orderBy('l.apellido_materno', 'ASC')
             ->when($empresa_id !== 0, function($query) use($empresa_id) {
                 $query->where('l.empresa_id', $empresa_id);
             })
@@ -224,11 +226,18 @@ class Liquidaciones extends Model
         }
     }
 
-    public static function massiveCreate(array $liquidaciones)
+    public static function massiveCreate(array $liquidaciones, array $fechas, int $estado, int $empresa_id)
     {
         $count = 0;
         $total = sizeof($liquidaciones);
         $errors = [];
+
+        $paraActualizar = self::get($fechas, $estado, $empresa_id);
+        $ids = array_column($paraActualizar, 'id');
+
+        DB::table('liquidaciones')
+            ->whereIn('id', $ids)
+            ->update(['borrado' => 1]);
 
         foreach($liquidaciones as $liquidacion)
         {
@@ -249,7 +258,8 @@ class Liquidaciones extends Model
                         'empresa_id' => $liquidacion['IdEmpresa'],
                         'fecha_emision' => date($liquidacion['FechaEmision']),
                         'banco' => $liquidacion['Banco'],
-                        'numero_cuenta' => $liquidacion['NumeroCuentaBancaria']
+                        'numero_cuenta' => $liquidacion['NumeroCuentaBancaria'],
+                        'borrado' => 0
                     ]
                 );
 
