@@ -30,7 +30,7 @@ class Covid extends Model
                 'tra.Apellidomaterno as apellido_materno_usuario',
                 'tra.Nombre as nombre_usuario',
             )
-            ->join('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
+            ->leftJoin('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
             ->whereDate('co.fecha', '>=', '2020-09-28')
             ->whereIn('co.IdEmpresa', [9, 14])
             ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL', 'NO USA PROTECTOR FACIAL'])
@@ -80,7 +80,7 @@ class Covid extends Model
                 'tra.Apellidomaterno as apellido_materno_usuario',
                 'tra.Nombre as nombre_usuario',
             )
-            ->join('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
+            ->leftJoin('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
             ->whereIn('co.IdEmpresa', [9, 14])
             ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL'])
             ->where('co.id', $id)

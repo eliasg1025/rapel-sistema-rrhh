@@ -23,6 +23,10 @@ class CovidController extends Controller
     {
         $username = $request->query('usuario');
         $usuario = Usuario::where('username', $username)->first();
+        if (!$usuario) {
+            return response()->json([]);
+        }
+
         $usernames = Covid::getSlavesUsername($usuario);
         $result = Covid::get($usernames);
 
