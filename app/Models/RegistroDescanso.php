@@ -26,7 +26,9 @@ class RegistroDescanso extends Model
                 'zl.code as zona_labor_id',
                 'rdm.trabajador_id',
                 'rdm.observacion',
-                'rdm.consideracion'
+                'rdm.consideracion',
+                'rdm.fecha_emision',
+                'rdm.numero_registro'
             )
             ->join('trabajadores as t', [
                 'rdm.trabajador_id' => 't.id'
