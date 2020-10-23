@@ -237,7 +237,7 @@ class Liquidaciones extends Model
 
         DB::table('liquidaciones')
             ->whereIn('id', $ids)
-            ->update(['borrado' => 1]);
+            ->update(['estado' => 6]); // ELIMINADO
 
         foreach($liquidaciones as $liquidacion)
         {
@@ -259,7 +259,7 @@ class Liquidaciones extends Model
                         'fecha_emision' => date($liquidacion['FechaEmision']),
                         'banco' => $liquidacion['Banco'],
                         'numero_cuenta' => $liquidacion['NumeroCuentaBancaria'],
-                        'borrado' => 0
+                        'estado' => $estado
                     ]
                 );
 
