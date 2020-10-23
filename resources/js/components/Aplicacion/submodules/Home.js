@@ -15,13 +15,13 @@ export const Home = () => {
         <>
             <h4>Panel de Control - Aplicación RRHH</h4>
             <br />
-            <h5>Estado Servidor:</h5>
+            <h5>Servidor:</h5>
             <Card>
                 Dirección IP: <b>209.151.144.74</b><br />
                 Estado: {oneline ? (
-                    <span>En línea</span>
+                    <span>{" "}<i className="fas fa-check" style={{ color: 'green' }}></i> En línea</span>
                 ) : (
-                    <span>Fuera de línea</span>
+                    <span>{" "}<i className="fas fa-times-circle" style={{ color: 'red' }}></i> Fuera de línea</span>
                 )}
             </Card>
         </>

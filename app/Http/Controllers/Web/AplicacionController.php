@@ -25,4 +25,23 @@ class AplicacionController extends Controller
 
         return view('pages.aplicacion', compact('data'));
     }
+
+    public function sync(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->aplicacion == 0 ) {
+            $nombre_modulo = 'aplicacion';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'sync',
+            '_token' => $request->session()->token(),
+            'editar' => 0
+        ];
+
+        return view('pages.aplicacion', compact('data'));
+    }
 }

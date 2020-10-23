@@ -43,6 +43,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'aplicacion'], function () {
         Route::get('/', 'Web\AplicacionController@index');
+        Route::get('/sincronizar', 'Web\AplicacionController@sync');
     });
 
     Route::group(['prefix' => 'descansos-medicos'], function () {
