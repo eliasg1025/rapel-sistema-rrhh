@@ -44,6 +44,7 @@ class InformesDescansosController extends Controller
             ->leftJoinSub($registros, 'registros', function ($join) {
                 $join->on('registros.id', '=', 'idm.id');
             })
+            ->orderBy('idm.estado', 'DESC')
             ->orderBy('idm.id', 'DESC')
             /*
             ->when($usuario->descansos_medicos !== 2, function ($query) use ($usuario) {
@@ -138,8 +139,9 @@ class InformesDescansosController extends Controller
 
     public function update(Request $request, $id)
     {
+        $estado = $request->get('estado');
         $informe = InformeDescanso::find($id);
-        $informe->estado = $request->get('estado');
+        $informe->estado = $estado;
 
         $registros = RegistroDescanso::getByInforme($id);
 
@@ -152,7 +154,7 @@ class InformesDescansosController extends Controller
         $informe->save();
 
         return response()->json([
-            'message' => 'Informe terminado'
+            'message' => $estado ? 'Informe Terminado' : 'Informe Pendiente'
         ]);
     }
 

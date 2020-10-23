@@ -82,9 +82,9 @@ export const RegistrarInformes = () => {
         console.log('edit', descanso);
     }
 
-    const terminarInforme = () => {
+    const terminarInforme = (terminar) => {
         Swal.fire({
-            title: '¿Deseas marca como TERMINADO este informe?',
+            title: `¿Deseas marca como ${ terminar ? 'ENVIADO' : 'PENDIENTE' } este informe?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -95,7 +95,7 @@ export const RegistrarInformes = () => {
             .then(result => {
                 if (result.value) {
                     Axios.put(`/api/informes-descansos/${informe.id}`, {
-                        estado: 1
+                        estado: terminar
                     })
                         .then(res => {
                             console.log(res);
@@ -103,9 +103,6 @@ export const RegistrarInformes = () => {
                             notification['success']({
                                 message: res.data.message
                             });
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 2000);
                         })
                         .catch(err => {
                             console.error(err);
@@ -138,7 +135,11 @@ export const RegistrarInformes = () => {
                         <i className="fas fa-backward"></i> Atrás
                     </button>
                     <h4>
-                        Registrar: {informe?.informe || ''}{" "} {informe?.estado === 0 && <button className="btn btn-danger btn-sm" onClick={() => terminarInforme()}>Terminar Informe</button>}
+                        Registrar: {informe?.informe || ''}{" "} {informe?.estado === 0 ? (
+                            <button className="btn btn-danger btn-sm" onClick={() => terminarInforme(true)}>Terminar Informe</button>
+                        ) : (
+                            <button className="btn btn-primary btn-sm" onClick={() => terminarInforme(false)}>Desbloquear Informe</button>
+                        )}
                     </h4>
                     <DatosDescansos
                         informe={informe}

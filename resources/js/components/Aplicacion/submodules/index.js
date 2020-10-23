@@ -1,2 +1,2 @@
 export { Home } from './Home';
-export { Sincronizacion } from './Sincrinizacion';
+export { Sincronizacion } from './Sincronizacion';
