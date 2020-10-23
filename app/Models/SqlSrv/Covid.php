@@ -33,7 +33,7 @@ class Covid extends Model
             ->join('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
             ->whereDate('co.fecha', '>=', '2020-09-28')
             ->whereIn('co.IdEmpresa', [9, 14])
-            ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL'])
+            ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL', 'NO USA PROTECTOR FACIAL'])
             ->when(sizeof($usuarios) > 0, function($query) use ($usuarios) {
                 $query->whereIn('co.usuario', $usuarios);
             })

@@ -22,7 +22,7 @@ class CovidController extends Controller
     public function get(Request $request)
     {
         $username = $request->query('usuario');
-        $usuario = Usuario::where('username', $username);
+        $usuario = Usuario::where('username', $username)->first();
         $usernames = Covid::getSlavesUsername($usuario);
         $result = Covid::get($usernames);
 
