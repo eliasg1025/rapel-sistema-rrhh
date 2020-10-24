@@ -523,13 +523,6 @@ class Sancion extends Model
         $sancion = Sancion::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ($usuario->id !== $sancion->usuario_id) {
-            return [
-                'error'   => true,
-                'message' => 'La misma persona que cargó este formulario debe marcarlo como enviado'
-            ];
-        }
-
         $sancion->estado = 1;
         $sancion->fecha_hora_enviado = now()->toDateTimeString();
 
