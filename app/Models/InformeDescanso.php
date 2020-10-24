@@ -17,6 +17,14 @@ class InformeDescanso extends Model
         return $this->hasMany(RegistroDescanso::class, 'informe_descanso_medico_id', 'id');
     }
 
+    public function getFechaLargaAttribute($value)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_inicio);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
+
     public static function obtenerCorrelativo($id, $empresaId, $fechaIncio)
     {
         $anio = Carbon::parse($fechaIncio)->year;

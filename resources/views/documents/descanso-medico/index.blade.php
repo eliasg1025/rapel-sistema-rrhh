@@ -85,7 +85,7 @@
             </tr>
             <tr>
                 <td><b>FECHA:</b></td>
-                <td><b>{{ $informe->fecha_inicio }}</b></td>
+                <td><b>{{ $informe->fecha_larga }}</b></td>
             </tr>
         </table>
         <hr />
@@ -95,14 +95,14 @@
         <br />
         <table style="font-size: 10.5px" class="table">
             <thead>
-                <tr>
+                <tr style="background-color: grey; color: white">
                     <th>COD.</th>
                     <th>DNI</th>
                     <th>APELLIDOS Y NOMBRES</th>
                     <th>CONTINGENCIA</th>
                     <th>FUNDO</th>
-                    <th>DEL</th>
-                    <th>AL</th>
+                    <th style="width: 55px">DEL</th>
+                    <th style="width: 55px">AL</th>
                     <th>TOTAL</th>
                     <th>OBSERVACIONES</th>
                 </tr>
@@ -122,6 +122,13 @@
                     </tr>
                 @endforeach
             </tbody>
+        </table>
+        <br />
+        <table class="w-100">
+            <tr>
+                <td><b>Atentamente,</b></td>
+                <td></td>
+            </tr>
         </table>
     </section>
 @endsection

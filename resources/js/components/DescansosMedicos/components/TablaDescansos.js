@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 
 export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
 
@@ -13,15 +13,15 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
             dataIndex: 'rut'
         },
         {
-            title: 'APELLIDOS Y NOMBRES',
-            dataIndex: 'nombre_completo_trabajador'
+            title: 'Apellidos Y Nombres',
+            dataIndex: 'nombre_completo_trabajador',
         },
         {
-            title: 'CONTINGENCIA',
+            title: 'Contingencia',
             dataIndex: 'contingencia'
         },
         {
-            title: 'FUNDO',
+            title: 'Fundo',
             dataIndex: 'zona_labor'
         },
         {
@@ -33,17 +33,26 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
             dataIndex: 'fecha_fin'
         },
         {
-            title: 'TOTAL',
+            title: 'Total',
             dataIndex: 'total_dias',
             render: (value) => <b>{ value }</b>
         },
         {
-            title: 'OBSERVACION(ES)',
+            title: 'Observación(es)',
             dataIndex: 'observacion'
         },
         {
-            title: 'ALERTA',
+            title: 'N° Registro',
+            dataIndex: 'numero_registro'
+        },
+        {
+            title: 'Fecha Emisión',
+            dataIndex: 'fecha_emision'
+        },
+        {
+            title: 'Alerta',
             dataIndex: 'consideracion',
+            width: 250,
             render: (value) => {
                 const consideracion = JSON.parse(value);
                 return value && (
@@ -57,15 +66,20 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
         {
             title: 'Acciones',
             dataIndex: 'acciones',
+            fixed: 'right',
             render: (_, record) => {
                 return informe?.estado == 0 ? (
                     <div className="btn-group">
-                        <div className="btn btn-primary btn-sm" onClick={() => editRow(record)}>
-                            <i className="fas fa-edit"></i>
-                        </div>
-                        <div className="btn btn-danger btn-sm" onClick={() => deleteRow(record.id)}>
-                            <i className="fas fa-trash-alt"></i>
-                        </div>
+                        <Tooltip title="Editar Registro">
+                            <div className="btn btn-primary btn-sm" onClick={() => editRow(record)}>
+                                <i className="fas fa-edit"></i>
+                            </div>
+                        </Tooltip>
+                        <Tooltip title="Borrar registro">
+                            <div className="btn btn-danger btn-sm" onClick={() => deleteRow(record.id)}>
+                                <i className="fas fa-trash-alt"></i>
+                            </div>
+                        </Tooltip>
                     </div>
                 ) : null;
             }
@@ -75,6 +89,8 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
     return (
         <Table
             size="small"
+            pagination={{ size: 25 }}
+            scroll={{ x: 1300 }}
             columns={columns}
             dataSource={registros}
             bordered

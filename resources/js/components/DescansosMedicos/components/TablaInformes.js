@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Table, Tag } from 'antd';
+import { Table, Tag, Tooltip } from 'antd';
 import Axios from 'axios';
 
 const columns = [
@@ -36,15 +36,21 @@ const columns = [
         render: (_, record) => {
             return (
                 <div className="btn-group">
-                    <button type="button" className="btn btn-primary btn-sm" onClick={() => redirectToDetail(record.id)}>
-                        <i className="fas fa-edit"></i>
-                    </button>
-                    <a type="button" className="btn btn-primary btn-sm" target="_blank" href={`/ficha/descanso-medico/${record.id}`}>
-                        <i className="fas fa-file-alt"></i>
-                    </a>
-                    <a type="button" className="btn btn-success btn-sm" href={`/api/informes-descansos/${record.id}/exportar`}>
-                        <i className="fas fa-file-excel"></i>
-                    </a>
+                    <Tooltip title="Editar y Ver Registros">
+                        <button type="button" className="btn btn-primary btn-sm" onClick={() => redirectToDetail(record.id)}>
+                            <i className="fas fa-edit"></i>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title="Ver Informe (PDF)">
+                        <a type="button" className="btn btn-primary btn-sm" target="_blank" href={`/ficha/descanso-medico/${record.id}`}>
+                            <i className="fas fa-file-alt"></i>
+                        </a>
+                    </Tooltip>
+                    <Tooltip title="Exportar Registros">
+                        <a type="button" className="btn btn-success btn-sm" href={`/api/informes-descansos/${record.id}/exportar`}>
+                            <i className="fas fa-file-excel"></i>
+                        </a>
+                    </Tooltip>
                 </div>
             );
         }

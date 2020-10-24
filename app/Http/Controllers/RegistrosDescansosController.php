@@ -40,6 +40,21 @@ class RegistrosDescansosController extends Controller
             ], 400);
         }
 
+        $tipoLicencia = DB::connection('mysql')
+            ->table('tipo_licencias_medicas')
+            ->where([
+                'id' => $tipoLicenciaId,
+                'empresa_id' => $empresaId
+            ])->first();
+
+        if (!$tipoLicencia->permiso) {
+            if (!$numeroRegistro || !$fechaEmision) {
+                return response()->json([
+                    'message' => 'Este tipo de licencia require N° REGISTRO y FECHA DE EMISIÓN'
+                ], 400);
+            }
+        }
+
         $estaDeVacaciones = DB::connection('sqlsrv')
             ->table('Vacaciones as v')
             ->where(function ($query) use ($fechaInicio, $rut, $empresaId) {
@@ -109,8 +124,8 @@ class RegistrosDescansosController extends Controller
         $registroDescanso->informe_descanso_medico_id = $infomeMedicoId;
         $registroDescanso->zona_labor_id = $zonaLabor->id;
         $registroDescanso->usuario_id = $usuarioId;
-        $registroDescanso->numero_registro = $numeroRegistro;
-        $registroDescanso->fecha_emision = $fechaEmision;
+        $registroDescanso->numero_registro = !$tipoLicencia->permiso ? $numeroRegistro : null;
+        $registroDescanso->fecha_emision = !$tipoLicencia->permiso ? $fechaEmision : null;
         if (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) {
             $registroDescanso->consideracion = json_encode($observaciones);
         } else {
