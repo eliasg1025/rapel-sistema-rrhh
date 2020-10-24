@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DatePicker, message } from 'antd';
+import { DatePicker, message, Spin } from 'antd';
 import { MDBDataTableV5 } from 'mdbreact';
 import moment from 'moment';
 import Axios from 'axios';
@@ -38,7 +38,7 @@ const TablaAfps = props => {
                 link.href = window.URL.createObjectURL(blob)
                 link.download = `ELECIONES-AFP-${filtro.desde}-${filtro.hasta}.xlsx`
                 link.click()
-            })
+            });
     };
 
     return (
@@ -204,6 +204,7 @@ const Tabla = props => {
 
     }
 
+    const [loading, setLoading] = useState(false);
     const [datatable, setDatatable] = useState({
         columns: _columns,
         rows: []
@@ -213,6 +214,7 @@ const Tabla = props => {
         let intentos = 0;
         function fetchEleccionesAfp() {
             intentos++;
+            setLoading(true);
             Axios.post('/api/eleccion-afp/get-all', {
                 usuario_id: usuario.id,
                 desde,
@@ -253,22 +255,25 @@ const Tabla = props => {
                     if (intentos < 5) {
                         fetchEleccionesAfp();
                     }
-                });
+                })
+                .finally(() => setLoading(false));
         }
 
         fetchEleccionesAfp();
     }, [desde, hasta])
 
     return (
-        <MDBDataTableV5
-            hover
-            responsive
-            entriesOptions={[10, 20, 25]}
-            entries={10}
-            pagesAmount={10}
-            data={datatable}
-            searchTop
-            searchBottom={false}
-        />
+        <Spin spinning={loading}>
+            <MDBDataTableV5
+                hover
+                responsive
+                entriesOptions={[10, 20, 25]}
+                entries={10}
+                pagesAmount={10}
+                data={datatable}
+                searchTop
+                searchBottom={false}
+            />
+        </Spin>
     );
 }
