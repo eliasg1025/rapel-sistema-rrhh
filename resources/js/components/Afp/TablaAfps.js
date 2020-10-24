@@ -20,6 +20,8 @@ const TablaAfps = props => {
                 dni: item.rut,
                 trabajador: item.nombre_completo,
                 empresa: item.empresa,
+                regimen: item.regimen,
+                oficio: item.oficio,
                 usuario: item.nombre_completo_usuario
             }
         });

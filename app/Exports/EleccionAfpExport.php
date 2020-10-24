@@ -27,6 +27,8 @@ class EleccionAfpExport implements FromArray, WithColumnFormatting
             'DNI',
             'TRABAJADOR',
             'EMPRESA',
+            'REGIMEN',
+            'OFICIO',
             'SUBIDO POR',
         ];
         return [
