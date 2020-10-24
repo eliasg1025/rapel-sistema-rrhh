@@ -227,11 +227,20 @@ class FormularioPermiso extends Model
         }
 
         if ( $usuario->permisos == 1 ) {
-            $jefe = DB::table('usuarios as u')
-                ->select('t.id')
+            $jefe_trabajador = DB::table('usuarios as u')
+                ->select(
+                    't.rut',
+                )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id')
                 ->where('u.id', $usuario->id)
                 ->first();
+
+            $initialRut = ltrim($jefe_trabajador->rut, "0");
+            $trabajadores = DB::table('trabajadores as t')
+                ->select('t.id')
+                ->where('t.rut', 'like', '%' . $initialRut . '%')
+                ->get()->toArray();
+            $ids = array_column($trabajadores, 'id');
 
             return DB::table('formularios_permisos as f')
                 ->select(
@@ -263,9 +272,9 @@ class FormularioPermiso extends Model
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
-                ->where(function ($query) use ($usuario, $jefe) {
-                    $query->where('f.usuario_id', $usuario->id)
-                        ->orWhere('j.id', $jefe->id);
+                ->where(function ($query) use ($usuario, $ids) {
+                    $query->whereIn('f.jefe_id', $ids);
+                    $query->orWhere('f.usuario_id', $usuario->id);
                 })
                 ->where('f.estado', $estado)
                 ->when($estado == 3, function($query) use ($fechas) {
