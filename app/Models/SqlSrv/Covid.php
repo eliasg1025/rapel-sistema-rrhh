@@ -293,10 +293,13 @@ class Covid extends Model
                         'o.descripcion as name',
                         'o.idEmpresa as empresa_id'
                     )
+                    ->join('dbo.Oficio as o', [
+                        'o.idempresa' => 'c.idempresa',
+                        'o.IdOficio' => 'c.IdOficio'
+                    ])
                     ->where('c.ruttrabajador', $row['rut'])
                     ->where('c.idempresa', $row['empresa_id'])
                     ->where('c.indicadorVigencia', '1')
-                    ->join('dbo.Oficio as o', 'o.idempresa', '=', 'c.idempresa')
                     ->first();
 
                 $zona_labor = DB::connection('sqlsrv')

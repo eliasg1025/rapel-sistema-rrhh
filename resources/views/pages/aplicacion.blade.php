@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Panel Aplicación Movil | Verfrut
+    Panel Aplicación Movil | Grupo Verfrut
 @endsection
 
 @section('contenido')
