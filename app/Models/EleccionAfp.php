@@ -94,6 +94,7 @@ class EleccionAfp extends Model
             ];
         }
 
+        $data = [];
         if ($usuario->afp === 2) {
             $usuarios = DB::table('usuarios as u')
                 ->select(
@@ -103,9 +104,10 @@ class EleccionAfp extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
-            return DB::table('elecciones_afp as ea')
+            $data = DB::table('elecciones_afp as ea')
                 ->select(
                     'ea.id',
+                    'ea.empresa_id',
                     'ea.fecha_solicitud',
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
@@ -121,12 +123,13 @@ class EleccionAfp extends Model
                 ->whereBetween('ea.fecha_solicitud', [$fechas['desde'], $fechas['hasta']])
                 ->get();
         } else if ($usuario->afp === 1) {
-            return DB::table('elecciones_afp as ea')
+            $data = DB::table('elecciones_afp as ea')
                 ->select(
                     'ea.id',
                     'ea.fecha_solicitud',
                     't.rut',
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'ea.empresa_id',
                     'e.shortname as empresa'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'ea.trabajador_id')
@@ -137,6 +140,34 @@ class EleccionAfp extends Model
         } else {
             return [];
         }
+
+        $data->transform(function ($item) {
+            $d = DB::connection('sqlsrv')
+                ->table('Contratos as c')
+                ->select(
+                    'r.Descripcion as regimen',
+                    'o.Descripcion as oficio'
+                )
+                ->join('Oficio as o', [
+                    'c.IdEmpresa' => 'o.IdEmpresa',
+                    'c.IdOficio' => 'o.IdOficio'
+                ])
+                ->join('TipoRegimen as r', [
+                    'r.IdTipo' => 'c.IdRegimen'
+                ])
+                ->where([
+                    'c.IdEmpresa' => $item->empresa_id,
+                    'c.RutTrabajador' => $item->rut
+                ])
+                ->where('c.IndicadorVigencia', true)
+                ->first();
+
+            $item->regimen = $d->regimen;
+            $item->oficio = $d->oficio;
+            return $item;
+        });
+
+        return $data;
     }
 
     public static function _getByUser(Usuario $id)

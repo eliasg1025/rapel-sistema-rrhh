@@ -137,6 +137,16 @@ const Tabla = props => {
                 width: 150,
             },
             {
+                label: 'Regimen',
+                field: 'regimen',
+                sort: 'disabled',
+            },
+            {
+                label: 'Oficio',
+                field: 'oficio',
+                sort: 'disabled'
+            },
+            {
                 label: 'Acciones',
                 field: 'acciones',
                 sort: 'disabled'
@@ -166,6 +176,16 @@ const Tabla = props => {
                 field: 'empresa',
                 sort: 'disabled',
                 width: 150,
+            },
+            {
+                label: 'Regimen',
+                field: 'regimen',
+                sort: 'disabled',
+            },
+            {
+                label: 'Oficio',
+                field: 'oficio',
+                sort: 'disabled'
             },
             {
                 label: 'Cargado por',
