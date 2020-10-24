@@ -89,7 +89,7 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
     return (
         <Table
             size="small"
-            pagination={{ size: 25 }}
+            pagination={{ pageSize: 25 }}
             scroll={{ x: 1300 }}
             columns={columns}
             dataSource={registros}
