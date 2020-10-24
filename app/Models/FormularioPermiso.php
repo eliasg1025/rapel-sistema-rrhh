@@ -227,6 +227,12 @@ class FormularioPermiso extends Model
         }
 
         if ( $usuario->permisos == 1 ) {
+            $jefe = DB::table('usuarios as u')
+                ->select('t.id')
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id')
+                ->where('u.id', $usuario->id)
+                ->first();
+
             return DB::table('formularios_permisos as f')
                 ->select(
                     'f.id',
@@ -257,7 +263,10 @@ class FormularioPermiso extends Model
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
                 ->join('motivos_permisos as m', 'm.id', '=', 'f.motivo_permiso_id')
                 ->join('zona_labores as z', 'z.id', '=', 'f.zona_labor_id')
-                ->where('f.usuario_id', $usuario->id)
+                ->where(function ($query) use ($usuario, $jefe) {
+                    $query->where('f.usuario_id', $usuario->id)
+                        ->orWhere('j.id', $jefe->id);
+                })
                 ->where('f.estado', $estado)
                 ->when($estado == 3, function($query) use ($fechas) {
                     $query->whereBetween('f.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
