@@ -159,7 +159,7 @@ class EleccionAfp extends Model
                     'c.IdEmpresa' => $item->empresa_id,
                     'c.RutTrabajador' => $item->rut
                 ])
-                ->where('c.IndicadorVigencia', true)
+                ->orderBy('IdContrato', 'DESC')
                 ->first();
 
             $item->regimen = $d->regimen;
