@@ -124,6 +124,25 @@ export const Sincronizacion = () => {
                     />
                 </div>
             </div>
+            <br />
+            <div className="row">
+                <div className="col-md-6">
+                    <SyncForm
+                        table="horas-jornal"
+                        eTable="asistencias"
+                        zonasLabor={zonasLabor}
+                        header={form}
+                    />
+                </div>
+                <div className="col-md-6">
+                    <SyncForm
+                        table="horas-no-jornal"
+                        eTable="asistencias"
+                        zonasLabor={zonasLabor}
+                        header={form}
+                    />
+                </div>
+            </div>
         </>
     );
 }
@@ -162,7 +181,7 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
 
     const recoverData = () => {
         setLoadingZonas(true);
-        Axios.post(`http://rapel-api.test/api/sueldos/${table}`, {
+        Axios.post(`http://192.168.60.16/api/sueldos/${table}`, {
             ...header,
             zonasLaborId
         })
