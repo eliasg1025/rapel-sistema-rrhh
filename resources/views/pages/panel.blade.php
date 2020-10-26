@@ -79,10 +79,25 @@
             </div>
         </div>
         <br />
-        <form class="form-inline m-auto" method="POST" action="/logout">
-            @csrf
-            <button class="btn btn-outline-danger m-auto" type="submit">Cerrar Sesión</button>
-        </form>
+        @if ($data['usuario']['rol'] === 'admin')
+            <div class="text-center">
+                <h4>Módulos de Administrador</h4>
+            </div>
+            <div class="py-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="btn btn-block btn-light" href="/usuarios" {{ $data['usuario']->usuarios === 0 ? 'disabled' : '' }}>
+                            <i class="fas fa-user-friends"></i> Gestión de Usuarios
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a class="btn btn-block btn-light" href="/aplicacion" {{ $data['usuario']->aplicacion === 0 ? 'disabled' : '' }}>
+                            <i class="fas fa-mobile-alt"></i> Panel de Control (Aplicación)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
         <script>
             console.log(@json($data['usuario']));
         </script>
