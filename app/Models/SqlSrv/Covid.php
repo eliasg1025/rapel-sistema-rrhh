@@ -82,7 +82,7 @@ class Covid extends Model
             )
             ->leftJoin('dbo.Trabajador as tra', 'tra.UsuarioSis', 'co.usuario')
             ->whereIn('co.IdEmpresa', [9, 14])
-            ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL'])
+            ->whereIn('co.Causa', ['SIN MASCARILLA', 'SIN ALCOHOL', 'NO USA PROTECTOR FACIAL'])
             ->where('co.id', $id)
             ->first();
 

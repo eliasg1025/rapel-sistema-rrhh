@@ -165,7 +165,7 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
     }
 
     const insertData = (data) => {
-        Axios.post(`http://remun-api.test/api/${eTable}/many`,{
+        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
             data
         })
             .then(res => {
