@@ -258,6 +258,9 @@ class Covid extends Model
                 case 'SIN ALCOHOL':
                     $incidencia_id = 6;
                     break;
+
+                case 'NO USA PROTECTOR FACIAL':
+                    $incidencia_id = 2;
             }
 
             try {
