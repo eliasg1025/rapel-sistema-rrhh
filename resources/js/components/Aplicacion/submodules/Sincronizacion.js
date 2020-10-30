@@ -127,18 +127,8 @@ export const Sincronizacion = () => {
             <br />
             <div className="row">
                 <div className="col-md-6">
-                    <SyncForm
-                        table="horas-jornal"
-                        eTable="asistencias"
-                        zonasLabor={zonasLabor}
-                        header={form}
-                    />
-                </div>
-                <div className="col-md-6">
-                    <SyncForm
-                        table="horas-no-jornal"
-                        eTable="asistencias"
-                        zonasLabor={zonasLabor}
+                    <SyncFormTarja
+                        eTable="tarja"
                         header={form}
                     />
                 </div>
@@ -231,6 +221,138 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
                                 {!loadingZonas ? (
                                     <>
                                         <i className="fas fa-sync-alt"></i>{" "}Sincronizar <b>{ table.toUpperCase() }</b>
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fas fa-sync-alt fa-spin"></i>{" "}Obteniendo datos
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </Card>
+        </>
+    );
+}
+
+const SyncFormTarja = ({ header, eTable }) => {
+
+    const [loading, setLoading] = useState(false);
+    const [form, setForm] = useState({
+        regimenId: 1,
+        conDigitacion: 'SI',
+    });
+
+    const regimenes = [
+        {
+            id: 1,
+            name: 'Empleados Agrarios'
+        },
+        {
+            id: 2,
+            name: 'Empleados Regulares'
+        },
+        {
+            id: 3,
+            name: 'Obreros'
+        }
+    ];
+
+    const confirm = (data, action) => {
+        Modal.confirm({
+            title: 'Cargar Datos',
+            icon: <ExclamationCircleOutlined />,
+            content: `Se recuperaron ${data.length} registros. ¿Desea cargarlos todos?`,
+            okText: 'Si, CARGAR',
+            cancelText: 'Cancelar',
+            onOk: action
+        });
+    }
+
+    const insertData = (data) => {
+        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
+            data
+        })
+            .then(res => {
+                console.log(res.data);
+                notification['success']({
+                    message: res.data.message
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    const recoverData = () => {
+        setLoading(true);
+        Axios.post(`http://192.168.60.16/api/sueldos/horas-jornal`, {
+            ...header,
+            ...form
+        })
+            .then(res => {
+                const { data } = res;
+                confirm(data, () => insertData(data));
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .finally(() => setLoading(false));
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        recoverData();
+    };
+
+    return (
+        <>
+            <h5>TARJA</h5>
+            <Card>
+                <form onSubmit={handleSubmit}>
+                    <div className="row">
+                        <div className="col-md-6">
+                            Regimen:<br />
+                            <Select
+                                allowClear
+                                style={{ width: '100%' }}
+                                value={form.regimenId}
+                                placeholder="Seleccione REGIMEN"
+                                onChange={value => setForm({...form, regimenId: value})}
+                                size="small"
+                            >
+                                {regimenes.map(item => (
+                                    <Select.Option key={item.id} value={item.id}>
+                                        {`${item.id} - ${item.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="col-md-6">
+                            Con Digitacion:<br />
+                            <Select
+                                allowClear
+                                value={form.conDigitacion}
+                                style={{ width: '100%' }}
+                                onChange={value => setForm({ ...form, conDigitacion: value })}
+                                size="small"
+                            >
+                                {['SI', 'NO'].map(item => (
+                                    <Select.Option key={item} value={item}>
+                                        {`${item}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+                    <br />
+                    <div className="row">
+                        <div className="col-md-12">
+                            <button className="btn btn-primary" disabled={loading}>
+                                {!loading ? (
+                                    <>
+                                        <i className="fas fa-sync-alt"></i>{" "}Sincronizar <b>TARJA</b>
                                     </>
                                 ) : (
                                     <>
