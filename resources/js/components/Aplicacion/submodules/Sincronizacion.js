@@ -271,7 +271,9 @@ const SyncFormTarja = ({ header, eTable }) => {
     }
 
     const insertData = (data, mes, anio) => {
-        Axios.post(`http://remun-api.test/api/${eTable}/many`,{
+        // 209.151.144.74
+        // remun-api.test
+        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
             data,
             mes,
             anio
