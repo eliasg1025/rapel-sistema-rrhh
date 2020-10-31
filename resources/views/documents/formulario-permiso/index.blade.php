@@ -59,7 +59,7 @@
                 </td>
             </tr>
         </table>
-        <div style="font-size: 13px">
+        <div style="font-size: 12px">
             <table class="table" style="font-size: 12px;">
                 <tr>
                     <td class="bold">NOMBRE TRABAJADOR:</td>
