@@ -6,11 +6,12 @@
 
 import ReactDOM from "react-dom";
 import React from "react";
+
+import Ingresos from "./components/IngresosPersonal";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
 import AgregarSancion from "./components/Sanciones/Submodules/AgregarSancion";
-import EstadisticasUsuarios from "./components/EstadisticasUsuario";
 import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
@@ -21,6 +22,8 @@ import Perfil from "./components/Perfil";
 import DescansosMedicos from "./components/DescansosMedicos";
 import Aplicacion from "./components/Aplicacion";
 
+import 'antd/dist/antd.css';
+
 require('./bootstrap');
 
 /**
@@ -29,29 +32,12 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Login');
-require('./layouts/MainLayout');
-require('./layouts/TrabajadoresLayout');
-require('./layouts/UsuariosLayout');
-require('./layouts/RegistroIndividualLayout');
-require('./layouts/RegistroMasivoLayout');
-require('./components/Cuentas/components/AgregarCuenta');
-require('./components/Afp/AgregarAfp');
-require('./components/Permisos/AgregarPermiso');
-require('./components/Sanciones/Submodules/AgregarSancion');
-require('./components/ConsultaTrabajadores/ConsultarTrabajadores');
+if (document.getElementById("ingresos")) {
+    const element = document.getElementById("ingresos");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Ingresos {...props} />, document.getElementById("ingresos"));
+}
 
-// Estadisticas
-require('./components/EstadisticasUsuario');
-
-
-// Liquidaciones
-require('./components/Liquidaciones/Liquidaciones');
-
-require('./components/Sanciones/Sanciones');
-require('./components/Sctr/Sctr');
-
-//
 if (document.getElementById("controlador-aplicacion")) {
     const element = document.getElementById("controlador-aplicacion");
     const props = Object.assign({}, element.dataset);

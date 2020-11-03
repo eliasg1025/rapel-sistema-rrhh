@@ -21,19 +21,31 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', 'Web\ViewController@login');
 
 Route::group(['middleware' => 'web.auth'], function() {
-    Route::get('/', 'Web\ViewController@panel');
+    Route::get('/', 'Web\ViewController@index');
     Route::get('/perfil', 'Web\ViewController@perfil');
-    Route::get('/ingresos', 'Web\ViewController@index');
+
+    Route::group(['prefix' => 'ingresos'], function() {
+        Route::get('/', 'Web\IngresosController@index');
+        Route::get('/trabajadores', 'Web\IngresosController@trabajadores');
+        Route::get('/registro-individual', 'Web\IngresosController@registroIndividual');
+        Route::get('/registro-individual/editar/{id}', 'Web\IngresosController@editarRegistroIndividual');
+        Route::get('/registro-masivo', 'Web\IngresosController@registorMasivo');
+    });
+
     Route::get('/usuarios', 'Web\ViewController@usuarios');
-    Route::get('/trabajadores', 'Web\ViewController@trabajadores');
-    Route::get('/registro-individual', 'Web\ViewController@registroIndividual');
-    Route::get('/registro-individual/editar/{id}', 'Web\ViewController@editarRegistroIndividual');
-    Route::get('/registro-masivo', 'Web\ViewController@registorMasivo');
-    Route::get('/cuentas', 'Web\CuentasController@index');
-    Route::get('/cuentas/editar/{id}', 'Web\CuentasController@editarCuenta');
+
+    Route::group(['prefix' => 'cuentas'], function() {
+        Route::get('/', 'Web\CuentasController@index');
+        Route::get('/editar/{id}', 'Web\CuentasController@editarCuenta');
+    });
+
     Route::get('/eleccion-afp', 'Web\ViewController@afp');
-    Route::get('/formularios-permisos', 'Web\ViewController@permisos');
-    Route::get('/formularios-permisos/editar/{id}', 'Web\ViewController@editarPermiso');
+
+    Route::group(['prefix' => 'formularios-permisos'], function() {
+        Route::get('/', 'Web\ViewController@permisos');
+        Route::get('/editar/{id}', 'Web\ViewController@editarPermiso');
+    });
+
     Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
 
     Route::group(['prefix' => 'perfil'], function () {
@@ -85,7 +97,6 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
         Route::get('/', 'Web\LiquidacionesController@index');
-        //Route::get('/importacion', 'Web\LiquidacionesController@liquidacionesImportacion');
         Route::get('/consulta', 'Web\LiquidacionesController@consulta');
 
         Route::group(['prefix' => 'l'], function() {
