@@ -15,7 +15,7 @@ const MainLayout = props => {
     return (
         <Layout>
             <Sider
-                theme="light"
+                theme="dark"
                 breakpoint="lg"
                 collapsedWidth="0"
                 onBreakpoint={broken => {
@@ -26,7 +26,7 @@ const MainLayout = props => {
                 }}
             >
                 <br />
-                <Menu mode="inline" defaultSelectedKeys={['2']}>
+                <Menu mode="inline" defaultSelectedKeys={['2']} theme="dark">
                     {
                         usuario.usuario.rol === 'admin' && (
                             <Menu.Item key="2" icon={<UserOutlined />}>

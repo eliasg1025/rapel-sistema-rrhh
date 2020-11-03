@@ -15,7 +15,7 @@ const TrabajadoresLayout = props => {
     return (
         <Layout>
             <Sider
-                theme="light"
+                theme="dark"
                 breakpoint="lg"
                 collapsedWidth="0"
                 onBreakpoint={broken => {
@@ -26,7 +26,7 @@ const TrabajadoresLayout = props => {
                 }}
             >
                 <br />
-                <Menu mode="inline" defaultSelectedKeys={['3']}>
+                <Menu mode="inline" defaultSelectedKeys={['3']} theme="dark">
                     <Menu.Item key="1" icon={<HomeOutlined />}>
                         <a href="/ingresos">
                             Inicio
