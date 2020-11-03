@@ -273,7 +273,12 @@ const SyncFormTarja = ({ header, eTable }) => {
     const insertData = (data, mes, anio) => {
         // 209.151.144.74
         // remun-api.test
-        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
+
+        const instance = form.conDigitacion === 'SI'
+            ? eTable
+            : 'asistencias';
+
+        Axios.post(`http://209.151.144.74/api/${instance}/many`,{
             data,
             mes,
             anio
@@ -291,7 +296,12 @@ const SyncFormTarja = ({ header, eTable }) => {
 
     const recoverData = () => {
         setLoading(true);
-        Axios.post(`http://192.168.60.16/api/sueldos/horas-jornal`, {
+
+        const url = form.conDigitacion === 'SI'
+            ? `http://192.168.60.16/api/sueldos/horas-jornal`
+            : `http://192.168.60.16/api/sueldos/horas-no-jornal`;
+
+        Axios.post(url, {
             ...header,
             ...form
         })
