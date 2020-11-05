@@ -281,7 +281,8 @@ const SyncFormTarja = ({ header, eTable }) => {
         Axios.post(`http://209.151.144.74/api/${instance}/many`,{
             data,
             mes,
-            anio
+            anio,
+            empresaId: header.empresaId
         })
             .then(res => {
                 console.log(res.data);
