@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { message } from 'antd';
 
-import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador, MostrarUltimaActualizacion } from './components';
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador, MostrarUltimaActualizacion } from '../components';
 
 export const Prorrogas = () => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));

@@ -3,9 +3,7 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, SnippetsOutlined } from "@ant-design/icons";
 import moment from 'moment';
 
-import { Home } from './submodules/Home';
-import { Boletas } from './submodules/Boletas';
-import { Prorrogas } from './submodules/Prorrogas';
+import { Home, Boletas, Prorrogas } from './submodules';
 
 const { Content, Footer, Sider } = Layout;
 

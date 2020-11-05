@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador, MostrarUltimaActualizacion } from './components'
+import { ImportarDocumentos, TablaDocumentos, FiltroTablaDocumentos, BuscarTrabajador, MostrarUltimaActualizacion } from '../components'
 import Axios from 'axios';
 import { message } from 'antd';
 
