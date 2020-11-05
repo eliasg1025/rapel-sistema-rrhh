@@ -188,7 +188,8 @@ class ViewController extends Controller
             return view('pages.no-acceso', compact('nombre_modulo'));
         }
         $data = [
-            'usuario' => $usuario
+            'usuario' => $usuario,
+            'submodule' => 'main'
         ];
         return view('pages.usuarios', compact('data'));
     }

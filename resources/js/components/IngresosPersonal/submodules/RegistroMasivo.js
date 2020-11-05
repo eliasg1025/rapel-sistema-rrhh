@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Card, Modal, notification, Form, Row, Col, Button, message, Switch } from 'antd';
 import moment from 'moment';
-import Axios from 'Axios';
+import Axios from 'axios';
 
 import AgregarTrabajador from "../components/RegistroMasivo/AgregarTrabajador";
 import ListaTrabajadores from "../components/RegistroMasivo/ListaTrabajadores";

@@ -21,6 +21,7 @@ import Cuentas from "./components/Cuentas";
 import Perfil from "./components/Perfil";
 import DescansosMedicos from "./components/DescansosMedicos";
 import Aplicacion from "./components/Aplicacion";
+import Usuarios from "./components/Usuarios";
 
 import 'antd/dist/antd.css';
 
@@ -37,6 +38,12 @@ if (document.getElementById("ingresos")) {
     const element = document.getElementById("ingresos");
     const props = Object.assign({}, element.dataset);
     ReactDOM.render(<Ingresos {...props} />, document.getElementById("ingresos"));
+}
+
+if (document.getElementById("usuarios")) {
+    const element = document.getElementById("usuarios");
+    const props = Object.assign({}, element.dataset);
+    ReactDOM.render(<Usuarios {...props} />, document.getElementById("usuarios"));
 }
 
 if (document.getElementById("controlador-aplicacion")) {

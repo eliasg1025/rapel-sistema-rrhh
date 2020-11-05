@@ -5,5 +5,9 @@
 @endsection
 
 @section('contenido')
-    <div id="usuarios-layout" data-props="{{ json_encode($data) }}"></div>
+    <div id="usuarios"></div>
+
+    <script>
+        sessionStorage.setItem('data', JSON.stringify(@json($data)) );
+    </script>
 @endsection
