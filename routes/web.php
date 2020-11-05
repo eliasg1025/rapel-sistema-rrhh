@@ -32,7 +32,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/registro-masivo', 'Web\IngresosController@registorMasivo');
     });
 
-    Route::get('/usuarios', 'Web\ViewController@usuarios');
+    Route::group(['prefix' => 'usuarios'], function() {
+        Route::get('/', 'Web\UsuariosController@index');
+        Route::get('/roles', 'Web\UsuariosController@roles');
+    });
 
     Route::group(['prefix' => 'cuentas'], function() {
         Route::get('/', 'Web\CuentasController@index');

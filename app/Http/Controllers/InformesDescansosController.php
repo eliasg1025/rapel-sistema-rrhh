@@ -44,7 +44,7 @@ class InformesDescansosController extends Controller
             ->leftJoinSub($registros, 'registros', function ($join) {
                 $join->on('registros.id', '=', 'idm.id');
             })
-            ->orderBy('idm.estado', 'DESC')
+            ->orderBy('idm.estado', 'ASC')
             ->orderBy('idm.id', 'DESC')
             /*
             ->when($usuario->descansos_medicos !== 2, function ($query) use ($usuario) {

@@ -98,8 +98,5 @@
                 </div>
             </div>
         @endif
-        <script>
-            console.log(@json($data['usuario']));
-        </script>
     </div>
 @endsection

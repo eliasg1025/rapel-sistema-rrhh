@@ -3,7 +3,7 @@ import Axios from 'axios';
 
 import ListaUsuarios from '../components/ListaUsuarios';
 
-const Usuarios = () => {
+export const Usuarios = () => {
     const [reloadUser, setReloadUser] = useState(false);
     const [usersActive, setUsersActive] = useState([]);
     const [usersInactive, setUsersInactive] = useState([]);
@@ -30,5 +30,3 @@ const Usuarios = () => {
         </div>
     );
 }
-
-export default Usuarios;
