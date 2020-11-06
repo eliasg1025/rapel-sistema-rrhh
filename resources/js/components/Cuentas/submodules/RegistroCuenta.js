@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { TablaCuentas } from "../components/TablaCuentas";
 import { BusquedaTrabajador } from "../components/BusquedaTrabajador";
 import Axios from "axios";
+import { EtiquetaAdministrador } from "../../shared";
 
 export const RegistroCuenta = () => {
     const { usuario, editar, submodule } = JSON.parse(
@@ -116,9 +117,7 @@ export const RegistroCuenta = () => {
             <div className="mb-3">
                 <h4>
                     Cuentas{" "}
-                    <small>
-                        {usuario.cuentas === 2 ? "(Modo Administrador)" : ""}
-                    </small>
+                    {usuario.cuentas === 2 && <EtiquetaAdministrador />}
                 </h4>
             </div>
             {!editar && (

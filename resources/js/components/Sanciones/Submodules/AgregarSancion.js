@@ -5,6 +5,7 @@ import Axios from 'axios';
 import BuscarTrabajador from '../../shared/BuscarTrabajador';
 import { DatosSancion } from './components/DatosSancion';
 import { TablaSancion } from './components/TablaSancion';
+import { EtiquetaAdministrador } from '../../shared';
 
 const AgregarSancion = () => {
     const { usuario, editar } = JSON.parse(sessionStorage.getItem('data'));
@@ -133,7 +134,10 @@ const AgregarSancion = () => {
     return (
         <>
             <div className="mb-3">
-                <h4>Sanciones <small>{ usuario.sanciones === 2 ? '(Modo Administrador)' : '' }</small></h4>
+                <h4>
+                    Sanciones{" "}
+                    { usuario.sanciones === 2 && <EtiquetaAdministrador /> }
+                </h4>
             </div>
             {!editar && (
                 <BuscarTrabajador

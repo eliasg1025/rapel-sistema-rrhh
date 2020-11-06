@@ -42,14 +42,19 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/editar/{id}', 'Web\CuentasController@editarCuenta');
     });
 
-    Route::get('/eleccion-afp', 'Web\ViewController@afp');
+    Route::group(['prefix' => 'eleccion-afp'], function() {
+        Route::get('/', 'Web\AfpController@index');
+    });
+
+    Route::group(['prefix' => 'atencion-cambio-clave'], function() {
+        Route::get('/', 'Web\AtencionReseteoClaveController@index');
+    });
 
     Route::group(['prefix' => 'formularios-permisos'], function() {
         Route::get('/', 'Web\ViewController@permisos');
         Route::get('/editar/{id}', 'Web\ViewController@editarPermiso');
     });
 
-    Route::get('/atencion-cambio-clave', 'Web\ViewController@atencionReseteoClave');
 
     Route::group(['prefix' => 'perfil'], function () {
         Route::get('/', 'Web\PerfilController@index');

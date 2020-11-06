@@ -6,13 +6,15 @@
 
 import ReactDOM from "react-dom";
 import React from "react";
+import "antd/dist/antd.css";
+
+import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 
 import Ingresos from "./components/IngresosPersonal";
-import AgregarAfp from "./components/Afp/AgregarAfp";
-import AgregarPermiso from "./components/Permisos/AgregarPermiso";
-import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
+import Afp from "./components/Afp";
+import ReseteoClave from "./components/ReseteoClave";
 import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
-import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
+import ConsultaTrabajadores from "./components/ConsultaTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
 import Sctr from "./components/Sctr/Sctr";
 import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
@@ -23,10 +25,8 @@ import Aplicacion from "./components/Aplicacion";
 import Usuarios from "./components/Usuarios";
 import Panel from "./components/Panel";
 
-import 'antd/dist/antd.css';
-
-require('./bootstrap');
-require('./components/Login');
+require("./bootstrap");
+require("./components/Login");
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -37,78 +37,80 @@ require('./components/Login');
 const initContainers = (containers = []) => {
     containers.forEach(container => {
         if (document.getElementById(container.id)) {
-            ReactDOM.render(container.component, document.getElementById(container.id));
+            ReactDOM.render(
+                container.component,
+                document.getElementById(container.id)
+            );
         }
     });
-}
+};
 
 const containers = [
     {
-        id: 'panel',
+        id: "panel",
         component: <Panel />
     },
     {
-        id: 'ingresos',
+        id: "ingresos",
         component: <Ingresos />
     },
     {
-        id: 'usuarios',
+        id: "usuarios",
         component: <Usuarios />
     },
     {
-        id: 'controlador-aplicacion',
+        id: "controlador-aplicacion",
         component: <Aplicacion />
     },
     {
-        id: 'descansos-medicos',
+        id: "descansos-medicos",
         component: <DescansosMedicos />
     },
     {
-        id: 'perfil',
+        id: "perfil",
         component: <Perfil />
     },
     {
-        id: 'cuentas',
+        id: "cuentas",
         component: <Cuentas />
     },
     {
-        id: 'estado-documentos',
+        id: "estado-documentos",
         component: <EstadoDocumentos />
     },
     {
-        id: 'sctr',
+        id: "sctr",
         component: <Sctr />
     },
     {
-        id: 'sanciones',
+        id: "sanciones",
         component: <Sanciones />
     },
     {
-        id: 'consulta-trabajadores',
+        id: "consulta-trabajadores",
         component: <ConsultaTrabajadores />
     },
     {
-        id: 'liquidaciones',
+        id: "liquidaciones",
         component: <Liquidaciones />
-    }
-]
+    },
+    {
+        id: "afp",
+        component: <Afp />
+    },
+    {
+        id: 'reseteo-clave',
+        component: <ReseteoClave />
+    },
+];
 
 initContainers(containers);
-
-if (document.getElementById("agregar-afp")) {
-    const element = document.getElementById("agregar-afp");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<AgregarAfp {...props} />, document.getElementById("agregar-afp"));
-}
 
 if (document.getElementById("agregar-permiso")) {
     const element = document.getElementById("agregar-permiso");
     const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<AgregarPermiso {...props} />, document.getElementById("agregar-permiso"));
-}
-
-if (document.getElementById("agregar-reseteo-clave")) {
-    const element = document.getElementById("agregar-reseteo-clave");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<AgregarReseteoClave {...props} />, document.getElementById("agregar-reseteo-clave"));
+    ReactDOM.render(
+        <AgregarPermiso {...props} />,
+        document.getElementById("agregar-permiso")
+    );
 }

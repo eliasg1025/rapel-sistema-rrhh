@@ -4,7 +4,6 @@ import { DatePicker, Input, message } from 'antd';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import { TablaFP } from './TablaFP';
-import {TablaR} from "../ReseteoClave/TablaR";
 
 export const TablaFormulariosPermisos = ({ reloadDatos, setReloadDatos }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
