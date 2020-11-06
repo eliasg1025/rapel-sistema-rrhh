@@ -25,7 +25,7 @@ class CuentasController extends Controller
             'editar' => 0
         ];
 
-        return view('pages.cuentas.user', compact('data'));
+        return view('pages.cuentas', compact('data'));
     }
 
     public function editarCuenta(Request $request, int $id)
@@ -43,7 +43,7 @@ class CuentasController extends Controller
             'editar' => $id
         ];
 
-        return view('pages.cuentas.user', compact('data'));
+        return view('pages.cuentas', compact('data'));
     }
 
     public function descargarCuentas(Request $request)

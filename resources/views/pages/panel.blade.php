@@ -99,4 +99,10 @@
             </div>
         @endif
     </div>
+
+    <div id="panel"></div>
+
+    <script>
+        sessionStorage.setItem('data', JSON.stringify(@json($data)) );
+    </script>
 @endsection

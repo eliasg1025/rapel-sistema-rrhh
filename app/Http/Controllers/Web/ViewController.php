@@ -3,16 +3,26 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Services\ModulosService;
+use App\User;
 use Illuminate\Http\Request;
+
 
 class ViewController extends Controller
 {
+    public ModulosService $modulosService;
+
+    public function __construct()
+    {
+        $this->modulosService = new ModulosService();
+    }
+
     public function index(Request $request)
     {
         $usuario = $request->session()->get('usuario');
-
         $data = [
-            'usuario' => $usuario
+            'usuario'   => $usuario,
+            'modulos'   => $this->modulosService->get()
         ];
         return view('pages.panel', compact('data'));
     }

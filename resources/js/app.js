@@ -11,7 +11,6 @@ import Ingresos from "./components/IngresosPersonal";
 import AgregarAfp from "./components/Afp/AgregarAfp";
 import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import AgregarReseteoClave from "./components/ReseteoClave/AgregarReseteoClave";
-import AgregarSancion from "./components/Sanciones/Submodules/AgregarSancion";
 import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores/ConsultarTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
@@ -22,6 +21,7 @@ import Perfil from "./components/Perfil";
 import DescansosMedicos from "./components/DescansosMedicos";
 import Aplicacion from "./components/Aplicacion";
 import Usuarios from "./components/Usuarios";
+import Panel from "./components/Panel";
 
 import 'antd/dist/antd.css';
 
@@ -34,77 +34,66 @@ require('./components/Login');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-if (document.getElementById("ingresos")) {
-    const element = document.getElementById("ingresos");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Ingresos {...props} />, document.getElementById("ingresos"));
+const initContainers = (containers = []) => {
+    containers.forEach(container => {
+        if (document.getElementById(container.id)) {
+            ReactDOM.render(container.component, document.getElementById(container.id));
+        }
+    });
 }
 
-if (document.getElementById("usuarios")) {
-    const element = document.getElementById("usuarios");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Usuarios {...props} />, document.getElementById("usuarios"));
-}
+const containers = [
+    {
+        id: 'panel',
+        component: <Panel />
+    },
+    {
+        id: 'ingresos',
+        component: <Ingresos />
+    },
+    {
+        id: 'usuarios',
+        component: <Usuarios />
+    },
+    {
+        id: 'controlador-aplicacion',
+        component: <Aplicacion />
+    },
+    {
+        id: 'descansos-medicos',
+        component: <DescansosMedicos />
+    },
+    {
+        id: 'perfil',
+        component: <Perfil />
+    },
+    {
+        id: 'cuentas',
+        component: <Cuentas />
+    },
+    {
+        id: 'estado-documentos',
+        component: <EstadoDocumentos />
+    },
+    {
+        id: 'sctr',
+        component: <Sctr />
+    },
+    {
+        id: 'sanciones',
+        component: <Sanciones />
+    },
+    {
+        id: 'consulta-trabajadores',
+        component: <ConsultaTrabajadores />
+    },
+    {
+        id: 'liquidaciones',
+        component: <Liquidaciones />
+    }
+]
 
-if (document.getElementById("controlador-aplicacion")) {
-    const element = document.getElementById("controlador-aplicacion");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Aplicacion {...props} />, document.getElementById("controlador-aplicacion"));
-}
-
-if (document.getElementById("descansos-medicos")) {
-    const element = document.getElementById("descansos-medicos");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<DescansosMedicos {...props} />, document.getElementById("descansos-medicos"));
-}
-
-if (document.getElementById("perfil")) {
-    const element = document.getElementById("perfil");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Perfil {...props} />, document.getElementById("perfil"));
-}
-
-if (document.getElementById("cuentas")) {
-    const element = document.getElementById("cuentas");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Cuentas {...props} />, document.getElementById("cuentas"));
-}
-
-if (document.getElementById("estado-documentos")) {
-    const element = document.getElementById("estado-documentos");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<EstadoDocumentos {...props} />, document.getElementById("estado-documentos"));
-}
-
-if (document.getElementById("sctr")) {
-    const element = document.getElementById("sctr");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Sctr {...props} />, document.getElementById("sctr"));
-}
-
-if (document.getElementById("sanciones")) {
-    const element = document.getElementById("sanciones");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Sanciones {...props} />, document.getElementById("sanciones"));
-}
-
-if (document.getElementById("consulta-trabajadores")) {
-    const element = document.getElementById("consulta-trabajadores");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<ConsultaTrabajadores {...props} />, document.getElementById("consulta-trabajadores"));
-}
-
-if (document.getElementById('estadisticas-usuarios')) {
-    const element = document.getElementById('estadisticas-usuarios');
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<EstadisticasUsuarios {...props} />, document.getElementById('estadisticas-usuarios'));
-}
-
-if (document.getElementById("agregar-cuenta")) {
-    const element = document.getElementById("agregar-cuenta");
-    const props = Object.assign({}, element.dataset)
-    ReactDOM.render(<AgregarCuenta {...props} />, document.getElementById("agregar-cuenta"));
-}
+initContainers(containers);
 
 if (document.getElementById("agregar-afp")) {
     const element = document.getElementById("agregar-afp");
@@ -122,16 +111,4 @@ if (document.getElementById("agregar-reseteo-clave")) {
     const element = document.getElementById("agregar-reseteo-clave");
     const props = Object.assign({}, element.dataset);
     ReactDOM.render(<AgregarReseteoClave {...props} />, document.getElementById("agregar-reseteo-clave"));
-}
-
-if (document.getElementById("agregar-sancion")) {
-    const element = document.getElementById("agregar-sancion");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<AgregarSancion {...props} />, document.getElementById("agregar-sancion"));
-}
-
-if (document.getElementById("liquidaciones")) {
-    const element = document.getElementById("liquidaciones");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(<Liquidaciones {...props} />, document.getElementById("liquidaciones"));
 }

@@ -1,4 +1,4 @@
-@extends('home-layout')
+@extends('nologin-layout')
 
 @section('titulo')
     Grupo Verfrut
