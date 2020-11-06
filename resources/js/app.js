@@ -13,6 +13,7 @@ import AgregarPermiso from "./components/Permisos/AgregarPermiso";
 import Ingresos from "./components/IngresosPersonal";
 import Afp from "./components/Afp";
 import ReseteoClave from "./components/ReseteoClave";
+import Permisos from './components/Permisos';
 import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
 import ConsultaTrabajadores from "./components/ConsultaTrabajadores";
 import Sanciones from "./components/Sanciones/Sanciones";
@@ -101,6 +102,10 @@ const containers = [
     {
         id: 'reseteo-clave',
         component: <ReseteoClave />
+    },
+    {
+        id: 'formularios-permisos',
+        component: <Permisos />
     },
 ];
 

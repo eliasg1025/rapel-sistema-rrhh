@@ -45,40 +45,6 @@ class ViewController extends Controller
         return view('pages.perfil', compact('data'));
     }
 
-    public function permisos(Request $request)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        if ( $usuario->permisos == 0 ) {
-            $nombre_modulo = 'formularios de permiso';
-            return view('pages.no-acceso', compact('nombre_modulo'));
-        }
-
-        $data = [
-            'usuario' => $usuario,
-            'editar' => 0
-        ];
-
-        return view('pages.permisos', compact('data'));
-    }
-
-    public function editarPermiso(Request $request, int $id)
-    {
-        $usuario = $request->session()->get('usuario');
-
-        if ( $usuario->permisos == 0 ) {
-            $nombre_modulo = 'formularios de permiso';
-            return view('pages.no-acceso', compact('nombre_modulo'));
-        }
-
-        $data = [
-            'usuario' => $usuario,
-            'editar' => $id
-        ];
-
-        return view('pages.permisos', compact('data'));
-    }
-
     public function consultaTrabajadores(Request $request)
     {
         $usuario = $request->session()->get('usuario');

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import BuscarTrabajador from '../shared/BuscarTrabajador';
-import DatosFormularioPermiso from './DatosFormularioPermiso';
-import { TablaFormulariosPermisos } from './TablaFormulariosPermisos';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
+
+import BuscarTrabajador from '../shared/BuscarTrabajador';
+import { DatosFormularioPermiso, TablaFormulariosPermisos } from './components';
 
 const AgregarPermiso = () => {
     const { usuario, editar } = JSON.parse(sessionStorage.getItem('data'));

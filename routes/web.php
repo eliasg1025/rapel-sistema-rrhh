@@ -51,10 +51,9 @@ Route::group(['middleware' => 'web.auth'], function() {
     });
 
     Route::group(['prefix' => 'formularios-permisos'], function() {
-        Route::get('/', 'Web\ViewController@permisos');
-        Route::get('/editar/{id}', 'Web\ViewController@editarPermiso');
+        Route::get('/', 'Web\FormulariosPermisosController@index');
+        Route::get('/editar/{id}', 'Web\FormulariosPermisosController@editar');
     });
-
 
     Route::group(['prefix' => 'perfil'], function () {
         Route::get('/', 'Web\PerfilController@index');
