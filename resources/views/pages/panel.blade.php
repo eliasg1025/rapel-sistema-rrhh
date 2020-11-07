@@ -5,7 +5,7 @@
 @endsection
 
 @section('contenido')
-    <div class="container p-5">
+    {{-- <div class="container p-5">
         <div class="text-center">
             <h3>¿Á que módulo deseas entrar?</h3>
         </div>
@@ -98,7 +98,7 @@
                 </div>
             </div>
         @endif
-    </div>
+    </div> --}}
 
     <div id="panel"></div>
 

@@ -8,8 +8,6 @@ import ReactDOM from "react-dom";
 import React from "react";
 import "antd/dist/antd.css";
 
-import AgregarPermiso from "./components/Permisos/AgregarPermiso";
-
 import Ingresos from "./components/IngresosPersonal";
 import Afp from "./components/Afp";
 import ReseteoClave from "./components/ReseteoClave";
@@ -110,12 +108,3 @@ const containers = [
 ];
 
 initContainers(containers);
-
-if (document.getElementById("agregar-permiso")) {
-    const element = document.getElementById("agregar-permiso");
-    const props = Object.assign({}, element.dataset);
-    ReactDOM.render(
-        <AgregarPermiso {...props} />,
-        document.getElementById("agregar-permiso")
-    );
-}
