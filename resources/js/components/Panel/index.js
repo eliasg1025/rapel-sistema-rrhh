@@ -6,8 +6,6 @@ export default function Panel() {
     const modulosNormales = modulos.filter(item => item.para_admins === 0);
     const modulosAdministrador = modulos.filter(item => item.para_admins === 1);
 
-    console.log(modulos, modulosNormales);
-
     return (
         <div className="container p-5">
             <div className="text-center">
@@ -19,7 +17,7 @@ export default function Panel() {
                         modulosNormales.map(modulo => {
                             return (
                                 <div className="col-md-6" key={modulo.id}>
-                                    <a className="btn btn-block btn-light" href={modulo.slug} >
+                                    <a className={"btn btn-block btn-light " + (usuario[modulo.rol_name] === 0 && 'disabled')} href={modulo.slug}>
                                         <i className={modulo.fa_icon_classname}></i> {modulo.name}
                                     </a>
                                 </div>

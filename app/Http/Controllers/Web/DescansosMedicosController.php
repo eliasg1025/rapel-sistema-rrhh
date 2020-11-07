@@ -11,10 +11,9 @@ class DescansosMedicosController extends Controller
     public function index(Request $request)
     {
         $usuario = $request->session()->get('usuario');
-
-        if ( $usuario->descansos_medicos == 0 ) {
+        if ( $usuario->descansos_medicos === 0 ) {
             $nombre_modulo = 'descansos medicos';
-            return view('pages.descansos-medicos', compact('nombre_modulo'));
+            return view('pages.no-acceso', compact('nombre_modulo'));
         }
 
         $data = [
