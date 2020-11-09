@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class DocumentoTuRecibo extends Model
 {
     protected $table = 'documentos_turecibo';
+    public $timestamps = false;
 
     public static function _getByTrabajador($tipo_documento_turecibo_id, $rut)
     {

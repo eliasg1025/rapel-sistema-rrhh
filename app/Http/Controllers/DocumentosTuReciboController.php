@@ -34,6 +34,15 @@ class DocumentosTuReciboController extends Controller
         return response()->json($result);
     }
 
+    public function update($id, Request $request)
+    {
+        $result = DocumentoTuRecibo::where('id', $id)->update(
+            $request->all()
+        );
+
+        return response()->json($result);
+    }
+
     public function generateJson(Request $request)
     {
         try {

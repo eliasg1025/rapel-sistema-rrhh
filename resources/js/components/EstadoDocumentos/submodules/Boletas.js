@@ -85,6 +85,19 @@ export const Boletas = () => {
             })
     }
 
+    const banDocument = (id) => {
+        Axios.put(`/api/documentos-turecibo/${id}`, {
+            'estado': 'ANULADO'
+        })
+            .then(res => {
+                console.log(res);
+                setReloadData(!reloadData);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
     return (
         <>
             <MostrarUltimaActualizacion />
@@ -124,6 +137,7 @@ export const Boletas = () => {
                 reloadData={reloadData}
                 loading={loading}
                 data={documentos}
+                banDocument={banDocument}
             />
         </>
     );

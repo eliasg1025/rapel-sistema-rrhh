@@ -83,6 +83,19 @@ export const Prorrogas = () => {
             })
     }
 
+    const banDocument = (id) => {
+        Axios.put(`/api/documentos-turecibo/${id}`, {
+            'estado': 'ANULADO'
+        })
+            .then(res => {
+                console.log(res);
+                setReloadData(!reloadData);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
     return (
         <>
             <MostrarUltimaActualizacion />
@@ -120,6 +133,7 @@ export const Prorrogas = () => {
             <br />
             <TablaDocumentos
                 reloadData={reloadData}
+                banDocument={banDocument}
                 loading={loading}
                 data={documentos}
             />

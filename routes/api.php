@@ -230,6 +230,7 @@ Route::group(['prefix' => 'documentos-turecibo'], function() {
     Route::get('/cantidad-firmados-dia', 'DocumentosTuReciboController@getCantidadFirmadosPorDia');
     Route::get('/cantidad-firmados-zona-labor', 'DocumentosTuReciboController@getCantidadPorZonaLabor');
     Route::get('/{rut}', 'DocumentosTuReciboController@getByTrabajador');
+    Route::put('/{id}', 'DocumentosTuReciboController@update');
 });
 
 Route::group(['prefix' => 'corte-turecibo'], function() {
