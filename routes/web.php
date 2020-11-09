@@ -119,6 +119,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         });
     });
 
+    Route::group(['prefix' => 'bonos'], function() {
+        Route::get('/', 'Web\BonosController@index');
+    });
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');

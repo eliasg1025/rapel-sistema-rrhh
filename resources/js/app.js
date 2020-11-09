@@ -23,6 +23,7 @@ import DescansosMedicos from "./components/DescansosMedicos";
 import Aplicacion from "./components/Aplicacion";
 import Usuarios from "./components/Usuarios";
 import Panel from "./components/Panel";
+import Bonos from './components/Bonos';
 
 require("./bootstrap");
 require("./components/Login");
@@ -104,6 +105,10 @@ const containers = [
     {
         id: 'formularios-permisos',
         component: <Permisos />
+    },
+    {
+        id: 'bonos',
+        component: <Bonos />
     },
 ];
 

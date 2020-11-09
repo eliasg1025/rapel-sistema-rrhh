@@ -61,7 +61,7 @@ class AtencionReseteoClave extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $usuario_carga_id)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $usuario_carga_id, $rut)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -107,6 +107,9 @@ class AtencionReseteoClave extends Model
                 ->when($estado != 0, function($query) use ($fechas) {
                     $query->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
                 })
+                ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
+                    $query->where('t.rut', 'like', $rut . '%');
+                })
                 ->orderBy('a.id', 'ASC')
                 ->get();
         } else if ( $usuario->reseteo_clave == 2 ) {
@@ -150,6 +153,9 @@ class AtencionReseteoClave extends Model
                 })
                 ->when($estado != 0, function($query) use ($fechas) {
                     $query->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
+                    $query->where('t.rut', 'like', $rut . '%');
                 })
                 ->orderBy('a.id', 'ASC')
                 ->get();
