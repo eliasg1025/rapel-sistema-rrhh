@@ -245,6 +245,12 @@ Route::group(['prefix' => 'sqlsrv'], function () {
     Route::get('/trabajador/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador');
 });
 
+Route::group(['prefix' => 'bonos'], function () {
+    Route::get('/', 'BonosController@get');
+    Route::post('/', 'BonosController@create');
+    Route::post('/planilla', 'BonosController@getPlanillaBono');
+});
+
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');

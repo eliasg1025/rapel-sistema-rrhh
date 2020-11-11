@@ -121,6 +121,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'bonos'], function() {
         Route::get('/', 'Web\BonosController@index');
+        Route::get('/editar/{id}', 'Web\BonosController@editar');
     });
 
     Route::group(['prefix' => 'ficha'], function() {

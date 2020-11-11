@@ -33,6 +33,32 @@
     border: rgb(96, 162, 248);
 }
 
+.steps-content {
+    margin-top: 16px;
+    border: 1px dashed #e9e9e9;
+    border-radius: 2px;
+    background-color: #fafafa;
+    min-height: 200px;
+    //text-align: center;
+    padding: 20px;
+}
+
+.steps-action {
+    margin-top: 24px;
+}
+
+.rapel-list-item {
+    cursor: pointer;
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    padding: 10px;
+    transition: .5s all;
+}
+
+.rapel-list-item:hover {
+    border: 1px solid #1890ff;
+}
+
 .sign-in {
     &__content {
         display: flex;

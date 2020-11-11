@@ -23,4 +23,22 @@ class BonosController extends Controller
 
         return view('pages.bonos', compact('data'));
     }
+
+    public function editar(int $id, Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->bonos == 0 ) {
+            $nombre_modulo = 'bonos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'editar',
+            'editar'    => $id
+        ];
+
+        return view('pages.bonos', compact('data'));
+    }
 }

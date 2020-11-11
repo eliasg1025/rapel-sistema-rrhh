@@ -3,7 +3,7 @@ import moment from "moment";
 import { Layout, Menu } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
-import { Home } from './submodules';
+import { Home, Bono } from './submodules';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -20,7 +20,7 @@ export default function PanelAplicacion() {
                 <br />
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                     <Menu.Item key="main" icon={<HomeOutlined />}>
-                        <a href="/aplicacion">
+                        <a href="/bonos">
                             Principal
                         </a>
                     </Menu.Item>
@@ -30,6 +30,7 @@ export default function PanelAplicacion() {
                 <Content style={{ margin: '24px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         {submodule === 'main' && <Home />}
+                        {submodule === 'editar' && <Bono />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>
