@@ -247,8 +247,10 @@ Route::group(['prefix' => 'sqlsrv'], function () {
 
 Route::group(['prefix' => 'bonos'], function () {
     Route::get('/', 'BonosController@get');
+    Route::get('/{id}', 'BonosController@show');
     Route::post('/', 'BonosController@create');
     Route::post('/planilla', 'BonosController@getPlanillaBono');
+    Route::delete('/{id}', 'BonosController@delete');
 });
 
 /*

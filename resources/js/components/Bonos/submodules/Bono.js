@@ -1,105 +1,60 @@
 import React, {useEffect, useState} from 'react';
-import { Steps, Button } from 'antd';
+import { Button, notification, Spin, Result } from 'antd';
 import Axios from 'axios';
-
-import { empresa } from '../../../data/default.json';
-
-const { Step } = Steps;
+import { Configuracion, PasosIniciales, ResumenBono } from '../components';
 
 export const Bono = () => {
 
-    const { usuario } = JSON.parse(sessionStorage.getItem("data"));
+    const { usuario, editar } = JSON.parse(sessionStorage.getItem("data"));
 
-    const [form, setForm] = useState({
-        empresaId: '',
-        zonasIds: [],
-        laboresIds: [],
-        cuartelesIds: [],
-        name: '',
-        descripcion: '',
-    });
-    const [zonas, setZonas] = useState([]);
+    const [bono, setBono] = useState(null);
+    const [loadingBono, setLoadingBono] = useState(false);
 
     useEffect(() => {
-        if (form.empresaId) {
-            Axios.get(`/api/zona-labor/${form.empresaId}`)
-                .then(res => {
-                    setZonas(res.data);
-                })
-                .catch(err => console.error(err));
-        }
-    }, [form.empresaId]);
-
-    const steps = [
-        {
-            title: 'Filtro',
-            content: 'filtro',
-        },
-        {
-            title: 'Condiciones',
-            content: 'condiciones',
-        },
-        {
-            title: 'Finalizar',
-            content: 'finalizar',
-        },
-    ];
-
-    // Step page
-    const [current, setCurrent] = useState(0);
-    // Data state
-
-    const next = () => {
-        setCurrent(current + 1);
-    }
-
-    const prev = () => {
-        setCurrent(current - 1 );
-    }
-
-    const done = () => {
-        Axios.post('/api/bonos', {})
+        setLoadingBono(true);
+        Axios.get(`/api/bonos/${editar}`)
             .then(res => {
-                const { message, data } = res.data;
-
-                console.log(data);
+                const { data } = res.data;
+                setBono(data);
             })
             .catch(err => {
                 console.error(err);
-            });
-    }
+                notification['error']({
+                    message: 'Error al obtener el bono'
+                });
+            })
+            .finally(() => setLoadingBono(false));
+    }, []);
 
     return (
         <>
-            <h4>Bono</h4>
-            <br />
-            <Steps current={current}>
+            <Button type="ghost" size="small" onClick={() => location.replace('/bonos')}>
+                <i className="fas fa-arrow-left"></i> Atrás
+            </Button>
+            <br /><br />
+            <Spin spinning={loadingBono}>
+                <h4><u>BONO:</u> {bono?.name}</h4>
+                <br />
                 {
-                    steps.map(item => (
-                        <Step key={item.title} title={item.title} />
-                    ))
+                    bono ? (
+                        bono?.listo_para_usar ? (
+                            <>
+                                <ResumenBono />
+                                <br />
+                                <Configuracion />
+                            </>
+                        ) : (
+                            <PasosIniciales />
+                        )
+                    ) : (
+                        <Result
+                            status="500"
+                            title="Error al cargar el recurso"
+                            extra={<Button type="primary" onClick={() => location.reload()}>Volver a cargar</Button>}
+                        />
+                    )
                 }
-            </Steps>
-            <div className="steps-content">
-                {steps[current].content}
-            </div>
-            <div className="steps-action">
-                {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => next()} size="small">
-                        Siguiente
-                    </Button>
-                )}
-                {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => done()} size="small">
-                        TERMINAR
-                    </Button>
-                )}
-                {current > 0 && (
-                    <Button style={{ margin: '0 8px' }} onClick={() => prev()} size="small">
-                        Anterior
-                    </Button>
-                )}
-            </div>
+            </Spin>
         </>
     );
 }

@@ -17,11 +17,21 @@ class BonosController extends Controller
 
     public function get()
     {
-        $bonos = Bono::with('usuario')->get();
+        $bonos = Bono::with('usuario')->where('activo', 1)->get();
 
         return response()->json([
             'message' => 'Bonos obtenidos',
             'data' => $bonos
+        ]);
+    }
+
+    public function show(int $id)
+    {
+        $bono = Bono::with('usuario', 'empresa')->where('id', $id)->first();
+
+        return response()->json([
+            'message' => 'Bono obtenidos',
+            'data' => $bono
         ]);
     }
 
@@ -37,6 +47,18 @@ class BonosController extends Controller
         return response()->json([
             'message' => 'Bono creado correctamente',
             'data' => $bono
+        ], 201);
+    }
+
+    public function delete(int $id)
+    {
+        $bono = Bono::find($id);
+        $bono->activo = 0;
+        $bono->save();
+
+        return response()->json([
+            'message' => 'Bono borrado correctamente',
+            'data' => $id
         ]);
     }
 
