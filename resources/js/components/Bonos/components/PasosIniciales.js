@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { Steps, Button } from 'antd';
 
+import { ReglasBono } from './ReglasBono';
+import { CondicionesPago } from './CondicionesPago';
+
 const { Step } = Steps;
 
-export const PasosIniciales = () => {
+export const PasosIniciales = ({ bono }) => {
     const [current, setCurrent] = useState(0);
 
 
     const steps = [
         {
             title: 'Reglas y filtros',
-            content: 'Reglas',
+            content: <ReglasBono bono={bono} />,
         },
         {
             title: 'Pago',
-            content: 'pago',
+            content: <CondicionesPago />,
         },
         {
             title: 'Finalizar',

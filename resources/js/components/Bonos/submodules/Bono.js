@@ -44,7 +44,7 @@ export const Bono = () => {
                                 <Configuracion />
                             </>
                         ) : (
-                            <PasosIniciales />
+                            <PasosIniciales bono={bono} />
                         )
                     ) : (
                         <Result

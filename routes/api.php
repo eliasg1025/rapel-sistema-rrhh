@@ -253,6 +253,11 @@ Route::group(['prefix' => 'bonos'], function () {
     Route::delete('/{id}', 'BonosController@delete');
 });
 
+Route::group(['prefix' => 'bonos-reglas'], function() {
+    Route::get('/bono/{id}', 'BonosReglasController@getByBono');
+    Route::post('/', 'BonosReglasController@create');
+    Route::delete('/{id}', 'BonosReglasController@delete');
+});
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
     Route::get('/data/por-empresa', 'DataController@porEmpresa');

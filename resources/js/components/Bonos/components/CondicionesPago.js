@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const Second = () => {
+export const CondicionesPago = () => {
     return (
-        <h1>Second</h1>
+        <h1>CondicionesPago</h1>
     );
 }

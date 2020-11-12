@@ -15,7 +15,7 @@ export const AgregarBono = ({ reload, setReload }) => {
         descripcion: ""
     });
 
-    const validForm = form.name !== '' && form.empresaId !== '';
+    const validForm = form.name !== "" && form.empresaId !== "";
 
     const handleSubmit = e => {
         e.preventDefault();

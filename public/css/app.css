@@ -18,6 +18,24 @@
   font-size: 11px;
 }
 
+.btn {
+  border-radius: 2px;
+}
+
+.form-control {
+  border-radius: 2px;
+}
+
+.form-control:hover,
+.form-control:focus {
+  border-color: #1890FF;
+}
+
+.btn-primary {
+  border-color: #1890FF;
+  background-color: #1890FF;
+}
+
 .table-row-red {
   background-color: rgba(0, 255, 34, 0.3);
   border: #00ff22;
