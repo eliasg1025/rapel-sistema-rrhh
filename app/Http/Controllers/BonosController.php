@@ -85,4 +85,16 @@ class BonosController extends Controller
             'data' => $data
         ]);
     }
+
+    public function update($id)
+    {
+        $data = Bono::where('id', $id)->update([
+            'listo_para_usar' => 1
+        ]);
+
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'data' => $id
+        ]);
+    }
 }

@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Input, Select, Table, Spin, notification, Tooltip, Modal } from "antd";
 import Axios from "axios";
 
-export const ReglasBono = ({ bono }) => {
-
-    const [reload, setReload] = useState(false);
+export const ReglasBono = ({ bono, reglas, setReglas, reload, setReload }) => {
 
     return (
         <>
             <p style={{ fontWeight: 'bold' }}>Define a que trabajadores se les dará bono</p>
             <AgregarRegla bono={bono} reload={reload} setReload={setReload} />
             <br />
-            <TablaReglas bono={bono} reload={reload} setReload={setReload} />
+            <TablaReglas bono={bono} reload={reload} setReload={setReload} reglas={reglas} setReglas={setReglas} />
         </>
     );
 };
@@ -268,9 +266,7 @@ const AgregarRegla = ({ bono, reload, setReload }) => {
     );
 };
 
-const TablaReglas = ({ bono, reload, setReload }) => {
-
-    const [reglas, setReglas] = useState([]);
+const TablaReglas = ({ bono, reglas, setReglas, reload, setReload }) => {
     const [loading, setLoading] = useState(false);
 
     const confirmDelete = (record) => {

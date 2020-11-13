@@ -250,6 +250,7 @@ Route::group(['prefix' => 'bonos'], function () {
     Route::get('/{id}', 'BonosController@show');
     Route::post('/', 'BonosController@create');
     Route::post('/planilla', 'BonosController@getPlanillaBono');
+    Route::put('/{id}', 'BonosController@update');
     Route::delete('/{id}', 'BonosController@delete');
 });
 
@@ -257,6 +258,11 @@ Route::group(['prefix' => 'bonos-reglas'], function() {
     Route::get('/bono/{id}', 'BonosReglasController@getByBono');
     Route::post('/', 'BonosReglasController@create');
     Route::delete('/{id}', 'BonosReglasController@delete');
+});
+
+Route::group(['prefix' => 'bonos-condiciones-pagos'], function() {
+    Route::post('/', 'BonosCondicionesPagosController@create');
+    Route::get('/bono/{id}', 'BonosCondicionesPagosController@getLastByBono');
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {
