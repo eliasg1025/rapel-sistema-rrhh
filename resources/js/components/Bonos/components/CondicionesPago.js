@@ -67,11 +67,11 @@ const DatosCondiciones = ({ bono, condicionPago, setCondicionPago }) => {
 
     const variables = [
         {
-            id: 'horas',
+            id: 'HoraNormales',
             name: 'HORAS'
         },
         {
-            id: 'unidad_producida',
+            id: 'UnidadProducida',
             name: 'UNIDADES PRODUCIDAS'
         }
     ];

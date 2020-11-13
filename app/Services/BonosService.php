@@ -2,63 +2,218 @@
 
 namespace App\Services;
 
+use App\Models\Bono;
+use App\Models\BonoCondicionPago;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 
 class BonosService
 {
-    public function queryResult($empresaId, $desde, $hasta, $zonasIds, $laboresIds, $cuartelesIds)
+    private function getInfoFechas(CarbonPeriod $periodo, BonoCondicionPago $condicion)
     {
-        $desde = Carbon::parse($desde)->format('Ymd h:i:s');
-        $hasta = Carbon::parse($hasta)->format('Ymd h:i:s');
+        $fechas = [];
+        $recuentos = [];
 
-        $asistencias = DB::connection('sqlsrv')->table('dbo.ActividadTrabajador as a')
-            ->select(
-                DB::raw('DATEPART(DAY, a.fechaActividad) as dia'),
-                DB::raw('DATEPART(WEEK, a.fechaActividad) as semana'),
-                DB::raw("(t.ApellidoPaterno + ' ' + t.ApellidoMaterno + ' ' + t.Nombre) as nombre_completo"),
-                't.RutTrabajador as rut',
-                't.IdTrabajador as codigo',
-                'a.idEmpresa as empresa_id',
-                'c.FechaTermino as fecha_finiquito',
-                'act.IdActividad as labor_id',
-                'act.Nombre as labor',
-                'cu.IdCuartel as cuartel_id',
-                'cu.Nombre as cuartel',
-                'a.HoraNormales as horas'
-            )
-            ->join('dbo.Trabajador as t', [
-                'a.idTrabajador' => 't.idTrabajador',
-                'a.idEmpresa' => 't.idEmpresa'
-            ])
-            ->join('dbo.Contratos as c', [
-                'c.idContrato' => 'a.idContrato',
-                'a.idEmpresa' => 'c.idEmpresa'
-            ])
-            ->join('dbo.Cuartel as cu', [
-                'cu.idEmpresa' => 'a.idEmpresa',
-                'cu.idZona' => 'a.idZona',
-                'cu.idCuartel' => 'a.idCuartel'
-            ])
-            ->join('dbo.Actividades as act', [
-                'act.idFamilia' => 'a.idFamilia',
-                'act.idEmpresa' => 'a.idEmpresa',
-                'act.idActividad' => 'a.idActividad'
-            ])
-            ->when(sizeof($zonasIds) !== 0, function($query) use ($zonasIds) {
-                $query->whereIn('a.IdZona', $zonasIds);
-            })
-            ->when(sizeof($laboresIds) !== 0, function($query) use ($laboresIds) {
-                $query->whereIn('act.IdActividad', $laboresIds);
-            })
-            ->when(sizeof($cuartelesIds) !== 0, function($query) use ($cuartelesIds) {
-                $query->whereIn('c.IdCuartel', $cuartelesIds);
-            })
-            ->whereBetween('a.FechaActividad', [$desde, $hasta])
-            ->where([
-                'a.idEmpresa' => $empresaId,
+        foreach ($periodo as $date) {
+            $day = $date->day;
+            if ($date->dayOfWeek !== 0) {
+                $fechas[$day] = 0;
+            } else {
+                $fechas[$day] = null;
+                array_push($recuentos, $day);
+            }
+        }
+
+        if ($periodo->last()->dayOfWeek !== 0) {
+            array_push($recuentos, $periodo->last()->day);
+        };
+
+        if ($condicion->recuento === 'quincenal') {
+            $recuentos = [end($recuentos)];
+        }
+
+        return [
+            (object) $fechas,
+            $recuentos
+        ];
+    }
+
+    private function getResultados($fechas, $condicion, $recuentos)
+    {
+        $asArr = get_object_vars($fechas);
+
+        $acc = 0;
+        $accRecuentos = 0;
+        foreach ($asArr as $key => $value)
+        {
+            $condicional = 0;
+            switch ($condicion->condicion) {
+                case '>':
+                    $condicional = $value > $condicion->valor_meta;
+                    break;
+                case '<':
+                    $condicional = $value < $condicion->valor_meta;
+                    break;
+                case '=':
+                    $condicional = $value = $condicion->valor_meta;
+                    break;
+                case '>=':
+                    $condicional = $value >= $condicion->valor_meta;
+                    break;
+                case '<=':
+                    $condicional = $value <= $condicion->valor_meta;
+                    break;
+            }
+
+            $newValue = !is_null($value) ? (
+                $condicional ? (double) $condicion->valor_bono : ((double) $condicion->valor_descuento) * (-1)
+            ) : null;
+
+            $asArr[$key] = $newValue;
+            $acc += $newValue;
+
+            if (!is_bool(array_search($key, $recuentos))) {
+                $valorRecuento = $acc >= 0 ? $acc : 0;
+                $asArr['recuento_hasta_' . $key] = $valorRecuento;
+                /* $offset = array_search($key, array_keys($asArr)) + 1;
+                $asArr = array_slice($asArr, 0, $offset, true) + array('Recuento ' . $key => 0) + array_slice($asArr, $offset, null, true); */
+                $accRecuentos += $valorRecuento;
+                $acc = 0;
+            }
+        }
+        $asArr['total_bono'] = $accRecuentos;
+
+        return (object) $asArr;
+    }
+
+    private function getColumnsFromDates($fechas, $recuentos, $tipo)
+    {
+        $columns = [
+            [
+                'title' => 'Apellidos y Nombre',
+                'dataIndex' => 'nombre_completo'
+            ],
+            [
+                'title' => 'DNI',
+                'dataIndex' => 'rut'
+            ],
+            [
+                'title' => 'Cod.',
+                'dataIndex' => 'codigo'
+            ],
+            [
+                'title' => 'Fecha Finiquito',
+                'dataIndex' => 'fecha_finiquito'
+            ]
+        ];
+
+        if ($tipo === 'actividades') {
+            $keys = array_keys(get_object_vars($fechas));
+
+            foreach ($keys as $key) {
+                array_push($columns, [
+                    'title' => (string) $key,
+                    'dataIndex' => (string) $key
+                ]);
+            }
+        } else {
+            $keys = array_keys(get_object_vars($fechas));
+
+            foreach ($keys as $key) {
+                array_push($columns, [
+                    'title' => (string) $key,
+                    'dataIndex' => (string) $key
+                ]);
+
+                if (!is_bool(array_search($key, $recuentos))) {
+                    array_push($columns, [
+                        'title' => 'Recuento Hasta ' . $key,
+                        'dataIndex' => 'recuento_hasta_' . $key,
+                    ]);
+                }
+            }
+
+            array_push($columns, [
+                'title' => 'Total Bono',
+                'dataIndex' => 'total_bono'
             ]);
+        }
 
+        return $columns;
+    }
+
+    public function getPlanilla(Bono $bono, $_desde, $_hasta)
+    {
+        $desde = Carbon::parse($_desde)->subDay()->format('Ymd h:i:s');
+        $hasta = Carbon::parse($_hasta)->format('Ymd h:i:s');
+        $periodo = CarbonPeriod::create($_desde, $_hasta);
+
+        $bono->reglas;
+        $bono->condicion = BonoCondicionPago::where('bono_id', $bono->id)
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        [$fechas, $recuentos] = $this->getInfoFechas($periodo, $bono->condicion);
+
+        $i = 0;
+        foreach ($bono->reglas as $regla) {
+            $q = DB::connection('sqlsrv')->table('dbo.ActividadTrabajador as a')
+                ->select(
+                    DB::raw('DATEPART(DAY, a.fechaActividad) as dia'),
+                    DB::raw('DATEPART(WEEK, a.fechaActividad) as semana'),
+                    DB::raw("(t.ApellidoPaterno + ' ' + t.ApellidoMaterno + ' ' + t.Nombre) as nombre_completo"),
+                    't.RutTrabajador as rut',
+                    't.IdTrabajador as codigo',
+                    'a.idEmpresa as empresa_id',
+                    'c.FechaTermino as fecha_finiquito',
+                    'act.IdActividad as labor_id',
+                    'act.Nombre as labor',
+                    'cu.IdCuartel as cuartel_id',
+                    'cu.Nombre as cuartel',
+                    // DB::raw("CAST(ROUND(a." . $bono->condicion->variable_utilizada . ", 2, 0) as decimal(18, 2)) horas"),
+                    'a.'. $bono->condicion->variable_utilizada . ' as horas'
+                )
+                ->join('dbo.Trabajador as t', [
+                    'a.idTrabajador' => 't.idTrabajador',
+                    'a.idEmpresa' => 't.idEmpresa'
+                ])
+                ->join('dbo.Contratos as c', [
+                    'c.idContrato' => 'a.idContrato',
+                    'a.idEmpresa' => 'c.idEmpresa'
+                ])
+                ->join('dbo.Cuartel as cu', [
+                    'cu.idEmpresa' => 'a.idEmpresa',
+                    'cu.idZona' => 'a.idZona',
+                    'cu.idCuartel' => 'a.idCuartel'
+                ])
+                ->join('dbo.Actividades as act', [
+                    'act.idFamilia' => 'a.idFamilia',
+                    'act.idEmpresa' => 'a.idEmpresa',
+                    'act.idActividad' => 'a.idActividad'
+                ])
+                ->when($regla->zona_id, function($query) use ($regla) {
+                    $query->where('a.IdZona', $regla->zona_id);
+                })
+                ->when($regla->labor_id !== '0', function($query) use ($regla) {
+                    $query->where('act.IdActividad', $regla->labor_id);
+                })
+                ->when($regla->actividad_id !== '0', function($query) use ($regla) {
+                    $query->where('act.IdFamilia', $regla->actividad_id);
+                })
+                ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
+                    $query->where('c.IdCuartel', $regla->cuartel_id);
+                })
+                ->whereBetween('a.FechaActividad', [$desde, $hasta])
+                ->where('a.idEmpresa', $bono->empresa_id);
+
+            if ($i < 1) {
+                $actividades = $q;
+            } else {
+                $actividades->union($q);
+            }
+            $i++;
+        }
 
         $pivotQuery = "
             asistencias.codigo,
@@ -103,25 +258,23 @@ class BonosService
 
         $pivotTable = DB::connection('sqlsrv')->table('dbo.Trabajador as t')
             ->selectRaw($pivotQuery)
-            ->joinSub($asistencias, 'asistencias', function($join) {
+            ->joinSub($actividades, 'asistencias', function($join) {
                 $join->on([
                     'asistencias.codigo' => 't.idTrabajador',
                     'asistencias.empresa_id' => 't.idEmpresa'
                 ]);
             })->get();
 
-
-        $pivot = function ($query) use ($asistencias, $pivotQuery) {
+        $pivot = function ($query) use ($actividades, $pivotQuery) {
             $query->selectRaw($pivotQuery)
                 ->from('dbo.Trabajador as t')
-                ->joinSub($asistencias, 'asistencias', function($join) {
+                ->joinSub($actividades, 'asistencias', function($join) {
                     $join->on([
                         'asistencias.codigo' => 't.idTrabajador',
                         'asistencias.empresa_id' => 't.idEmpresa'
                     ]);
                 });
         };
-
 
         $result = DB::connection('sqlsrv')->table($pivot, 'p')
             ->select(
@@ -134,16 +287,29 @@ class BonosService
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 
-        $result->transform(function($item) use ($pivotTable) {
+        $result->transform(function($item) use ($pivotTable, $fechas, $bono, $recuentos) {
             $dias = array_values($pivotTable->where('codigo', $item->codigo)->toArray());
 
+            $item->fechas = clone $fechas;
+
             foreach ($dias as $dia) {
-                $item->{$dia->dia} = $dia->{$dia->dia};
+                $item->fechas->{$dia->dia} = (double) $dia->{$dia->dia};
             }
-            //$item->subquery = $data;
+
+            $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos);
+
             return $item;
         });
 
-        return $result;
+        return [
+            'info' => [
+                'columnas' => [
+                    'actividades' => $this->getColumnsFromDates($fechas, $recuentos, 'actividades'),
+                    'resultados' => $this->getColumnsFromDates($fechas, $recuentos, 'resultados')
+                ],
+                'recuentos' => $recuentos
+            ],
+            'output' => $result
+        ];
     }
 }

@@ -20,6 +20,6 @@ class Bono extends Model
 
     public function reglas()
     {
-        //return $this->hasMany()
+        return $this->hasMany(BonoRegla::class, 'bono_id', 'id');
     }
 }

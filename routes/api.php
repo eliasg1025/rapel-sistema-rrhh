@@ -249,9 +249,10 @@ Route::group(['prefix' => 'bonos'], function () {
     Route::get('/', 'BonosController@get');
     Route::get('/{id}', 'BonosController@show');
     Route::post('/', 'BonosController@create');
-    Route::post('/planilla', 'BonosController@getPlanillaBono');
+    Route::get('/{bono}/planilla', 'BonosController@getPlanillaBono');
     Route::put('/{id}', 'BonosController@update');
     Route::delete('/{id}', 'BonosController@delete');
+    Route::post('/exportar', 'BonosController@export');
 });
 
 Route::group(['prefix' => 'bonos-reglas'], function() {

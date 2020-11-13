@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Button, notification, Spin, Result } from 'antd';
 import Axios from 'axios';
-import { PasosIniciales, ResumenBono, Resultados } from '../components';
+import { PasosIniciales, ResumenBono, Panel } from '../components';
 
 export const Bono = () => {
 
@@ -41,7 +41,7 @@ export const Bono = () => {
                             <>
                                 <ResumenBono bono={bono}/>
                                 <br />
-                                <Resultados bono={bono} />
+                                <Panel bono={bono} />
                             </>
                         ) : (
                             <PasosIniciales bono={bono} />

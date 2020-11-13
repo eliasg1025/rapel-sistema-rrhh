@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Bono;
 use App\Services\BonosService;
+use Box\Spout\Writer\Style\StyleBuilder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Rap2hpoutre\FastExcel\SheetCollection;
 
 class BonosController extends Controller
 {
@@ -62,23 +66,12 @@ class BonosController extends Controller
         ]);
     }
 
-    public function getPlanillaBono(Request $request)
+    public function getPlanillaBono(Bono $bono, Request $request)
     {
-        $empresaId = $request->get('empresaId');
-        $desde = $request->get('desde');
-        $hasta = $request->get('hasta');
-        $zonasIds = $request->get('zonasIds');
-        $laboresIds = $request->get('laboresIds');
-        $cuartelesIds = $request->get('cuartelesIds');
+        $desde = $request->query('desde');
+        $hasta = $request->query('hasta');
 
-        $data = $this->bonosService->queryResult(
-            $empresaId,
-            $desde,
-            $hasta,
-            $zonasIds,
-            $laboresIds,
-            $cuartelesIds
-        );
+        $data = $this->bonosService->getPlanilla($bono, $desde, $hasta);
 
         return response()->json([
             'message' => 'Planilla de bonos obtenida correctamente',
@@ -96,5 +89,31 @@ class BonosController extends Controller
             'message' => 'Estado actualizado correctamente',
             'data' => $id
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $actividades = $request->get('actividades') ?? [];
+        $resultados = $request->get('resultados') ?? [];
+
+        $listActividades = collect($actividades);
+        $listResultados = collect($resultados);
+
+        $headerStyle = (new StyleBuilder())->setFontBold()->build();
+
+        $rowsStyle = (new StyleBuilder())
+            ->setFontSize(15)
+            ->setShouldWrapText()
+            ->setBackgroundColor("EDEDED")
+            ->build();
+
+        $sheets = new SheetCollection([
+            'Actividades' => $listActividades,
+            'Reporte Publicar' => $listResultados
+        ]);
+
+        return (new FastExcel($sheets))
+            ->headerStyle($headerStyle)
+            ->download('file.xlsx');
     }
 }
