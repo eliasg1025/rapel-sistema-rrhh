@@ -42,7 +42,7 @@
     </nav>
     @yield('contenido')
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
+    {{-- <script>
         Pusher.logToConsole = true;
 
         let pusher = new Pusher('4bcc98f6c9321c69044d', {
@@ -55,6 +55,6 @@
         channel.bind('notifications', function(data) {
             alert(JSON.stringify(data));
         })
-    </script>
+    </script> --}}
 </body>
 </html>
