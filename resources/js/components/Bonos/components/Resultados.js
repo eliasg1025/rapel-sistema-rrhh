@@ -133,7 +133,6 @@ export const Resultados = ({ bono }) => {
                     <Tabs.TabPane tab="Actividades" key="1">
                         <Table
                             size="small"
-                            pagination={{ pageSize: 50 }}
                             dataSource={actividades}
                             columns={columnsA}
                             scroll={{ x: 1500 }}
@@ -143,7 +142,6 @@ export const Resultados = ({ bono }) => {
                     <Tabs.TabPane tab="Reporte Publicar" key="2">
                         <Table
                             size="small"
-                            pagination={{ pageSize: 50 }}
                             dataSource={resultados}
                             columns={columnsR}
                             scroll={{ x: 1500 }}

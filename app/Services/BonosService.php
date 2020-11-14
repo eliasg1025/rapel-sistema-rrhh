@@ -75,14 +75,14 @@ class BonosService
 
             if (!is_bool(array_search($key, $recuentos))) {
                 $valorRecuento = $acc >= 0 ? $acc : 0;
-                $asArr['recuento_hasta_' . $key] = $valorRecuento;
+                $asArr['recuento_hasta_' . $key] = round($valorRecuento, 2);
                 /* $offset = array_search($key, array_keys($asArr)) + 1;
                 $asArr = array_slice($asArr, 0, $offset, true) + array('Recuento ' . $key => 0) + array_slice($asArr, $offset, null, true); */
                 $accRecuentos += $valorRecuento;
                 $acc = 0;
             }
         }
-        $asArr['total_bono'] = $accRecuentos;
+        $asArr['total_bono'] = round($accRecuentos, 2);
 
         return (object) $asArr;
     }
