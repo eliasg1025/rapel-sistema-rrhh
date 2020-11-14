@@ -144,3 +144,9 @@ Route::group(['middleware' => 'web.auth'], function() {
 
 Route::post('/login', 'Web\AuthController@login');
 Route::post('/logout', 'Web\AuthController@logout');
+
+
+Route::get('/test-pusher', function() {
+    event(new App\Events\SendNotification('eguere', 'hola'));
+    return 'hi';
+});

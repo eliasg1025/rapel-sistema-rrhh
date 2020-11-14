@@ -21,7 +21,9 @@ class BonosController extends Controller
 
     public function get()
     {
-        $bonos = Bono::with('usuario')->where('activo', 1)->get();
+        $bonos = Bono::with('usuario')
+            ->where('activo', 1)
+            ->get();
 
         return response()->json([
             'message' => 'Bonos obtenidos',

@@ -42,5 +42,19 @@
     </nav>
     @yield('contenido')
     <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        Pusher.logToConsole = true;
+
+        let pusher = new Pusher('4bcc98f6c9321c69044d', {
+            cluster: 'us2',
+            encrypted: true
+        });
+
+        let channel = pusher.subscribe("notifications-{{ $data['usuario']->username  }}");
+
+        channel.bind('notifications', function(data) {
+            alert(JSON.stringify(data));
+        })
+    </script>
 </body>
 </html>

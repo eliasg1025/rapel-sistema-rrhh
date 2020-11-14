@@ -136,6 +136,7 @@ export const Resultados = ({ bono }) => {
                             pagination={{ pageSize: 50 }}
                             dataSource={actividades}
                             columns={columnsA}
+                            scroll={{ x: 1500 }}
                             bordered
                         />
                     </Tabs.TabPane>
@@ -145,6 +146,7 @@ export const Resultados = ({ bono }) => {
                             pagination={{ pageSize: 50 }}
                             dataSource={resultados}
                             columns={columnsR}
+                            scroll={{ x: 1500 }}
                             bordered
                         />
                     </Tabs.TabPane>

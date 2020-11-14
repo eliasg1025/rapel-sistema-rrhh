@@ -103,9 +103,17 @@ class BonosService
                 'dataIndex' => 'codigo'
             ],
             [
+                'title' => 'Banco',
+                'dataIndex' => 'banco'
+            ],
+            [
+                'title' => 'Fecha Ingreso',
+                'dataIndex' => 'fecha_ingreso'
+            ],
+            [
                 'title' => 'Fecha Finiquito',
                 'dataIndex' => 'fecha_finiquito'
-            ]
+            ],
         ];
 
         if ($tipo === 'actividades') {
@@ -163,16 +171,27 @@ class BonosService
                     DB::raw('DATEPART(DAY, a.fechaActividad) as dia'),
                     DB::raw('DATEPART(WEEK, a.fechaActividad) as semana'),
                     DB::raw("(t.ApellidoPaterno + ' ' + t.ApellidoMaterno + ' ' + t.Nombre) as nombre_completo"),
-                    't.RutTrabajador as rut',
+                    DB::raw("
+                        CASE
+                            WHEN t.IdTipoDctoIden = 1
+                                THEN RIGHT('000000' + CAST(t.RutTrabajador as varchar), 8)
+                            ELSE
+                                RIGHT('000000' + CAST(t.RutTrabajador as varchar), 9)
+                        END AS rut
+                    "),
                     't.IdTrabajador as codigo',
                     'a.idEmpresa as empresa_id',
-                    'c.FechaTermino as fecha_finiquito',
+                    //'c.FechaInicioPeriodo as fecha_ingreso',
+                    //'c.FechaTermino as fecha_finiquito',
+                    DB::raw('cast(c.FechaInicioPeriodo as date) as fecha_ingreso'),
+                    DB::raw('cast(c.FechaTermino as date) as fecha_finiquito'),
                     'act.IdActividad as labor_id',
                     'act.Nombre as labor',
                     'cu.IdCuartel as cuartel_id',
                     'cu.Nombre as cuartel',
                     // DB::raw("CAST(ROUND(a." . $bono->condicion->variable_utilizada . ", 2, 0) as decimal(18, 2)) horas"),
-                    'a.'. $bono->condicion->variable_utilizada . ' as horas'
+                    'a.'. $bono->condicion->variable_utilizada . ' as horas',
+                    'b.Nombre as banco'
                 )
                 ->join('dbo.Trabajador as t', [
                     'a.idTrabajador' => 't.idTrabajador',
@@ -191,6 +210,10 @@ class BonosService
                     'act.idFamilia' => 'a.idFamilia',
                     'act.idEmpresa' => 'a.idEmpresa',
                     'act.idActividad' => 'a.idActividad'
+                ])
+                ->join('dbo.Banco as b', [
+                    'b.idBanco' => 't.idBanco',
+                    'b.idEmpresa' => 't.idEmpresa'
                 ])
                 ->when($regla->zona_id, function($query) use ($regla) {
                     $query->where('a.IdZona', $regla->zona_id);
@@ -222,6 +245,8 @@ class BonosService
             asistencias.nombre_completo,
             asistencias.dia,
             asistencias.semana,
+            asistencias.banco,
+            asistencias.fecha_ingreso,
             asistencias.fecha_finiquito,
             [1] = case when asistencias.dia = 1 then CONVERT(float, asistencias.horas) end,
             [2] = case when asistencias.dia = 2 then CONVERT(float, asistencias.horas) end,
@@ -281,9 +306,11 @@ class BonosService
                 'codigo',
                 'rut',
                 'nombre_completo',
-                'fecha_finiquito'
+                'fecha_ingreso',
+                'fecha_finiquito',
+                'banco'
             )
-            ->groupBy('codigo', 'rut', 'nombre_completo', 'fecha_finiquito')
+            ->groupBy('codigo', 'rut', 'nombre_completo', 'fecha_finiquito', 'banco', 'fecha_ingreso')
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 
