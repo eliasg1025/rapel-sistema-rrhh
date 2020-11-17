@@ -228,7 +228,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                                 width: '100%',
                             }}
                         >
-                            <Select.Option value={0} key="0"><b>TODOS</b></Select.Option>
+                            <Select.Option value={0} key="0">TODOS</Select.Option>
                             {usuariosCarga.map(option => <Select.Option value={option.id} key={option.id}>{ `${option.nombre_completo}` }</Select.Option>)}
                         </Select>
                     </div>
