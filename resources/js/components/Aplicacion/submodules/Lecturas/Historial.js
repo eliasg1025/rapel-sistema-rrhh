@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, Card, Table, Tooltip } from 'antd';
+import { DatePicker, Card, Table, Tooltip, notification } from 'antd';
 import moment from 'moment';
 import Axios from 'axios';
 
@@ -74,36 +74,95 @@ export const Historial = () => {
         <>
             <h4>Historial de consultas</h4>
             <br />
-            <Card>
-                <form>
-                    <div className="row">
-                        <div className="col-md-4">
-                            Desde - Hasta:<br />
-                        <DatePicker.RangePicker
-                            allowClear={false}
-                            style={{ width: "100%" }}
-                            placeholder={["Desde", "Hasta"]}
-                            onChange={(date, dateString) => {
-                                setFiltro({
-                                    ...filtro,
-                                    desde: dateString[0],
-                                    hasta: dateString[1]
-                                });
-                            }}
-                            value={[moment(filtro.desde), moment(filtro.hasta)]}
-                            size="small"
-                        />
-                        </div>
-                    </div>
-                </form>
-            </Card>
+            <div className="row">
+                <div className="col-md-6">
+                    <Card>
+                        <form>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    Desde - Hasta:<br />
+                                <DatePicker.RangePicker
+                                    allowClear={false}
+                                    style={{ width: "100%" }}
+                                    placeholder={["Desde", "Hasta"]}
+                                    onChange={(date, dateString) => {
+                                        setFiltro({
+                                            ...filtro,
+                                            desde: dateString[0],
+                                            hasta: dateString[1]
+                                        });
+                                    }}
+                                    value={[moment(filtro.desde), moment(filtro.hasta)]}
+                                    size="small"
+                                />
+                                </div>
+                            </div>
+                        </form>
+                    </Card>
+
+                </div>
+                <div className="col-md-6">
+                    <TablaLecturasPorDia />
+                </div>
+            </div>
             <br />
             <Table
+                bordered
                 loading={loading}
+                pagination={{ size: 5 }}
                 size="small"
                 dataSource={lecturas}
                 columns={columns}
             />
         </>
+    );
+}
+
+
+const TablaLecturasPorDia = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [lecturasPorDia, setLecturasPorDia] = useState([]);
+
+    const columns = [
+        {
+            title: 'Fecha',
+            dataIndex: 'fecha_lectura',
+        },
+        {
+            title: 'Cantidad',
+            dataIndex: 'cantidad'
+        }
+    ];
+
+    useEffect(() => {
+        setLoading(false);
+        Axios.get(`http://209.151.144.74/api/lecturas-sueldos/get-cantidad-por-dia`)
+            .then(res => {
+                setLecturasPorDia(res.data.map(item => {
+                    return {
+                        ...item,
+                        key: item.fecha_lectura
+                    }
+                }));
+            })
+            .catch(err => {
+                notification['error']({
+                    message: 'Error al obtener las lecturas por dia'
+                });
+            })
+            .finally(() => setLoading(false));
+    }, []);
+
+    return (
+        <Table
+            bordered
+            size="small"
+            loading={loading}
+            dataSource={lecturasPorDia}
+            columns={columns}
+        >
+
+        </Table>
     );
 }
