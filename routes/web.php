@@ -63,6 +63,10 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::group(['prefix' => 'aplicacion'], function () {
         Route::get('/', 'Web\AplicacionController@index');
         Route::get('/sincronizar', 'Web\AplicacionController@sync');
+        Route::group(['prefix' => 'lecturas-sueldos'], function() {
+            Route::get('/historial', 'Web\AplicacionController@lecturasHisorial');
+            Route::get('/observaciones', 'Web\AplicacionController@lecturasObservaciones');
+        });
     });
 
     Route::group(['prefix' => 'descansos-medicos'], function () {
@@ -149,4 +153,8 @@ Route::post('/logout', 'Web\AuthController@logout');
 Route::get('/test-pusher', function() {
     event(new App\Events\SendNotification('eguere', 'hola'));
     return 'hi';
+});
+
+Route::get('/test', function() {
+    return md5(sha1("yl.1234"));
 });

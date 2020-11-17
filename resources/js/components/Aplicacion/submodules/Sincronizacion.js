@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, DatePicker, Select, Modal, notification } from 'antd';
+import { Card, DatePicker, Select, Modal, notification, Spin } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import Axios from 'axios';
 import moment from 'moment';
@@ -8,6 +8,7 @@ import { empresa } from '../../../data/default.json';
 
 export const Sincronizacion = () => {
 
+    const [loading, setLoading] = useState(false);
     const [zonasLabor, setZonasLabor] = useState([]);
     const [form, setForm] =useState({
         empresaId: 9,
@@ -40,105 +41,111 @@ export const Sincronizacion = () => {
         <>
             <h4>Sincronización</h4>
             <br />
-            <div className="row">
-                <div className="col-md-12">
-                    <Card>
-                        <div className="row">
-                            <div className="col-md-4">
-                                Empresa:<br />
-                                <Select
-                                    value={form.empresaId} showSearch
-                                    style={{ width: '100%' }} optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        option.children
-                                            .toLowerCase()
-                                            .indexOf(input.toLowerCase()) >= 0
-                                    }
-                                    onChange={e => setForm({ ...form, empresaId: e })}
-                                    size="small"
-                                >
-                                    {empresa.map(e => (
-                                        <Select.Option value={e.id} key={e.id}>
-                                            {`${e.id} - ${e.name}`}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
+            <Spin spinning={loading}>
+                <div className="row">
+                    <div className="col-md-12">
+                        <Card>
+                            <div className="row">
+                                <div className="col-md-4">
+                                    Empresa:<br />
+                                    <Select
+                                        value={form.empresaId} showSearch
+                                        style={{ width: '100%' }} optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={e => setForm({ ...form, empresaId: e })}
+                                        size="small"
+                                    >
+                                        {empresa.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id} - ${e.name}`}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                                <div className="col-md-4">
+                                    Tipo Pago:<br />
+                                    <Select
+                                        value={form.tipoPago} showSearch
+                                        style={{ width: '100%' }} optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={e => setForm({ ...form, tipoPago: e })}
+                                        size="small"
+                                    >
+                                        {tiposPagos.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.name}`}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                                <div className="col-md-4">
+                                    Periodo:<br />
+                                    <DatePicker
+                                        size="small"
+                                        allowClear={false}
+                                        style={{ width: '100%' }}
+                                        placeholder="Seleccione Periodo"
+                                        picker="month"
+                                        onChange={(date, dateString) => {
+                                            setForm({
+                                                ...form,
+                                                periodo: dateString,
+                                            })
+                                        }}
+                                        value={moment(form.periodo)}
+                                    />
+                                </div>
                             </div>
-                            <div className="col-md-4">
-                                Tipo Pago:<br />
-                                <Select
-                                    value={form.tipoPago} showSearch
-                                    style={{ width: '100%' }} optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        option.children
-                                            .toLowerCase()
-                                            .indexOf(input.toLowerCase()) >= 0
-                                    }
-                                    onChange={e => setForm({ ...form, tipoPago: e })}
-                                    size="small"
-                                >
-                                    {tiposPagos.map(e => (
-                                        <Select.Option value={e.id} key={e.id}>
-                                            {`${e.name}`}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </div>
-                            <div className="col-md-4">
-                                Periodo:<br />
-                                <DatePicker
-                                    size="small"
-                                    allowClear={false}
-                                    style={{ width: '100%' }}
-                                    placeholder="Seleccione Periodo"
-                                    picker="month"
-                                    onChange={(date, dateString) => {
-                                        setForm({
-                                            ...form,
-                                            periodo: dateString,
-                                        })
-                                    }}
-                                    value={moment(form.periodo)}
-                                />
-                            </div>
-                        </div>
-                    </Card>
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <br />
-            <div className="row">
-                <div className="col-md-6">
-                    <SyncForm
-                        table="planilla"
-                        eTable="payments"
-                        zonasLabor={zonasLabor}
-                        header={form}
-                    />
+                <br />
+                <div className="row">
+                    <div className="col-md-6">
+                        <SyncForm
+                            table="planilla"
+                            eTable="payments"
+                            zonasLabor={zonasLabor}
+                            header={form}
+                            setLoading={setLoading}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <SyncForm
+                            table="detalle-planilla"
+                            eTable="payments-detail"
+                            zonasLabor={zonasLabor}
+                            header={form}
+                            setLoading={setLoading}
+                        />
+                    </div>
                 </div>
-                <div className="col-md-6">
-                    <SyncForm
-                        table="detalle-planilla"
-                        eTable="payments-detail"
-                        zonasLabor={zonasLabor}
-                        header={form}
-                    />
+                <br />
+                <div className="row">
+                    <div className="col-md-6">
+                        <SyncFormTarja
+                            eTable="tarja"
+                            header={form}
+                            loading={loading}
+                            setLoading={setLoading}
+                        />
+                    </div>
                 </div>
-            </div>
-            <br />
-            <div className="row">
-                <div className="col-md-6">
-                    <SyncFormTarja
-                        eTable="tarja"
-                        header={form}
-                    />
-                </div>
-            </div>
+            </Spin>
         </>
     );
 }
 
 
-const SyncForm = ({ table, eTable, zonasLabor, header }) => {
+const SyncForm = ({ table, eTable, zonasLabor, header, setLoading }) => {
 
     const [zonasLaborId, setZonasLaborId] = useState([]);
     const [loadingZonas, setLoadingZonas] = useState(false);
@@ -155,6 +162,7 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
     }
 
     const insertData = (data) => {
+        setLoading(true);
         Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
             data
         })
@@ -166,7 +174,8 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
             })
             .catch(err => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     }
 
     const recoverData = () => {
@@ -236,9 +245,8 @@ const SyncForm = ({ table, eTable, zonasLabor, header }) => {
     );
 }
 
-const SyncFormTarja = ({ header, eTable }) => {
+const SyncFormTarja = ({ header, eTable, loading, setLoading }) => {
 
-    const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         regimenId: 1,
         conDigitacion: 'SI',
@@ -278,6 +286,7 @@ const SyncFormTarja = ({ header, eTable }) => {
             ? eTable
             : 'asistencias';
 
+        setLoading(true);
         Axios.post(`http://209.151.144.74/api/${instance}/many`,{
             data,
             mes,
@@ -292,7 +301,8 @@ const SyncFormTarja = ({ header, eTable }) => {
             })
             .catch(err => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     }
 
     const recoverData = () => {

@@ -44,4 +44,42 @@ class AplicacionController extends Controller
 
         return view('pages.aplicacion', compact('data'));
     }
+
+    public function lecturasHisorial(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->aplicacion == 0 ) {
+            $nombre_modulo = 'aplicacion';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submenu' => 'sub1',
+            'submodule' => 'historial',
+            'editar' => 0
+        ];
+
+        return view('pages.aplicacion', compact('data'));
+    }
+
+    public function lecturasObservaciones(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->aplicacion == 0 ) {
+            $nombre_modulo = 'aplicacion';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submenu' => 'sub1',
+            'submodule' => 'observaciones',
+            'editar' => 0
+        ];
+
+        return view('pages.aplicacion', compact('data'));
+    }
 }

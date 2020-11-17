@@ -24,6 +24,11 @@ export const Home = () => {
                     <span>{" "}<i className="fas fa-times-circle" style={{ color: 'red' }}></i> Fuera de línea</span>
                 )}
             </Card>
+            <br />
+            <h5>Consultas de sueldo</h5>
+            <Card>
+                hi
+            </Card>
         </>
     );
 }
