@@ -8,29 +8,30 @@ import ReactDOM from "react-dom";
 import React from "react";
 import "antd/dist/antd.css";
 
-import Ingresos from "./components/IngresosPersonal";
-import Afp from "./components/Afp";
-import ReseteoClave from "./components/ReseteoClave";
-import Permisos from './components/Permisos';
-import Liquidaciones from "./components/Liquidaciones/Liquidaciones";
-import ConsultaTrabajadores from "./components/ConsultaTrabajadores";
-import Sanciones from "./components/Sanciones/Sanciones";
-import Sctr from "./components/Sctr/Sctr";
-import EstadoDocumentos from "./components/EstadoDocumentos/EstadoDocumentos";
-import Cuentas from "./components/Cuentas";
-import Perfil from "./components/Perfil";
-import DescansosMedicos from "./components/DescansosMedicos";
-import Aplicacion from "./components/Aplicacion";
-import Usuarios from "./components/Usuarios";
-import Panel from "./components/Panel";
-import Bonos from './components/Bonos';
+import Ingresos from "./containers/IngresosPersonal";
+import Afp from "./containers/Afp";
+import ReseteoClave from "./containers/ReseteoClave";
+import Permisos from './containers/Permisos';
+import Liquidaciones from "./containers/Liquidaciones/Liquidaciones";
+import ConsultaTrabajadores from "./containers/ConsultaTrabajadores";
+import Sanciones from "./containers/Sanciones/Sanciones";
+import Sctr from "./containers/Sctr/Sctr";
+import EstadoDocumentos from "./containers/EstadoDocumentos/EstadoDocumentos";
+import Cuentas from "./containers/Cuentas";
+import Perfil from "./containers/Perfil";
+import DescansosMedicos from "./containers/DescansosMedicos";
+import Aplicacion from "./containers/Aplicacion";
+import Usuarios from "./containers/Usuarios";
+import Panel from "./containers/Panel";
+import Bonos from './containers/Bonos';
+import FiniquitosMasivos from './containers/FiniquitosMasivos';
 
 require("./bootstrap");
-require("./components/Login");
+require("./containers/Login");
 
 /**
  * Next, we will create a fresh React component instance and attach it to
- * the page. Then, you may begin adding components to this application
+ * the page. Then, you may begin adding containers to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
@@ -109,6 +110,10 @@ const containers = [
     {
         id: 'bonos',
         component: <Bonos />
+    },
+    {
+        id: 'finiquitos',
+        component: <FiniquitosMasivos />
     },
 ];
 

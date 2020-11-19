@@ -1,0 +1,1 @@
+export { EtiquetaAdministrador } from './EtiquetaAdministrador';
