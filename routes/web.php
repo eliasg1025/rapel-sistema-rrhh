@@ -128,7 +128,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/editar/{id}', 'Web\BonosController@editar');
     });
 
-    Route::group(['prefix' => 'finiquitos'], function() {
+    Route::group(['prefix' => 'finiquitos', 'middleware' => 'module:finiquitos'], function() {
         Route::get('/', 'Web\FiniquitosMasivosController@index');
     });
 

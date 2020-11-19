@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'api.auth' => \App\Http\Middleware\ApiAuthenticate::class,
         'rol' => \App\Http\Middleware\CheckRole::class,
         'web.auth' => \App\Http\Middleware\WebAuthenticate::class,
+        'module' => \App\Http\Middleware\VerifyModuleAccess::class,
     ];
 }
