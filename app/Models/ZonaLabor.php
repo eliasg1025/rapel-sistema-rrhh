@@ -46,4 +46,14 @@ class ZonaLabor extends Model
         ->where('habilitado', '1')
         ->get();
     }
+
+    public static function getAll()
+    {
+        return DB::table('zona_labores')
+            ->select(
+                DB::raw('DISTINCT name')
+            )
+            ->where('habilitado', '1')
+            ->get();
+    }
 }

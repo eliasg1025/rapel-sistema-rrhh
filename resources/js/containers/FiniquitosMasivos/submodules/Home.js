@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+import { CreateGrupoForm, TablaGrupo } from '../components';
 
 export const Home = () => {
 
-    useState()
-
-    const [form, setForm] = useState({
-
-    });
+    const [reload, setReload] = useState(false);
 
     return (
         <>
             <h4>Finiquitos Masivos</h4>
             <br />
-            <div className="row">
-                <div className="col-md-4">
-
-                </div>
-            </div>
+            <CreateGrupoForm
+                reload={reload}
+                setReload={setReload}
+            />
+            <br />
+            <TablaGrupo
+                reload={reload}
+            />
         </>
     );
 }
+
+

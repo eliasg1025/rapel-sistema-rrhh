@@ -75,6 +75,7 @@ Route::group(['prefix' => 'banco'], function() {
 
 Route::group(['prefix' => 'zona-labor'], function() {
     Route::get('/{empresa_id}', 'ZonaLaborController@get');
+    Route::get('/', 'ZonaLaborController@getAll');
 });
 
 Route::group(['prefix' => 'oficio'], function() {
@@ -241,10 +242,6 @@ Route::group(['prefix' => 'tipo-licencia'], function () {
     Route::get('/{empresaId}', 'TipoLicenciaController@get');
 });
 
-Route::group(['prefix' => 'sqlsrv'], function () {
-    Route::get('/trabajador/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador');
-});
-
 Route::group(['prefix' => 'bonos'], function () {
     Route::get('/', 'BonosController@get');
     Route::get('/{id}', 'BonosController@show');
@@ -264,6 +261,21 @@ Route::group(['prefix' => 'bonos-reglas'], function() {
 Route::group(['prefix' => 'bonos-condiciones-pagos'], function() {
     Route::post('/', 'BonosCondicionesPagosController@create');
     Route::get('/bono/{id}', 'BonosCondicionesPagosController@getLastByBono');
+});
+
+Route::group(['prefix' => 'grupos-finiquitos'], function() {
+    Route::get('/', 'GruposFiniquitosController@get');
+    Route::post('/', 'GruposFiniquitosController@create');
+});
+
+Route::group(['prefix' => 'sqlsrv'], function () {
+    Route::group(['prefix' => 'trabajador'], function() {
+        Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador');
+    });
+
+    Route::group(['prefix' => 'rutas'], function() {
+        Route::get('/', 'Sqlsrv\RutasController@getAll');
+    });
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

@@ -13,4 +13,10 @@ class ZonaLaborController extends Controller
 
         return response()->json($result);
     }
+
+    public function getAll()
+    {
+        $result = ZonaLabor::getAll();
+        return response()->json($result);
+    }
 }
