@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Finiquito;
 use App\Models\Modulo;
 use Illuminate\Http\Request;
 use App\Services\UserService;
@@ -21,10 +22,51 @@ class FiniquitosMasivosController extends Controller
         $usuario = $request->session()->get('usuario');
 
         $data = [
-            'usuario' => $usuario,
-            'submodule' => 'main'
+            'usuario'   => $usuario,
+            'submodule' => 'main',
+            'editar'    => 0
         ];
 
         return view('pages.finiquitos', compact('data'));
+    }
+
+    public function editar(Request $request, int $id)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'main',
+            'editar'    => $id
+        ];
+
+        return view('pages.finiquitos', compact('data'));
+    }
+
+    public function verFicha(Finiquito $finiquito)
+    {
+        try {
+            $data = [
+                'finiquito'     => $finiquito,
+                'trabajador'     => $finiquito->trabajador,
+                'codigo'         => 3 . '@' . $finiquito->id,
+            ];
+
+            $pdf = \PDF::setOptions([
+                'images' => true
+            ])->loadView('documents.' . $finiquito->tipoCese->sigla . '.index', $data);
+
+            $filename = $finiquito->persona->apellido_paterno . '-' .
+                $finiquito->persona->apellido_materno . '-' .
+                $finiquito->persona->rut . '-' .
+                $finiquito->empresa->nombre_corto . '-' .
+                $finiquito->tipoCese->sigla . '.pdf';
+
+            return $pdf->stream($filename);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ]);
+        }
     }
 }

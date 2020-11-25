@@ -15,7 +15,7 @@ export default function FiniquitosMasivos() {
         return (
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                 <Menu.Item key="main" icon={<HomeOutlined />}>
-                    <a href="/main">
+                    <a href="/finiquitos">
                         Principal
                     </a>
                 </Menu.Item>

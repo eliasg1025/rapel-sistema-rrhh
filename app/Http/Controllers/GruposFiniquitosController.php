@@ -42,4 +42,14 @@ class GruposFiniquitosController extends Controller
             'data' => $result
         ]);
     }
+
+    public function find(Request $request, int $id)
+    {
+        $result = $this->gruposFiniquitosService->find($id);
+
+        return response()->json([
+            'message' => 'Grupo obtenido correctamente',
+            'data' => $result
+        ]);
+    }
 }

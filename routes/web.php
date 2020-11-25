@@ -130,6 +130,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'finiquitos', 'middleware' => 'module:finiquitos'], function() {
         Route::get('/', 'Web\FiniquitosMasivosController@index');
+        Route::get('/{id}', 'Web\FiniquitosMasivosController@editar');
     });
 
     Route::group(['prefix' => 'ficha'], function() {
@@ -139,6 +140,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/formulario-permiso/{formularioPermiso}', 'FormularioPermisoController@verFicha');
         Route::get('/sancion/{sancion}', 'SancionesController@verFicha');
         Route::get('/descanso-medico/{informe}', 'InformesDescansosController@verFicha');
+        Route::get('/cese/{finiquito}', 'Web\FiniquitosMasivosController@verFicha');
     });
 
     Route::group(['prefix' => 'descargar'], function() {

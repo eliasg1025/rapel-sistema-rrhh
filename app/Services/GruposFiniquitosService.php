@@ -28,4 +28,11 @@ class GruposFiniquitosService
 
         return $grupos;
     }
+
+    public function find($id)
+    {
+        $grupo = GrupoFiniquito::with('usuario.trabajador', 'finiquitos.persona', 'finiquitos.empresa', 'finiquitos.tipoCese', 'finiquitos.regimen', 'finiquitos.oficio')->where('id', $id)->first();
+
+        return $grupo;
+    }
 }

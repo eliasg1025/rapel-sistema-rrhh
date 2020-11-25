@@ -266,11 +266,23 @@ Route::group(['prefix' => 'bonos-condiciones-pagos'], function() {
 Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::get('/', 'GruposFiniquitosController@get');
     Route::post('/', 'GruposFiniquitosController@create');
+    Route::get('/{id}', 'GruposFiniquitosController@find');
+});
+
+Route::group(['prefix' => 'finiquitos'], function() {
+    Route::post('/', 'FiniquitosController@create');
+    Route::post('/import', 'FiniquitosController@import');
+    Route::delete('/{id}', 'FiniquitosController@delete');
+});
+
+Route::group(['prefix' => 'tipos-ceses'], function() {
+    Route::get('/', 'TiposCesesController@get');
 });
 
 Route::group(['prefix' => 'sqlsrv'], function () {
     Route::group(['prefix' => 'trabajador'], function() {
-        Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador');
+        Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador')->where('empresaId', '[0-9]+');
+        Route::get('/{rut}/finiquito', 'Sqlsrv\TrabajadoresController@getParaFiniquito');
     });
 
     Route::group(['prefix' => 'rutas'], function() {

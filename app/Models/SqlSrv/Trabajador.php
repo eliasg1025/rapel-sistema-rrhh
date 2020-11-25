@@ -94,4 +94,76 @@ class Trabajador extends Model
             ]
         ];
     }
+
+    public static function getTrabajadorParaFiniquito($rut, $fechaFiniquito)
+    {
+        $fechaFiniquito = Carbon::parse($fechaFiniquito);
+
+        $trabajador = DB::connection('sqlsrv')
+            ->table('Contratos as c')
+            ->select(
+                't.RutTrabajador as persona_id',
+                't.Nombre as nombre',
+                't.ApellidoPaterno as apellido_paterno',
+                't.ApellidoMaterno as apellido_materno',
+                DB::raw('CAST(t.FechaNacimiento as date) fecha_nacimiento'),
+                't.Direccion as direccion',
+                't.Sexo as sexo',
+                DB::raw('CAST(c.FechaInicioPeriodo as date) fecha_inicio_periodo'),
+                DB::raw('CAST(c.FechaTerminoC as date) fecha_termino_contrato'),
+                DB::raw('CAST(c.IdRegimen as int) regimen_id'),
+                DB::raw('CAST(c.IdEmpresa as int) empresa_id'),
+                'o.IdOficio as oficio_id',
+                'o.Descripcion as oficio_name',
+            )
+            ->join('Trabajador as t', [
+                't.IdEmpresa' => 'c.IdEmpresa',
+                't.IdTrabajador' => 'c.IdTrabajador'
+            ])
+            ->join('Oficio as o', [
+                'o.IdEmpresa' => 'c.IdEmpresa',
+                'o.IdOficio' => 'c.IdOficio'
+            ])
+            ->where('c.IndicadorVigencia', 1)
+            ->where('t.RutTrabajador', $rut)
+            ->whereIn('t.idEmpresa', [9, 14])
+            ->first();
+
+        try {
+            $trabajador->tiempo_servicio = $fechaFiniquito->diffInMonths($trabajador->fecha_inicio_periodo);
+
+            $trabajador->tipo_cese_id = $trabajador->tiempo_servicio < 3 ? 1 : (
+                $fechaFiniquito->toDateString() === $trabajador->fecha_termino_contrato ? 3 : 2
+            );
+
+            if ($trabajador->regimen_id == 2) {
+                return [
+                    'message' => 'No se puede finiquitar a un trabajador del Regimen: EMPLEADO REGULAR por este medio',
+                    'data'  => [
+                        'rut' => $rut,
+                    ],
+                    'error' => true,
+                ];
+            } else if ($trabajador->regimen_id == 1) {
+                return [
+                    'message' => 'Trabajador Obtenido. EMPLEADO AGRARIO',
+                    'data' => $trabajador,
+                ];
+            }
+
+            return [
+                'message' => 'Trabajador Obtenido',
+                'data' => $trabajador
+            ];
+        } catch (\Exception $e) {
+            return [
+                'message' => 'Trabajador no encontrado',
+                'error' => true,
+                'data' => [
+                    'rut' => $rut,
+                    'error' => $e->getMessage()
+                ]
+            ];
+        }
+    }
 }

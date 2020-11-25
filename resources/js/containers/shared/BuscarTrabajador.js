@@ -70,7 +70,7 @@ const BuscarTrabajador = ({
                         onChange={e => setRut(e.target.value)}
                     />
                     <div className="input-group-append">
-                        <button className="btn btn-primary" type="submit" disabled={rut.length !== 8 || loading}>
+                        <button className="btn btn-primary" type="submit" disabled={rut.length < 8 || loading}>
                             <i className="fas fa-search"></i>
                         </button>
                     </div>
