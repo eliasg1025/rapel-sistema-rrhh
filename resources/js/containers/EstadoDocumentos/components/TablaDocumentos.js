@@ -49,6 +49,10 @@ export const TablaDocumentos = ({ data, reloadData, loading, banDocument }) => {
             dataIndex: 'zona_labor'
         },
         {
+            title: 'Oficio',
+            dataIndex: 'oficio'
+        },
+        {
             title: 'Estado',
             dataIndex: 'estado'
         },

@@ -52,6 +52,7 @@ export const Prorrogas = () => {
             'Nombre Completo',
             'Regimen',
             'Zona Labor',
+            'Oficio',
             'Estado'
         ];
 
@@ -63,6 +64,7 @@ export const Prorrogas = () => {
                 nombre_completo: d.nombre_completo,
                 regimen: d.regimen,
                 zona_labor: d.zona_labor,
+                oficio: d.oficio,
                 estado: d.estado
             }
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BonosExport;
 use App\Models\Bono;
 use App\Services\BonosService;
 use Box\Spout\Writer\Style\StyleBuilder;
@@ -95,13 +96,9 @@ class BonosController extends Controller
 
     public function export(Request $request)
     {
-        $actividades = $request->get('actividades') ?? [];
-        $resultados = $request->get('resultados') ?? [];
+        dd($request->all());
 
-        $listActividades = collect($actividades);
-        $listResultados = collect($resultados);
-
-        $headerStyle = (new StyleBuilder())->setFontBold()->build();
+        /*$headerStyle = (new StyleBuilder())->setFontBold()->build();
 
         $rowsStyle = (new StyleBuilder())
             ->setFontSize(15)
@@ -116,6 +113,6 @@ class BonosController extends Controller
 
         return (new FastExcel($sheets))
             ->headerStyle($headerStyle)
-            ->download('file.xlsx');
+            ->download('file.xlsx'); */
     }
 }

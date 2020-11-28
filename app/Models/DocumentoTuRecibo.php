@@ -68,6 +68,23 @@ class DocumentoTuRecibo extends Model
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 
+        $result->transform(function ($item) {
+            $contratoActual = DB::connection('sqlsrv')->table('dbo.Contratos as c')
+                ->select('o.Descripcion as oficio')
+                ->join('dbo.Oficio as o', [
+                    'o.IdEmpresa' => 'c.IdEmpresa',
+                    'o.IdOficio' => 'c.IdOficio'
+                ])
+                ->where('c.IndicadorVigencia', true)
+                ->where('c.RutTrabajador', $item->rut)
+                ->whereIn('c.IdEmpresa', [9, 14])
+                ->first();
+
+            $item->oficio = $contratoActual->oficio;
+
+            return $item;
+        });
+
         return $result;
     }
 

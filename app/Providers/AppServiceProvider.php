@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Finiquito;
+use App\Models\GrupoFiniquito;
+use App\Observers\FiniquitoObserver;
+use App\Observers\GrupoFiniquitoObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        GrupoFiniquito::observe(GrupoFiniquitoObserver::class);
+        Finiquito::observe(FiniquitoObserver::class);
     }
 }

@@ -19,6 +19,8 @@ export const Resultados = ({ bono }) => {
     const [actividades, setActividades] = useState([]);
     const [resultados, setResultados] = useState([]);
 
+    const [dataToExport, setDataToExport] = useState(null);
+
     const getData = () => {
         setLoading(true);
         Axios.get(
@@ -30,6 +32,8 @@ export const Resultados = ({ bono }) => {
                 notification["success"]({
                     message: message
                 });
+
+                setDataToExport(data);
 
                 setActividades(
                     data.output.map(item => {
@@ -65,10 +69,7 @@ export const Resultados = ({ bono }) => {
         Axios({
             method: 'POST',
             url: '/api/bonos/exportar',
-            data: {
-                actividades: actividades,
-                resultados: resultados
-            },
+            data: dataToExport,
             responseType: 'blob'
         })
             .then(res => {
