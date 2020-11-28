@@ -80,7 +80,7 @@ class DocumentoTuRecibo extends Model
                 ->whereIn('c.IdEmpresa', [9, 14])
                 ->first();
 
-            $item->oficio = $contratoActual->oficio;
+            $item->oficio = $contratoActual->oficio ?? '';
 
             return $item;
         });
