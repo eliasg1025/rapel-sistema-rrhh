@@ -26,14 +26,14 @@ export const Historial = ({ bono }) => {
         },
         {
             title: 'Generado',
-            dataIndex: 'created_at',
+            dataIndex: 'updated_at',
             render: (_, value) => moment(_).format('DD/MM/YYYY h:m:s')
         },
         {
             title: 'Ver',
             dataIndex: 'link',
             render: (_, value) => (
-                <a href={`/storage/${value.link}`} className="btn btn-light" target="_blank">
+                <a href={`/storage${value.link}`} className="btn btn-light" target="_blank">
                     <i className="fas fa-search"></i>
                 </a>
             )
