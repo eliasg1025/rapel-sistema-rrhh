@@ -33,7 +33,7 @@ export const Historial = ({ bono }) => {
             title: 'Ver',
             dataIndex: 'link',
             render: (_, value) => (
-                <a href={value.link} className="btn btn-light" target="_blank">
+                <a href={`/storage/${value.link}`} className="btn btn-light" target="_blank">
                     <i className="fas fa-search"></i>
                 </a>
             )
