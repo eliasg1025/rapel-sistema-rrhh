@@ -42,6 +42,14 @@ class BonosService
     public function getInasistencias(Bono $bono, $desde, $hasta)
     {
         return DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
+            ->select(
+                'IdEmpresa as empresa_id',
+                'idTrabajador as codigo',
+                'RutTrabajador as rut',
+                DB::raw('CAST(FechaInicio as date) as fecha'),
+                DB::raw('DATEPART(DAY, FechaInicio) as dia'),
+                'MotivoAusencia as motivo'
+            )
             ->where('p.IdEmpresa', $bono->empresa_id)
             ->where('p.MotivoAusencia', 'FALTA')
             ->where('p.HoraInasistencia', 8)
@@ -49,7 +57,7 @@ class BonosService
             ->get();
     }
 
-    private function getResultados($fechas, $condicion, $recuentos)
+    private function getResultados($fechas, $condicion, $recuentos, $inasistencias)
     {
         $asArr = get_object_vars($fechas);
 
@@ -80,9 +88,19 @@ class BonosService
                 $condicional ? (double) $condicion->valor_bono : ((double) $condicion->valor_descuento) * (-1)
             ) : null; */
 
-            $newValue = !is_null($value) ? (
+            $hayInasistencia = in_array($key, $inasistencias);
+
+   /*          $newValue = !is_null($value) ? (
                 $condicional ? (double) $condicion->valor_bono : null
-            ) : null;
+            ) : null; */
+
+            if (!$hayInasistencia) {
+                $newValue = !is_null($value) ? (
+                    $condicional ? (double) $condicion->valor_bono : null
+                ) : null;
+            } else {
+                $newValue = ((double) $condicion->valor_descuento) * (-1);
+            }
 
             $asArr[$key] = $newValue;
             $acc += $newValue;
@@ -332,16 +350,27 @@ class BonosService
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 
-        $result->transform(function($item) use ($pivotTable, $fechas, $bono, $recuentos) {
-            $dias = array_values($pivotTable->where('codigo', $item->codigo)->toArray());
+        $inasistencias = collect($this->getInasistencias($bono, $desde, $hasta));
 
+        /* $inasistencias = collect([
+            ['codigo' => '455336', 'dia' => 17]
+        ]); */
+
+        $result->transform(function($item) use ($pivotTable, $fechas, $bono, $recuentos, $inasistencias) {
+            $dias = array_values($pivotTable->where('codigo', $item->codigo)->toArray());
+            $inasistencias = array_values($inasistencias->where('codigo', $item->codigo)->toArray());
             $item->fechas = clone $fechas;
+            $item->inasistencias = [];
 
             foreach ($dias as $dia) {
                 $item->fechas->{$dia->dia} = (double) $dia->{$dia->dia};
             }
 
-            $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos);
+            foreach ($inasistencias as $inasistencia) {
+                array_push($item->inasistencias, $inasistencia['dia']);
+            }
+
+            $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos, $item->inasistencias);
 
             return $item;
         });
