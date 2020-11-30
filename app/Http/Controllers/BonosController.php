@@ -83,10 +83,17 @@ class BonosController extends Controller
         ]);
     }
 
-    public function update($id)
+    public function update($id, Request $request)
     {
-        $data = Bono::where('id', $id)->update([
-            'listo_para_usar' => 1
+        $tipo_bono = $request->get('tipo_bono');
+        $descripcion = $request->get('descripcion');
+        $concepto_id = $request->get('concepto_id');
+
+        Bono::where('id', $id)->update([
+            'listo_para_usar' => 1,
+            'tipo_bono' => $tipo_bono,
+            'descripcion' => $descripcion,
+            'concepto_id' => $concepto_id
         ]);
 
         return response()->json([
