@@ -39,6 +39,16 @@ class BonosService
         ];
     }
 
+    public function getInasistencias(Bono $bono, $desde, $hasta)
+    {
+        return DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
+            ->where('p.IdEmpresa', $bono->empresa_id)
+            ->where('p.MotivoAusencia', 'FALTA')
+            ->where('p.HoraInasistencia', 8)
+            ->whereBetween('p.FechaInicio', [$desde, $hasta])
+            ->get();
+    }
+
     private function getResultados($fechas, $condicion, $recuentos)
     {
         $asArr = get_object_vars($fechas);
@@ -66,8 +76,12 @@ class BonosService
                     break;
             }
 
-            $newValue = !is_null($value) ? (
+            /* $newValue = !is_null($value) ? (
                 $condicional ? (double) $condicion->valor_bono : ((double) $condicion->valor_descuento) * (-1)
+            ) : null; */
+
+            $newValue = !is_null($value) ? (
+                $condicional ? (double) $condicion->valor_bono : null
             ) : null;
 
             $asArr[$key] = $newValue;
@@ -76,8 +90,6 @@ class BonosService
             if (!is_bool(array_search($key, $recuentos))) {
                 $valorRecuento = $acc >= 0 ? $acc : 0;
                 $asArr['recuento_hasta_' . $key] = round($valorRecuento, 2);
-                /* $offset = array_search($key, array_keys($asArr)) + 1;
-                $asArr = array_slice($asArr, 0, $offset, true) + array('Recuento ' . $key => 0) + array_slice($asArr, $offset, null, true); */
                 $accRecuentos += $valorRecuento;
                 $acc = 0;
             }
@@ -215,7 +227,7 @@ class BonosService
                     'b.idBanco' => 't.idBanco',
                     'b.idEmpresa' => 't.idEmpresa'
                 ])
-                ->when($regla->zona_id, function($query) use ($regla) {
+                ->when($regla->zona_id !== '0', function($query) use ($regla) {
                     $query->where('a.IdZona', $regla->zona_id);
                 })
                 ->when($regla->labor_id !== '0', function($query) use ($regla) {
@@ -226,6 +238,12 @@ class BonosService
                 })
                 ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
                     $query->where('c.IdCuartel', $regla->cuartel_id);
+                })
+                ->when($regla->rut, function($query) use ($regla) {
+                    $query->where('a.RutTrabajador', $regla->rut);
+                })
+                ->when($regla->ciclo, function($query) use ($regla) {
+                    $query->where('a.Ciclo', $regla->ciclo);
                 })
                 ->whereBetween('a.FechaActividad', [$desde, $hasta])
                 ->where('a.idEmpresa', $bono->empresa_id);

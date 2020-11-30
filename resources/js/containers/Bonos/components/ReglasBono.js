@@ -26,7 +26,8 @@ const AgregarRegla = ({ bono, reload, setReload }) => {
         unidadMedidaId: 0,
         cuartelId: 0,
         laborId: 0,
-        ciclo: ""
+        ciclo: "",
+        rut: ""
     });
 
     const [loadingCreate, setLoadingCreate] = useState(false);
@@ -254,6 +255,16 @@ const AgregarRegla = ({ bono, reload, setReload }) => {
                 </div>
                 <br />
             </div>
+            <div className="row">
+                <div className="col-md-4">
+                    RUT:
+                    <input
+                        className="form-control"
+                        value={form.rut}
+                        onChange={e => setForm({ ...form, rut: e.target.value })}
+                    />
+                </div>
+            </div>
             <br />
             <div className="row">
                 <div className="col-md-12">
@@ -317,6 +328,10 @@ const TablaReglas = ({ bono, reglas, setReglas, reload, setReload }) => {
         {
             title: 'Ciclo',
             dataIndex: 'ciclo'
+        },
+        {
+            title: 'RUT',
+            dataIndex: 'rut'
         },
         {
             title: 'Acciones',

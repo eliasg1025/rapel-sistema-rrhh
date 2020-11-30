@@ -19,6 +19,7 @@ class BonosReglasController extends Controller
         $actividad_id = $laborActividad[1] ?? 0;
         $bono_id = $request->get('bonoId');
         $ciclo = $request->get('ciclo');
+        $rut = $request->get('rut');
 
         $regla = new BonoRegla();
         $regla->zona_id = $zona_id;
@@ -28,6 +29,7 @@ class BonosReglasController extends Controller
         $regla->actividad_id = $actividad_id;
         $regla->labor_id = $labor_id;
         $regla->ciclo = $ciclo;
+        $regla->rut = $rut;
         $regla->bono_id = $bono_id;
         $regla->save();
 

@@ -96,9 +96,40 @@ class BonosController extends Controller
 
     public function export(Request $request)
     {
-        dd($request->all());
+        $data = $request->all();
+        $actividades = [];
+        $resultados = [];
 
-        /*$headerStyle = (new StyleBuilder())->setFontBold()->build();
+        foreach ($data['output'] as $row) {
+
+            $trabajadorData = [
+                'Apellidos Y Nombres' => $row['nombre_completo'],
+                'DNI' => $row['rut'],
+                'Cod.' => $row['codigo'],
+                'Banco' => $row['banco'],
+                'Fecha Ingreso' => $row['fecha_ingreso'],
+                'Fecha Finiquito' => $row['fecha_finiquito']
+            ];
+
+            $dataActividades = $trabajadorData;
+            $dataResultados = $trabajadorData;
+
+            foreach ($row['fechas'] as $key => $value) {
+                $dataActividades[$key] = $value;
+            }
+
+            foreach ($row['resultado'] as $key => $value) {
+                $dataResultados[$key] = $value;
+            }
+
+            array_push($actividades, $dataActividades);
+            array_push($resultados, $dataResultados);
+        }
+
+        $listActividades = collect($actividades);
+        $listResultados = collect($resultados);
+
+        $headerStyle = (new StyleBuilder())->setFontBold()->build();
 
         $rowsStyle = (new StyleBuilder())
             ->setFontSize(15)
@@ -113,6 +144,6 @@ class BonosController extends Controller
 
         return (new FastExcel($sheets))
             ->headerStyle($headerStyle)
-            ->download('file.xlsx'); */
+            ->download('file.xlsx');
     }
 }
