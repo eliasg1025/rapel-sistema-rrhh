@@ -62,14 +62,21 @@ export const Resultados = ({ bono }) => {
                     message: err.response.message
                 });
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const handleExport = () => {
         Axios({
             method: 'POST',
-            url: '/api/bonos/exportar',
-            data: dataToExport,
+            url: `/api/bonos/exportar`,
+            data: {
+                ...dataToExport,
+                bono_id: bono.id,
+                desde: filtro.desde,
+                hasta: filtro.hasta
+            },
             responseType: 'blob'
         })
             .then(res => {

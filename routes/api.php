@@ -263,6 +263,10 @@ Route::group(['prefix' => 'bonos-condiciones-pagos'], function() {
     Route::get('/bono/{id}', 'BonosCondicionesPagosController@getLastByBono');
 });
 
+Route::group(['prefix' => 'cargas-bonos'], function() {
+    Route::get('/', 'CargasBonosController@get');
+});
+
 Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::get('/', 'GruposFiniquitosController@get');
     Route::post('/', 'GruposFiniquitosController@create');

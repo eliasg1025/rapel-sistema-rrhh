@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\BonosExport;
 use App\Models\Bono;
+use App\Models\CargaBono;
 use App\Services\BonosService;
 use Box\Spout\Writer\Style\StyleBuilder;
 use Carbon\Carbon;
@@ -141,6 +142,18 @@ class BonosController extends Controller
             'Actividades' => $listActividades,
             'Reporte Publicar' => $listResultados
         ]);
+
+        $path = '/cargas-bonos/' . time() . '.xlsx';
+
+        (new FastExcel($sheets))->export(storage_path() . '/app/public' . $path);
+
+        $bono = Bono::find($data['bono_id']);
+
+        $cargaBonos = new CargaBono();
+        $cargaBonos->name = $bono->name . ' ' . $data['desde'] . ' ' . $data['hasta'];
+        $cargaBonos->bono_id = $data['bono_id'];
+        $cargaBonos->link = $path;
+        $cargaBonos->save();
 
         return (new FastExcel($sheets))
             ->headerStyle($headerStyle)

@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'antd';
 import { PasosIniciales } from './PasosIniciales';
 import { Resultados } from './Resultados';
+import { Historial } from './Historial';
 
 export const Panel = ({ bono }) => {
     return (
@@ -11,6 +12,9 @@ export const Panel = ({ bono }) => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Configuración" key="2">
                 <PasosIniciales bono={bono} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="Historial" key="3">
+                <Historial bono={bono} />
             </Tabs.TabPane>
         </Tabs>
     );
