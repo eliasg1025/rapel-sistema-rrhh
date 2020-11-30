@@ -148,8 +148,17 @@ class BonosController extends Controller
         (new FastExcel($sheets))->export(storage_path() . '/app/public' . $path);
 
         $bono = Bono::find($data['bono_id']);
+        $name = $bono->name . ' ' . $data['desde'] . ' ' . $data['hasta'];
 
-        $cargaBonos = new CargaBono();
+        $cargaBonos = CargaBono::where([
+            'bono_id' => $data['bono_id'],
+            'name' => $name
+        ])->first();
+
+        if (!$cargaBonos)
+        {
+            $cargaBonos = new CargaBono();
+        }
         $cargaBonos->name = $bono->name . ' ' . $data['desde'] . ' ' . $data['hasta'];
         $cargaBonos->bono_id = $data['bono_id'];
         $cargaBonos->link = $path;
