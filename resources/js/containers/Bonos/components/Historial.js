@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 import Axios from 'axios';
 import moment from 'moment';
 
-export const Historial = ({ bono }) => {
+export const Historial = ({ bono, reload }) => {
 
     const [cargasBonos, setCargasBonos] = useState([]);
 
@@ -17,7 +17,7 @@ export const Historial = ({ bono }) => {
             .catch(err => {
                 console.error(err);
             });
-    }, []);
+    }, [reload]);
 
     const columns = [
         {
@@ -27,7 +27,7 @@ export const Historial = ({ bono }) => {
         {
             title: 'Generado',
             dataIndex: 'updated_at',
-            render: (_, value) => moment(_).format('DD/MM/YYYY h:m:s')
+            render: (_, value) => moment(_).format('DD/MM/YYYY hh:mm:ss')
         },
         {
             title: 'Ver',

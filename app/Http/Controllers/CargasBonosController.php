@@ -11,7 +11,7 @@ class CargasBonosController extends Controller
     {
         $bonoId = $request->query('bono_id');
 
-        $result = CargaBono::where('bono_id', $bonoId)->get();
+        $result = CargaBono::where('bono_id', $bonoId)->orderBy('updated_at', 'DESC')->get();
 
         return [
             'message' => 'ok',
