@@ -52,4 +52,15 @@ class GruposFiniquitosController extends Controller
             'data' => $result
         ]);
     }
+
+    public function changeState(Request $request, int $id)
+    {
+        $result = $this->gruposFiniquitosService->changeState($request->get('estado_id'), $id);
+
+        if (isset($result['error'])) {
+            return response()->json($result, 400);
+        }
+
+        return response()->json($result);
+    }
 }

@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Result, Button } from 'antd';
+import { Result, Button, Tag } from 'antd';
 
 import { CreateGrupoForm, TablaGrupo, TablaFiniquitos, CreateFiniquitoForm } from '../components';
 
@@ -56,7 +56,7 @@ export const Home = () => {
                                     <i className="fas fa-backward"></i> Atrás
                                 </button>
                                 <h4>
-                                    Registrar Finiquitos: {informe?.ruta || ''} - {informe?.codigo_bus || ''}{" "}
+                                    Registrar Finiquitos: {informe?.ruta || ''} - {informe?.codigo_bus || ''}{" "}{" - "}<Tag color={informe?.estado?.color}>{informe?.estado?.name}</Tag>
                                 </h4>
                                 <br />
                                 <CreateGrupoForm

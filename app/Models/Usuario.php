@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\JwtAuthService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Usuario extends Model
 {
@@ -15,6 +16,20 @@ class Usuario extends Model
     public function trabajador()
     {
         return $this->belongsTo(Trabajador::class);
+    }
+
+    public function getRol($moduloSlug)
+    {
+        $modulo = Modulo::where('slug', $moduloSlug)->first();
+
+        return DB::table('rol_usuario as ru')
+            ->join('roles as r', [
+                'r.id' => 'ru.rol_id',
+                'r.modulo_id' => 'ru.modulo_id'
+            ])
+            ->where('ru.modulo_id', $modulo->id)
+            ->where('ru.usuario_id', $this->id)
+            ->first();
     }
 
     /**

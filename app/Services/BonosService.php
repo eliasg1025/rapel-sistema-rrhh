@@ -343,10 +343,10 @@ class BonosService
                 'rut',
                 'nombre_completo',
                 'fecha_ingreso',
-                'fecha_finiquito',
+                DB::raw("MAX(fecha_finiquito) as fecha_finiquito"),
                 'banco'
             )
-            ->groupBy('codigo', 'rut', 'nombre_completo', 'fecha_finiquito', 'banco', 'fecha_ingreso')
+            ->groupBy('codigo', 'rut', 'nombre_completo', 'banco', 'fecha_ingreso')
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 

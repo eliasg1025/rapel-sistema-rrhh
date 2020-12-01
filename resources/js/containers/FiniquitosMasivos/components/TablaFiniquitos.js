@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, notification, Table, Tooltip, Modal } from 'antd';
+import { Button, notification, Table, Tooltip, Modal, Tag } from 'antd';
 import moment from 'moment';
 
 import { FiniquitosProvider } from '../../../providers';
@@ -68,17 +68,18 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
         {
             title: 'Estado',
             dataIndex: 'estado',
+            render: (record) => <Tag >{record.name}</Tag>
         },
         {
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (item, value) => (
                 <Button.Group size="small">
-                    <Tooltip title="Editar Registro">
+                    {/* <Tooltip title="Editar Registro">
                         <button className="btn btn-primary btn-sm">
                             <i className="fas fa-edit"></i>
                         </button>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Tooltip title="Ver documento">
                         <a href={`/ficha/cese/${value.id}`} className="btn btn-primary btn-sm" target="_blank">
                             <i className="fas fa-search"></i>
@@ -100,6 +101,7 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
             <br /><br />
             <Table
                 size="small"
+                rowClassName={(record, index) => record.regimen.id === 1 ? 'table-row-warning' : null}
                 bordered
                 columns={columns}
                 dataSource={informe.finiquitos.map(item => ({ ...item, key: item.id })) || []}

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasEstado;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class GrupoFiniquito extends Model
 {
+    use HasEstado;
+
     protected $table = 'grupos_finiquitos';
 
     public function getFechaFiniquitoLargaAttribute($value)

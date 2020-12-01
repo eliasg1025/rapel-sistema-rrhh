@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { notification, Select, Button } from "antd";
+import { notification, Select, Button, Modal } from "antd";
 
 import { SubirArchivo } from '../../shared/SubirArchivo';
-import Modal from "../../Modal";
 import {
     FiniquitosProvider,
+    GruposFiniquitosProvider,
     RegimenesProvider,
     TiposCesesProvider,
     TrabajadorProvider
@@ -15,6 +15,7 @@ const regimenesProvider = new RegimenesProvider();
 const tiposCesesProvider = new TiposCesesProvider();
 const trabajadoresProvider = new TrabajadorProvider();
 const finiquitosProvider = new FiniquitosProvider();
+const gruposFiniquitosProvider = new GruposFiniquitosProvider();
 
 const initalFormState = {
     empresa_id: "",
@@ -35,6 +36,24 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
         errores:        [],
     });
 
+    const handleEnviar = async () => {
+        Modal.confirm({
+            title: 'Enviar Grupo',
+            content: '¿Desea marcar este grupo como ENVIADO?',
+            cancelText: 'Cancelar',
+            okText: 'Si, ENVIAR',
+            onOk: async function() {
+                const { message, status } = await gruposFiniquitosProvider.setState({ estado_id: 2 }, informe.id);
+
+                notification[status]({
+                    message: message
+                });
+
+                setReload(!reload);
+            }
+        });
+    }
+
     return (
         <>
             <div className="row">
@@ -51,6 +70,15 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                     >
                         <i className="far fa-file-excel"></i> Importar
                     </button>
+                    {informe?.estado?.name === 'PENDIENTE' ? (
+                        <button className="btn btn-outline-dark" style={{ float: "right" }} onClick={() => handleEnviar()}>
+                            <i className="fas fa-share"></i> Enviar
+                        </button>
+                    ) : (
+                        <button className="btn btn-primary" style={{ float: "right" }} onClick={() => handleEnviar()}>
+                            <i className="fas fa-file-alt"></i> Imprimir
+                        </button>
+                    )}
                 </div>
             </div>
             <br />

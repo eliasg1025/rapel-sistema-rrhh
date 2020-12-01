@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Table, Tooltip } from 'antd';
+import { Button, Table, Tooltip, Tag } from 'antd';
 import Axios from 'axios';
 
 export const TablaGrupo = ({ reload }) => {
@@ -32,13 +32,18 @@ export const TablaGrupo = ({ reload }) => {
             dataIndex: 'codigo_bus'
         },
         {
+            title: '# Registros',
+            dataIndex: 'cantidad_registros'
+        },
+        {
             title: 'Creado Por',
             dataIndex: 'usuario',
             render: (_, value) => `${_.username}`
         },
         {
             title: 'Estado',
-            dataIndex: 'estado'
+            dataIndex: 'estado',
+            render: (record) => <Tag color={record.color}>{record.name}</Tag>
         },
         {
             title: 'Acciones',

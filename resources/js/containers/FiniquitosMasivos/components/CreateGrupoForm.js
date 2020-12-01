@@ -65,7 +65,7 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
         <>
             <div className="row mb-2">
                 <div className="col-md-4">
-                    <button className="btn btn-primary btn-sm" onClick={() => setCanEdit(!canEdit)}>
+                    <b>Resumen:</b>&nbsp;&nbsp;<button className={'btn btn-sm ' + (!canEdit ? 'btn-outline-primary' : 'btn-primary')} onClick={() => setCanEdit(!canEdit)}>
                         <i className="fas fa-pen"></i>
                     </button>
                 </div>
@@ -180,7 +180,7 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
                                         block
                                         disabled={isValidForm}
                                     >
-                                        Crear
+                                        Crear / Actualizar
                                     </Button>
                                 </div>
                             </div>
