@@ -272,6 +272,7 @@ Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::post('/', 'GruposFiniquitosController@create');
     Route::put('/{id}/set-state', 'GruposFiniquitosController@changeState');
     Route::get('/{id}', 'GruposFiniquitosController@find');
+    Route::get('/{id}/print', 'GruposFiniquitosController@print');
 });
 
 Route::group(['prefix' => 'finiquitos'], function() {

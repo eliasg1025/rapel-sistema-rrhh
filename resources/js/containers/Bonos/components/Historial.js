@@ -10,9 +10,12 @@ export const Historial = ({ bono, reload }) => {
     useEffect(() => {
         Axios.get(`/api/cargas-bonos?bono_id=${bono.id}`)
             .then(res => {
-                console.log(res);
-
-                setCargasBonos(res.data.data);
+                setCargasBonos(res.data.data.map(item => {
+                    return {
+                        ...item,
+                        key: item.id
+                    }
+                }));
             })
             .catch(err => {
                 console.error(err);

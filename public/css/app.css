@@ -41,6 +41,18 @@
   background-color: #46a6ff;
 }
 
+.btn-export {
+  border-color: #31a063;
+  background-color: #31a063;
+  color: white;
+}
+
+.btn-export:hover {
+  border-color: #34b46d;
+  background-color: #34b46d;
+  color: white;
+}
+
 .table-row-red {
   background-color: rgba(0, 255, 34, 0.3);
   border: #00ff22;

@@ -49,7 +49,7 @@ class FiniquitosMasivosController extends Controller
             $data = [
                 'finiquito'     => $finiquito,
                 'trabajador'     => $finiquito->trabajador,
-                'codigo'         => 3 . '@' . $finiquito->id,
+                'codigo'         => 6 . '@' . $finiquito->id,
             ];
 
             $pdf = \PDF::setOptions([

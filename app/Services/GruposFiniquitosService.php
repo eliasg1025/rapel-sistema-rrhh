@@ -5,10 +5,17 @@ namespace App\Services;
 use App\Models\Finiquito;
 use App\Models\GrupoFiniquito;
 use App\Models\Usuario;
-use Illuminate\Support\Facades\DB;
+use App\Helpers\PdfUtils;
 
 class GruposFiniquitosService
 {
+    public FiniquitosService $finiquitosService;
+
+    public function __construct()
+    {
+        $this->finiquitosService = new FiniquitosService();
+    }
+
     public function create($usuarioId, $fechaFiniquito, $zonaLabor, $ruta, $codigoBus)
     {
         $grupo = new GrupoFiniquito();
@@ -88,5 +95,54 @@ class GruposFiniquitosService
         $grupo->finiquitos = $finiquitos;
 
         return $grupo;
+    }
+
+    public function print($id)
+    {
+        $generados = [];
+        $errores = [];
+
+        try {
+            $grupo = GrupoFiniquito::find($id);
+            $finiquitos = $grupo->finiquitos;
+
+            foreach ($finiquitos as $finiquito) {
+                $result = $this->finiquitosService->print($finiquito);
+
+                if ($result['error']) {
+                    array_push($errores, [
+                        'object' => $finiquito,
+                        'error' => $result['error']
+                    ]);
+                } else {
+                    array_push($generados, [
+                        'object' => $finiquito,
+                        'filename' => $result['filename']
+                    ]);
+                }
+            }
+
+            $name = 'GRUPO_' . $grupo->fecha_finiquito . '_' . $grupo->zona_labor . '_' . $grupo->ruta . '_' . $grupo->codigo_bus;
+            $result = PdfUtils::unirPdfs('/cargas-finiquitos/' . $grupo->id, $name, $generados);
+
+            if ($result['error']) {
+                return [
+                    'error' => $result['error']
+                ];
+            }
+
+            return [
+                'message' => 'Documentos generados',
+                'data' => [
+                    'file' => '/storage/cargas-finiquitos/' . $grupo->id . '/' . $name . '.pdf',
+                    'generados' => $generados,
+                    'errores' => $errores,
+                ]
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ];
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Finiquito;
 use App\Models\Oficio;
 use App\Models\SqlSrv\Trabajador;
+use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 class FiniquitosService
@@ -81,6 +82,43 @@ class FiniquitosService
                 'error' => true,
                 'data' => $e->getMessage()
             ];
+        }
+    }
+
+    public function print(Finiquito $finiquito)
+    {
+        try {
+            $data = [
+                'finiquito'     => $finiquito,
+                'trabajador'     => $finiquito->trabajador,
+                'codigo'         => 6 . '@' . $finiquito->id,
+            ];
+
+            $pdf = \PDF::setOptions([
+                'images' => true
+            ])->loadView('documents.' . $finiquito->tipoCese->sigla . '.index', $data)->output();
+
+            $filename = '/cargas-finiquitos/' . $finiquito->grupo_finiquito_id . '/' . $finiquito->persona->apellido_paterno . '-' .
+                $finiquito->persona->apellido_materno . '-' .
+                $finiquito->persona->id . '-' .
+                $finiquito->empresa->shortname . '-' .
+                $finiquito->tipoCese->sigla . '.pdf';
+
+            if (Storage::disk('public')->put($filename, $pdf)) {
+                return [
+                    'filename' => $filename,
+                    'error' => false
+                ];
+            } else {
+                return [
+                    'error' => 'No se guardo el archivo',
+                ];
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ]);
         }
     }
 

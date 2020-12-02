@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Tooltip } from 'antd';
+import { Table, Tooltip, Spin } from 'antd';
 import Swal from 'sweetalert2';
 import Axios from 'axios';
 
@@ -71,9 +71,14 @@ export const TablaDocumentos = ({ data, reloadData, loading, banDocument }) => {
     ];
 
     return (
-        <Table
-            columns={columns} dataSource={data} size="small"
-            scroll={{ x: 500 }}
-        />
+        <Spin
+            spinning={loading}
+            tip="Obteniendo datos"
+        >
+            <Table
+                columns={columns} dataSource={data} size="small"
+                scroll={{ x: 500 }}
+            />
+        </Spin>
     );
 }

@@ -21,6 +21,7 @@ export const Prorrogas = () => {
         let intentos = 0;
         function fetchTipoDocumentosTurecibo() {
             intentos++;
+            setLoading(true);
             Axios.get(`/api/documentos-turecibo?tipo_documento_turecibo_id=${1}&empresa_id=${filter.empresa_id}&estado=${filter.estado}&regimen_id=${filter.regimen_id}&zona_labor_id=${filter.zona_labor_id}`)
                 .then(res => {
                     console.log(res);
@@ -37,7 +38,8 @@ export const Prorrogas = () => {
                     if (intentos < 5) {
                         fetchTipoDocumentosTurecibo();
                     }
-                });
+                })
+                .finally(() => setLoading(false));
         }
 
         fetchTipoDocumentosTurecibo();

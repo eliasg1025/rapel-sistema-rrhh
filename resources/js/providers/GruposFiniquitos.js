@@ -49,4 +49,19 @@ export class GruposFiniquitosProvider {
             };
         }
     }
+
+    async print(id) {
+        try {
+            const res = await Axios.get(`${this.url}/${id}/print`);
+            return {
+                ...res.data,
+                status: 'success'
+            };
+        } catch (e) {
+            return {
+                ...e.response.data,
+                status: 'error'
+            };
+        }
+    }
 }

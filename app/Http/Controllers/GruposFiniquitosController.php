@@ -63,4 +63,11 @@ class GruposFiniquitosController extends Controller
 
         return response()->json($result);
     }
+
+    public function print(int $id)
+    {
+        $result = $this->gruposFiniquitosService->print($id);
+
+        return response()->json($result);
+    }
 }

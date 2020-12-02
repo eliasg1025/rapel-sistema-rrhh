@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { notification, Select, Button, Modal } from "antd";
+import { notification, Select, Button, Modal as ModalAnt, Spin } from "antd";
 
-import { SubirArchivo } from '../../shared/SubirArchivo';
+import { SubirArchivo } from "../../shared/SubirArchivo";
 import {
     FiniquitosProvider,
     GruposFiniquitosProvider,
@@ -10,6 +10,7 @@ import {
     TrabajadorProvider
 } from "../../../providers";
 import { empresa } from "../../../data/default.json";
+import Modal from "../../Modal";
 
 const regimenesProvider = new RegimenesProvider();
 const tiposCesesProvider = new TiposCesesProvider();
@@ -29,21 +30,28 @@ const initalFormState = {
 export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
     const [viewModal, setViewModal] = useState(false);
     const [viewModalImport, setViewModalImport] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [estadoCarga, setEstadoCarga] = useState({
-        advertencias:   [],
-        correctos:      [],
-        errores:        [],
+        advertencias: [],
+        correctos: [],
+        errores: []
     });
 
     const handleEnviar = async () => {
-        Modal.confirm({
-            title: 'Enviar Grupo',
-            content: '¿Desea marcar este grupo como ENVIADO?',
-            cancelText: 'Cancelar',
-            okText: 'Si, ENVIAR',
+        ModalAnt.confirm({
+            title: "Enviar Grupo",
+            content: "¿Desea marcar este grupo como ENVIADO?",
+            cancelText: "Cancelar",
+            okText: "Si, ENVIAR",
             onOk: async function() {
-                const { message, status } = await gruposFiniquitosProvider.setState({ estado_id: 2 }, informe.id);
+                const {
+                    message,
+                    status
+                } = await gruposFiniquitosProvider.setState(
+                    { estado_id: 2 },
+                    informe.id
+                );
 
                 notification[status]({
                     message: message
@@ -52,81 +60,112 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                 setReload(!reload);
             }
         });
-    }
+    };
+
+    const handleImprimir = async () => {
+        setLoading(true);
+        try {
+            const {
+                message,
+                status,
+                data
+            } = await gruposFiniquitosProvider.print(informe.id);
+
+            notification[status]({
+                message: message
+            });
+
+            setTimeout(() => {
+                window.open(data.file, "_blank");
+            }, 1000);
+        } catch (err) {
+            notification["error"]({
+                message: err
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
-            <div className="row">
-                <div className="col-md-12">
-                    <button
-                        className="btn btn-primary mr-3"
-                        onClick={() => setViewModal(true)}
-                    >
-                        <i className="fas fa-plus"></i> Agregar
-                    </button>
-                    <button
-                        className="btn btn-success"
-                        onClick={() => setViewModalImport(true)}
-                    >
-                        <i className="far fa-file-excel"></i> Importar
-                    </button>
-                    {informe?.estado?.name === 'PENDIENTE' ? (
-                        <button className="btn btn-outline-dark" style={{ float: "right" }} onClick={() => handleEnviar()}>
-                            <i className="fas fa-share"></i> Enviar
-                        </button>
-                    ) : (
-                        <button className="btn btn-primary" style={{ float: "right" }} onClick={() => handleEnviar()}>
-                            <i className="fas fa-file-alt"></i> Imprimir
-                        </button>
-                    )}
-                </div>
-            </div>
+            {informe?.estado && (
+                <Spin spinning={loading}>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <button
+                                className="btn btn-primary mr-3"
+                                onClick={() => setViewModal(true)}
+                            >
+                                <i className="fas fa-plus"></i> Agregar
+                            </button>
+                            <button
+                                className="btn btn-success"
+                                onClick={() => setViewModalImport(true)}
+                            >
+                                <i className="far fa-file-excel"></i> Importar
+                            </button>
+                            {informe?.estado?.name === "PENDIENTE" ? (
+                                <button
+                                    className="btn btn-outline-dark"
+                                    style={{ float: "right" }}
+                                    onClick={() => handleEnviar()}
+                                >
+                                    <i className="fas fa-share"></i> Enviar
+                                </button>
+                            ) : (
+                                <button
+                                    className="btn btn-primary"
+                                    style={{ float: "right" }}
+                                    onClick={() => handleImprimir()}
+                                >
+                                    <i className="fas fa-file-alt"></i> Imprimir
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </Spin>
+            )}
             <br />
-            {
-                estadoCarga.errores.length > 0 && (
-                    <div className="alert alert-danger">
-                        <ul>
-                            {estadoCarga.errores.map(item => {
-                                return (
-                                    <li key={item.data.rut}>
-                                        <b>{item.data.rut}</b> - {item.message}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                )
-            }
-            {
-                estadoCarga.advertencias.length > 0 && (
-                    <div className="alert alert-warning">
-                        <ul>
-                            {estadoCarga.advertencias.map(item => {
-                                return (
-                                    <li key={item.data.rut}>
-                                        <b>{item.data.rut}</b> - {item.message}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                )
-            }
-            {
-                estadoCarga.correctos.length > 0 && (
-                    <div className="alert alert-success">
-                        <ul>
-                            {estadoCarga.correctos.map(item => {
-                                return (
-                                    <li key={item.data.rut}>
-                                        <b>{item.data.rut}</b> - {item.message}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                )
-            }
+            {estadoCarga.errores.length > 0 && (
+                <div className="alert alert-danger">
+                    <ul>
+                        {estadoCarga.errores.map(item => {
+                            return (
+                                <li key={item.data.rut}>
+                                    <b>{item.data.rut}</b> - {item.message}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
+            {estadoCarga.advertencias.length > 0 && (
+                <div className="alert alert-warning">
+                    <ul>
+                        {estadoCarga.advertencias.map(item => {
+                            return (
+                                <li key={item.data.rut}>
+                                    <b>{item.data.rut}</b> - {item.message}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
+            {estadoCarga.correctos.length > 0 && (
+                <div className="alert alert-success">
+                    <ul>
+                        {estadoCarga.correctos.map(item => {
+                            return (
+                                <li key={item.data.rut}>
+                                    <b>{item.data.rut}</b> - {item.message}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
             <Modal
                 isVisible={viewModal}
                 setIsVisible={setViewModal}
@@ -400,8 +439,12 @@ const FiniquitoForm = ({ reload, setReload, informe }) => {
     );
 };
 
-const ImportarFiniquitosForm = ({ reload, setReload, informe, setEstadoCarga }) => {
-
+const ImportarFiniquitosForm = ({
+    reload,
+    setReload,
+    informe,
+    setEstadoCarga
+}) => {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         fecha_finiquito: informe.fecha_finiquito,
@@ -413,7 +456,9 @@ const ImportarFiniquitosForm = ({ reload, setReload, informe, setEstadoCarga }) 
 
         setLoading(true);
         try {
-            const { message, data, status } = await finiquitosProvider.import(form);
+            const { message, data, status } = await finiquitosProvider.import(
+                form
+            );
 
             notification[status]({
                 message: message
@@ -424,22 +469,25 @@ const ImportarFiniquitosForm = ({ reload, setReload, informe, setEstadoCarga }) 
         } catch (e) {
             console.log(e);
 
-            notification['error']({
-                message: 'Error'
+            notification["error"]({
+                message: "Error"
             });
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit}>
-            <SubirArchivo
-                form={form}
-                setForm={setForm}
-            />
+            <SubirArchivo form={form} setForm={setForm} />
             <br />
-            <Button type="primary" htmlType="submit" block disabled={!form.file} loading={loading}>
+            <Button
+                type="primary"
+                htmlType="submit"
+                block
+                disabled={!form.file}
+                loading={loading}
+            >
                 Cargar
             </Button>
         </form>

@@ -368,6 +368,7 @@ const TablaReglas = ({ bono, reglas, setReglas, reload, setReload }) => {
             <Table
                 bordered
                 size="small"
+                scroll={{ x: 600 }}
                 columns={columns}
                 dataSource={reglas}
             />

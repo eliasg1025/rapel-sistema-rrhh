@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, DatePicker, Button, notification, Spin, Tabs } from "antd";
+import { Table, DatePicker, Button, notification, Spin, Tabs, Space } from "antd";
 import moment from "moment";
 import Axios from "axios";
 
@@ -98,7 +98,7 @@ export const Resultados = ({ bono }) => {
     return (
         <>
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-4 col-sm-6">
                     <DatePicker.RangePicker
                         allowClear={false}
                         style={{ width: "100%" }}
@@ -114,29 +114,29 @@ export const Resultados = ({ bono }) => {
                         size="small"
                     />
                 </div>
-                <div className="col-md-4">
-                    <Button
-                        type="primary"
-                        size="small"
+            </div>
+            <br />
+            <div className="row">
+                <div className="col-md-12">
+                    <button
                         onClick={() => getData()}
-                        loading={loading}
+                        className="btn btn-primary"
+                        disabled={loading}
                     >
                         <i className="fas fa-play"></i>&nbsp;&nbsp;Ejecutar
-                    </Button>
-                </div>
-                <div className="col-md-4 offset-col-md-4">
+                    </button>
                     <button
-                        className="btn btn-success"
+                        className="btn btn-export mr-3"
                         onClick={() => handleExport()}
                         disabled={
                             actividades.length === 0 || resultados.length === 0
                         }
                     >
-                        <i className="far fa-file-excel"></i> Exportar
+                        <i className="far fa-file-excel"></i>&nbsp;&nbsp;Exportar
                     </button>
                 </div>
             </div>
-            <Spin spinning={loading}>
+            <Spin spinning={loading} tip="Generando Planilla de Bonos">
                 <Tabs defaultActiveKey="1">
                     <Tabs.TabPane tab="Actividades" key="1">
                         <Table
