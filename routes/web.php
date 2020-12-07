@@ -130,7 +130,8 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'finiquitos', 'middleware' => 'module:finiquitos'], function() {
         Route::get('/', 'Web\FiniquitosMasivosController@index');
-        Route::get('/{id}', 'Web\FiniquitosMasivosController@editar');
+        Route::get('/{id}', 'Web\FiniquitosMasivosController@editar')->where('id', '[0-9]+');
+        Route::get('/registro/individual', 'Web\FiniquitosMasivosController@registroIndividual');
     });
 
     Route::group(['prefix' => 'ficha'], function() {

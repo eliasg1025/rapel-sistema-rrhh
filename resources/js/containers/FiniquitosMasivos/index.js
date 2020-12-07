@@ -5,7 +5,7 @@ import { Menu } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
 
-import { Home } from "./submodules";
+import { Home, RegistroIndividual } from "./submodules";
 
 
 export default function FiniquitosMasivos() {
@@ -19,6 +19,11 @@ export default function FiniquitosMasivos() {
                         Principal
                     </a>
                 </Menu.Item>
+                <Menu.Item key="registro-individual" icon={<HomeOutlined />}>
+                    <a href="/finiquitos/registro/individual">
+                        Registro Individual
+                    </a>
+                </Menu.Item>
             </Menu>
         );
     }
@@ -26,9 +31,11 @@ export default function FiniquitosMasivos() {
     const Content = () => {
         switch (submodule) {
             case 'main':
-                return <Home />
+                return <Home />;
+            case 'registro-individual':
+                return <RegistroIndividual />;
             default:
-                return <Home />
+                return <Home />;
         }
     }
 

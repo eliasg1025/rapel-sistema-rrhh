@@ -33,7 +33,6 @@ export const Historial = ({ bono, reload, setReload }) => {
     }
 
     const deleteRecord = id => {
-        
         Axios.delete(`/api/cargas-bonos/${id}`)
             .then(res => {
                 // console.log(res);
