@@ -157,7 +157,7 @@ class BonosController extends Controller
         $bono = Bono::find($data['bono_id']);
         $name = $bono->name . ' ' . $data['desde'] . ' ' . $data['hasta'];
 
-        $cargaBonos = CargaBono::where([
+        /* $cargaBonos = CargaBono::where([
             'bono_id' => $data['bono_id'],
             'name' => $name
         ])->first();
@@ -165,7 +165,8 @@ class BonosController extends Controller
         if (!$cargaBonos)
         {
             $cargaBonos = new CargaBono();
-        }
+        } */
+        $cargaBonos = new CargaBono();
         $cargaBonos->name = $bono->name . ' ' . $data['desde'] . ' ' . $data['hasta'];
         $cargaBonos->bono_id = $data['bono_id'];
         $cargaBonos->link = $path;
