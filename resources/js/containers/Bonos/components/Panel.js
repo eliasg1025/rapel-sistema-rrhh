@@ -17,7 +17,7 @@ export const Panel = ({ bono }) => {
                 <PasosIniciales bono={bono} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Historial" key="3">
-                <Historial bono={bono} reload={reload} />
+                <Historial bono={bono} reload={reload} setReload={setReload} />
             </Tabs.TabPane>
         </Tabs>
     );

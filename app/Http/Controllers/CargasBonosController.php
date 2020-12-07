@@ -18,4 +18,16 @@ class CargasBonosController extends Controller
             'data' => $result
         ];
     }
+
+    public function delete(int $id)
+    {
+        $cargaBono = CargaBono::find($id);
+
+        $cargaBono->delete();
+
+        return response()->json([
+            'message' => 'Registro eliminado correctamente',
+            'data' => $cargaBono
+        ]);
+    }
 }

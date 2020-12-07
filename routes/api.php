@@ -265,6 +265,7 @@ Route::group(['prefix' => 'bonos-condiciones-pagos'], function() {
 
 Route::group(['prefix' => 'cargas-bonos'], function() {
     Route::get('/', 'CargasBonosController@get');
+    Route::delete('/{id}', 'CargasBonosController@delete');
 });
 
 Route::group(['prefix' => 'grupos-finiquitos'], function() {
