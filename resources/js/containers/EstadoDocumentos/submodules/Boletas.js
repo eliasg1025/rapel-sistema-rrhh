@@ -13,7 +13,7 @@ export const Boletas = () => {
     const [filter, setFilter] = useState({
         empresa_id: 9,
         regimen_id: 1,
-        zona_labor_id: usuario.estado_documentos === 2 ? 0 : '51',
+        zona_labor_id: usuario.estado_documentos === 2 ? '51' : '51',
         estado: 'NO FIRMADO'
     });
 
@@ -21,6 +21,7 @@ export const Boletas = () => {
         let intentos = 0;
         function fetchTipoDocumentosTurecibo() {
             intentos++;
+            setLoading(true);
             Axios.get(`
                 /api/documentos-turecibo?tipo_documento_turecibo_id=${2}&empresa_id=${filter.empresa_id}&estado=${filter.estado}&regimen_id=${filter.regimen_id}&zona_labor_id=${filter.zona_labor_id}
             `)
@@ -39,7 +40,8 @@ export const Boletas = () => {
                     if (intentos < 5) {
                         fetchTipoDocumentosTurecibo();
                     }
-                });
+                })
+                .finally(() => setLoading(false));
         }
 
         fetchTipoDocumentosTurecibo();

@@ -42,6 +42,17 @@ class DocumentoTuRecibo extends Model
             'empresa_id' => $empresa_id
         ])->first();
 
+        $ultimoPeriodo = DB::table('documentos_turecibo')
+            ->select(
+                'mes',
+                'ano',
+                DB::raw('STR_TO_DATE( CONCAT(ano, "-", mes), "%Y-%m") as periodo'),
+            )
+            ->where('tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
+            ->groupBy('periodo')
+            ->orderBy('periodo', 'DESC')
+            ->first();
+
         $result = DB::table('documentos_turecibo as dt')
             ->select(
                 'dt.id as key',
@@ -61,6 +72,8 @@ class DocumentoTuRecibo extends Model
             ->where('dt.tipo_documento_turecibo_id', $tipo_documento_turecibo_id)
             ->where('dt.empresa_id', $empresa_id)
             ->where('dt.regimen_id', $regimen_id)
+            ->where('dt.ano', $ultimoPeriodo->ano)
+            ->where('dt.mes', $ultimoPeriodo->mes)
             ->when($zona_labor !== null, function($query) use ($zona_labor) {
                 $query->where('dt.zona_labor_id', $zona_labor->id);
             })
@@ -82,8 +95,12 @@ class DocumentoTuRecibo extends Model
 
             $item->oficio = $contratoActual->oficio ?? '';
 
-            return $item;
+            if ($item->oficio !== '') {
+                return $item;
+            }
         });
+
+        $result = array_values( array_filter($result->toArray()) );
 
         return $result;
     }
