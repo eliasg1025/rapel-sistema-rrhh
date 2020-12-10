@@ -120,6 +120,8 @@ class DocumentoTuRecibo extends Model
         foreach ($documentos as $documento)
         {
             try {
+                $fecha_carga = DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_carga']);
+
                 DB::table('documentos_turecibo')->updateOrInsert(
                     [
                         'rut' => $documento['rut'],
@@ -133,13 +135,28 @@ class DocumentoTuRecibo extends Model
                         'apellido_paterno' => $documento['apellido_paterno'],
                         'apellido_materno' => $documento['apellido_materno'],
                         'estado' => $documento['estado'],
-                        'fecha_carga' => DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_carga']),
+                        'fecha_carga' => $fecha_carga,
                         'fecha_firma' => isset($documento['fecha_firma']) ? DateTime::createFromFormat('d/m/Y H:i', $documento['fecha_firma']) : null,
                         'regimen_id' => $documento['regimen_id'],
                         'zona_labor_id' => isset($documento['zona_labor_id']) ? $documento['zona_labor_id'] : null,
                         'corte_turecibo_id' => $corte->id
                     ]
                 );
+
+                if ($tipo_documento_turecibo_id == 2) {
+                    if ($documento['estado'] == 'FIRMADO CONFORME') {
+                        $attempt = DB::table('documentos_turecibo')->where([
+                            'rut' => $documento['rut'],
+                            'empresa_id' => $empresa_id,
+                            'estado' => 'NO FIRMADO',
+                            'tipo_documento_turecibo_id' => $tipo_documento_turecibo_id,
+                        ])
+                        ->whereDate('fecha_carga', '<', $fecha_carga)
+                        ->update([
+                            'estado' => 'FIRMADO CONFORME'
+                        ]);
+                    }
+                }
 
                 $count++;
             } catch (\Exception $e) {
