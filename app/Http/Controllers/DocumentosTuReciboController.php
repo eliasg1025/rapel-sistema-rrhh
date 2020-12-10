@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessStoreManyFinquitos;
 use App\Models\DocumentoTuRecibo;
 use App\Models\Empresa;
 use App\Models\EstadoDocumentoTuRecibo;
@@ -29,9 +30,11 @@ class DocumentosTuReciboController extends Controller
         $tipo_documento_turecibo_id = $request->get('tipo_documento_turecibo_id');
         $usuario_id = $request->get('usuario_id');
 
-        $result = DocumentoTuRecibo::massiveCreate($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
+        ProcessStoreManyFinquitos::dispatch($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
 
-        return response()->json($result);
+        return response()->json([
+            'message' => 'Proceso en cola'
+        ]);
     }
 
     public function update($id, Request $request)

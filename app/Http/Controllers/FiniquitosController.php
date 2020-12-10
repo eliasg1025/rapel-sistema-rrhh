@@ -31,7 +31,8 @@ class FiniquitosController extends Controller
                 $request->fecha_inicio_periodo,
                 $request->fecha_termino_contrato,
                 $request->regimen_id,
-                $oficioId
+                $oficioId,
+                $request->usuario_id
             );
 
             if (isset($result['error'])) {

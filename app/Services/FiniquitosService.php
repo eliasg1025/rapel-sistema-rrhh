@@ -44,7 +44,7 @@ class FiniquitosService
 
     public function create(
         $empresaId, $personaId, $tipoCeseId, $grupoFiniquitoId,
-        $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId
+        $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId, $usuarioId
     )
     {
         $exists = Finiquito::where([
@@ -70,6 +70,7 @@ class FiniquitosService
             $finiquito->grupo_finiquito_id = $grupoFiniquitoId;
             $finiquito->fecha_inicio_periodo = $fechaInicioPeriodo;
             $finiquito->fecha_termino_contrato = $fechaTerminaoContrato;
+            $finiquito->usuario_id = $usuarioId;
             $finiquito->save();
 
             return [

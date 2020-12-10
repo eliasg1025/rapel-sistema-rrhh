@@ -195,6 +195,8 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
 };
 
 const FiniquitoForm = ({ reload, setReload, informe }) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
     const [loadingRut, setLoadingRut] = useState(false);
     const [loading, setLoading] = useState(false);
     const [rut, setRut] = useState("");
@@ -236,7 +238,8 @@ const FiniquitoForm = ({ reload, setReload, informe }) => {
         try {
             const { message, data, status } = await finiquitosProvider.create({
                 ...form,
-                grupo_finiquito_id: informe.id
+                grupo_finiquito_id: informe.id,
+                usuario_id: usuario.id
             });
 
             await notification[status]({
