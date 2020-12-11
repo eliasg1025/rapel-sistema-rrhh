@@ -24,20 +24,22 @@ class FiniquitosPost extends FormRequest
     public function rules()
     {
         return [
-            "persona_id" => ['required', 'numeric'],
-            "nombre" => ['required'],
-            "apellido_paterno" => ['required'],
-            "apellido_materno" => ['required'],
-            "fecha_nacimiento" => ['required', 'date'],
-            "direccion" => ['max:250'],
-            "sexo" => ['max:10'],
+            "persona.id" => ['required', 'numeric'],
+            "persona.nombre" => ['required'],
+            "persona.apellido_paterno" => ['required'],
+            "persona.apellido_materno" => ['required'],
+            "persona.fecha_nacimiento" => ['required', 'date'],
+            "persona.direccion" => ['max:250'],
+            "persona.sexo" => ['max:10'],
             "fecha_inicio_periodo" => ['required', 'date'],
             "fecha_termino_contrato" => ['required', 'date'],
             "regimen_id" => ['required', 'numeric'],
             "empresa_id" => ['required', 'numeric'],
-            "oficio_id" => ['required', 'numeric'],
-            "oficio_name" => ['required', 'max:100'],
+            "oficio.id" => ['required', 'numeric'],
+            "oficio.name" => ['required', 'max:100'],
             "tipo_cese_id" => ['required', 'numeric'],
+            "fecha_finiquito" => ['date'],
+            "zona_labor" => ["max:150"],
         ];
     }
 }

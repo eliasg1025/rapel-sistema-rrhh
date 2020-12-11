@@ -49,7 +49,7 @@
         <h3 class="text-center">CARTA POR TERMINO DE CONTRATO</h3>
         <br />
         <div style="float: right;">
-            El Papayo, {{ $finiquito->grupoFiniquito->fecha_finiquito_larga }}
+            El Papayo, {{ $finiquito->fecha_finiquito_larga }}
         </div>
         <br /><br />
         <div style="font-weight: bold;">
@@ -64,7 +64,7 @@
             <p>Estimado señor(a):</p>
             <br />
             <p>
-                Comunico  a Ud. que con fecha <b>{{ $finiquito->grupoFiniquito->fecha_finiquito_larga }}</b>,  culminará su contrato  por lo que se ha visto conveniente poner término al vínculo laboral que mantenía  con la empresa, habiendo optado por no renovarlo; por lo que nuestra empresa agradece sus servicios prestados.
+                Comunico  a Ud. que con fecha <b>{{ $finiquito->fecha_finiquito_larga }}</b>,  culminará su contrato  por lo que se ha visto conveniente poner término al vínculo laboral que mantenía  con la empresa, habiendo optado por no renovarlo; por lo que nuestra empresa agradece sus servicios prestados.
             </p>
             <p>
                 Debo indicarle  que le estaremos comunicando a la brevedad la fecha de pago  que corresponde de acuerdo a ley, a fin de que previa comunicación se apersone a nuestras oficinas.

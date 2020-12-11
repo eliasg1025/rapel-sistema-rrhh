@@ -18,6 +18,27 @@ class FiniquitosController extends Controller
         $this->finiquitosService = new FiniquitosService();
     }
 
+    public function get(Request $request)
+    {
+        $tipo = $request->get('tipo');
+        $usuarioId = $request->get('usuario_id');
+
+        $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio')
+            ->where('grupo_finiquito_id', null)
+            ->where('usuario_id', $usuarioId)
+            ->get();
+
+        $finiquitos->transform(function ($item) {
+            $item->estado = $item->getEstado();
+            return $item;
+        });
+
+        return response()->json([
+            'message' => 'Data obtenida',
+            'data' => $finiquitos
+        ]);
+    }
+
     public function create(FiniquitosPost $request)
     {
         try {
@@ -32,7 +53,9 @@ class FiniquitosController extends Controller
                 $request->fecha_termino_contrato,
                 $request->regimen_id,
                 $oficioId,
-                $request->usuario_id
+                $request->usuario_id,
+                $request->fecha_finiquito,
+                $request->zona_labor
             );
 
             if (isset($result['error'])) {

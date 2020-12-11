@@ -62,7 +62,7 @@
                 Sirve la presente para hacer de su conocimiento mi renuncia irrevocable al puesto de trabajo de&nbsp;&nbsp;<b>{{ $finiquito->oficio->name }}</b>, que vengo desempeñando en la empresa. El motivo al cual obedece esta decisión es por razones estrictamente personales.
             </p>
             <p>
-                Deseo agradecer la responsabilidad asignada a mi persona, así como la colaboración de todos mis compañeros de trabajo durante mi permanencia en la empresa. Asimismo, le agradeceré instruir a quien corresponda se sirva exonerarme de los 30 días de preaviso conforme a ley, considerando que el día&nbsp;&nbsp;<b>{{ $finiquito->grupoFiniquito->fecha_finiquito_larga }}</b>, fue mi último día de trabajo.
+                Deseo agradecer la responsabilidad asignada a mi persona, así como la colaboración de todos mis compañeros de trabajo durante mi permanencia en la empresa. Asimismo, le agradeceré instruir a quien corresponda se sirva exonerarme de los 30 días de preaviso conforme a ley, considerando que el día&nbsp;&nbsp;<b>{{ $finiquito->fecha_finiquito_larga }}</b>, fue mi último día de trabajo.
             </p>
             <p>
                 Adicionalmente, solicito se le indique a quien le corresponda se me autorice hacer efectivo mi último sueldo junto con los beneficios de ley y mi certificado de trabajo.
@@ -83,7 +83,7 @@
         </div>
         <br />
         <div style="margin-top: 80px">
-            <b>El Papayo, {{ $finiquito->grupoFiniquito->fecha_finiquito_larga }}</b>
+            <b>El Papayo, {{ $finiquito->fecha_finiquito_larga }}</b>
         </div>
     </section>
 @endsection

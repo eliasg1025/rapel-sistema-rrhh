@@ -49,4 +49,16 @@ class Finiquito extends Model
         $mes = $meses[($fecha->format('n')) - 1];
         return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
     }
+    
+    public function getFechaFiniquitoLargaAttribute($value)
+    {
+        if ($this->grupo_finiquito_id) {
+            return $this->grupoFiniquito->fecha_finiquito_larga;
+        }
+
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $fecha = Carbon::parse($this->fecha_finiquito);
+        $mes = $meses[($fecha->format('n')) - 1];
+        return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+    }
 }

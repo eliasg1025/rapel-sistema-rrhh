@@ -129,6 +129,21 @@ class Trabajador extends Model
             ->whereIn('t.idEmpresa', [9, 14])
             ->first();
 
+        $trabajador->persona = [
+            'id' => $trabajador->persona_id,
+            'nombre' => $trabajador->nombre,
+            'apellido_paterno' => $trabajador->apellido_paterno,
+            'apellido_materno' => $trabajador->apellido_materno,
+            'direccion' => $trabajador->direccion,
+            'fecha_nacimiento' => $trabajador->fecha_nacimiento,
+            'sexo' => $trabajador->sexo
+        ];
+
+        $trabajador->oficio = [
+            'id' => $trabajador->oficio_id,
+            'name' => $trabajador->oficio_name
+        ];
+
         try {
             $trabajador->tiempo_servicio = $fechaFiniquito->diffInMonths($trabajador->fecha_inicio_periodo);
 

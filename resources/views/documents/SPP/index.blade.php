@@ -47,7 +47,7 @@
 @section('contenido')
     <section style="font-size: 14px; padding: 25px;">
         <div style="float: right;">
-            Piura, {{ $finiquito->grupoFiniquito->fecha_finiquito_larga }}
+            Piura, {{ $finiquito->fecha_finiquito_larga }}
         </div>
         <br /><br />
         <div style="font-weight: bold;">

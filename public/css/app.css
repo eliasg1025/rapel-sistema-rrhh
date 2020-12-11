@@ -18,6 +18,10 @@
   font-size: 11px;
 }
 
+.hoverable:hover {
+  cursor: pointer;
+}
+
 .btn {
   border-radius: 2px;
 }

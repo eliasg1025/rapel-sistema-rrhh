@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, notification, Table, Tooltip, Modal, Tag } from 'antd';
 import moment from 'moment';
 
@@ -6,7 +6,12 @@ import { FiniquitosProvider } from '../../../providers';
 
 const finiquitosProvider = new FiniquitosProvider();
 
-export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
+export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) => {
+
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
+    const [loading, setLoading] = useState(false);
+    const [finiquitos, setFiniquitos] = useState([]);
 
     const confirmDelete = (id) => {
         Modal.confirm({
@@ -28,9 +33,36 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
         });
     }
 
+    const getFiniquitos = async () => {
+        setLoading(true);
+        try {
+            const { message, data } = await finiquitosProvider.get(usuario.id);
+
+            console.log(data);
+            setFiniquitos(data);
+        } catch (e) {
+            notification['error']({
+                message: e
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        getFiniquitos();
+    }, [reload]);
 
 
     const columns = [
+        {
+            title: 'Fecha Finiquito',
+            dataIndex: 'fecha_finiquito',
+        },
+        {
+            title: 'Zona Labor',
+            dataIndex: 'zona_labor',
+        },
         {
             title: 'Empresa',
             dataIndex: 'empresa',
@@ -43,7 +75,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
         {
             title: 'Apellidos y Nombres',
             dataIndex: 'persona',
-            render: (_, value) => `${_.apellido_paterno} ${_.apellido_materno} ${_.nombre}`
+            render: (item, value) => `${item.apellido_paterno} ${item.apellido_materno} ${item.nombre}`
         },
         {
             title: 'Regimen',
@@ -63,12 +95,12 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
         {
             title: 'Tiempo Servicio',
             dataIndex: 'tiempo_servicio',
-            render: (_, value) => moment(informe.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') >= 0 ? moment(informe.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') : 0
+            render: (_, value) => moment(value.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') >= 0 ? moment(value.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') : 0
         },
         {
             title: 'Estado',
             dataIndex: 'estado',
-            render: (record) => <Tag >{record.name}</Tag>
+            render: (record) => <Tag color={record.color}>{record.name}</Tag>
         },
         {
             title: 'Acciones',
@@ -97,15 +129,26 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
 
     return (
         <>
-            <b style={{ fontSize: '13px' }}>Cantidad: {informe.finiquitos.length} finiquitos</b>
+            <b style={{ fontSize: '13px' }}>Cantidad: {finiquitos.length} finiquitos</b>
             <br /><br />
             <Table
+                loading={loading}
                 size="small"
-                rowClassName={(record, index) => record.regimen.id === 1 ? 'table-row-warning' : null}
+                rowClassName={(record, index) => 'hoverable ' + (record.regimen.id === 1 ? 'table-row-warning' : null)}
                 bordered
                 columns={columns}
-                dataSource={informe.finiquitos.map(item => ({ ...item, key: item.id })) || []}
+                dataSource={finiquitos.map(item => ({ ...item, key: item.id })) || []}
                 scroll={{ x: 1100 }}
+                onRow={(record, rowIndex) => {
+                    return {
+                        onClick: e => {
+                            console.log(record);
+                            setForm(record)
+                        }, // click row
+                        onDoubleClick: e => {}, // double click row
+                        onContextMenu: e => {}, // right button click row
+                    };
+                }}
             />
         </>
     );

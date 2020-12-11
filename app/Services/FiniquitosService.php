@@ -43,21 +43,37 @@ class FiniquitosService
     }
 
     public function create(
-        $empresaId, $personaId, $tipoCeseId, $grupoFiniquitoId,
-        $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId, $usuarioId
+        $empresaId, $personaId, $tipoCeseId, $grupoFiniquitoId = null,
+        $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId, $usuarioId,
+        $fechaFiniquito = null, $zonaLabor = null
     )
     {
-        $exists = Finiquito::where([
-            'persona_id' => $personaId,
-            'grupo_finiquito_id' => $grupoFiniquitoId
-        ])->exists();
+        if ($grupoFiniquitoId) {
+            $exists = Finiquito::where([
+                'persona_id' => $personaId,
+                'grupo_finiquito_id' => $grupoFiniquitoId
+            ])->exists();
+    
+            if ($exists) {
+                return [
+                    'message' => 'Ya existe ese trabajador en este grupo',
+                    'error' => true,
+                    'data' => []
+                ];
+            }
+        } else {
+            $exists = Finiquito::where([
+                'persona_id' => $personaId,
+                'fecha_finiquito' => $fechaFiniquito
+            ])->exists();
 
-        if ($exists) {
-            return [
-                'message' => 'Ya existe ese trabajador en este grupo',
-                'error' => true,
-                'data' => []
-            ];
+            if ($exists) {
+                return [
+                    'message' => 'Ya existe un registro de este trabajador para la fecha ' . $fechaFiniquito,
+                    'data' => [],
+                    'error' => true
+                ];
+            }
         }
 
         try {
@@ -71,6 +87,8 @@ class FiniquitosService
             $finiquito->fecha_inicio_periodo = $fechaInicioPeriodo;
             $finiquito->fecha_termino_contrato = $fechaTerminaoContrato;
             $finiquito->usuario_id = $usuarioId;
+            $finiquito->fecha_finiquito = $fechaFiniquito;
+            $finiquito->zona_labor = $zonaLabor;
             $finiquito->save();
 
             return [
@@ -155,7 +173,7 @@ class FiniquitosService
                         $trabajador->fecha_termino_contrato,
                         $trabajador->regimen_id,
                         $oficioId,
-                        $grupoFiniquitoId->usuario_id
+                        $grupoFiniquitoId->usuario_id,
                     );
 
                     if ($trabajador->regimen_id == 3) {
