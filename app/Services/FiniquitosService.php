@@ -81,7 +81,7 @@ class FiniquitosService
             return [
                 'message' => 'Error al crear finiquito',
                 'error' => true,
-                'data' => $e->getMessage()
+                'data' => $e->getMessage() . ' -- ' . $e->getLine() 
             ];
         }
     }
@@ -154,7 +154,8 @@ class FiniquitosService
                         $trabajador->fecha_inicio_periodo,
                         $trabajador->fecha_termino_contrato,
                         $trabajador->regimen_id,
-                        $oficioId
+                        $oficioId,
+                        $grupoFiniquitoId->usuario_id
                     );
 
                     if ($trabajador->regimen_id == 3) {

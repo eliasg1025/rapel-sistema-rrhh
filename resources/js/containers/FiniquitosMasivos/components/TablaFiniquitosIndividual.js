@@ -6,7 +6,7 @@ import { FiniquitosProvider } from '../../../providers';
 
 const finiquitosProvider = new FiniquitosProvider();
 
-export const TablaFiniquitos = ({ reload, setReload, informe }) => {
+export const TablaFiniquitosIndividual = ({ reload, setReload, informe }) => {
 
     const confirmDelete = (id) => {
         Modal.confirm({

@@ -15,12 +15,19 @@ class FiniquitoObserver
      */
     public function created(Finiquito $finiquito)
     {
-        DB::table('entidades_estados')->insert([
-            'estado_id' => 1,
-            'tipo_estado_id' => 2,
-            'entidad_id' => $finiquito->id,
-            'created_at' => now()
-        ]);
+        DB::table('entidades_estados')->updateOrInsert(
+            [
+                'estado_id' => 1,
+                'tipo_estado_id' => 2,
+                'entidad_id' => $finiquito->id
+            ],
+            [
+                'estado_id' => 1,
+                'tipo_estado_id' => 2,
+                'entidad_id' => $finiquito->id,
+                'created_at' => now()
+            ]
+        );
     }
 
     /**
