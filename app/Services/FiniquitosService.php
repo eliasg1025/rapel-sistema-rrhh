@@ -21,13 +21,13 @@ class FiniquitosService
     public function prepare($request)
     {
         $personaId = $this->personasService->create(
-            $request->persona_id,
-            $request->nombre,
-            $request->apellido_paterno,
-            $request->apellido_materno,
-            $request->fecha_nacimiento,
-            $request->sexo,
-            $request->direccion
+            $request->persona['id'],
+            $request->persona['nombre'],
+            $request->persona['apellido_paterno'],
+            $request->persona['apellido_materno'],
+            $request->persona['fecha_nacimiento'],
+            $request->persona['sexo'],
+            $request->persona['direccion']
         );
 
         $oficioId = Oficio::findOrCreate([
@@ -45,7 +45,7 @@ class FiniquitosService
     public function create(
         $empresaId, $personaId, $tipoCeseId, $grupoFiniquitoId = null,
         $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId, $usuarioId,
-        $fechaFiniquito = null, $zonaLabor = null
+        $fechaFiniquito = null, $zonaLabor = null, $id = null
     )
     {
         if ($grupoFiniquitoId) {
@@ -65,19 +65,26 @@ class FiniquitosService
             $exists = Finiquito::where([
                 'persona_id' => $personaId,
                 'fecha_finiquito' => $fechaFiniquito
-            ])->exists();
+            ])->first();
 
             if ($exists) {
-                return [
-                    'message' => 'Ya existe un registro de este trabajador para la fecha ' . $fechaFiniquito,
-                    'data' => [],
-                    'error' => true
-                ];
+                if (!$id) {
+                    return [
+                        'message' => 'Ya existe un registro de este trabajador para la fecha ' . $fechaFiniquito,
+                        'data' => [],
+                        'error' => true
+                    ];
+                }
             }
         }
 
         try {
-            $finiquito = new Finiquito();
+            if ($id) {
+                $finiquito = Finiquito::find($id);
+            } else {
+                $finiquito = new Finiquito();
+            }
+            
             $finiquito->empresa_id = $empresaId;
             $finiquito->persona_id = $personaId;
             $finiquito->oficio_id = $oficioId;

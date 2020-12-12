@@ -143,8 +143,8 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                                 {!loadingRut ? (
                                     <i className="fas fa-search"></i>
                                 ) : (
-                                    <i className="fas fa-spinner fa-spin"></i>
-                                )}
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                    )}
                             </button>
                         </div>
                     </div>
@@ -284,7 +284,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                     <div className="col-md-4">
                         Zona Labor:<br />
                         <Select
-                            value={form?.zona_labor || '' } showSearch
+                            value={form?.zona_labor || ''} showSearch
                             style={{ width: '100%' }} optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children

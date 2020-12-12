@@ -55,7 +55,8 @@ class FiniquitosController extends Controller
                 $oficioId,
                 $request->usuario_id,
                 $request->fecha_finiquito,
-                $request->zona_labor
+                $request->zona_labor,
+                $request->id
             );
 
             if (isset($result['error'])) {
