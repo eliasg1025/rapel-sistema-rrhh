@@ -45,8 +45,31 @@
 
 
 @section('contenido')
-    <section style="font-size: 14.5px; padding: 25px;">
-        <h3 class="text-center">CARTA POR TERMINO DE CONTRATO</h3>
+    <section style="font-size: 14.5px; padding: -25px 25px 25px 25px;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="text-align: center">
+                    
+                </td>
+                <td style="text-align: center">
+                    
+                </td>
+                <td style="text-align: right">
+                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td style="text-align: center">
+                    <h3 class="text-center">CARTA POR TERMINO DE CONTRATO</h3>
+                </td>
+                <td style="text-align: center">
+                    
+                </td>
+            </tr>
+        </table>
         <br />
         <div style="float: right;">
             El Papayo, {{ $finiquito->fecha_finiquito_larga }}

@@ -25,7 +25,9 @@ export const RegistroIndividual = () => {
         <>
             <h4>Registro Individual</h4>
             <br />
-            <Card>
+            <Card
+                style={{ border: form?.id ? '1.5px solid #1890FF' : '' }}
+            >
                 <CreateFiniquitoFormIndividual
                     reload={reload}
                     setReload={setReload}

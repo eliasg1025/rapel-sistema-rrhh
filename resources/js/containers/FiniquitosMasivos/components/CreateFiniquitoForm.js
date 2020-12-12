@@ -448,10 +448,12 @@ const ImportarFiniquitosForm = ({
     informe,
     setEstadoCarga
 }) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         fecha_finiquito: informe.fecha_finiquito,
-        grupo_finiquito_id: informe.id
+        grupo_finiquito_id: informe.id,
+        usuario_id: usuario.id
     });
 
     const handleSubmit = async e => {

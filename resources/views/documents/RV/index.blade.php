@@ -45,9 +45,43 @@
 
 
 @section('contenido')
-    <section style="font-size: 14px; padding: 25px;">
-        <h2 class="text-center">CARTA DE RENUNCIA</h2>
-        <br /><br /><br />
+    <section style="font-size: 14px; padding: -25px 25px 25px 25px;">
+        <table style="width: 100%;">
+            <tr>
+                <td style="text-align: center">
+                    
+                </td>
+                <td style="text-align: center">
+                    
+                </td>
+                <td style="text-align: right">
+                    <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td style="text-align: center">
+                    <h3 class="text-center">CARTA DE RENUNCIA</h3>
+                </td>
+                <td style="text-align: center">
+                    
+                </td>
+            </tr>
+        </table>
+{{--         <table style="width: 100%;">
+            <td style="text-align: center">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+            <td style="text-align: center">
+                <h2 class="text-center">CARTA DE RENUNCIA</h2>
+            </td>
+            <td style="text-align: center">
+                <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+            </td>
+        </table> --}}
+        <br /><br />
         <div>
             Señores de :<br />
             Recursos Humanos<br />
@@ -76,7 +110,7 @@
             </p>
         </div>
         <br />
-        <div class="text-center" style="margin-top: 150px">
+        <div class="text-center" style="margin-top: 120px">
             ___________________________________<br /><br />
             <b>{{ $finiquito->persona->nombre_completo }}</b><br />
             <b>DNI: {{ $finiquito->persona_id }}</b>

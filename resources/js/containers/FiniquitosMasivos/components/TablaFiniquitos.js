@@ -71,6 +71,11 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
             render: (record) => <Tag >{record.name}</Tag>
         },
         {
+            title: 'Cargado por',
+            dataIndex: 'usuario',
+            render: (record) => `${record.trabajador.apellido_paterno} ${record.trabajador.apellido_materno} ${record.trabajador.nombre}` 
+        },
+        {
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (item, value) => (

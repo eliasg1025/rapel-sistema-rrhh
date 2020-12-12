@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, notification, Table, Tooltip, Modal, Tag } from 'antd';
+import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker } from 'antd';
 import moment from 'moment';
 
 import { FiniquitosProvider } from '../../../providers';
@@ -9,6 +9,14 @@ const finiquitosProvider = new FiniquitosProvider();
 export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) => {
 
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
+    const [filtro, setFiltro] = useState({
+        desde: moment().format('YYYY-MM-DD').toString(),
+        hasta: moment().format('YYYY-MM-DD').toString(),
+        estado: 0,
+        usuario_carga_id: 0,
+        rut: '',
+    });
 
     const [loading, setLoading] = useState(false);
     const [finiquitos, setFiniquitos] = useState([]);
@@ -36,7 +44,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     const getFiniquitos = async () => {
         setLoading(true);
         try {
-            const { message, data } = await finiquitosProvider.get(usuario.id);
+            const { message, data } = await finiquitosProvider.get(usuario.id, filtro);
 
             console.log(data);
             setFiniquitos(data);
@@ -49,9 +57,13 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         }
     }
 
+    const handleExportar = () => {
+
+    }
+
     useEffect(() => {
         getFiniquitos();
-    }, [reload]);
+    }, [reload, filtro]);
 
 
     const columns = [
@@ -103,6 +115,11 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             render: (record) => <Tag color={record.color}>{record.name}</Tag>
         },
         {
+            title: 'Cargado por',
+            dataIndex: 'usuario',
+            render: (record) => `${record.trabajador.apellido_paterno} ${record.trabajador.apellido_materno} ${record.trabajador.nombre}` 
+        },
+        {
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (item, value) => (
@@ -129,7 +146,28 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
 
     return (
         <>
-            <b style={{ fontSize: '13px' }}>Cantidad: {finiquitos.length} finiquitos</b>
+            <br />
+            <div className="row">
+                <div className="col-md-4 col-sm-6 col-xd-12">
+                    Desde - Hasta:<br />
+                    <DatePicker.RangePicker
+                        placeholder={['Desde', 'Hasta']}
+                        style={{ width: '100%' }}
+                        onChange={(date, dateString) => {
+                            setFiltro({
+                                ...filtro,
+                                desde: dateString[0],
+                                hasta: dateString[1],
+                            });
+                        }}
+                        value={[moment(filtro.desde), moment(filtro.hasta)]}
+                    />
+                </div>
+            </div>
+            <br />
+            <b style={{ fontSize: '13px' }}>Cantidad: {finiquitos.length} finiquitos&nbsp;<button className="btn btn-success btn-sm" onClick={handleExportar}>
+                        <i className="fas fa-file-excel" /> Exportar
+                    </button></b>
             <br /><br />
             <Table
                 loading={loading}
@@ -143,7 +181,11 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                     return {
                         onClick: e => {
                             console.log(record);
-                            setForm(record)
+                            setForm({
+                                ...record,
+                                tiempo_servicio: moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') >= 0 ? moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') : 0
+                            });
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
                         }, // click row
                         onDoubleClick: e => {}, // double click row
                         onContextMenu: e => {}, // right button click row

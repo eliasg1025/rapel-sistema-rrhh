@@ -37,6 +37,11 @@ class Finiquito extends Model
         return $this->belongsTo(Regimen::class, 'regimen_id');
     }
 
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
     public function oficio()
     {
         return $this->belongsTo(Oficio::class, 'oficio_id');

@@ -45,11 +45,12 @@
 
 
 @section('contenido')
-    <section style="font-size: 14px; padding: 25px;">
+    <section style="font-size: 13px; padding: 25px;">
+        <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
         <div style="float: right;">
             Piura, {{ $finiquito->fecha_finiquito_larga }}
         </div>
-        <br /><br />
+        <br />
         <div style="font-weight: bold;">
             SEÑOR (A)(ITA):<br />
             {{ $finiquito->persona->nombre_completo }}<br />
@@ -89,7 +90,7 @@
         <br />
         <p class="text-center">Recibí copia de la presente carta:</p>
         <br />
-        <div class="text-center" style="margin-top: 80px">
+        <div class="text-center" style="margin-top: 60px">
             ___________________________________<br /><br />
             <b>FIRMA DEL TRABAJADOR</b>
         </div>

@@ -81,7 +81,7 @@ class GruposFiniquitosService
     {
         $grupo = GrupoFiniquito::with('usuario.trabajador')->where('id', $id)->first();
 
-        $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio')
+        $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador')
             ->where('grupo_finiquito_id', $grupo->id)
             ->orderBy('regimen_id', 'ASC')
             ->get();

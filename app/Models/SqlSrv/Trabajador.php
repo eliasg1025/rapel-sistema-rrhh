@@ -115,6 +115,9 @@ class Trabajador extends Model
                 DB::raw('CAST(c.IdEmpresa as int) empresa_id'),
                 'o.IdOficio as oficio_id',
                 'o.Descripcion as oficio_name',
+                'z.IdZona as zona_labor_id',
+                'z.Nombre as zona_name',
+                'c.Jornal as jornal'
             )
             ->join('Trabajador as t', [
                 't.IdEmpresa' => 'c.IdEmpresa',
@@ -123,6 +126,10 @@ class Trabajador extends Model
             ->join('Oficio as o', [
                 'o.IdEmpresa' => 'c.IdEmpresa',
                 'o.IdOficio' => 'c.IdOficio'
+            ])
+            ->join('Zona as z', [
+                'z.IdEmpresa' => 't.IdEmpresa',
+                'z.IdZona' => 't.IdZonaLabores'
             ])
             ->where('c.IndicadorVigencia', 1)
             ->where('t.RutTrabajador', $rut)
@@ -150,6 +157,38 @@ class Trabajador extends Model
             $trabajador->tipo_cese_id = $trabajador->tiempo_servicio < 3 ? 1 : (
                 $fechaFiniquito->toDateString() === $trabajador->fecha_termino_contrato ? 3 : 2
             );
+
+            if ($trabajador->jornal) {
+                $ultimaActividad = DB::connection('sqlsrv')
+                    ->table('ActividadTrabajador as a')
+                    ->select(
+                        'a.IdActividadTrabajador as id',
+                        DB::raw('cast(a.FechaActividad as date) as fecha_actividad'),
+                        'a.IdZona as zona_id',
+                        'z.Nombre as zona_name'
+                    )
+                    ->join('Zona as z', [
+                        'a.IdEmpresa' => 'z.IdEmpresa',
+                        'a.IdZona' => 'z.IdZona'
+                    ])
+                    ->where('a.RutTrabajador', $trabajador->persona_id)
+                    ->orderBy('a.FechaActividad', 'DESC')
+                    ->first();
+
+                if (Carbon::parse($ultimaActividad->fecha_actividad)->greaterThan($fechaFiniquito)) {
+                    return [
+                        'message' => 'Este trabajador tiene asistencia el dia ' . $fechaFiniquito . ', no se puede registrar el finiquito',
+                        'data'  => [
+                            'rut' => $rut,
+                        ],
+                        'error' => true,
+                    ];
+                }
+
+                $trabajador->zona_labor = $ultimaActividad->zona_name;
+            } else {
+                $trabajador->zona_labor = $trabajador->zona_name;
+            }
 
             if ($trabajador->regimen_id == 2) {
                 return [

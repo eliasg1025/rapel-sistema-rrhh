@@ -57,9 +57,12 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                 message: message
             });
 
-            setForm(initalFormState);
-            setRut("");
-            setReload(!reload);
+            if (status === 'success') {
+                setForm(initalFormState);
+                setRut("");
+                setReload(!reload);
+            }
+            
         } catch (e) {
             console.log(e);
 
@@ -71,8 +74,12 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
         }
     };
 
-    const buscarTrabajador = async e => {
+    const handleSubmitBuscarTrabajador = e => {
         e.preventDefault();
+        buscarTrabajador();
+    }
+
+    const buscarTrabajador = async () => {
         setLoadingRut(true);
 
         try {
@@ -122,7 +129,18 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
     return (
         <>
             <div className="row">
-                <form className="col-md-4" onSubmit={buscarTrabajador}>
+                <div className="col-md-4">
+                    Fecha Finiquito:<br />
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={form?.fecha_finiquito}
+                        onChange={e => setForm({ ...form, fecha_finiquito: e.target.value })}
+                        onBlur={buscarTrabajador}
+                        onEnded={buscarTrabajador}
+                    />
+                </div>
+                <form className="col-md-4" onSubmit={handleSubmitBuscarTrabajador}>
                     RUT:<br />
                     <div className="input-group">
                         <input
@@ -159,43 +177,26 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         readOnly={true}
                     />
                 </div>
-                <div className="col-md-4">
+                {/* <div className="col-md-4">
                     Empresa:
                     <br />
-                    <Select
+                    <select
+                        className="form-control"
                         value={parseInt(form.empresa_id) || ""}
-                        showSearch
-                        style={{ width: "100%" }}
-                        optionFilterProp="children"
-                        filterOption={(input, option) =>
-                            option.children
-                                .toLowerCase()
-                                .indexOf(input.toLowerCase()) >= 0
-                        }
                         onChange={e => setForm({ ...form, empresa_id: e })}
-                        size="small"
                         disabled
                     >
                         {empresa.map(e => (
-                            <Select.Option value={e.id} key={e.id}>
+                            <option value={e.id} key={e.id}>
                                 {`${e.id} - ${e.name}`}
-                            </Select.Option>
+                            </option>
                         ))}
-                    </Select>
-                </div>
+                    </select>
+                </div> */}
             </div>
             <br />
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="col-md-4">
-                        Fecha Finiquito:<br />
-                        <input
-                            type="date"
-                            className="form-control"
-                            value={form?.fecha_finiquito}
-                            onChange={e => setForm({ ...form, fecha_finiquito: e.target.value })}
-                        />
-                    </div>
                     <div className="col-md-4">
                         Tipo Cese:
                         <br />
@@ -222,6 +223,29 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         </Select>
                     </div>
                     <div className="col-md-4">
+                        Zona Labor Envio:<br />
+                        <Select
+                            value={form?.zona_labor || ''} showSearch
+                            style={{ width: '100%' }} optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            onChange={e => setForm({ ...form, zona_labor: e })}
+                            size="small"
+                        >
+                            {zonasLabor.map(e => (
+                                <Select.Option value={e.name} key={e.name}>
+                                    {`${e.name}`}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                </div>
+                <br />
+                <div className="row">
+                    <div className="col-md-4">
                         Tiempo de Servicio (meses):
                         <br />
                         <input
@@ -231,33 +255,22 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                             value={form.tiempo_servicio}
                         />
                     </div>
-                </div>
-                <br />
-                <div className="row">
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         Regimen:
                         <br />
-                        <Select
+                        <select
+                            className="form-control"
                             value={parseInt(form.regimen_id) || ""}
-                            showSearch
-                            style={{ width: "100%" }}
-                            optionFilterProp="children"
-                            filterOption={(input, option) =>
-                                option.children
-                                    .toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            }
                             onChange={e => setForm({ ...form, regimen_id: e })}
-                            size="small"
                             disabled
                         >
                             {regimenes.map(e => (
-                                <Select.Option value={e.id} key={e.id}>
+                                <option value={e.id} key={e.id}>
                                     {`${e.id} - ${e.name}`}
-                                </Select.Option>
+                                </option>
                             ))}
-                        </Select>
-                    </div>
+                        </select>
+                    </div> */}
                     <div className="col-md-4">
                         Fecha Inicio Periodo:
                         <br />
@@ -281,36 +294,13 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                 </div>
                 <br />
                 <div className="row">
-                    <div className="col-md-4">
-                        Zona Labor:<br />
-                        <Select
-                            value={form?.zona_labor || ''} showSearch
-                            style={{ width: '100%' }} optionFilterProp="children"
-                            filterOption={(input, option) =>
-                                option.children
-                                    .toLowerCase()
-                                    .indexOf(input.toLowerCase()) >= 0
-                            }
-                            onChange={e => setForm({ ...form, zona_labor: e })}
-                            size="small"
-                        >
-                            {zonasLabor.map(e => (
-                                <Select.Option value={e.name} key={e.name}>
-                                    {`${e.name}`}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
-                <br />
-                <div className="row">
                     <div className="col-md-12">
                         <Button
                             type="primary"
                             htmlType="submit"
                             block
                             loading={loading}
-                            disabled={form.zona_labor == ""}
+                            disabled={!form.zona_labor}
                         >
                             Enviar
                         </Button>

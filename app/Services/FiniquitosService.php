@@ -148,7 +148,7 @@ class FiniquitosService
         }
     }
 
-    public function import($fileName, $fechaFiniquito, $grupoFiniquitoId)
+    public function import($fileName, $fechaFiniquito, $grupoFiniquitoId, $usuarioId)
     {
         $trabajadores = [];
         $errores = [];
@@ -180,7 +180,7 @@ class FiniquitosService
                         $trabajador->fecha_termino_contrato,
                         $trabajador->regimen_id,
                         $oficioId,
-                        $grupoFiniquitoId->usuario_id,
+                        $usuarioId,
                     );
 
                     if ($trabajador->regimen_id == 3) {
