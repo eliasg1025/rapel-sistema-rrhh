@@ -31,9 +31,9 @@ class FiniquitosService
         );
 
         $oficioId = Oficio::findOrCreate([
-            'id' => $request->oficio_id,
+            'id' => $request->oficio['id'],
             'empresa_id' => $request->empresa_id,
-            'name' => $request->oficio_name
+            'name' => $request->oficio['name']
         ]);
 
         return [
