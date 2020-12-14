@@ -99,45 +99,43 @@ class Trabajador extends Model
     {
         $fechaFiniquito = Carbon::parse($fechaFiniquito);
 
-        $trabajador = DB::connection('sqlsrv')
-            ->table('Contratos as c')
-            ->select(
-                't.RutTrabajador as persona_id',
-                't.Nombre as nombre',
-                't.ApellidoPaterno as apellido_paterno',
-                't.ApellidoMaterno as apellido_materno',
-                DB::raw('CAST(t.FechaNacimiento as date) fecha_nacimiento'),
-                't.Direccion as direccion',
-                't.Sexo as sexo',
-                DB::raw('CAST(c.FechaInicioPeriodo as date) fecha_inicio_periodo'),
-                DB::raw('CAST(c.FechaTerminoC as date) fecha_termino_contrato'),
-                DB::raw('CAST(c.IdRegimen as int) regimen_id'),
-                DB::raw('CAST(c.IdEmpresa as int) empresa_id'),
-                'o.IdOficio as oficio_id',
-                'o.Descripcion as oficio_name',
-                'z.IdZona as zona_labor_id',
-                'z.Nombre as zona_name',
-                'c.Jornal as jornal'
-            )
-            ->join('Trabajador as t', [
-                't.IdEmpresa' => 'c.IdEmpresa',
-                't.IdTrabajador' => 'c.IdTrabajador'
-            ])
-            ->join('Oficio as o', [
-                'o.IdEmpresa' => 'c.IdEmpresa',
-                'o.IdOficio' => 'c.IdOficio'
-            ])
-            ->join('Zona as z', [
-                'z.IdEmpresa' => 't.IdEmpresa',
-                'z.IdZona' => 't.IdZonaLabores'
-            ])
-            ->where('c.IndicadorVigencia', 1)
-            ->where('t.RutTrabajador', $rut)
-            ->whereIn('t.idEmpresa', [9, 14])
-            ->first();
-
-            
         try {
+            $trabajador = DB::connection('sqlsrv')
+                ->table('Contratos as c')
+                ->select(
+                    't.RutTrabajador as persona_id',
+                    't.Nombre as nombre',
+                    't.ApellidoPaterno as apellido_paterno',
+                    't.ApellidoMaterno as apellido_materno',
+                    DB::raw('CAST(t.FechaNacimiento as date) fecha_nacimiento'),
+                    't.Direccion as direccion',
+                    't.Sexo as sexo',
+                    DB::raw('CAST(c.FechaInicioPeriodo as date) fecha_inicio_periodo'),
+                    DB::raw('CAST(c.FechaTerminoC as date) fecha_termino_contrato'),
+                    DB::raw('CAST(c.IdRegimen as int) regimen_id'),
+                    DB::raw('CAST(c.IdEmpresa as int) empresa_id'),
+                    'o.IdOficio as oficio_id',
+                    'o.Descripcion as oficio_name',
+                    'z.IdZona as zona_labor_id',
+                    'z.Nombre as zona_name',
+                    'c.Jornal as jornal'
+                )
+                ->join('Trabajador as t', [
+                    't.IdEmpresa' => 'c.IdEmpresa',
+                    't.IdTrabajador' => 'c.IdTrabajador'
+                ])
+                ->join('Oficio as o', [
+                    'o.IdEmpresa' => 'c.IdEmpresa',
+                    'o.IdOficio' => 'c.IdOficio'
+                ])
+                ->join('Zona as z', [
+                    'z.IdEmpresa' => 't.IdEmpresa',
+                    'z.IdZona' => 't.IdZonaLabores'
+                ])
+                ->where('c.IndicadorVigencia', 1)
+                ->where('t.RutTrabajador', $rut)
+                ->whereIn('t.idEmpresa', [9, 14])
+                ->first();
             $trabajador->persona = [
                 'id' => $trabajador->persona_id,
                 'nombre' => $trabajador->nombre,
