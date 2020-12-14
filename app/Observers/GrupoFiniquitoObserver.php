@@ -42,7 +42,10 @@ class GrupoFiniquitoObserver
      */
     public function deleted(GrupoFiniquito $grupoFiniquito)
     {
-        //
+        DB::table('entidades_estados')->where([
+            'tipo_estado_id' => 1,
+            'entidad_id' => $grupoFiniquito->id
+        ])->delete();
     }
 
     /**

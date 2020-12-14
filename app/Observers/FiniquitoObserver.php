@@ -49,7 +49,10 @@ class FiniquitoObserver
      */
     public function deleted(Finiquito $finiquito)
     {
-        //
+        DB::table('entidades_estados')->where([
+            'tipo_estado_id' => 2,
+            'entidad_id' => $finiquito->id
+        ])->delete();
     }
 
     /**

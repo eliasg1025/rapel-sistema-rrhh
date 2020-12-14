@@ -28,6 +28,26 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
         });
     }
 
+    const confirmChangeState = id => {
+        Modal.confirm({
+            title: 'Marcar como Firmado',
+            content: '¿Desea marcar como firmado este registro?',
+            okText: 'SI',
+            cancelText: 'Cancelar',
+            onOk: () => changeState(id)
+        });
+    }
+
+    const changeState = async (id) => {
+        const { message, data } = await finiquitosProvider.changeState(id, { estado_id: 2 });
+
+        setReload(!reload);
+
+        notification['success']({
+            message: message
+        });
+    }
+
 
 
     const columns = [
@@ -90,11 +110,26 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    <Tooltip title="Eliminar Registro">
-                        <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </Tooltip>
+                    {value.estado.name === 'NO FIRMADO' && (
+                        <Tooltip title="Estado">
+                            <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
+                                <i className="fas fa-check"></i>
+                            </button>
+                        </Tooltip>
+                    )}
+                    {value.estado.name === 'SIN EFECTO' ? (
+                        <Tooltip title="Eliminar Registro">
+                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                <i className="fas fa-trash"></i>
+                            </button>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="Anular registro">
+                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                <i className="fas fa-ban"></i>
+                            </button>
+                        </Tooltip>
+                    )}
                 </Button.Group>
             )
         },

@@ -116,15 +116,16 @@ class FiniquitosController extends Controller
         return response()->json($result);
     }
 
+    public function changeState(Request $request, int $id)
+    {
+        $estadoId = $request->get('estado_id');
+        $result = $this->finiquitosService->changeState($estadoId, $id);
+        return response()->json($result);
+    }
+
     public function delete(int $id)
     {
-        $finiquito = Finiquito::find($id);
-
-        $finiquito->delete();
-
-        return response()->json([
-            'message' => 'Finiquito borrado correctamente',
-            'data' => $id
-        ]);
+        $result = $this->finiquitosService->delete($id);
+        return response()->json($result);
     }
 }

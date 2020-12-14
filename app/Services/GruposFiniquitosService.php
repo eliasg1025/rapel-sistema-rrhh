@@ -34,6 +34,23 @@ class GruposFiniquitosService
         $grupo = GrupoFiniquito::find($id);
 
         if ($grupo->setEstado($estadoId)) {
+
+            $estado = $grupo->getEstado();
+
+            switch ($estado->name) {
+                case 'ANULADO':
+
+                    $finiquitos = Finiquito::where('grupo_finiquito_id', $grupo->id)->get();
+
+                    $finiquitos->transform(function($item) {
+                        $item->setEstado(3);
+                    });
+
+                    break;
+                default:
+                    break;
+            }
+
             return [
                 'message' => 'Estado cambiando correctamente',
                 'data' => $grupo

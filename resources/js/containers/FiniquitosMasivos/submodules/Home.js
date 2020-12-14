@@ -45,6 +45,7 @@ export const Home = () => {
                     <br />
                     <TablaGrupo
                         reload={reload}
+                        setReload={setReload}
                     />
                 </>
             ) : (

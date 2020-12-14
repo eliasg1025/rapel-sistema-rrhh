@@ -20,6 +20,21 @@ export class FiniquitosProvider {
         }
     }
 
+    async changeState(id, data) {
+        try {
+            const res = await Axios.put(`${this.url}/${id}/state`, data);
+            return {
+                ...res.data,
+                status: 'success'
+            };
+        } catch (e) {
+            return {
+                ...e.response.data,
+                status: 'error'
+            };
+        }
+    }
+
     async create(data) {
         try {
             const res = await Axios.post(`${this.url}`, data);

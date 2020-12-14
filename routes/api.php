@@ -281,6 +281,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::get('/', 'FiniquitosController@get');
     Route::post('/', 'FiniquitosController@create');
     Route::post('/import', 'FiniquitosController@import');
+    Route::put('/{id}/state', 'FiniquitosController@changeState');
     Route::delete('/{id}', 'FiniquitosController@delete');
 });
 

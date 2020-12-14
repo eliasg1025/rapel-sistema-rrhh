@@ -21,7 +21,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     const [loading, setLoading] = useState(false);
     const [finiquitos, setFiniquitos] = useState([]);
 
-    const confirmDelete = (id) => {
+    const confirmDelete = id => {
         Modal.confirm({
             title: 'Eliminar Finiquito',
             content: '¿Desea eliminar este registro?',
@@ -29,6 +29,37 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             cancelText: 'Cancelar',
             onOk: () => deleteFiniquito(id)
         })
+    }
+
+    const confirmChangeState = id => {
+        Modal.confirm({
+            title: 'Marcar como Firmado',
+            content: '¿Desea marcar como firmado este registro?',
+            okText: 'SI',
+            cancelText: 'Cancelar',
+            onOk: () => changeState(id)
+        });
+    }
+
+    const changeState = async (id) => {
+        const { message, data } = await finiquitosProvider.changeState(id, { estado_id: 2 });
+
+        setReload(!reload);
+        setForm({
+            id: "",
+            empresa_id: "",
+            regimen_id: "",
+            tipo_cese_id: "",
+            fecha_inicio_periodo: "",
+            fecha_termino_contrato: "",
+            zona_labor: "",
+            tiempo_servicio: 0,
+            fecha_finiquito: moment().format("YYYY-MM-DD")
+        })
+
+        notification['success']({
+            message: message
+        });
     }
 
     const deleteFiniquito = async (id) => {
@@ -134,7 +165,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (item, value) => (
-                <Button.Group size="small">
+                <div className="btn-group">
                     {/* <Tooltip title="Editar Registro">
                         <button className="btn btn-primary btn-sm">
                             <i className="fas fa-edit"></i>
@@ -145,12 +176,27 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    <Tooltip title="Eliminar Registro">
-                        <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                            <i className="fas fa-trash"></i>
-                        </button>
-                    </Tooltip>
-                </Button.Group>
+                    {value.estado.name === 'NO FIRMADO' && (
+                        <Tooltip title="Estado">
+                            <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
+                                <i className="fas fa-check"></i>
+                            </button>
+                        </Tooltip>
+                    )}
+                    {value.estado.name === 'SIN EFECTO' ? (
+                        <Tooltip title="Eliminar Registro">
+                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                <i className="fas fa-trash"></i>
+                            </button>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="Anular registro">
+                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                <i className="fas fa-ban"></i>
+                            </button>
+                        </Tooltip>
+                    )}
+                </div>
             )
         },
     ];

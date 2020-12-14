@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Table, Tooltip, Tag, Modal } from 'antd';
+import { Button, Table, Tooltip, Tag, Modal, notification } from 'antd';
 import Axios from 'axios';
 
-export const TablaGrupo = ({ reload }) => {
+export const TablaGrupo = ({ reload, setReload }) => {
 
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
@@ -62,11 +62,13 @@ export const TablaGrupo = ({ reload }) => {
                             <i className="fas fa-file-excel"></i>
                         </Button>
                     </Tooltip>
-                    <Tooltip title="Anular Informe">
-                        <Button type="danger" onClick={() => confirmDelete(value.id)}>
-                            <i className="fas fa-ban"></i>
-                        </Button>
-                    </Tooltip>
+                    {value.estado.name !== 'ANULADO' && (
+                        <Tooltip title="Anular Informe">
+                            <Button type="danger" onClick={() => confirmDelete(value.id)}>
+                                <i className="fas fa-ban"></i>
+                            </Button>
+                        </Tooltip>
+                    )}
                 </Button.Group>
             )
         },
@@ -76,20 +78,26 @@ export const TablaGrupo = ({ reload }) => {
         Modal.confirm({
             title: "Anular grupo",
             content: "¿Desea anular el grupo de finiquitos?",
-            okText: "Si, BORRAR",
+            okText: "Si, ANULAR",
             cancelText: "Cancelar",
-            onOk: (id) => softDelete(id)
+            onOk: () => softDelete(id)
         });
     }
 
     const softDelete = (id) => {
+        setReload(!reload);
         Axios.delete(`/api/grupos-finiquitos/${id}`)
             .then(res => {
                 console.log(res);
+
+                notification['success']({
+                    message: res.data.message
+                });
             })
             .catch(err => {
                 console.error(err);
-            });
+            })
+            .finally(() => setReload(!reload));
     }
 
     const redirectToDetail = (id) => {

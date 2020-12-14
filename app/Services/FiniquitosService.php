@@ -111,6 +111,41 @@ class FiniquitosService
         }
     }
 
+    public function changeState($estadoId, $id)
+    {
+        $finiquito = Finiquito::find($id);
+
+        if ($finiquito->setEstado($estadoId)) {
+
+            return [
+                'message' => 'Estado cambiando correctamente',
+                'data' => $finiquito
+            ];
+        } else {
+            return [
+                'message' => 'Algo salió mal',
+                'error' => true,
+                'data' => $finiquito
+            ];
+        }
+    }
+
+    public function delete($id)
+    {
+        $finiquito = Finiquito::find($id);
+
+        if ($finiquito->getEstado()->name === 'SIN EFECTO') {
+            $finiquito->delete();
+        } else {
+            $this->changeState(3, $finiquito->id);
+        }
+
+        return [
+            'message' => 'Finiquito borrado correctamente',
+            'data' => $id
+        ];
+    }
+
     public function print(Finiquito $finiquito)
     {
         try {

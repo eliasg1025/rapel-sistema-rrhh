@@ -89,7 +89,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
 
     return (
         <>
-            {informe?.estado && (
+            {informe?.estado?.name !== 'ANULADO' && (
                 <Spin spinning={loading}>
                     <div className="row">
                         <div className="col-md-12">
