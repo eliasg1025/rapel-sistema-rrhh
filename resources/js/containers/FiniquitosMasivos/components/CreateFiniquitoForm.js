@@ -127,7 +127,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                 </Spin>
             )}
             <br />
-            {estadoCarga.errores.length > 0 && (
+            {estadoCarga?.errores?.length > 0 && (
                 <div className="alert alert-danger">
                     <ul>
                         {estadoCarga.errores.map(item => {
@@ -140,7 +140,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                     </ul>
                 </div>
             )}
-            {estadoCarga.advertencias.length > 0 && (
+            {estadoCarga?.advertencias?.length > 0 && (
                 <div className="alert alert-warning">
                     <ul>
                         {estadoCarga.advertencias.map(item => {
@@ -153,7 +153,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                     </ul>
                 </div>
             )}
-            {estadoCarga.correctos.length > 0 && (
+            {/* {estadoCarga.correctos.length > 0 && (
                 <div className="alert alert-success">
                     <ul>
                         {estadoCarga.correctos.map(item => {
@@ -165,7 +165,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                         })}
                     </ul>
                 </div>
-            )}
+            )} */}
             <Modal
                 isVisible={viewModal}
                 setIsVisible={setViewModal}
@@ -484,6 +484,9 @@ const ImportarFiniquitosForm = ({
 
     return (
         <form onSubmit={handleSubmit}>
+            <div class="alert alert-primary" role="alert">
+                Los N° de documentos de los trabajadores <b>deben ir en la columna <u>RUT</u></b>
+            </div>
             <SubirArchivo form={form} setForm={setForm} />
             <br />
             <Button

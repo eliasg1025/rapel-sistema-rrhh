@@ -254,8 +254,12 @@ class FiniquitosService
             ];
         } catch (\Exception $e) {
             return [
-                'message'   => 'Error al importar',
-                'data'      => $e->getMessage(),
+                'message'   => $e->getMessage() !== 'Undefined index: RUT' ? "Error al importar" : (
+                    'El archivo debe tener la columna "RUT"'
+                ),
+                'data'      => [
+                    'error' => $e->getMessage()
+                ],
                 'error'     => true
             ];
         }
