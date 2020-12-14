@@ -11,7 +11,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
     const [filtro, setFiltro] = useState({
-        desde: moment().format('YYYY-MM-DD').toString(),
+        desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
         estado: 0,
         usuario_carga_id: 0,
@@ -35,6 +35,17 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         const { message, data } = await finiquitosProvider.delete(id);
 
         setReload(!reload);
+        setForm({
+            id: "",
+            empresa_id: "",
+            regimen_id: "",
+            tipo_cese_id: "",
+            fecha_inicio_periodo: "",
+            fecha_termino_contrato: "",
+            zona_labor: "",
+            tiempo_servicio: 0,
+            fecha_finiquito: moment().format("YYYY-MM-DD")
+        })
 
         notification['success']({
             message: message

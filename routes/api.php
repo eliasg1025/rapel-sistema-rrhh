@@ -274,6 +274,7 @@ Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::put('/{id}/set-state', 'GruposFiniquitosController@changeState');
     Route::get('/{id}', 'GruposFiniquitosController@find');
     Route::get('/{id}/print', 'GruposFiniquitosController@print');
+    Route::delete('/{id}', 'GruposFiniquitosController@delete');
 });
 
 Route::group(['prefix' => 'finiquitos'], function() {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Table, Tooltip, Tag } from 'antd';
+import { Button, Table, Tooltip, Tag, Modal } from 'antd';
 import Axios from 'axios';
 
 export const TablaGrupo = ({ reload }) => {
@@ -63,7 +63,7 @@ export const TablaGrupo = ({ reload }) => {
                         </Button>
                     </Tooltip>
                     <Tooltip title="Anular Informe">
-                        <Button type="danger">
+                        <Button type="danger" onClick={() => confirmDelete(value.id)}>
                             <i className="fas fa-ban"></i>
                         </Button>
                     </Tooltip>
@@ -71,6 +71,26 @@ export const TablaGrupo = ({ reload }) => {
             )
         },
     ];
+
+    const confirmDelete = (id) => {
+        Modal.confirm({
+            title: "Anular grupo",
+            content: "¿Desea anular el grupo de finiquitos?",
+            okText: "Si, BORRAR",
+            cancelText: "Cancelar",
+            onOk: (id) => softDelete(id)
+        });
+    }
+
+    const softDelete = (id) => {
+        Axios.delete(`/api/grupos-finiquitos/${id}`)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
 
     const redirectToDetail = (id) => {
         window.location.replace(`/finiquitos/${id}`);
