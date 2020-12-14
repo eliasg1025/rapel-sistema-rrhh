@@ -82,12 +82,22 @@
             </td>
         </table> --}}
         <br /><br />
-        <div>
-            Señores de :<br />
-            Recursos Humanos<br />
-            {{ $finiquito->empresa->name }}<br />
-            Presente   .-<br />
-        </div>
+        @if ($finiquito->empresa->shortname == 'RAPEL')
+            <div>
+                Señor:<br />
+                Federico Carrillo Curay<br />
+                Jefe de Recursos Humanos<br />
+                {{ $finiquito->empresa->name }}<br />
+                Presente   .-<br />
+            </div>
+        @else
+            <div>
+                Señores de :<br />
+                Recursos Humanos<br />
+                {{ $finiquito->empresa->name }}<br />
+                Presente   .-<br />
+            </div>
+        @endif
         <br />
         <div class="justify">
             <p>De mi especial consideración:</p>
