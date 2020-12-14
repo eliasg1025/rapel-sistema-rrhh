@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker } from 'antd';
 import moment from 'moment';
+import Axios from 'axios';
 
 import { FiniquitosProvider } from '../../../providers';
 
@@ -100,7 +101,50 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     }
 
     const handleExportar = () => {
+        const headings = [
+            'FECHA FINIQUITO',
+            'ZONA LABOR',
+            'EMPRESA',
+            'RUT',
+            'APELLIDOS Y NOMBRES',
+            'REGIMEN',
+            'OFICIO',
+            'TIPO DOCUMENTO',
+            'TIEMPO SERVICIO',
+            'ESTADO',
+            'CARGADO POR'
+        ];
 
+        const d = finiquitos.map(item => {
+            return {
+                fecha_finiquito: item.fecha_finiquito,
+                zona_labor: item.zona_labor,
+                empresa: item.empresa.shortname,
+                rut: item.persona_id,
+                apellidos_nombres: `${item.persona.apellido_paterno} ${item.persona.apellido_materno} ${item.persona.nombre}`,
+                regimen: item.regimen.name,
+                oficio: item.oficio.name,
+                tipo_documento: item.tipo_cese.name,
+                tiempo_servicio: moment(item.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') >= 0 ? moment(item.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') : 0,
+                estado: item.estado.name,
+                cargado_por: `${item.usuario.trabajador.apellido_paterno} ${item.usuario.trabajador.apellido_materno} ${item.usuario.trabajador.nombre}`
+            };
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data: d},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                //console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `FINIQUITOS_${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click();
+            });
     }
 
     useEffect(() => {

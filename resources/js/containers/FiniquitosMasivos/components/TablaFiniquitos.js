@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, notification, Table, Tooltip, Modal, Tag } from 'antd';
 import moment from 'moment';
+import Axios from 'axios';
 
 import { FiniquitosProvider } from '../../../providers';
 
@@ -48,6 +49,52 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
         });
     }
 
+    const handleExportar = () => {
+        const headings = [
+            'FECHA FINIQUITO',
+            'ZONA LABOR',
+            'EMPRESA',
+            'RUT',
+            'APELLIDOS Y NOMBRES',
+            'REGIMEN',
+            'OFICIO',
+            'TIPO DOCUMENTO',
+            'TIEMPO SERVICIO',
+            'ESTADO',
+            'CARGADO POR'
+        ];
+
+        const d = informe.finiquitos.map(item => {
+            return {
+                fecha_finiquito: informe.fecha_finiquito,
+                zona_labor: informe.zona_labor,
+                empresa: item.empresa.shortname,
+                rut: item.persona_id,
+                apellidos_nombres: `${item.persona.apellido_paterno} ${item.persona.apellido_materno} ${item.persona.nombre}`,
+                regimen: item.regimen.name,
+                oficio: item.oficio.name,
+                tipo_documento: item.tipo_cese.name,
+                tiempo_servicio: moment(informe.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') >= 0 ? moment(informe.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') : 0,
+                estado: item.estado.name,
+                cargado_por: `${item.usuario.trabajador.apellido_paterno} ${item.usuario.trabajador.apellido_materno} ${item.usuario.trabajador.nombre}`
+            };
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data: d},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                //console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `FINIQUITOS_${informe.fecha_finiquito}_${informe?.ruta || ''}_${informe?.codigo_bus || ''}.xlsx`
+                link.click();
+            });
+    }
 
 
     const columns = [
@@ -137,7 +184,9 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
 
     return (
         <>
-            <b style={{ fontSize: '13px' }}>Cantidad: {informe.finiquitos.length} finiquitos</b>
+            <b style={{ fontSize: '13px' }}>Cantidad: {finiquitos.length} finiquitos&nbsp;<button className="btn btn-success btn-sm" onClick={handleExportar}>
+                        <i className="fas fa-file-excel" /> Exportar
+                    </button></b>
             <br /><br />
             <Table
                 size="small"
