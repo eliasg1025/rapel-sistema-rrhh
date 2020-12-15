@@ -35,7 +35,7 @@ export const TableSegurosVida = () => {
     ];
 
     const getData = () => {
-        Axios.get(`/api/seguros-vida?usuario_id=${}`)
+        Axios.get(`/api/seguros-vida?usuario_id=${usuario.id}`)
             .then(res => {
                 console.log(res);
             })
