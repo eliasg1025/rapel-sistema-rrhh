@@ -134,6 +134,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/registro/individual', 'Web\FiniquitosMasivosController@registroIndividual');
     });
 
+    Route::group(['prefix' => 'seguros-vida', 'middleware' => 'module:seguros-vida'], function() {
+        Route::get('/', 'Web\SegurosVidaController@index');
+    });
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');

@@ -16,7 +16,7 @@ export default function FiniquitosMasivos() {
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                 <Menu.Item key="main" icon={<HomeOutlined />}>
                     <a href="/finiquitos">
-                        Principal
+                        Registro Grupos
                     </a>
                 </Menu.Item>
                 <Menu.Item key="registro-individual" icon={<FileAddOutlined />}>

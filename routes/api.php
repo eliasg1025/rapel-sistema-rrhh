@@ -290,6 +290,11 @@ Route::group(['prefix' => 'tipos-ceses'], function() {
     Route::get('/', 'TiposCesesController@get');
 });
 
+Route::group(['prefix' => 'seguros-vida'], function() {
+    Route::get('/', 'SegurosVidaController@get');
+    Route::post('/', 'SegurosVidaController@create');
+});
+
 Route::group(['prefix' => 'sqlsrv'], function () {
     Route::group(['prefix' => 'trabajador'], function() {
         Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador')->where('empresaId', '[0-9]+');
