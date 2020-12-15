@@ -184,7 +184,7 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
 
     return (
         <>
-            <b style={{ fontSize: '13px' }}>Cantidad: {finiquitos.length} finiquitos&nbsp;<button className="btn btn-success btn-sm" onClick={handleExportar}>
+            <b style={{ fontSize: '13px' }}>Cantidad: {informe.finiquitos.length} finiquitos&nbsp;<button className="btn btn-success btn-sm" onClick={handleExportar}>
                         <i className="fas fa-file-excel" /> Exportar
                     </button></b>
             <br /><br />

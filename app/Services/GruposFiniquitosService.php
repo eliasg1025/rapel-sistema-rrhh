@@ -29,6 +29,19 @@ class GruposFiniquitosService
         return $grupo;
     }
 
+    public function update($id, $usuarioId, $fechaFiniquito, $zonaLabor, $ruta, $codigoBus)
+    {
+        $grupo = GrupoFiniquito::find($id);
+        $grupo->usuario_id = $usuarioId;
+        $grupo->fecha_finiquito = $fechaFiniquito;
+        $grupo->zona_labor = $zonaLabor;
+        $grupo->ruta = $ruta;
+        $grupo->codigo_bus = $codigoBus;
+        $grupo->save();
+
+        return $grupo;
+    }
+
     public function changeState($estadoId, $id)
     {
         $grupo = GrupoFiniquito::find($id);

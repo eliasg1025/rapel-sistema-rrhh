@@ -57,11 +57,11 @@ export const TablaGrupo = ({ reload, setReload }) => {
                             <i className="fas fa-edit"></i>
                         </Button>
                     </Tooltip>
-                    <Tooltip title="Exportar Registros">
+                    {/* <Tooltip title="Exportar Registros">
                         <Button type="success" style={{ backgroundColor: '#3FB618', borderColor: '#3FB618', color: 'white' }}>
                             <i className="fas fa-file-excel"></i>
                         </Button>
-                    </Tooltip>
+                    </Tooltip> */}
                     {value.estado.name !== 'ANULADO' && (
                         <Tooltip title="Anular Informe">
                             <Button type="danger" onClick={() => confirmDelete(value.id)}>

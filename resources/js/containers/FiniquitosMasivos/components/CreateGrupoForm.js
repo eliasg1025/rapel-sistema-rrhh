@@ -41,9 +41,17 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        Axios.post('/api/grupos-finiquitos', {
-            ...form,
-            usuario_id: usuario.id
+        const url = informe?.id
+            ? `/api/grupos-finiquitos/${informe?.id}`
+            : '/api/grupos-finiquitos';
+
+        Axios({
+            url,
+            method: informe?.id ? 'PUT' : 'POST',
+            data: {
+                ...form,
+                usuario_id: usuario.id
+            }
         })
             .then(res => {
                 notification['success']({
@@ -66,10 +74,12 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
             <div className="row mb-2">
                 <div className="col-md-4">
                     <b>Resumen:</b>&nbsp;&nbsp;
-                    {informe?.estado?.name !== 'ANULADO' && (
-                        <button className={'btn btn-sm ' + (!canEdit ? 'btn-outline-primary' : 'btn-primary')} onClick={() => setCanEdit(!canEdit)}>
-                            <i className="fas fa-pen"></i>
-                        </button>
+                    {informe?.id && (
+                        informe?.estado?.name !== 'ANULADO' && (
+                            <button className={'btn btn-sm ' + (!canEdit ? 'btn-outline-primary' : 'btn-primary')} onClick={() => setCanEdit(!canEdit)}>
+                                <i className="fas fa-pen"></i>
+                            </button>
+                        )
                     )}
                 </div>
             </div>
@@ -183,7 +193,7 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
                                         block
                                         disabled={isValidForm}
                                     >
-                                        Crear / Actualizar
+                                        {informe?.id ? 'Actualizar' : 'Crear'}{' Grupo'}
                                     </Button>
                                 </div>
                             </div>

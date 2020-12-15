@@ -2,7 +2,7 @@ import React from 'react';
 
 import { PrivateLayout } from '../../layouts';
 import { Menu } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined, FileAddOutlined } from "@ant-design/icons";
 
 
 import { Home, RegistroIndividual } from "./submodules";
@@ -19,7 +19,7 @@ export default function FiniquitosMasivos() {
                         Principal
                     </a>
                 </Menu.Item>
-                <Menu.Item key="registro-individual" icon={<HomeOutlined />}>
+                <Menu.Item key="registro-individual" icon={<FileAddOutlined />}>
                     <a href="/finiquitos/registro/individual">
                         Registro Individual
                     </a>

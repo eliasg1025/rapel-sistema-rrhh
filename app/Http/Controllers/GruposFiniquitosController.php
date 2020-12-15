@@ -43,6 +43,23 @@ class GruposFiniquitosController extends Controller
         ]);
     }
 
+    public function update(Request $request, int $id)
+    {
+        $result = $this->gruposFiniquitosService->update(
+            $id,
+            $request->usuario_id,
+            $request->fecha_finiquito,
+            $request->zona_labor,
+            $request->ruta,
+            $request->codigo_bus
+        );
+
+        return response()->json([
+            'message' => 'Grupo actualizado correctamente',
+            'data' => $result
+        ]);
+    }
+
     public function find(Request $request, int $id)
     {
         $result = $this->gruposFiniquitosService->find($id);

@@ -271,6 +271,7 @@ Route::group(['prefix' => 'cargas-bonos'], function() {
 Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::get('/', 'GruposFiniquitosController@get');
     Route::post('/', 'GruposFiniquitosController@create');
+    Route::put('/{id}', 'GruposFiniquitosController@update');
     Route::put('/{id}/set-state', 'GruposFiniquitosController@changeState');
     Route::get('/{id}', 'GruposFiniquitosController@find');
     Route::get('/{id}/print', 'GruposFiniquitosController@print');
