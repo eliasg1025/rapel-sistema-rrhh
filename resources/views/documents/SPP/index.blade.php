@@ -46,8 +46,8 @@
 
 @section('contenido')
     <section style="font-size: 13px; padding: 25px;">
-        <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
-        <div style="float: right;">
+        <img style="float: right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
+        <div >
             Piura, {{ $finiquito->fecha_finiquito_larga }}
         </div>
         <br />
@@ -81,18 +81,20 @@
             </p>
         </div>
         <br />
-        <div class="text-center">
-            <img src="{{public_path() . '/img/PostFirma - Daniel E  ' . $finiquito->empresa->shortname . ' SAC.jpg'}}" width="180"  alt="logo empresa"><br />
-            ___________________________________<br /><br />
-            <b>{{ $finiquito->empresa->name }}</b><br />
-            <b>{{ $finiquito->empresa->ruc }}</b>
-        </div>
-        <br />
-        <p class="text-center">Recibí copia de la presente carta:</p>
-        <br />
-        <div class="text-center" style="margin-top: 60px">
-            ___________________________________<br /><br />
-            <b>FIRMA DEL TRABAJADOR</b>
+        <div style="margin-left: -280">
+            <div class="text-center">
+                <img src="{{public_path() . '/img/PostFirma - Daniel E  ' . $finiquito->empresa->shortname . ' SAC.jpg'}}" width="180"  alt="logo empresa"><br />
+                ___________________________________<br /><br />
+                <b>{{ $finiquito->empresa->name }}</b><br />
+                <b>{{ $finiquito->empresa->ruc }}</b>
+            </div>
+            <br />
+            <p class="text-center">Recibí copia de la presente carta:</p>
+            <br />
+            <div class="text-center" style="margin-top: 60px">
+                ___________________________________<br /><br />
+                <b>FIRMA DEL TRABAJADOR</b>
+            </div>
         </div>
     </section>
 @endsection
