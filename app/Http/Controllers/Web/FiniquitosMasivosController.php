@@ -55,6 +55,18 @@ class FiniquitosMasivosController extends Controller
         return view('pages.finiquitos', compact('data'));
     }
 
+    public function registroAnalistas(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'registro-analistas'
+        ];
+
+        return view('pages.finiquitos', compact('data'));
+    }
+
     public function verFicha(Finiquito $finiquito)
     {
         try {

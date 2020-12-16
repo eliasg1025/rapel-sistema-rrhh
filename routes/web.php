@@ -132,6 +132,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\FiniquitosMasivosController@index');
         Route::get('/{id}', 'Web\FiniquitosMasivosController@editar')->where('id', '[0-9]+');
         Route::get('/registro/individual', 'Web\FiniquitosMasivosController@registroIndividual');
+        Route::get('/registro/analistas', 'Web\FiniquitosMasivosController@registroAnalistas');
     });
 
     Route::group(['prefix' => 'seguros-vida', 'middleware' => 'module:seguros-vida'], function() {

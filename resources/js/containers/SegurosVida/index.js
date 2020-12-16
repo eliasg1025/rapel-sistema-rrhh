@@ -14,7 +14,7 @@ export default function SegurosVida() {
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                 <Menu.Item key="main" icon={<HomeOutlined />}>
                     <a href="/seguros-vida">
-                        Registro Grupos
+                        Principal
                     </a>
                 </Menu.Item>
             </Menu>

@@ -2,10 +2,10 @@ import React from 'react';
 
 import { PrivateLayout } from '../../layouts';
 import { Menu } from "antd";
-import { HomeOutlined, FileAddOutlined } from "@ant-design/icons";
+import { HomeOutlined, FileAddOutlined, UserSwitchOutlined } from "@ant-design/icons";
 
 
-import { Home, RegistroIndividual } from "./submodules";
+import { Home, RegistroAnalistas, RegistroIndividual } from "./submodules";
 
 
 export default function FiniquitosMasivos() {
@@ -24,6 +24,11 @@ export default function FiniquitosMasivos() {
                         Registro Individual
                     </a>
                 </Menu.Item>
+                <Menu.Item key="registro-analistas" icon={<UserSwitchOutlined />}>
+                    <a href="/finiquitos/registro/analistas">
+                        Registro Analistas
+                    </a>
+                </Menu.Item>
             </Menu>
         );
     }
@@ -34,6 +39,8 @@ export default function FiniquitosMasivos() {
                 return <Home />;
             case 'registro-individual':
                 return <RegistroIndividual />;
+            case 'registro-analistas':
+                return <RegistroAnalistas />;
             default:
                 return <Home />;
         }
