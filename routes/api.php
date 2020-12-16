@@ -293,6 +293,7 @@ Route::group(['prefix' => 'tipos-ceses'], function() {
 Route::group(['prefix' => 'seguros-vida'], function() {
     Route::get('/', 'SegurosVidaController@get');
     Route::post('/', 'SegurosVidaController@create');
+    Route::delete('/{id}', 'SegurosVidaController@delete');
 });
 
 Route::group(['prefix' => 'sqlsrv'], function () {

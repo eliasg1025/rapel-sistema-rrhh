@@ -17,10 +17,10 @@ export const Home = () => {
                 />
             </Card>
             <br /><br />
-            {/* <TableSegurosVida
+            <TableSegurosVida
                 reload={reload}
                 setReload={setReload}
-            /> */}
+            />
         </>
     );
 }

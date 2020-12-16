@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { empresa as empresas } from '../../../data/default.json';
 
-export const CreateSeguroVidaForm = () => {
+export const CreateSeguroVidaForm = ({ reload, setReload }) => {
 
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
@@ -28,6 +28,7 @@ export const CreateSeguroVidaForm = () => {
         })
             .then(res => {
                 //console.log(res);
+                setReload(!reload);
                 notification['success']({
                     message: res.data.message
                 });
@@ -122,7 +123,7 @@ export const CreateSeguroVidaForm = () => {
                         ))}
                     </select>
                 </div>
-                <div className="col-md-4">
+                {/* <div className="col-md-4">
                     Fecha Documento:<br />
                     <input
                         type="date"
@@ -130,7 +131,7 @@ export const CreateSeguroVidaForm = () => {
                         value={form.fecha_documento}
                         onChange={e => setForm({ ...form, fecha_documento: e.target.value })}
                     />
-                </div>
+                </div> */}
             </div>
             <div className="row mt-4">
                 <div className="col-md-12">

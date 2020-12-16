@@ -17,4 +17,9 @@ class SeguroVida extends Model
     {
         return $this->belongsTo(Trabajador::class, 'trabajador_id', 'id');
     }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
+    }
 }
