@@ -9,6 +9,8 @@ const finiquitosProvider = new FiniquitosProvider();
 
 export const TablaFiniquitos = ({ reload, setReload, informe }) => {
 
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
     const confirmDelete = (id) => {
         Modal.confirm({
             title: 'Eliminar Finiquito',
@@ -135,7 +137,7 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
         {
             title: 'Estado',
             dataIndex: 'estado',
-            render: (record) => <Tag >{record.name}</Tag>
+            render: (record) => <Tag color={record.color}>{record.name}</Tag>
         },
         {
             title: 'Cargado por',
@@ -157,19 +159,23 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    {value.estado.name === 'NO FIRMADO' && (
-                        <Tooltip title="Estado">
-                            <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
-                                <i className="fas fa-check"></i>
-                            </button>
-                        </Tooltip>
+                    {usuario.rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                        value.estado.name === 'NO FIRMADO' && (
+                            <Tooltip title="Estado">
+                                <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        )
                     )}
                     {value.estado.name === 'SIN EFECTO' ? (
-                        <Tooltip title="Eliminar Registro">
-                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                                <i className="fas fa-trash"></i>
-                            </button>
-                        </Tooltip>
+                        usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                            <Tooltip title="Eliminar Registro">
+                                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                    <i className="fas fa-trash"></i>
+                                </button>
+                            </Tooltip>
+                        )
                     ) : (
                         <Tooltip title="Anular registro">
                             <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>

@@ -33,6 +33,10 @@ Route::group(['prefix' => 'usuario'], function() {
     Route::put('/{usuario}', 'UserController@update');
 });
 
+Route::group(['prefix' => 'modulos'], function() {
+    Route::get('/{modulo}/usuarios', 'ModulosController@getUsuarios');
+});
+
 Route::get('/empresa', 'EmpresasController@all');
 Route::get('/incidencia', 'IncidenciaController@all');
 
@@ -273,9 +277,12 @@ Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::post('/', 'GruposFiniquitosController@create');
     Route::put('/{id}', 'GruposFiniquitosController@update');
     Route::put('/{id}/set-state', 'GruposFiniquitosController@changeState');
-    Route::get('/{id}', 'GruposFiniquitosController@find');
+    Route::get('/{id}', 'GruposFiniquitosController@find')->where('id', '[0-9]+');
     Route::get('/{id}/print', 'GruposFiniquitosController@print');
     Route::delete('/{id}', 'GruposFiniquitosController@delete');
+    Route::get('/usuarios-zonas', 'GruposFiniquitosController@getUsuariosZonas');
+    Route::post('/usuarios-zonas', 'GruposFiniquitosController@createUsuariosZonas');
+    Route::delete('/usuarios-zonas/{usuario}/{zonaLabor}', 'GruposFiniquitosController@deleteUsuariosZonas');
 });
 
 Route::group(['prefix' => 'finiquitos'], function() {

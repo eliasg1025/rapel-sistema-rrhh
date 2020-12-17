@@ -26,7 +26,6 @@ class GruposFiniquitosPost extends FormRequest
         return [
             'usuario_id'    => 'required|exists:App\Models\Usuario,id|numeric',
             'fecha_finiquito' => 'required|date',
-            'zona_labor'    => 'required',
             'ruta'          => 'required',
             'codigo_bus'    => 'required|numeric'
         ];

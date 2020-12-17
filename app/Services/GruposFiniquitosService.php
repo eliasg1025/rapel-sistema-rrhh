@@ -6,6 +6,8 @@ use App\Models\Finiquito;
 use App\Models\GrupoFiniquito;
 use App\Models\Usuario;
 use App\Helpers\PdfUtils;
+use App\Models\ZonaLabor;
+use Illuminate\Support\Facades\DB;
 
 class GruposFiniquitosService
 {
@@ -16,14 +18,19 @@ class GruposFiniquitosService
         $this->finiquitosService = new FiniquitosService();
     }
 
-    public function create($usuarioId, $fechaFiniquito, $zonaLabor, $ruta, $codigoBus)
+    public function create($usuarioId, $fechaFiniquito, $zonaLabor = null, $ruta, $codigoBus)
     {
         $grupo = new GrupoFiniquito();
         $grupo->usuario_id = $usuarioId;
         $grupo->fecha_finiquito = $fechaFiniquito;
-        $grupo->zona_labor = $zonaLabor;
         $grupo->ruta = $ruta;
         $grupo->codigo_bus = $codigoBus;
+
+        if (!$zonaLabor) {
+            $pivot = DB::table('usuarios_zonas')->where('usuario_id', $usuarioId)->first();
+            $zonaLabor = ZonaLabor::find($pivot->zona_labor_id)->name;
+        }
+        $grupo->zona_labor = $zonaLabor;
         $grupo->save();
 
         return $grupo;
@@ -137,6 +144,10 @@ class GruposFiniquitosService
             $finiquitos = $grupo->finiquitos;
 
             foreach ($finiquitos as $finiquito) {
+                if ($finiquito->getEstado()->name === 'SIN EFECTO') {
+                    continue;
+                }
+
                 $result = $this->finiquitosService->print($finiquito);
 
                 if ($result['error']) {

@@ -36,6 +36,9 @@ class VerifyModuleAccess
             $nombre_modulo = $moduleSlug;
             return response()->view('pages.no-acceso', compact('nombre_modulo'));
         }
+        
+        $user->rol = $rol;
+        $request->session()->put('usuario', $user);
 
         return $next($request);
     }

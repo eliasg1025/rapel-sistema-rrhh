@@ -12,7 +12,7 @@ export const Home = () => {
     const [reload, setReload] = useState(false);
     const [informe, setInforme] = useState({
         fecha_finiquito: moment().format('YYYY-MM-DD').toString(),
-        zona_labor: '',
+        /* zona_labor: '', */
         ruta: '',
         codigo_bus: '',
         finiquitos: [],
@@ -37,12 +37,16 @@ export const Home = () => {
                 <>
                     <h4>Finiquitos Masivos</h4>
                     <br />
-                    <CreateGrupoForm
-                        reload={reload}
-                        setReload={setReload}
-                        informe={informe}
-                    />
-                    <br />
+                    {usuario.rol.tipo.name === 'ANALISTA DE GESTION' && (
+                        <>
+                            <CreateGrupoForm
+                                reload={reload}
+                                setReload={setReload}
+                                informe={informe}
+                            />
+                            <br />
+                        </>
+                    )}
                     <TablaGrupo
                         reload={reload}
                         setReload={setReload}

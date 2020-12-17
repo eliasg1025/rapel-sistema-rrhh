@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GruposFiniquitosPost;
+use App\Models\Usuario;
+use App\Models\ZonaLabor;
 use App\Services\GruposFiniquitosService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GruposFiniquitosController extends Controller
 {
@@ -78,6 +81,64 @@ class GruposFiniquitosController extends Controller
         return response()->json([
             'message' => 'Grupo borrado correctamente',
             'data' => $result
+        ]);
+    }
+
+    public function getUsuariosZonas()
+    {
+        $result = DB::table('usuarios_zonas')->get();
+
+        $result->transform(function($item) {
+            $item->usuario = Usuario::with('trabajador')->where('id', $item->usuario_id)->first();
+            $item->zona_labor = ZonaLabor::find($item->zona_labor_id);
+            return $item;
+        });
+
+        return response()->json([
+            'message' => 'Data obtenida correctamente',
+            'data' => $result
+        ]);
+    }
+
+    public function createUsuariosZonas(Request $request)
+    {
+        $usuarioId = $request->get('usuario_id');
+        $zonaLaborName = $request->get('zona_labor');
+
+        $zonaLabor = ZonaLabor::where('name', $zonaLaborName)->first();
+
+        $exists = DB::table('usuarios_zonas')
+            ->where('usuario_id', $usuarioId)
+            ->orWhere('zona_labor_id', $zonaLabor->id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Ya hay usuario o zona labor asignada',
+                'data' => []
+            ], 400);
+        }
+
+        DB::table('usuarios_zonas')->insert([
+            'zona_labor_id' => $zonaLabor->id,
+            'usuario_id' => $usuarioId
+        ]);
+
+        return response()->json([
+            'message' => 'Usuario asignado correctamente',
+            'data' => []
+        ]);
+    }
+
+    public function deleteUsuariosZonas(Usuario $usuario, ZonaLabor $zonaLabor)
+    {
+        DB::table('usuarios_zonas')
+            ->where('usuario_id', $usuario->id)
+            ->where('zona_labor_id', $zonaLabor->id)
+            ->delete();
+
+        return response()->json([
+            'message' => 'Borrado correctamente'
         ]);
     }
 

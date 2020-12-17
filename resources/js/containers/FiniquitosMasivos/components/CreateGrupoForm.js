@@ -86,27 +86,29 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="col-md-4">
-                            Zona Labor:<br />
-                            <Select
-                                value={form?.zona_labor || '' } showSearch
-                                style={{ width: '100%' }} optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e => setForm({ ...form, zona_labor: e })}
-                                size="small"
-                                disabled={canEdit}
-                            >
-                                {zonasLabor.map(e => (
-                                    <Select.Option value={e.name} key={e.name}>
-                                        {`${e.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </div>
+                        {usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                            <div className="col-md-4">
+                                Zona Labor:<br />
+                                <Select
+                                    value={form?.zona_labor || '' } showSearch
+                                    style={{ width: '100%' }} optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        option.children
+                                            .toLowerCase()
+                                            .indexOf(input.toLowerCase()) >= 0
+                                    }
+                                    onChange={e => setForm({ ...form, zona_labor: e })}
+                                    size="small"
+                                    disabled={canEdit}
+                                >
+                                    {zonasLabor.map(e => (
+                                        <Select.Option value={e.name} key={e.name}>
+                                            {`${e.name}`}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        )}
                         <div className="col-md-4">
                             Ruta:<br />
                             <Select
@@ -138,29 +140,6 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
                                 disabled={canEdit}
                             />
                         </div>
-                    </div>
-                    <br />
-                    <div className="row">
-                        {/* <div className="col-md-4">
-                            Empresa:<br />
-                            <Select
-                                value={form.empresa_id} showSearch
-                                style={{ width: '100%' }} optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e => setForm({ ...form, empresa_id: e })}
-                                size="small"
-                            >
-                                {empresa.map(e => (
-                                    <Select.Option value={e.id} key={e.id}>
-                                        {`${e.id} - ${e.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </div> */}
                         <div className="col-md-4">
                             Fecha Finiquito:<br />
                             <DatePicker

@@ -220,19 +220,23 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    {value.estado.name === 'NO FIRMADO' && (
-                        <Tooltip title="Estado">
-                            <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
-                                <i className="fas fa-check"></i>
-                            </button>
-                        </Tooltip>
+                    {usuario.rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                        value.estado.name === 'NO FIRMADO' && (
+                            <Tooltip title="Estado">
+                                <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        )
                     )}
                     {value.estado.name === 'SIN EFECTO' ? (
-                        <Tooltip title="Eliminar Registro">
-                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                                <i className="fas fa-trash"></i>
-                            </button>
-                        </Tooltip>
+                        usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                            <Tooltip title="Eliminar Registro">
+                                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                    <i className="fas fa-trash"></i>
+                                </button>
+                            </Tooltip>
+                        )
                     ) : (
                         <Tooltip title="Anular registro">
                             <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
