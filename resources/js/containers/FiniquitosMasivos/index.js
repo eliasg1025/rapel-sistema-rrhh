@@ -24,7 +24,7 @@ export default function FiniquitosMasivos() {
                         Registro Individual
                     </a>
                 </Menu.Item>
-                {usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
                     <Menu.Item key="registro-analistas" icon={<UserSwitchOutlined />}>
                         <a href="/finiquitos/registro/analistas">
                             Registro Analistas

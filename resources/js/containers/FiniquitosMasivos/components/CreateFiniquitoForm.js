@@ -145,7 +145,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                     >
                                         <i className="fas fa-file-alt"></i> Imprimir
                                     </button>
-                                    {usuario.rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                                    {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
                                         <button
                                             className="btn btn-primary mr-3"
                                             style={{ float: "right" }}

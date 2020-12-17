@@ -37,7 +37,7 @@ class VerifyModuleAccess
             return response()->view('pages.no-acceso', compact('nombre_modulo'));
         }
         
-        $user->rol = $rol;
+        $user->modulo_rol = $rol;
         $request->session()->put('usuario', $user);
 
         return $next($request);

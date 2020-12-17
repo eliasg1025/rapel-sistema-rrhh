@@ -86,7 +86,7 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
             <Card>
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        {usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                        {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
                             <div className="col-md-4">
                                 Zona Labor:<br />
                                 <Select

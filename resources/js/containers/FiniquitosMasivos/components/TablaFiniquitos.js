@@ -159,7 +159,7 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    {usuario.rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                    {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
                         value.estado.name === 'NO FIRMADO' && (
                             <Tooltip title="Estado">
                                 <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
@@ -169,7 +169,7 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                         )
                     )}
                     {value.estado.name === 'SIN EFECTO' ? (
-                        usuario.rol.tipo.name === 'ADMINISTRADOR' && (
+                        usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
                             <Tooltip title="Eliminar Registro">
                                 <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
                                     <i className="fas fa-trash"></i>

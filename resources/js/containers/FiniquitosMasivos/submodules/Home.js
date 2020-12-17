@@ -37,7 +37,7 @@ export const Home = () => {
                 <>
                     <h4>Finiquitos Masivos</h4>
                     <br />
-                    {usuario.rol.tipo.name === 'ANALISTA DE GESTION' && (
+                    {usuario.modulo_rol.tipo.name === 'ANALISTA DE GESTION' && (
                         <>
                             <CreateGrupoForm
                                 reload={reload}
