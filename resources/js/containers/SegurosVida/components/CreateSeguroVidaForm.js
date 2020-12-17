@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { notification } from 'antd';
+import { notification, Card } from 'antd';
 import Axios from 'axios';
 import moment from 'moment';
 
@@ -66,85 +66,99 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
     }
 
     return (
-        <div>
-            <div className="row">
-                <div className="col-md-4">
-                    RUT:<br />
-                    <div className="input-group">
+        <>
+            <Card>
+                <div className="row">
+                    <div className="col-md-4">
+                        RUT:<br />
+                        <div className="input-group">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="_rut"
+                                autoComplete="off"
+                                placeholder="Buscar por RUT"
+                                value={rut}
+                                onChange={e => setRut(e.target.value)}
+                                onKeyPress={e => e.key == 'Enter' ? buscarTrabajador() : null}
+                            />
+                            <div className="input-group-append">
+                                <button
+                                    className="btn btn-primary"
+                                    type="button"
+                                    disabled={loadingRut || rut.length < 8}
+                                    onClick={buscarTrabajador}
+                                >
+                                    {!loadingRut ? (
+                                        <i className="fas fa-search"></i>
+                                    ) : (
+                                        <i className="fas fa-spinner fa-spin"></i>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        Trabajador:<br />
                         <input
                             type="text"
                             className="form-control"
-                            name="_rut"
-                            autoComplete="off"
-                            placeholder="Buscar por RUT"
-                            value={rut}
-                            onChange={e => setRut(e.target.value)}
-                            onKeyPress={e => e.key == 'Enter' ? buscarTrabajador() : null}
+                            value={trabajador ? `${trabajador.apellido_paterno} ${trabajador.apellido_materno} ${trabajador.nombre}` : ''}
+                            disabled={true}
                         />
-                        <div className="input-group-append">
-                            <button
-                                className="btn btn-primary"
-                                type="button"
-                                disabled={loadingRut || rut.length < 8}
-                                onClick={buscarTrabajador}
-                            >
-                                {!loadingRut ? (
-                                    <i className="fas fa-search"></i>
-                                ) : (
-                                    <i className="fas fa-spinner fa-spin"></i>
-                                )}
-                            </button>
-                        </div>
+                    </div>
+                    <div className="col-md-4">
+                        Empresa:<br />
+                        <select
+                            className="form-control"
+                            value={contratoActivo ? contratoActivo.empresa_id : 0}
+                            disabled
+                        >
+                            <option key={0} value={0}>
+                                
+                            </option>
+                            {empresas.map(item => (
+                                <option key={item.id} value={item.id}>
+                                    {`${item.id} - ${item.name}`}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {/* <div className="col-md-4">
+                        Fecha Documento:<br />
+                        <input
+                            type="date"
+                            className="form-control"
+                            value={form.fecha_documento}
+                            onChange={e => setForm({ ...form, fecha_documento: e.target.value })}
+                        />
+                    </div> */}
+                </div>
+                <div className="row mt-4">
+                    <div className="col-md-12">
+                        <button
+                            type="submit"
+                            className="btn btn-primary btn-block"
+                            onClick={handleSubmit}
+                            disabled={!trabajador && !contratoActivo}
+                        >
+                            Enviar
+                        </button>
                     </div>
                 </div>
-                <div className="col-md-4">
-                    Trabajador:<br />
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={trabajador ? `${trabajador.apellido_paterno} ${trabajador.apellido_materno} ${trabajador.nombre}` : ''}
-                        disabled={true}
-                    />
-                </div>
-                <div className="col-md-4">
-                    Empresa:<br />
-                    <select
-                        className="form-control"
-                        value={contratoActivo ? contratoActivo.empresa_id : 0}
-                        disabled
+            </Card>
+            <br />
+            <div className="row">
+                <div className="col">
+                    <a
+                        className="btn btn-primary mr-3"
+                        href="/storage/Declaracion Beneficiarios Vida Ley.pdf"
+                        target="_blank"
                     >
-                        <option key={0} value={0}>
-                            
-                        </option>
-                        {empresas.map(item => (
-                            <option key={item.id} value={item.id}>
-                                {`${item.id} - ${item.name}`}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                {/* <div className="col-md-4">
-                    Fecha Documento:<br />
-                    <input
-                        type="date"
-                        className="form-control"
-                        value={form.fecha_documento}
-                        onChange={e => setForm({ ...form, fecha_documento: e.target.value })}
-                    />
-                </div> */}
-            </div>
-            <div className="row mt-4">
-                <div className="col-md-12">
-                    <button
-                        type="submit"
-                        className="btn btn-primary btn-block"
-                        onClick={handleSubmit}
-                        disabled={!trabajador && !contratoActivo}
-                    >
-                        Enviar
-                    </button>
+                        <i className="fas fa-file-alt"></i> Descargar Formato
+                    </a>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

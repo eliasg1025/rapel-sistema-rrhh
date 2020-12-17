@@ -134,6 +134,35 @@ class GruposFiniquitosService
         return $grupo;
     }
 
+    public function updateFiniquitos($id)
+    {
+        try {
+            $grupo = GrupoFiniquito::findOrFail($id);
+
+            $finiquitos = $grupo->finiquitos;
+
+            foreach ($finiquitos as $finiquito) {
+                $estado = $finiquito->getEstado()->name;
+                if ($estado === 'SIN EFECTO' || $estado === 'FIRMADO') {
+                    continue;
+                }
+
+                $finiquito->setEstado(2);
+            }
+    
+            return [
+                'message' => 'Estado actualizado correctamente'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'message' => 'Error al actualizar estado',
+                'data' => [
+                    'error' => $e->getMessage()
+                ]
+            ];
+        }
+    }
+
     public function print($id)
     {
         $generados = [];

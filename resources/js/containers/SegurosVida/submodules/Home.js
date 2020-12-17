@@ -10,12 +10,10 @@ export const Home = () => {
         <>
             <h4>Seguros Vida Ley</h4>
             <br />
-            <Card>
-                <CreateSeguroVidaForm
-                    reload={reload}
-                    setReload={setReload}
-                />
-            </Card>
+            <CreateSeguroVidaForm
+                reload={reload}
+                setReload={setReload}
+            />
             <br /><br />
             <TableSegurosVida
                 reload={reload}

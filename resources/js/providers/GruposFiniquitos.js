@@ -50,6 +50,21 @@ export class GruposFiniquitosProvider {
         }
     }
 
+    async updateFiniquitos(id) {
+        try {
+            const res = await Axios.put(`${this.url}/${id}/finiquitos`, {});
+            return {
+                ...res.data,
+                status: 'success'
+            };
+        } catch (e) {
+            return {
+                ...e.response.data,
+                status: 'error'
+            };
+        }
+    }
+
     async print(id) {
         try {
             const res = await Axios.get(`${this.url}/${id}/print`);

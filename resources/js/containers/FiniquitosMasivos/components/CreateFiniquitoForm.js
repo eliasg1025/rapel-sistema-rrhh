@@ -28,6 +28,8 @@ const initalFormState = {
 };
 
 export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+
     const [viewModal, setViewModal] = useState(false);
     const [viewModalImport, setViewModalImport] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -61,6 +63,27 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
             }
         });
     };
+
+    const handleFirmar = async () => {
+        ModalAnt.confirm({
+            title: "Firmar Grupo",
+            content: "¿Desea marcar los finiquitos de este grupo como FIRMADOS?",
+            cancelText: "Cancelar",
+            okText: "Si, FIRMAR",
+            onOk: async function() {
+                const {
+                    message,
+                    status
+                } = await gruposFiniquitosProvider.updateFiniquitos(informe.id);
+
+                notification[status]({
+                    message: message
+                });
+
+                setReload(!reload);
+            }
+        });
+    }
 
     const handleImprimir = async () => {
         setLoading(true);
@@ -114,13 +137,24 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                     <i className="fas fa-share"></i> Enviar
                                 </button>
                             ) : (
-                                <button
-                                    className="btn btn-primary"
-                                    style={{ float: "right" }}
-                                    onClick={() => handleImprimir()}
-                                >
-                                    <i className="fas fa-file-alt"></i> Imprimir
-                                </button>
+                                <>
+                                    <button
+                                        className="btn btn-primary"
+                                        style={{ float: "right" }}
+                                        onClick={() => handleImprimir()}
+                                    >
+                                        <i className="fas fa-file-alt"></i> Imprimir
+                                    </button>
+                                    {usuario.rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                                        <button
+                                            className="btn btn-primary mr-3"
+                                            style={{ float: "right" }}
+                                            onClick={() => handleFirmar()}
+                                        >
+                                            <i className="fas fa-check"></i> Firmar TODOS
+                                        </button>
+                                    )}
+                                </>
                             )}
                         </div>
                     </div>

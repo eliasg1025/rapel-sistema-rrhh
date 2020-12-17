@@ -153,6 +153,17 @@ class GruposFiniquitosController extends Controller
         return response()->json($result);
     }
 
+    public function updateFiniquitos(Request $request, int $id)
+    {
+        $result = $this->gruposFiniquitosService->updateFiniquitos($id);
+
+        if (isset($result['error'])) {
+            return response()->json($result, 400);
+        }
+
+        return response()->json($result);
+    }
+
     public function print(int $id)
     {
         $result = $this->gruposFiniquitosService->print($id);
