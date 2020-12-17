@@ -136,8 +136,11 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         className="form-control"
                         value={form?.fecha_finiquito}
                         onChange={e => setForm({ ...form, fecha_finiquito: e.target.value })}
-                        onBlur={buscarTrabajador}
-                        onEnded={buscarTrabajador}
+                        onBlur={() => {
+                            if (form?.rut?.length >= 8) {
+                                buscarTrabajador();
+                            }
+                        }}
                     />
                 </div>
                 <form className="col-md-4" onSubmit={handleSubmitBuscarTrabajador}>

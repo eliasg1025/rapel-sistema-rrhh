@@ -118,7 +118,8 @@ class Trabajador extends Model
                     'o.Descripcion as oficio_name',
                     'z.IdZona as zona_labor_id',
                     'z.Nombre as zona_name',
-                    'c.Jornal as jornal'
+                    'c.Jornal as jornal',
+                    'c.IdEmpresa as empresa_id'
                 )
                 ->join('Trabajador as t', [
                     't.IdEmpresa' => 'c.IdEmpresa',
@@ -136,6 +137,17 @@ class Trabajador extends Model
                 ->where('t.RutTrabajador', $rut)
                 ->whereIn('t.idEmpresa', [9, 14])
                 ->first();
+            
+            if (!$trabajador) {
+                return [
+                    'message' => 'RUT no encontrado',
+                    'data'  => [
+                        'rut' => $rut,
+                    ],
+                    'error' => true,
+                ];
+            }
+            
             $trabajador->persona = [
                 'id' => $trabajador->persona_id,
                 'nombre' => $trabajador->nombre,
@@ -175,7 +187,7 @@ class Trabajador extends Model
 
                 if (Carbon::parse($ultimaActividad->fecha_actividad)->greaterThan($fechaFiniquito)) {
                     return [
-                        'message' => 'Este trabajador tiene asistencia el dia ' . $fechaFiniquito . ', no se puede registrar el finiquito',
+                        'message' => 'Este trabajador tiene ASISTENCIA el dia ' . $fechaFiniquito->toDateString() . ', no se puede registrar el finiquito',
                         'data'  => [
                             'rut' => $rut,
                         ],
@@ -186,6 +198,54 @@ class Trabajador extends Model
                 $trabajador->zona_labor = $ultimaActividad->zona_name;
             } else {
                 $trabajador->zona_labor = $trabajador->zona_name;
+            }
+
+            $estaDeVacaciones = DB::connection('sqlsrv')
+                ->table('Vacaciones as v')
+                ->where(function ($query) use ($fechaFiniquito, $rut, $trabajador) {
+                    $query->where('v.RutTrabajador', $rut);
+                    $query->where('v.IdEmpresa', $trabajador->empresa_id);
+                    $query->whereDate('v.FechaInicio', '<=', $fechaFiniquito);
+                    $query->whereDate('v.FechaFinal', '>=', $fechaFiniquito);
+                })
+                ->orWhere(function ($query) use ($fechaFiniquito, $rut, $trabajador) {
+                    $query->where('v.RutTrabajador', $rut);
+                    $query->where('v.IdEmpresa', $trabajador->empresa_id);
+                    $query->whereDate('v.FechaInicio', '<=', $fechaFiniquito);
+                    $query->whereDate('v.FechaFinal', '>=', $fechaFiniquito);
+                })
+                ->orderBy('v.FechaInicio', 'DESC')
+                ->first();
+
+            //dd($estaDeVacaciones);
+
+            if ($estaDeVacaciones) {
+                return [
+                    'message' => 'El trabajador esta de VACACIONES en desde el ' . Carbon::parse($estaDeVacaciones->FechaInicio)->format('d/m/Y') . ' hasta el ' . Carbon::parse($estaDeVacaciones->FechaFinal)->format('d/m/Y'),
+                    'data'  => [
+                        'rut' => $rut,
+                    ],
+                    'error' => true
+                ];
+            }
+
+            $permisosInasistencias = DB::connection('sqlsrv')
+                ->table('dbo.PermisosInasistencias as p')
+                ->where([
+                    'p.RutTrabajador' => $rut
+                ])
+                ->whereDate('p.FechaInicio', $fechaFiniquito)
+                ->whereNotIn('MotivoAusencia', ['PERMISO', 'FALTA'])
+                ->first();
+
+            if ($permisosInasistencias) {
+                return [
+                    'message' => 'El trabajador tiene ' . $permisosInasistencias->MotivoAusencia . ' el dia ' . Carbon::parse($permisosInasistencias->FechaInicio)->format('d/m/Y'),
+                    'data'  => [
+                        'rut' => $rut,
+                    ],
+                    'error' => true
+                ];
             }
 
             if ($trabajador->regimen_id == 2) {
