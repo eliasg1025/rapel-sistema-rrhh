@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Finiquito;
 use App\Models\Oficio;
 use App\Models\SqlSrv\Trabajador;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -188,14 +189,27 @@ class FiniquitosService
         $trabajadores = [];
         $errores = [];
         try {
+            $id = DB::table('importaciones_finquitos')->insertGetId([
+                'name' => 'IMPORTACION ' . now()->toDateTimeString(),
+                'fecha_hora' => now()->toDateTimeString(),
+                'grupo_finiquito_id' => $grupoFiniquitoId
+            ]);
+
+
             (new FastExcel)
-                ->import(storage_path('app/public') . $fileName, function($line) use (&$trabajadores, &$errores, $fechaFiniquito) {
+                ->import(storage_path('app/public') . $fileName, function($line) use (&$trabajadores, &$errores, $fechaFiniquito, $id) {
 
                     $trabajador = Trabajador::getTrabajadorParaFiniquito($line['RUT'], $fechaFiniquito);
                     if (!isset($trabajador['error'])) {
                         array_push($trabajadores, (object) $trabajador['data']);
                     } else {
-                        array_push($errores, $trabajador);;
+                        array_push($errores, $trabajador);
+
+                        DB::table('observaciones_importaciones_finiquitos')->insert([
+                            'rut' => $trabajador['data']['rut'],
+                            'descripcion' => $trabajador['message'],
+                            'importacion_finiquito_id' => $id
+                        ]);
                     }
                 });
 
@@ -249,7 +263,8 @@ class FiniquitosService
                 'data'      => [
                     'errores'   => $errores,
                     'advertencias' => $warnings,
-                    'correctos'    => $results
+                    'correctos'    => $results,
+                    'importacion_finiquito_id' => $id,
                 ]
             ];
         } catch (\Exception $e) {

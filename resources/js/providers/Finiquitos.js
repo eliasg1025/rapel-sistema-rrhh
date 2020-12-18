@@ -5,9 +5,9 @@ export class FiniquitosProvider {
         this.url = '/api/finiquitos';
     }
 
-    async get(usuarioId, { desde, hasta }) {
+    async get(usuarioId, { desde, hasta, rut }) {
         try {
-            const res = await Axios.get(`${this.url}?usuario_id=${usuarioId}&tipo=individual&desde=${desde}&hasta=${hasta}`);
+            const res = await Axios.get(`${this.url}?usuario_id=${usuarioId}&tipo=individual&desde=${desde}&hasta=${hasta}&persona_id=${rut}`);
             return {
                 ...res.data,
                 status: 'success'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker } from 'antd';
+import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker, Input } from 'antd';
 import moment from 'moment';
 import Axios from 'axios';
 
@@ -148,7 +148,9 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     }
 
     useEffect(() => {
-        getFiniquitos();
+        if (filtro.rut.length === 0 || filtro.rut.length >= 8) {
+            getFiniquitos();
+        }
     }, [reload, filtro]);
 
 
@@ -253,7 +255,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         <>
             <br />
             <div className="row">
-                <div className="col-md-4 col-sm-6 col-xd-12">
+                <div className="col-md-4 col-sm-6 col-xs-12">
                     Desde - Hasta:<br />
                     <DatePicker.RangePicker
                         placeholder={['Desde', 'Hasta']}
@@ -266,6 +268,15 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                             });
                         }}
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
+                    />
+                </div>
+                <div className="col-md-4 col-sm-6 col-xs-12">
+                    Búsqueda por DNI:<br />
+                    <Input
+                        placeholder="Mínimo 8 caracteres"
+                        value={filtro.rut}
+                        onChange={e => setFiltro({ ...filtro, rut: e.target.value })}
+                        allowClear
                     />
                 </div>
             </div>

@@ -116,7 +116,7 @@ class GruposFiniquitosService
 
     public function find($id)
     {
-        $grupo = GrupoFiniquito::with('usuario.trabajador')->where('id', $id)->first();
+        $grupo = GrupoFiniquito::with('usuario.trabajador', 'importacionesFiniquitos')->where('id', $id)->first();
 
         $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador')
             ->where('grupo_finiquito_id', $grupo->id)

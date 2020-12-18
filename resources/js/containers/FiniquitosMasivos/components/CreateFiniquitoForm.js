@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { notification, Select, Button, Modal as ModalAnt, Spin } from "antd";
+import { notification, Select, Button, Modal as ModalAnt, Spin, Table } from "antd";
 
 import { SubirArchivo } from "../../shared/SubirArchivo";
 import {
@@ -32,6 +32,7 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
 
     const [viewModal, setViewModal] = useState(false);
     const [viewModalImport, setViewModalImport] = useState(false);
+    const [viewModalObservaciones, setViewModalObservaciones] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [estadoCarga, setEstadoCarga] = useState({
@@ -123,11 +124,19 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                 <i className="fas fa-plus"></i> Agregar
                             </button>
                             <button
-                                className="btn btn-success"
+                                className="btn btn-success mr-3"
                                 onClick={() => setViewModalImport(true)}
                             >
                                 <i className="far fa-file-excel"></i> Importar
                             </button>
+                            {informe?.importaciones_finiquitos?.length !== 0 && (
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() => setViewModalObservaciones(true)}
+                                >
+                                    <i className="fas fa-exclamation-triangle"></i> Observaciones
+                                </button>
+                            )}
                             {informe?.estado?.name === "PENDIENTE" ? (
                                 <button
                                     className="btn btn-outline-dark"
@@ -222,6 +231,18 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                     reload={reload}
                     setReload={setReload}
                     setEstadoCarga={setEstadoCarga}
+                />
+            </Modal>
+            <Modal
+                isVisible={viewModalObservaciones}
+                setIsVisible={setViewModalObservaciones}
+                title="Observaciones"
+                width={1000}
+            >
+                <TableObservaciones
+                    informe={informe}
+                    reload={reload}
+                    setReload={setReload}
                 />
             </Modal>
         </>
@@ -518,7 +539,7 @@ const ImportarFiniquitosForm = ({
 
     return (
         <form onSubmit={handleSubmit}>
-            <div class="alert alert-primary" role="alert">
+            <div className="alert alert-primary" role="alert">
                 Los N° de documentos de los trabajadores <b>deben ir en la columna <u>RUT</u></b>
             </div>
             <SubirArchivo form={form} setForm={setForm} />
@@ -533,5 +554,37 @@ const ImportarFiniquitosForm = ({
                 Cargar
             </Button>
         </form>
+    );
+};
+
+const TableObservaciones = ({ informe, reload, setReload }) => {
+
+    const columns = [
+        {
+            title: "Nombre",
+            dataIndex: "name"
+        },
+        {
+            title: "Acciones",
+            dataIndex: "acciones",
+            render: (item, record) => (
+                <a
+                    href={`/api/importaciones-finiquitos/${record.id}/export`}
+                    target="_blank"
+                    className="btn btn-primary"
+                >
+                    <i className="fas fa-download"></i>
+                </a>
+            )
+        }
+    ];
+
+    return (
+        <Table 
+            bordered
+            size="small"
+            columns={columns}
+            dataSource={informe?.importaciones_finiquitos.map(item => ({ ...item, key: item.id })) || []}      
+        />
     );
 };

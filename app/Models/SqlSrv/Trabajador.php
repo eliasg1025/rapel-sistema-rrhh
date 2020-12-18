@@ -269,7 +269,7 @@ class Trabajador extends Model
             ];
         } catch (\Exception $e) {
             return [
-                'message' => 'Trabajador no encontrado',
+                'message' => $e->getMessage(),
                 'error' => true,
                 'data' => [
                     'rut' => $rut,

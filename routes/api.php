@@ -306,6 +306,10 @@ Route::group(['prefix' => 'seguros-vida'], function() {
     Route::delete('/{id}', 'SegurosVidaController@delete');
 });
 
+Route::group(['prefix' => 'importaciones-finiquitos'], function() {
+    Route::get('/{importacionFiniquito}/export', 'ImportacionesFiniquitosController@export');
+});
+
 Route::group(['prefix' => 'sqlsrv'], function () {
     Route::group(['prefix' => 'trabajador'], function() {
         Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador')->where('empresaId', '[0-9]+');

@@ -25,29 +25,29 @@ class FiniquitosController extends Controller
         $usuarioId = $request->get('usuario_id');
         $desde = $request->get('desde');
         $hasta = $request->get('hasta');
+        $personaId = $request->get('persona_id');
 
         $rol = (Usuario::find($usuarioId))->getRol('finiquitos');
 
         switch ($rol->name) {
             case 'ADMINISTRADOR':
-                $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador')
-                    ->where('grupo_finiquito_id', null)
-                    ->whereBetween('fecha_finiquito', [$desde, $hasta])
-                    ->orderBy('regimen_id', 'ASC')
-                    ->orderBy('created_at', 'DESC')
-                    ->get();
+                $finiquitosQuery = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador');
                 break;
 
             default:
-                $finiquitos = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador')
-                    ->where('grupo_finiquito_id', null)
-                    ->where('usuario_id', $usuarioId)
-                    ->whereBetween('fecha_finiquito', [$desde, $hasta])
-                    ->orderBy('regimen_id', 'ASC')
-                    ->orderBy('created_at', 'DESC')
-                    ->get();
+                $finiquitosQuery = Finiquito::with('persona', 'empresa', 'tipoCese', 'regimen', 'oficio', 'usuario.trabajador')
+                    ->where('usuario_id', $usuarioId);
                 break;
         }
+
+        $finiquitos = $finiquitosQuery->whereBetween('fecha_finiquito', [$desde, $hasta])
+            ->when($personaId, function($query, $personaId) {
+                $query->where('persona_id', $personaId);
+            })
+            ->where('grupo_finiquito_id', null)
+            ->orderBy('regimen_id', 'ASC')
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         $finiquitos->transform(function ($item) {
             $item->estado = $item->getEstado();

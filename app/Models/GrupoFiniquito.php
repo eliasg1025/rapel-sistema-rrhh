@@ -29,4 +29,9 @@ class GrupoFiniquito extends Model
     {
         return $this->hasMany(Finiquito::class, 'grupo_finiquito_id');
     }
+
+    public function importacionesFiniquitos()
+    {
+        return $this->hasMany(ImportacionFiniquito::class, 'grupo_finiquito_id');
+    }
 }
