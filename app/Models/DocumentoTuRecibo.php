@@ -143,7 +143,7 @@ class DocumentoTuRecibo extends Model
                     ]
                 );
 
-                if ($tipo_documento_turecibo_id == 2) {
+                /* if ($tipo_documento_turecibo_id == 2) {
                     if ($documento['estado'] == 'FIRMADO CONFORME') {
                         $attempt = DB::table('documentos_turecibo')->where([
                             'rut' => $documento['rut'],
@@ -156,7 +156,7 @@ class DocumentoTuRecibo extends Model
                             'estado' => 'FIRMADO CONFORME'
                         ]);
                     }
-                }
+                } */
 
                 $count++;
             } catch (\Exception $e) {

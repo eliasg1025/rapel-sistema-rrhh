@@ -30,11 +30,15 @@ class DocumentosTuReciboController extends Controller
         $tipo_documento_turecibo_id = $request->get('tipo_documento_turecibo_id');
         $usuario_id = $request->get('usuario_id');
 
-        ProcessStoreManyFinquitos::dispatch($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
+        /* ProcessStoreManyFinquitos::dispatch($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
 
         return response()->json([
             'message' => 'Proceso en cola'
-        ]);
+        ]); */
+
+        $result = DocumentoTuRecibo::massiveCreate($usuario_id, $empresa_id, $tipo_documento_turecibo_id, $data);
+
+        return response()->json($result);
     }
 
     public function update($id, Request $request)
