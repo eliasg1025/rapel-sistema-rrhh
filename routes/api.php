@@ -49,6 +49,7 @@ Route::group(['prefix' => 'informes-descansos'], function () {
 });
 
 Route::group(['prefix' => 'registros-descansos'], function () {
+    Route::get('/export', 'RegistrosDescansosController@export');
     Route::post('/', 'RegistrosDescansosController@store');
     Route::delete('/{id}', 'RegistrosDescansosController@delete');
 });

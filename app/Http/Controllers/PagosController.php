@@ -69,14 +69,16 @@ class PagosController extends Controller
         ];
         $empresa_id = $request->empresa_id;
 
-        switch ( $tipo_pago_id ) {
+        /* switch ( $tipo_pago_id ) {
             case 1:
                 $result = Liquidaciones::massiveCreate($data, $fechas, $estado, $empresa_id);
                 break;
             case 2:
                 $result = Liquidaciones::massiveCreate($data, $fechas, $estado, $empresa_id);
                 break;
-        }
+        } */
+
+        $result = Pago::massiveCreate($data, $tipo_pago_id, $empresa_id);
 
         return response()->json($result);
     }
@@ -131,7 +133,7 @@ class PagosController extends Controller
         $empresa_id = $request->empresa_id;
         $tipo_pago_id = $request->tipo_pago_id;
 
-        switch ( $tipo_pago_id ) {
+        /* switch ( $tipo_pago_id ) {
             case 1:
                 $result = Liquidaciones::get($fechas, $estado, $empresa_id);
                 break;
@@ -144,16 +146,18 @@ class PagosController extends Controller
 
                 $result = [ ...$b, ...$a ];
                 break;
-        }
+        } */
 
+        $result = Pago::get($fechas, $estado, $empresa_id, $tipo_pago_id);
         return response()->json($result);
     }
     public function getByTrabajador($rut)
     {
-        $liquidaciones = Liquidaciones::getByTrabajador($rut);
+        /* $liquidaciones = Liquidaciones::getByTrabajador($rut);
         $utilidades = Utilidad::getByTrabajador($rut);
 
-        $result = [ ...$utilidades, ...$liquidaciones ];
+        $result = [ ...$utilidades, ...$liquidaciones ]; */
+        $result = Pago::getByTrabajador($rut);
 
         return response()->json($result);
     }

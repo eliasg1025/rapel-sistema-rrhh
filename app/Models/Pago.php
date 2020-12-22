@@ -20,7 +20,8 @@ class Pago extends Model
     {
         return DB::table('pagos as l')
             ->select(
-                'l.id', 'l.code', 'tp.name as tipo_pago', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                DB::raw('CONCAT(l.rut, "-", l.mes, "-", l.ano, "-", l.empresa_id, "-", l.tipo_pago_id) as id'),
+                'tp.name as tipo_pago', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_para_pago, "%d/%m/%Y") fecha_para_pago'),
@@ -116,12 +117,14 @@ class Pago extends Model
     {
         return DB::table('pagos as l')
             ->select(
-                'l.id as key', 'l.id', 'l.rut',
+                DB::raw('CONCAT(l.rut, "-", l.mes, "-", l.ano, "-", l.empresa_id, "-", l.tipo_pago_id) as id'), 'l.rut',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
+                'tp.name as tipo_pago',
                 DB::raw('DATE_FORMAT(l.fecha_hora_marca_firmado, "%d/%m/%Y %H:%i:%s") fecha_firmado'),
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
             )
             ->join('empresas as e', 'e.id', '=', 'l.empresa_id')
+            ->join('tipos_pago as tp', 'tp.id', '=', 'l.tipo_pago_id')
             ->where('l.rut', $rut)
             ->get();
     }
@@ -130,7 +133,8 @@ class Pago extends Model
     {
         return DB::table('pagos as l')
             ->select(
-                'l.id as key', 'tp.name as tipo_pago', 'l.id', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
+                DB::raw('CONCAT(l.rut, "-", l.mes, "-", l.ano, "-", l.empresa_id, "-", l.tipo_pago_id) as id'),
+                'tp.name as tipo_pago', 'l.rut', 'l.nombre', 'l.apellido_paterno', 'l.apellido_materno',
                 'l.mes', 'l.ano', 'l.monto', 'l.estado', 'e.shortname as empresa', 'l.banco', 'l.numero_cuenta',
                 DB::raw('DATE_FORMAT(l.fecha_pago, "%d/%m/%Y") fecha_pago')
             )
@@ -208,59 +212,31 @@ class Pago extends Model
         $total = sizeof($pagos);
         $errors = [];
 
-        foreach($pagos as $liquidacion)
+        foreach($pagos as $pago)
         {
             try {
-                /*
-                $p = Pago::where([
-                    'rut' => $liquidacion['RutTrabajador'],
-                    'mes' => $liquidacion['Mes'],
-                    'ano' => $liquidacion['Ano'],
-                    'empresa_id' => $empresa_id,
-                    'tipo_pago_id' => $tipo_pago_id,
-                ])->first();
-
-                if ( !$p ) {
-                    $p = new Pago();
-                    $p->rut = $liquidacion['RutTrabajador'];
-                    $p->mes = $liquidacion['Mes'];
-                    $p->ano = $liquidacion['Ano'];
-                    $p->empresa_id = $empresa_id;
-                    $p->tipo_pago_id = $tipo_pago_id;
-                    $p->nombre = $liquidacion['Nombre'];
-                    $p->apellido_paterno = $liquidacion['ApellidoPaterno'];
-                    $p->apellido_materno = $liquidacion['ApellidoMaterno'];
-                    $p->monto = $liquidacion['MontoAPagar'];
-                    $p->fecha_emision = date($liquidacion['FechaEmision']);
-                    $p->banco = $liquidacion['Banco'];
-                    $p->numero_cuenta = $liquidacion['NumeroCuentaBancaria'];
-                    $p->save();
-                    $count++;
-                }*/
-
                 DB::table('pagos')->updateOrInsert(
                     [
-                        'rut' => $liquidacion['RutTrabajador'],
-                        'ano' => $liquidacion['Ano'],
-                        'mes' => $liquidacion['Mes'],
+                        'rut' => $pago['RutTrabajador'],
+                        'ano' => $pago['Ano'],
+                        'mes' => $pago['Mes'],
                         'empresa_id' => $empresa_id,
                         'tipo_pago_id' => $tipo_pago_id,
                     ],
                     [
-                        'finiquito_id' => $liquidacion['IdFiniquito'],
-                        'nombre' => $liquidacion['Nombre'],
-                        'apellido_paterno' => $liquidacion['ApellidoPaterno'],
-                        'apellido_materno' => $liquidacion['ApellidoMaterno'],
-                        'monto' => $liquidacion['MontoAPagar'],
-                        'fecha_emision' => date($liquidacion['FechaEmision']),
-                        'banco' => $liquidacion['Banco'],
-                        'numero_cuenta' => $liquidacion['NumeroCuentaBancaria'],
+                        'nombre' => $pago['Nombre'],
+                        'apellido_paterno' => $pago['ApellidoPaterno'],
+                        'apellido_materno' => $pago['ApellidoMaterno'],
+                        'monto' => $pago['MontoAPagar'],
+                        'fecha_emision' => date($pago['FechaEmision']),
+                        'banco' => $pago['Banco'],
+                        'numero_cuenta' => $pago['NumeroCuentaBancaria'],
                     ]
                 );
 
             } catch (\Exception $e) {
                 array_push($errors, [
-                    'code' => $liquidacion['IdLiquidacion'],
+                    'code' => $pago['RutTrabajador'] . '-' . $pago['Mes'] . '-' . $pago['Ano'] . '-' . $empresa_id,
                     'error' => $e->getMessage()
                 ]);
             }

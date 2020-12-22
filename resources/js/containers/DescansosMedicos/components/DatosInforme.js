@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DatePicker, message, Select, notification } from 'antd';
+import { DatePicker, message, Select, notification, Modal } from 'antd';
 import moment from 'moment';
 
 import { empresa } from '../../../data/default.json';
@@ -12,6 +12,11 @@ export const DatosInforme = ({ reloadData, setReloadData }) => {
     const [form, setForm] = useState({
         empresa_id: '',
         fecha_inicio: moment().format('YYYY-MM-DD').toString(),
+    });
+
+    const [filtro, setFiltro] = useState({
+        desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
+        hasta: moment().format('YYYY-MM-DD').toString(),
     });
 
     const handleSubmit = e => {
@@ -34,6 +39,44 @@ export const DatosInforme = ({ reloadData, setReloadData }) => {
                     message: err.response.data.message
                 });
             });
+    }
+
+    const handleExportar = () => {
+        Modal.confirm({
+            title: "Exportar",
+            content: (
+                <>
+                    Desde - Hasta:<br />
+                    <DatePicker.RangePicker
+                        placeholder={['Desde', 'Hasta']}
+                        style={{ width: '100%' }}
+                        onChange={(date, dateString) => {
+                            setFiltro({
+                                ...filtro,
+                                desde: dateString[0],
+                                hasta: dateString[1],
+                            });
+                        }}
+                        value={[moment(filtro.desde), moment(filtro.hasta)]}
+                    />
+                </>
+            ),
+            okText: "Exportar",
+            cancelText: "Cancelar",
+            onOk: () => exportRecords()
+        });
+    }
+
+    const exportRecords = () => {
+/*         Axios.get(`/api/registros-descansos/export?desde=${filtro.desde}&hasta=${filtro.hasta}`)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.error(err)
+            }); */
+
+        window.open(`/api/registros-descansos/export?desde=${filtro.desde}&hasta=${filtro.hasta}`, '_blank');
     }
 
     return (
@@ -74,6 +117,9 @@ export const DatosInforme = ({ reloadData, setReloadData }) => {
                     <div className="form-group col-md-4">
                         <button type="submit" className="btn btn-primary">
                             Comenzar Informe
+                        </button>
+                        <button type="button" className="ml-2 btn btn-success" onClick={handleExportar}>
+                            Exportar registros
                         </button>
                     </div>
                 </div>

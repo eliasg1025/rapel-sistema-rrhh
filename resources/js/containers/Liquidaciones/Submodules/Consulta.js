@@ -22,7 +22,7 @@ export const Consulta = () => {
                     setLiquidaciones(res.data.map(item => {
                         return {
                             ...item,
-                            key: item._id
+                            key: item.id
                         }
                     }));
 

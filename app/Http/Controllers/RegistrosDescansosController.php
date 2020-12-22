@@ -8,6 +8,7 @@ use App\Models\ZonaLabor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class RegistrosDescansosController extends Controller
 {
@@ -148,5 +149,56 @@ class RegistrosDescansosController extends Controller
         return response()->json([
             'message' => 'Registro borrado correctamente'
         ]);
+    }
+
+    public function export(Request $request)
+    {
+        $desde = $request->get('desde');
+        $hasta = $request->get('hasta');
+
+        $result = DB::table('registros_descansos_medicos', 'r')
+            ->select(
+                't.code',
+                't.rut',
+                DB::raw("CONCAT(t.apellido_paterno, ' ', t.apellido_materno, ' ', t.nombre) as trabajador"),
+                'tlm.name as contingencia',
+                'zl.name as zona_labor',
+                'r.fecha_inicio as fecha_inicio',
+                'r.fecha_fin as fecha_fin',
+                DB::raw("DATEDIFF(r.fecha_fin, r.fecha_inicio) + 1 as total_dias"),
+                'r.observacion',
+                'r.numero_registro',
+                'r.fecha_emision',
+                'e.shortname as empresa',
+                'idm.fecha_inicio as fecha_informe'
+            )
+            ->join('informes_descansos_medicos as idm', 'r.informe_descanso_medico_id', '=', 'idm.id')
+            ->join('trabajadores as t', 'r.trabajador_id', '=', 't.id')
+            ->join('tipo_licencias_medicas as tlm', [
+                'r.tipo_licencia_medica_id' => 'tlm.id',
+                'idm.empresa_id' => 'tlm.empresa_id'
+            ])
+            ->join('zona_labores as zl', 'r.zona_labor_id', '=', 'zl.id')
+            ->join('empresas as e', 'e.id', '=', 'idm.empresa_id')
+            ->whereBetween('idm.fecha_inicio', [$desde, $hasta])
+            ->get();
+
+        return (new FastExcel($result))->download('INFORMES_' . $desde . '_' . $hasta . '.xlsx', function ($registro) {
+            return [
+                'CODIGO' => $registro->code,
+                'DNI' => $registro->rut,
+                'APELLIDOS Y NOMBRES' => $registro->trabajador,
+                'CONTINGENCIA' => $registro->contingencia,
+                'FUNDO' => $registro->zona_labor,
+                'DEL' => $registro->fecha_inicio,
+                'AL' => $registro->fecha_fin,
+                'TOTAL' => $registro->total_dias,
+                'OBSERVACION(ES)' => $registro->observacion,
+                'N° REGISTRO' => $registro->numero_registro,
+                'FECHA EMISION' => $registro->fecha_emision,
+                'EMPRESA' => $registro->empresa,
+                'FECHA INFROME' => $registro->fecha_informe
+            ];
+        });
     }
 }
