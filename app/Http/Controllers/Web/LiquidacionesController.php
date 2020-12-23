@@ -17,7 +17,7 @@ class LiquidacionesController extends Controller
         }
 
         if ( $usuario->liquidaciones == 1 || $usuario->liquidaciones === 3 ) {
-            return redirect('/liquidaciones-utilidades/consulta');
+            return redirect('/pagos/consulta');
         }
 
         $data = [
@@ -59,13 +59,32 @@ class LiquidacionesController extends Controller
         }
 
         if ( $usuario->liquidaciones == 1 || $usuario->liquidaciones === 3 ) {
-            return redirect('/liquidaciones-utilidades/l/pagados');
+            return redirect('/pagos/l/pagados');
         }
 
         $data = [
             'usuario' => $usuario,
             'submenu' => 'sub1',
             'submodule' => 'l',
+            'tipo_pago_id' => 1
+        ];
+
+        return view('pages.liquidaciones', compact('data'));
+    }
+
+    public function liquidacionesRegistros(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->liquidaciones === 0 ) {
+            $nombre_modulo = 'pagos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submenu' => 'sub1',
+            'submodule' => 'l-registros',
             'tipo_pago_id' => 1
         ];
 

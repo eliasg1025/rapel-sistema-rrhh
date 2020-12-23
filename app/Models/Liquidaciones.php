@@ -288,9 +288,16 @@ class Liquidaciones extends Model
         foreach($liquidaciones as $liquidacion)
         {
             try {
+                // rut_mes_ano_empresa_id_tipo_pago_id
+                $stringSeparado = explode('_', $liquidacion['id']);
+
                 DB::table('liquidaciones')->updateOrInsert(
                     [
-                        'id' => $liquidacion['id']
+                        'rut' => $stringSeparado[0],
+                        'mes' => $stringSeparado[1],
+                        'ano' => $stringSeparado[2],
+                        'empresa_id' => $stringSeparado[3],
+                        'tipo_pago_id' => $stringSeparado[4]
                     ],
                     [
                         'estado' => 1,

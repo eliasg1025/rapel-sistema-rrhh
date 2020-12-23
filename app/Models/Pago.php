@@ -150,6 +150,25 @@ class Pago extends Model
             ->get();
     }
 
+    public static function getPagadosTabla($empresa_id, $fecha_pago, $tipo_pago_id, $banco='TODOS')
+    {
+        return DB::table('pagos as l')
+            ->select(
+                'l.banco',
+                DB::raw('COUNT(*) AS cantidad'),
+                DB::raw('SUM(l.monto) AS monto')
+            )
+            ->groupBy('l.banco')
+            ->whereIn('l.estado', [3, 4])
+            ->where('l.fecha_pago', $fecha_pago)
+            ->where('l.empresa_id', $empresa_id)
+            ->where('l.tipo_pago_id', $tipo_pago_id)
+            ->when($banco !== 'TODOS', function($query) use ($banco) {
+                $query->where('l.banco', $banco);
+            })
+            ->get();
+    }
+
     public static function getRechazados($empresa_id = 9)
     {
         return DB::table('pagos_rechazos as l')
@@ -192,13 +211,34 @@ class Pago extends Model
     public static function forPayment(string $fecha, array $finiquitos)
     {
         try {
-            return DB::table('pagos')
+            $count = 0;
+            foreach ($finiquitos as $finiquito) {
+                $stringSeparado = explode('-', $finiquito);
+
+                DB::table('pagos')->where([
+                    'rut' => $stringSeparado[0],
+                    'mes' => $stringSeparado[1],
+                    'ano' => $stringSeparado[2],
+                    'empresa_id' => $stringSeparado[3],
+                    'tipo_pago_id' => $stringSeparado[4]
+                ])->update([
+                    'estado' => 2,
+                    'fecha_pago' => date($fecha),
+                    'fecha_hora_marca_para_pago' => now()->toDateTimeString()
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+            /* return DB::table('pagos')
                 ->whereIn('id', $finiquitos)
                 ->update([
                     'estado' => 2,
                     'fecha_pago' => date($fecha),
                     'fecha_hora_marca_para_pago' => now()->toDateTimeString()
-                ]);
+                ]); */
         } catch (\Exception $e) {
             return [
                 'error' => $e->getMessage()
@@ -234,6 +274,8 @@ class Pago extends Model
                     ]
                 );
 
+                $count++;
+
             } catch (\Exception $e) {
                 array_push($errors, [
                     'code' => $pago['RutTrabajador'] . '-' . $pago['Mes'] . '-' . $pago['Ano'] . '-' . $empresa_id,
@@ -258,9 +300,16 @@ class Pago extends Model
         foreach($pagos as $liquidacion)
         {
             try {
+                // rut_mes_ano_empresa_id_tipo_pago_id
+                $stringSeparado = explode('_', $liquidacion['id']);
+
                 DB::table('pagos')->updateOrInsert(
                     [
-                        'id' => $liquidacion['id']
+                        'rut' => $stringSeparado[0],
+                        'mes' => $stringSeparado[1],
+                        'ano' => $stringSeparado[2],
+                        'empresa_id' => $stringSeparado[3],
+                        'tipo_pago_id' => $stringSeparado[4]
                     ],
                     [
                         'estado' => 1,

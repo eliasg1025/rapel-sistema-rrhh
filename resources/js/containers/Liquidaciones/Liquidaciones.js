@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
-import {BankOutlined, FileDoneOutlined, HomeOutlined, QuestionCircleOutlined, StopOutlined } from "@ant-design/icons";
+import {BankOutlined, FileDoneOutlined, HomeOutlined, QuestionCircleOutlined, StopOutlined, FileOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import { Main } from './Submodules/Main';
@@ -8,6 +8,7 @@ import { Consulta } from './Submodules/Consulta';
 import { Liquidaciones } from './Submodules/Liquidaciones';
 import { Pagados } from './Submodules/Pagados';
 import { Rechazos } from './Submodules/Rechazos';
+import { MainPagos } from './Submodules/MainPagos';
 import { FloatingButton } from '../shared/FloatingButton';
 
 const { Content, Footer, Sider } = Layout;
@@ -28,13 +29,13 @@ export default function main() {
                 <Menu mode="inline" theme="dark" defaultSelectedKeys={[submodule]} defaultOpenKeys={[submenu]}>
                     {(usuario.liquidaciones === 2 || usuario.liquidaciones === 1) && (
                         <Menu.Item key="main" icon={<HomeOutlined />}>
-                            <a href="/liquidaciones-utilidades">
+                            <a href="/pagos">
                                 Inicio
                             </a>
                         </Menu.Item>
                     )}
                     <Menu.Item key="consulta" icon={<QuestionCircleOutlined />}>
-                        <a href="/liquidaciones-utilidades/consulta">
+                        <a href="/pagos/consulta">
                             Consulta
                         </a>
                     </Menu.Item>
@@ -43,18 +44,25 @@ export default function main() {
                             <SubMenu key="sub1" icon={<FileDoneOutlined />} title="Pagos">
                                 {usuario.liquidaciones === 2 && (
                                     <Menu.Item key="l" icon={<HomeOutlined />}>
-                                        <a href="/liquidaciones-utilidades/l">
+                                        <a href="/pagos/l">
                                             Principal
                                         </a>
                                     </Menu.Item>
                                 )}
+                                {usuario.liquidaciones === 2 && (
+                                    <Menu.Item key="l-registros" icon={<FileOutlined />}>
+                                        <a href="/pagos/l/registros">
+                                            Registros
+                                        </a>
+                                    </Menu.Item>
+                                )}
                                 <Menu.Item key="l-pagados" icon={<BankOutlined />}>
-                                    <a href="/liquidaciones-utilidades/l/pagados">
+                                    <a href="/pagos/l/pagados">
                                         Pagados
                                     </a>
                                 </Menu.Item>
                                 <Menu.Item key="l-rechazos" icon={<StopOutlined />}>
-                                    <a href="/liquidaciones-utilidades/l/rechazos">
+                                    <a href="/pagos/l/rechazos">
                                         Rechazos
                                     </a>
                                 </Menu.Item>
@@ -68,10 +76,9 @@ export default function main() {
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         {submodule === 'main' && <Main />}
                         {submodule === 'consulta' && <Consulta />}
-                        {submodule === 'l' && <Liquidaciones />}
-
+                        {submodule === 'l' && <MainPagos />}
+                        {submodule === 'l-registros' && <Liquidaciones />}
                         {submodule === 'l-pagados' && <Pagados />}
-
                         {submodule === 'l-rechazos' && <Rechazos />}
                     </div>
                 </Content>

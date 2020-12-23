@@ -67,7 +67,7 @@ export const Liquidaciones = () => {
 
     return (
         <>
-            <h4>Liquidaciones - Utilidades</h4>
+            <h4>Registros Pagos: Liquidaciones - Utilidades</h4>
             <FiltroTabla
                 getData={getData}
                 filtro={filtro}

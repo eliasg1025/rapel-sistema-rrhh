@@ -168,10 +168,12 @@ class PagosController extends Controller
         $fecha_pago = $request->query('fecha_pago');
         $banco = $request->query('banco');
 
-        $liquidaciones = Liquidaciones::getPagados($empresa_id, $fecha_pago, $banco);
+        /* $liquidaciones = Liquidaciones::getPagados($empresa_id, $fecha_pago, $banco);
         $utilidades = Utilidad::getPagados($empresa_id, $fecha_pago, $banco);
+        return response()->json([ ...$utilidades, ...$liquidaciones ]); */
 
-        return response()->json([ ...$utilidades, ...$liquidaciones ]);
+        $result = Pago::getPagados($empresa_id, $fecha_pago, $banco);
+        return response()->json($result);
     }
 
     public function getPagadosTabla(Request $request)
@@ -180,8 +182,11 @@ class PagosController extends Controller
         $fecha_pago = $request->query('fecha_pago');
         $banco = $request->query('banco');
 
-        $liquidaciones = Liquidaciones::getPagadosTabla($empresa_id, $fecha_pago, $banco);
-        $utilidades = Utilidad::getPagadosTabla($empresa_id, $fecha_pago, $banco);
+        /* $liquidaciones = Liquidaciones::getPagadosTabla($empresa_id, $fecha_pago, $banco);
+        $utilidades = Utilidad::getPagadosTabla($empresa_id, $fecha_pago, $banco); */
+
+        $liquidaciones = Pago::getPagadosTabla($empresa_id, $fecha_pago, $banco, 1);
+        $utilidades = Pago::getPagadosTabla($empresa_id, $fecha_pago, $banco, 2);
 
         return response()->json([
             'liquidaciones' => $liquidaciones,
@@ -192,10 +197,13 @@ class PagosController extends Controller
     public function getRechazados(Request $request)
     {
         $empresa_id = $request->query('empresa_id');
-        $liquidaciones = Liquidaciones::getRechazados($empresa_id);
+        /* $liquidaciones = Liquidaciones::getRechazados($empresa_id);
         $utilidades = Utilidad::getRechazados($empresa_id);
 
-        return response()->json([ ...$utilidades, ...$liquidaciones ]);
+        return response()->json([ ...$utilidades, ...$liquidaciones ]); */
+
+        $result = Pago::getRechazados($empresa_id);
+        return response()->json($result);
     }
 
     public function toggleRechazo($tipo, Request $request)
@@ -286,19 +294,20 @@ class PagosController extends Controller
                 $periodo = explode('-', $data[1]);
 
                 try {
-                    $liquidacion = DB::table('liquidaciones')
+                    $pago = DB::table('pagos')
                         ->where([
                             'rut' => $nombre_archivo[0],
                             'ano' => 2000 + $periodo[1],
                             'mes' => getMes($periodo[0]),
                             'empresa_id' => $empresa_id,
+                            'tipo_pago_id' => 1,
                             'estado' => 0
                         ])
                         ->first();
 
-                    if ($liquidacion) {
+                    if ($pago) {
                         array_push($arr, [
-                            'id' => $liquidacion->id,
+                            'id' => $pago->rut . '_' . $pago->mes . '_' . $pago->ano . '_' . $pago->empresa_id . '_' . $pago->tipo_pago_id,
                             'fecha_firma' => $fecha_firma->toDateTimeString()
                         ]);
                     }
@@ -326,9 +335,9 @@ class PagosController extends Controller
 
     public function insertarTuRecibo(Request $request)
     {
-        $liquidaciones = $request->get('liquidaciones');
+        $pagos = $request->get('liquidaciones');
 
-        $result = Liquidaciones::insertarTuRecibo($liquidaciones);
+        $result = Pago::insertarTuRecibo($pagos);
 
         return response()->json($result);
     }
@@ -368,8 +377,17 @@ class PagosController extends Controller
         $liquidaciones = $request->get('liquidaciones');
         $utilidades = $request->get('utilidades');
 
-        $result = Liquidaciones::forPayment($fecha, $liquidaciones);
+        /* $result = Liquidaciones::forPayment($fecha, $liquidaciones);
         $result2 = Utilidad::forPayment($fecha, $utilidades);
+
+        if ( isset($result['error']) || isset($result2['error']) ) {
+            return response()->json([
+                'message' => $result['error']
+            ], 400);
+        } */
+
+        $result = Pago::forPayment($fecha, $liquidaciones);
+        $result2 = Pago::forPayment($fecha, $utilidades);
 
         if ( isset($result['error']) || isset($result2['error']) ) {
             return response()->json([
@@ -378,8 +396,8 @@ class PagosController extends Controller
         }
 
         return response()->json([
-            'message' => 'Se actualizaron ' . $result . ' registros',
-            'actualizados' => $result
+            'message' => 'Se actualizaron ' . ($result + $result2) . ' registros',
+            'actualizados' => ($result + $result2)
         ]);
     }
 

@@ -106,20 +106,15 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/historial-busqueda', 'Web\ViewController@historialConsultaTrabajadores');
     });
 
-    Route::group(['prefix' => 'liquidaciones-utilidades'], function() {
+    Route::group(['prefix' => 'pagos'], function() {
         Route::get('/', 'Web\LiquidacionesController@index');
         Route::get('/consulta', 'Web\LiquidacionesController@consulta');
 
         Route::group(['prefix' => 'l'], function() {
             Route::get('/', 'Web\LiquidacionesController@liquidaciones');
+            Route::get('/registros', 'Web\LiquidacionesController@liquidacionesRegistros');
             Route::get('/pagados', 'Web\LiquidacionesController@liquidacionesPagados');
             Route::get('/rechazos', 'Web\LiquidacionesController@liquidacionesRechazos');
-        });
-
-        Route::group(['prefix' => 'u'], function() {
-            Route::get('/', 'Web\LiquidacionesController@utilidades');
-            Route::get('/pagados', 'Web\LiquidacionesController@utilidadesPagados');
-            Route::get('/rechazos', 'Web\LiquidacionesController@utilidadesRechazos');
         });
     });
 
