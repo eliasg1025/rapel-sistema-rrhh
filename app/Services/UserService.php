@@ -25,6 +25,10 @@ class UserService
             ->where('modulo_id', $modulo->id)
             ->first();
 
+        if (!$rol) {
+            return null;
+        }
+
         $rol->modulo = $modulo;
         $rol->tipo = Rol::where([
             'id' => $rol->rol_id,

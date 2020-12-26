@@ -19,11 +19,13 @@ export default function FiniquitosMasivos() {
                         Registro Grupos
                     </a>
                 </Menu.Item>
-                <Menu.Item key="registro-individual" icon={<FileAddOutlined />}>
-                    <a href="/finiquitos/registro/individual">
-                        Cartas de Renuncia
-                    </a>
-                </Menu.Item>
+                {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                    <Menu.Item key="registro-individual" icon={<FileAddOutlined />}>
+                        <a href="/finiquitos/registro/individual">
+                            Cartas de Renuncia
+                        </a>
+                    </Menu.Item>
+                )}
                 {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
                     <Menu.Item key="registro-analistas" icon={<UserSwitchOutlined />}>
                         <a href="/finiquitos/registro/analistas">
