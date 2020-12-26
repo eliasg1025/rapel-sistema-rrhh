@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InformeDescanso;
 use App\Models\RegistroDescanso;
 use App\Models\Trabajador;
 use App\Models\ZonaLabor;
@@ -170,6 +171,8 @@ class RegistrosDescansosController extends Controller
                 'r.numero_registro',
                 'r.fecha_emision',
                 'e.shortname as empresa',
+                'idm.empresa_id as empresa_id',
+                'idm.id as informe_id',
                 'idm.fecha_inicio as fecha_informe'
             )
             ->join('informes_descansos_medicos as idm', 'r.informe_descanso_medico_id', '=', 'idm.id')
@@ -197,7 +200,8 @@ class RegistrosDescansosController extends Controller
                 'N° REGISTRO' => $registro->numero_registro,
                 'FECHA EMISION' => $registro->fecha_emision,
                 'EMPRESA' => $registro->empresa,
-                'FECHA INFROME' => $registro->fecha_informe
+                'N° INFORME' => InformeDescanso::obtenerCorrelativo($registro->informe_id, $registro->empresa_id, $registro->fecha_informe),
+                'FECHA INFORME' => $registro->fecha_informe
             ];
         });
     }

@@ -95,7 +95,7 @@ class Trabajador extends Model
         ];
     }
 
-    public static function getTrabajadorParaFiniquito($rut, $fechaFiniquito)
+    public static function getTrabajadorParaFiniquito($rut, $fechaFiniquito, $masivo=false)
     {
         $fechaFiniquito = Carbon::parse($fechaFiniquito);
 
@@ -137,7 +137,7 @@ class Trabajador extends Model
                 ->where('t.RutTrabajador', $rut)
                 ->whereIn('t.idEmpresa', [9, 14])
                 ->first();
-            
+
             if (!$trabajador) {
                 return [
                     'message' => 'RUT no encontrado',
@@ -147,7 +147,7 @@ class Trabajador extends Model
                     'error' => true,
                 ];
             }
-            
+
             $trabajador->persona = [
                 'id' => $trabajador->persona_id,
                 'nombre' => $trabajador->nombre,
@@ -157,7 +157,7 @@ class Trabajador extends Model
                 'fecha_nacimiento' => $trabajador->fecha_nacimiento,
                 'sexo' => $trabajador->sexo
             ];
-    
+
             $trabajador->oficio = [
                 'id' => $trabajador->oficio_id,
                 'name' => $trabajador->oficio_name
@@ -167,6 +167,16 @@ class Trabajador extends Model
             $trabajador->tipo_cese_id = $trabajador->tiempo_servicio < 3 ? 1 : (
                 $fechaFiniquito->toDateString() === $trabajador->fecha_termino_contrato ? 3 : 2
             );
+
+            if ($masivo) {
+                if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
+                    return [
+                        'message' => 'Este trabajador tiene 5 años de tiempo de servicio. No se puede finiquitar por este medio',
+                        'data' => [],
+                        'error' => true,
+                    ];
+                }
+            }
 
             if ($trabajador->jornal) {
                 $ultimaActividad = DB::connection('sqlsrv')

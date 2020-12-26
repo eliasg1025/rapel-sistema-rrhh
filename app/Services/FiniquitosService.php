@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Finiquito;
 use App\Models\Oficio;
 use App\Models\SqlSrv\Trabajador;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -199,7 +200,7 @@ class FiniquitosService
             (new FastExcel)
                 ->import(storage_path('app/public') . $fileName, function($line) use (&$trabajadores, &$errores, $fechaFiniquito, $id) {
 
-                    $trabajador = Trabajador::getTrabajadorParaFiniquito($line['RUT'], $fechaFiniquito);
+                    $trabajador = Trabajador::getTrabajadorParaFiniquito($line['RUT'], $fechaFiniquito, true);
                     if (!isset($trabajador['error'])) {
                         array_push($trabajadores, (object) $trabajador['data']);
                     } else {
