@@ -168,16 +168,6 @@ class Trabajador extends Model
                 $fechaFiniquito->toDateString() === $trabajador->fecha_termino_contrato ? 3 : 2
             );
 
-            if ($masivo) {
-                if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
-                    return [
-                        'message' => 'Este trabajador tiene 5 años de tiempo de servicio. No se puede finiquitar por este medio',
-                        'data' => [],
-                        'error' => true,
-                    ];
-                }
-            }
-
             if ($trabajador->jornal) {
                 $ultimaActividad = DB::connection('sqlsrv')
                     ->table('ActividadTrabajador as a')
@@ -256,6 +246,18 @@ class Trabajador extends Model
                     ],
                     'error' => true
                 ];
+            }
+
+            if ($masivo) {
+                if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
+                    return [
+                        'message' => 'Este trabajador tiene 5 años de tiempo de servicio. No se puede finiquitar por este medio',
+                        'data'  => [
+                            'rut' => $rut,
+                        ],
+                        'error' => true,
+                    ];
+                }
             }
 
             if ($trabajador->regimen_id == 2) {

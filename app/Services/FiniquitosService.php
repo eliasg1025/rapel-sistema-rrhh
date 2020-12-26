@@ -274,7 +274,7 @@ class FiniquitosService
                     'El archivo debe tener la columna "RUT"'
                 ),
                 'data'      => [
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage() . ' --- ' . $e->getLine()
                 ],
                 'error'     => true
             ];
