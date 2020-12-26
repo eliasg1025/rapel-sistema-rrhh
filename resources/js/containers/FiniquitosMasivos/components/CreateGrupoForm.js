@@ -123,6 +123,9 @@ export const CreateGrupoForm = ({ reload, setReload, editable, informe }) => {
                                 size="small"
                                 disabled={canEdit}
                             >
+                                <Select.Option value="SIN RUTA" key="SIN RUTA">
+                                    {`SIN RUTA`}
+                                </Select.Option>
                                 {rutas.map(e => (
                                     <Select.Option value={e.name} key={e.name}>
                                         {`${e.name}`}

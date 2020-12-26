@@ -50,7 +50,7 @@
         <div >
             Piura, {{ $finiquito->fecha_finiquito_larga }}
         </div>
-        <br />
+        <br /><br />
         <div style="font-weight: bold;">
             SEÑOR (A)(ITA):<br />
             {{ $finiquito->persona->nombre_completo }}<br />
@@ -58,7 +58,7 @@
             {{ $finiquito->persona->direccion }}<br />
             Presente   .-<br />
         </div>
-        <br />
+        <br /><br />
         <div class="justify">
             <p>Estimado señor(a):</p>
             <p>

@@ -23,7 +23,7 @@ export const RegistroIndividual = () => {
 
     return (
         <>
-            <h4>Registro Individual</h4>
+            <h4>Cartas de Renuncia</h4>
             <br />
             <Card
                 style={{ border: form?.id ? '1.5px solid #1890FF' : '' }}

@@ -32,7 +32,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
         id: "",
         empresa_id: "",
         regimen_id: "",
-        tipo_cese_id: "",
+        tipo_cese_id: 2,
         fecha_inicio_periodo: "",
         fecha_termino_contrato: "",
         zona_labor: "",
@@ -62,7 +62,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                 setRut("");
                 setReload(!reload);
             }
-            
+
         } catch (e) {
             console.log(e);
 
@@ -200,7 +200,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
             <br />
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                         Tipo Cese:
                         <br />
                         <Select
@@ -224,7 +224,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                                 </Select.Option>
                             ))}
                         </Select>
-                    </div>
+                    </div> */}
                     <div className="col-md-4">
                         Zona Labor Envio:<br />
                         <Select

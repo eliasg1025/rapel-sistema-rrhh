@@ -21,7 +21,7 @@ export default function FiniquitosMasivos() {
                 </Menu.Item>
                 <Menu.Item key="registro-individual" icon={<FileAddOutlined />}>
                     <a href="/finiquitos/registro/individual">
-                        Registro Individual
+                        Cartas de Renuncia
                     </a>
                 </Menu.Item>
                 {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (

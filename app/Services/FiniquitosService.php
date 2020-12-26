@@ -54,7 +54,7 @@ class FiniquitosService
                 'persona_id' => $personaId,
                 'grupo_finiquito_id' => $grupoFiniquitoId
             ])->exists();
-    
+
             if ($exists) {
                 return [
                     'message' => 'Ya existe ese trabajador en este grupo',
@@ -85,11 +85,11 @@ class FiniquitosService
             } else {
                 $finiquito = new Finiquito();
             }
-            
+
             $finiquito->empresa_id = $empresaId;
             $finiquito->persona_id = $personaId;
             $finiquito->oficio_id = $oficioId;
-            $finiquito->tipo_cese_id = $tipoCeseId;
+            $finiquito->tipo_cese_id = $grupoFiniquitoId ? $tipoCeseId : 2;
             $finiquito->regimen_id = $regimenId;
             $finiquito->grupo_finiquito_id = $grupoFiniquitoId;
             $finiquito->fecha_inicio_periodo = $fechaInicioPeriodo;
@@ -107,7 +107,7 @@ class FiniquitosService
             return [
                 'message' => 'Error al crear finiquito',
                 'error' => true,
-                'data' => $e->getMessage() . ' -- ' . $e->getLine() 
+                'data' => $e->getMessage() . ' -- ' . $e->getLine()
             ];
         }
     }

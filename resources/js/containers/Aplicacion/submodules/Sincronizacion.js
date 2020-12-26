@@ -163,8 +163,13 @@ const SyncForm = ({ table, eTable, zonasLabor, header, setLoading }) => {
 
     const insertData = (data) => {
         setLoading(true);
-        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
-            data
+        // remun-api.test 209.151.144.74
+        Axios.post(`http://remun-api.test/api/${eTable}/many`,{
+            data,
+            mes: moment(header.periodo).format('MM'),
+            anio: moment(header.periodo).format('YYYY'),
+            tipoPago: header.tipoPago,
+            empresaId: header.empresaId
         })
             .then(res => {
                 console.log(res.data);
