@@ -10,7 +10,8 @@ import { DatosReseteoClave, TablaPendientes } from '../components'
 const initialState = {
     nombre_completo: '',
     fecha_solicitud: moment().format('YYYY-MM-DD').toString(),
-    empresa_id: 9
+    empresa_id: 9,
+    numero_telefono_trabajador: '',
 }
 
 export const Home = () => {
@@ -25,6 +26,7 @@ export const Home = () => {
         e.preventDefault();
         form.trabajador = trabajador;
         form.usuario_id = usuario.id;
+        form.contratoActivo = contratoActivo;
 
         console.log(form);
 
@@ -75,7 +77,7 @@ export const Home = () => {
             <div className="mb-3">
                 <h4>
                     Atención Reseteo Clave{" "}
-                    {usuario.reseteo_clave === 2 && (
+                    {(usuario.reseteo_clave === 2 || usuario.reseteo_clave === 3) && (
                         <EtiquetaAdministrador />
                     )}
                 </h4>
@@ -86,6 +88,7 @@ export const Home = () => {
                 activo={false}
             />
             <DatosReseteoClave
+                contratoActivo={contratoActivo}
                 handleSubmit={handleSubmit}
                 form={form}
                 setForm={setForm}

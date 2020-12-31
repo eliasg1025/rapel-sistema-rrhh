@@ -20,6 +20,7 @@ class AtencionReseteoClave extends Model
         try {
 
             $trabajador_id = Trabajador::findOrCreate($data['trabajador']);
+            $contrato_activo = $data['contratoActivo'];
             $existe_atencion_pendiente = AtencionReseteoClave::where([
                 'trabajador_id' => $trabajador_id,
                 'estado' => 0
@@ -38,9 +39,15 @@ class AtencionReseteoClave extends Model
             $atencion->trabajador_id = $trabajador_id;
             $atencion->empresa_id = $data['empresa_id'];
             $atencion->usuario_id = $data['usuario_id'];
-            $exploded = explode("-", $atencion->fecha_solicitud);
-            $exploded = array_reverse($exploded);
-            $atencion->clave = strtolower($atencion->empresa->shortname) . $exploded[0] . $exploded[1];
+            if (isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000) {
+                $atencion->sueldo_bruto = $contrato_activo['sueldo_bruto'];
+                $atencion->numero_telefono_trabajador = $data['numero_telefono_trabajador'];
+                $atencion->numero_telefono_rrhh = '981269819'; // TEMP
+            } else {
+                $exploded = explode("-", $atencion->fecha_solicitud);
+                $exploded = array_reverse($exploded);
+                $atencion->clave = strtolower($atencion->empresa->shortname) . $exploded[0] . $exploded[1];
+            }
 
             if ( $atencion->save() ) {
                 DB::commit();
@@ -90,7 +97,10 @@ class AtencionReseteoClave extends Model
                     DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
                     'e.shortname as empresa',
                     'a.estado',
-                    'a.clave'
+                    'a.clave',
+                    'a.numero_telefono_rrhh',
+                    'a.numero_telefono_trabajador',
+                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -132,7 +142,60 @@ class AtencionReseteoClave extends Model
                     'a.estado',
                     'a.clave',
                     'usuario.username as usuario',
-                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'a.numero_telefono_rrhh',
+                    'a.numero_telefono_trabajador',
+                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
+                )
+                ->when($estado == 1, function($query) use ($usuarios) {
+                    $query->joinSub($usuarios, 'usuario2', function($join) {
+                        $join->on('usuario2.id', '=', 'a.usuario2_id');
+                    })->addSelect(
+                        'usuario2.username as usuario2',
+                        'usuario2.nombre_completo_usuario as nombre_completo_usuario2'
+                    );
+                })
+                ->joinSub($usuarios, 'usuario', function($join) {
+                    $join->on('usuario.id', '=', 'a.usuario_id');
+                })
+                ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
+                ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->where('a.estado', $estado)
+                ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
+                    $query->where('usuario.id', $usuario_carga_id);
+                })
+                ->when($estado != 0, function($query) use ($fechas) {
+                    $query->whereBetween('a.fecha_solicitud', [$fechas['desde'], $fechas['hasta']]);
+                })
+                ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
+                    $query->where('t.rut', 'like', $rut . '%');
+                })
+                ->orderBy('a.id', 'ASC')
+                ->get();
+        } else if ( $usuario->reseteo_clave == 3 ) {
+            $usuarios = DB::table('usuarios as u')
+                ->select(
+                    'u.id',
+                    'u.username',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo_usuario')
+                )
+                ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
+
+            return DB::table('atenciones_reseteo_clave as a')
+                ->select(
+                    'a.id',
+                    'a.fecha_solicitud',
+                    DB::raw('DATE_FORMAT(a.created_at, "%H:%i:%s") hora'),
+                    't.rut',
+                    DB::raw('CONCAT(t.nombre, " ", t.apellido_paterno, " ", t.apellido_materno) as nombre_completo'),
+                    'e.shortname as empresa',
+                    'a.estado',
+                    'a.clave',
+                    'usuario.username as usuario',
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'a.numero_telefono_rrhh',
+                    'a.numero_telefono_trabajador',
+                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -194,7 +257,7 @@ class AtencionReseteoClave extends Model
         $atencion = AtencionReseteoClave::find($id);
         $usuario = Usuario::find($usuario_id);
 
-        if ( $usuario->reseteo_clave != 2 ) {
+        if ( $usuario->reseteo_clave == 1 ) {
             return [
                 'error'   => true,
                 'message' => 'No tiene autorización para realizar esta operación'

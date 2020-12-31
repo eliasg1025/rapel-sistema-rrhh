@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 
-export const DatosReseteoClave = ({ handleSubmit, form, setForm }) => {
+export const DatosReseteoClave = ({ contratoActivo, handleSubmit, form, setForm }) => {
     const [empresas, setEmpresas] = useState([]);
     const [loading, setLoading] = useState(false);
     const [validForm, setValidForm] = useState(false);
@@ -27,12 +27,20 @@ export const DatosReseteoClave = ({ handleSubmit, form, setForm }) => {
     }, []);
 
     useEffect(() => {
-        if (form.nombre_completo !== '') {
-            setValidForm(false);
+        if (contratoActivo?.sueldo_bruto >= 2000) {
+            if (form.nombre_completo !== '' && form.numero_telefono_trabajador !== '') {
+                setValidForm(false);
+            } else {
+                setValidForm(true);
+            }
         } else {
-            setValidForm(true);
+            if (form.nombre_completo !== '') {
+                setValidForm(false);
+            } else {
+                setValidForm(true);
+            }
         }
-    }, [form])
+    }, [form, contratoActivo])
 
     return (
         <form onSubmit={handleSubmit}>
@@ -66,6 +74,17 @@ export const DatosReseteoClave = ({ handleSubmit, form, setForm }) => {
                         {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                     </select>
                 </div>
+                {contratoActivo?.sueldo_bruto >= 2000 && (
+                    <div className="form-group col-md-6 col-lg-4">
+                        Telefono Trabajador:<br />
+                        <input
+                            type="text" name="numero_telefono_trabajador" placeholder="Telefono Trabajador"
+                            className="form-control"
+                            value={form.numero_telefono_trabajador}
+                            onChange={e => setForm({ ...form, numero_telefono_trabajador: e.target.value })}
+                        />
+                    </div>
+                )}
             </div>
             <div className="row">
                 <div className="col">

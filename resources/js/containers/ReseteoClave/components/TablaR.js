@@ -16,7 +16,7 @@ const Acciones = ({
         <div className="btn-group">
             {record.estado == 0 ? (
                 <>
-                    {usuario.reseteo_clave == 2 && (
+                    {(usuario.reseteo_clave == 2 || usuario.reseteo_clave == 3) && (
                         <Tooltip title="Marca como ATENDIDO">
                             <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
                                 <i className="fas fa-check"/>
@@ -120,6 +120,10 @@ const getColumns = (
                 dataIndex: 'clave'
             },
             {
+                title: 'Contacto',
+                dataIndex: 'numero_telefono_trabajador'
+            },
+            {
                 title: 'Acciones',
                 dataIndex: 'acciones',
                 render: (_, record) => (
@@ -177,7 +181,7 @@ const getColumns = (
     return (
         <div>
             <div style={{ marginBottom: 16 }}>
-                {(hasSelected && filtro.estado == 0 && usuario.reseteo_clave === 2) && (
+                {(hasSelected && filtro.estado == 0 && (usuario.reseteo_clave === 2 || usuario.reseteo_clave === 3)) && (
                     <button className="btn btn-primary" disabled={loading} onClick={handleMassiveResolver}>
                         {loading ? (
                             <>

@@ -113,7 +113,15 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         setIsVisible(true);
         setModalContent(
             <div className="container">
-                Nueva clave: <b>{item.clave}</b><br />
+                {!item.restringido ? (
+                    <>
+                        Nueva clave: <b>{item.clave}</b><br />
+                    </>
+                ) : (
+                    <>
+                        Contactar al: <b>{item.numero_telefono_rrhh}</b><br />
+                    </>
+                )}
                 Atendido por: <b>{item.nombre_completo_usuario2}</b>
             </div>
         );
@@ -211,7 +219,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         <Select.Option value={1} key="1">ATENDIDOS</Select.Option>
                     </Select>
                 </div>
-                {usuario.reseteo_clave == 2 && (
+                {(usuario.reseteo_clave == 2 || usuario.reseteo_clave == 3) && (
                     <div className="col-md-4">
                         Cargado por:<br />
                         <Select
