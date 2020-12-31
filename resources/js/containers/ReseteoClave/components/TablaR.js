@@ -16,12 +16,22 @@ const Acciones = ({
         <div className="btn-group">
             {record.estado == 0 ? (
                 <>
-                    {(usuario.reseteo_clave == 2 || usuario.reseteo_clave == 3) && (
-                        <Tooltip title="Marca como ATENDIDO">
-                            <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
-                                <i className="fas fa-check"/>
-                            </button>
-                        </Tooltip>
+                    {record.restringido === 1 ? (
+                        (usuario.reseteo_clave == 3) && (
+                            <Tooltip title="Marca como ATENDIDO">
+                                <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
+                                    <i className="fas fa-check"/>
+                                </button>
+                            </Tooltip>
+                        )
+                    ) : (
+                        (usuario.reseteo_clave == 2 || usuario.reseteo_clave == 3) && (
+                            <Tooltip title="Marca como ATENDIDO">
+                                <button className="btn btn-outline-primary btn-sm" onClick={() => handleResolver(record.id)}>
+                                    <i className="fas fa-check"/>
+                                </button>
+                            </Tooltip>
+                        )
                     )}
                     <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(record.id)}>
                         <i className="fas fa-trash-alt" />
@@ -199,6 +209,8 @@ const getColumns = (
                 rowSelection={rowSelection}
                 columns={getColumns(usuario, handleEliminar, handleResolver, handleVerCambio)}
                 dataSource={data}
+                bordered
+                rowClassName={(record, index) => record.restringido === 1 && 'table-row-warning'}
                 scroll={{ x: 1000 }}
                 size="small"
             />
