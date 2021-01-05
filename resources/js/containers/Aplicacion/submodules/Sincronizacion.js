@@ -164,7 +164,7 @@ const SyncForm = ({ table, eTable, zonasLabor, header, setLoading }) => {
     const insertData = (data) => {
         setLoading(true);
         // remun-api.test 209.151.144.74
-        Axios.post(`http://remun-api.test/api/${eTable}/many`,{
+        Axios.post(`http://209.151.144.74/api/${eTable}/many`,{
             data,
             mes: moment(header.periodo).format('MM'),
             anio: moment(header.periodo).format('YYYY'),
@@ -292,7 +292,7 @@ const SyncFormTarja = ({ header, eTable, loading, setLoading }) => {
             : 'asistencias';
 
         setLoading(true);
-        Axios.post(`http://remun-api.test/api/${instance}/many`,{
+        Axios.post(`http://209.151.144.74/api/${instance}/many`,{
             data,
             mes,
             anio,
