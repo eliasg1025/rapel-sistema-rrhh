@@ -8,6 +8,7 @@ use App\Models\RegistroDescanso;
 use App\Models\SqlSrv\Trabajador as SqlSrvTrabajador;
 use App\Models\Trabajador;
 use App\Models\Usuario;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -164,7 +165,7 @@ class InformesDescansosController extends Controller
         $informe->informe  = InformeDescanso::obtenerCorrelativo(
             $informe->id,
             $informe->empresa_id,
-            $informe->fecha_incio
+            $informe->fecha_inicio
         );
         $registros = RegistroDescanso::getByInforme($id);
 
