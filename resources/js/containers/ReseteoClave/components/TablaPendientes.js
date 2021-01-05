@@ -15,6 +15,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         estado: 0,
         usuario_carga_id: 0,
         rut: '',
+        tipo: 'TODOS',
     });
     const [isVisible, setIsVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
@@ -30,6 +31,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
             'EMPRESA',
             'CARGADO POR',
             'CLAVE SUGERIDA',
+            'CONTACTO',
             'ATENDIDO POR',
         ];
         const d = data.map(item => {
@@ -41,6 +43,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 empresa: item.empresa,
                 cargado_por: item?.nombre_completo_usuario || '',
                 clave: (filtro.estado == 0 && usuario.reseteo_clave == 1) ? '' : item.clave,
+                contacto: item?.numero_telefono_trabajador || '',
                 atendido_por: item?.nombre_completo_usuario2 || '',
             }
         });
@@ -136,6 +139,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                 hasta: filtro.hasta,
                 estado: filtro.estado,
                 rut: filtro.rut,
+                tipo: filtro.tipo,
             })
                 .then(res => {
                     message['success']({
@@ -157,7 +161,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         if (filtro.rut === '' || filtro.rut.length >= 8) {
             fetchData();
         }
-    }, [filtro.desde, filtro.hasta, filtro.estado, filtro.usuario_carga_id, filtro.rut, reloadDatos]);
+    }, [filtro.desde, filtro.hasta, filtro.estado, filtro.usuario_carga_id, filtro.rut, filtro.tipo, reloadDatos]);
 
     useEffect(() => {
         setFiltro({ ...filtro, usuario_carga_id: 0 });
@@ -179,7 +183,7 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
         }
 
         fetchUsuariosCarga();
-    }, [filtro.desde, filtro.hasta, filtro.estado, reloadDatos]);
+    }, [filtro.desde, filtro.hasta, filtro.estado, filtro.tipo, reloadDatos]);
 
     return (
         <>
@@ -238,6 +242,28 @@ export const TablaPendientes = ({ reloadDatos, setReloadDatos }) => {
                         >
                             <Select.Option value={0} key="0">TODOS</Select.Option>
                             {usuariosCarga.map(option => <Select.Option value={option.id} key={option.id}>{ `${option.nombre_completo}` }</Select.Option>)}
+                        </Select>
+                    </div>
+                )}
+                {usuario.reseteo_clave == 3 && (
+                    <div className="col-md-4">
+                        Tipo:<br />
+                        <Select
+                            value={filtro.tipo}
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            onChange={e => setFiltro({ ...filtro, tipo: e })}
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            <Select.Option value="TODOS" key="TODOS">TODOS</Select.Option>
+                            <Select.Option value="RESTRINGIDO" key="RESTRINGIDO">RESTRINGIDO</Select.Option>
                         </Select>
                     </div>
                 )}

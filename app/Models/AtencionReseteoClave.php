@@ -68,7 +68,7 @@ class AtencionReseteoClave extends Model
         }
     }
 
-    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $usuario_carga_id, $rut)
+    public static function _getAll(int $usuario_id, array $fechas, int $estado=0, int $usuario_carga_id, $rut, $tipo)
     {
         $usuario = Usuario::find($usuario_id);
 
@@ -219,6 +219,9 @@ class AtencionReseteoClave extends Model
                 })
                 ->when(($rut !== '' || !is_null($rut)) && is_numeric($rut), function($query) use ($rut) {
                     $query->where('t.rut', 'like', $rut . '%');
+                })
+                ->when($tipo === 'RESTRINGIDO', function($query) {
+                    $query->where('a.sueldo_bruto', '>=', 2000);
                 })
                 ->orderBy('a.id', 'ASC')
                 ->get();

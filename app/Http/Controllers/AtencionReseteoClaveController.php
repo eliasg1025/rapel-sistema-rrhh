@@ -27,8 +27,9 @@ class AtencionReseteoClaveController extends Controller
         $estado = $request->estado;
         $usuario_carga_id = $request->usuario_carga_id;
         $rut = $request->rut;
+        $tipo = $request->tipo;
 
-        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas, $estado, $usuario_carga_id, $rut);
+        $result = AtencionReseteoClave::_getAll($usuario_id, $fechas, $estado, $usuario_carga_id, $rut, $tipo);
 
         if (isset($result['error'])) {
             return response()->json([
