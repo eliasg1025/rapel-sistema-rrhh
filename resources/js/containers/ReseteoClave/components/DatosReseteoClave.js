@@ -27,7 +27,7 @@ export const DatosReseteoClave = ({ contratoActivo, handleSubmit, form, setForm 
     }, []);
 
     useEffect(() => {
-        if (contratoActivo?.sueldo_bruto >= 2000) {
+        if (contratoActivo?.sueldo_bruto >= 2000 || contratoActivo?.zona_labor?.id == 55) {
             if (form.nombre_completo !== '' && form.numero_telefono_trabajador !== '') {
                 setValidForm(false);
             } else {
@@ -74,7 +74,7 @@ export const DatosReseteoClave = ({ contratoActivo, handleSubmit, form, setForm 
                         {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                     </select>
                 </div>
-                {contratoActivo?.sueldo_bruto >= 2000 && (
+                {(contratoActivo?.sueldo_bruto >= 2000 || contratoActivo?.zona_labor?.id == 55 ) && (
                     <div className="form-group col-md-6 col-lg-4">
                         Telefono Trabajador:<br />
                         <input

@@ -39,14 +39,17 @@ class AtencionReseteoClave extends Model
             $atencion->trabajador_id = $trabajador_id;
             $atencion->empresa_id = $data['empresa_id'];
             $atencion->usuario_id = $data['usuario_id'];
-            if (isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000) {
+            if ((isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000) || $contrato_activo['zona_labor']['id'] == 55) {
                 $atencion->sueldo_bruto = $contrato_activo['sueldo_bruto'];
                 $atencion->numero_telefono_trabajador = $data['numero_telefono_trabajador'];
                 $atencion->numero_telefono_rrhh = '981269819'; // TEMP
+
+                $atencion->restringido = true;
             } else {
                 $exploded = explode("-", $atencion->fecha_solicitud);
                 $exploded = array_reverse($exploded);
                 $atencion->clave = strtolower($atencion->empresa->shortname) . $exploded[0] . $exploded[1];
+                $atencion->restringido = false;
             }
 
             if ( $atencion->save() ) {
@@ -100,7 +103,7 @@ class AtencionReseteoClave extends Model
                     'a.clave',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
+                    'a.restringido'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -145,7 +148,7 @@ class AtencionReseteoClave extends Model
                     'usuario.nombre_completo_usuario as nombre_completo_usuario',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
+                    'a.restringido'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -195,7 +198,7 @@ class AtencionReseteoClave extends Model
                     'usuario.nombre_completo_usuario as nombre_completo_usuario',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    DB::raw('case when a.sueldo_bruto >= 2000 then 1 else 0 end as restringido')
+                    'a.restringido'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -221,7 +224,7 @@ class AtencionReseteoClave extends Model
                     $query->where('t.rut', 'like', $rut . '%');
                 })
                 ->when($tipo === 'RESTRINGIDO', function($query) {
-                    $query->where('a.sueldo_bruto', '>=', 2000);
+                    $query->where('a.restringido', true);
                 })
                 ->orderBy('a.id', 'ASC')
                 ->get();
