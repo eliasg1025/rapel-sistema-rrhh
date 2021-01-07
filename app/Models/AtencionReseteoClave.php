@@ -39,6 +39,8 @@ class AtencionReseteoClave extends Model
             $atencion->trabajador_id = $trabajador_id;
             $atencion->empresa_id = $data['empresa_id'];
             $atencion->usuario_id = $data['usuario_id'];
+            $atencion->regimen_id = $contrato_activo['regimen_id'];
+            $atencion->oficio_id = Oficio::findOrCreate($contrato_activo['oficio']);
             if ((isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000) || $contrato_activo['zona_labor']['id'] == 55) {
                 $atencion->sueldo_bruto = $contrato_activo['sueldo_bruto'];
                 $atencion->numero_telefono_trabajador = $data['numero_telefono_trabajador'];
@@ -103,7 +105,9 @@ class AtencionReseteoClave extends Model
                     'a.clave',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    'a.restringido'
+                    'a.restringido',
+                    'o.name as oficio',
+                    'r.name as regimen'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -115,6 +119,8 @@ class AtencionReseteoClave extends Model
                 })
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->leftJoin('oficios as o', 'o.id', '=', 'a.oficio_id')
+                ->leftJoin('regimenes as r', 'r.id', '=', 'a.regimen_id')
                 ->where('a.usuario_id', '=', $usuario->id)
                 ->where('a.estado', $estado)
                 ->when($estado != 0, function($query) use ($fechas) {
@@ -148,7 +154,9 @@ class AtencionReseteoClave extends Model
                     'usuario.nombre_completo_usuario as nombre_completo_usuario',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    'a.restringido'
+                    'a.restringido',
+                    'o.name as oficio',
+                    'r.name as regimen'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -161,6 +169,8 @@ class AtencionReseteoClave extends Model
                 ->joinSub($usuarios, 'usuario', function($join) {
                     $join->on('usuario.id', '=', 'a.usuario_id');
                 })
+                ->leftJoin('oficios as o', 'o.id', '=', 'a.oficio_id')
+                ->leftJoin('regimenes as r', 'r.id', '=', 'a.regimen_id')
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->where('a.estado', $estado)
@@ -198,7 +208,9 @@ class AtencionReseteoClave extends Model
                     'usuario.nombre_completo_usuario as nombre_completo_usuario',
                     'a.numero_telefono_rrhh',
                     'a.numero_telefono_trabajador',
-                    'a.restringido'
+                    'a.restringido',
+                    'o.name as oficio',
+                    'r.name as regimen'
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -213,6 +225,8 @@ class AtencionReseteoClave extends Model
                 })
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->leftJoin('oficios as o', 'o.id', '=', 'a.oficio_id')
+                ->leftJoin('regimenes as r', 'r.id', '=', 'a.regimen_id')
                 ->where('a.estado', $estado)
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);

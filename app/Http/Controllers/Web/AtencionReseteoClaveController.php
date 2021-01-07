@@ -23,4 +23,21 @@ class AtencionReseteoClaveController extends Controller
 
         return view('pages.atencion-reseteo-clave', compact('data'));
     }
+
+    public function reportes(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->reseteo_clave == 0 ) {
+            $nombre_modulo = 'atencion de cambio de clave';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'reportes',
+        ];
+
+        return view('pages.atencion-reseteo-clave', compact('data'));
+    }
 }

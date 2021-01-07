@@ -131,6 +131,12 @@ Route::group(['prefix' => 'atencion-reseteo-clave'], function() {
     Route::post('/get-usuarios-carga', 'AtencionReseteoClaveController@getUsuariosCarga');
     Route::put('/resolver/{id}', 'AtencionReseteoClaveController@resolver');
     Route::delete('/{id}', 'AtencionReseteoClaveController@delete');
+
+    Route::group(['prefix' => 'reportes'], function() {
+        Route::post('/exportar', 'AtencionReseteoClaveController@export');
+        Route::get('/data-resumen', 'AtencionReseteoClaveController@getDataResumen');
+        Route::get('/resumen', 'AtencionReseteoClaveController@getResumen');
+    });
 });
 
 Route::group(['prefix' => 'formulario-permiso'], function() {

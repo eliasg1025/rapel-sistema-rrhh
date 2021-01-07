@@ -118,6 +118,14 @@ const getColumns = (
                 dataIndex: 'nombre_completo',
             },
             {
+                title: 'Oficio',
+                dataIndex: 'oficio'
+            },
+            {
+                title: 'Regimen',
+                dataIndex: 'regimen'
+            },
+            {
                 title: 'Empresa',
                 dataIndex: 'empresa',
             },

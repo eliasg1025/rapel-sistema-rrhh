@@ -48,6 +48,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'atencion-cambio-clave'], function() {
         Route::get('/', 'Web\AtencionReseteoClaveController@index');
+        Route::get('/reportes', 'Web\AtencionReseteoClaveController@reportes');
     });
 
     Route::group(['prefix' => 'formularios-permisos'], function() {
