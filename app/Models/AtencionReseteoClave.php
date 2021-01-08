@@ -140,6 +140,13 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
+            $registrosPorTrabajador = DB::table('atenciones_reseteo_clave as x')
+                ->select(
+                    'x.trabajador as id',
+                    DB::raw('COUNT(*) as cantidad_registros')
+                )
+                ->groupBy('x.trabajador_id');
+
             return DB::table('atenciones_reseteo_clave as a')
                 ->select(
                     'a.id',
@@ -156,7 +163,8 @@ class AtencionReseteoClave extends Model
                     'a.numero_telefono_trabajador',
                     'a.restringido',
                     'o.name as oficio',
-                    'r.name as regimen'
+                    'r.name as regimen',
+                    'registros.cantidad_registros',
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -173,6 +181,9 @@ class AtencionReseteoClave extends Model
                 ->leftJoin('regimenes as r', 'r.id', '=', 'a.regimen_id')
                 ->join('trabajadores as t', 't.id', '=', 'a.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
+                ->leftJoinSub($registrosPorTrabajador, 'registros', function ($join) {
+                    $join->on('registros.id', '=', 'a.trabajador_id');
+                })
                 ->where('a.estado', $estado)
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);
@@ -194,6 +205,13 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
+            $registrosPorTrabajador = DB::table('atenciones_reseteo_clave as x')
+                ->select(
+                    'x.trabajador_id as id',
+                    DB::raw('COUNT(*) as cantidad_registros')
+                )
+                ->groupBy('x.trabajador_id');
+
             return DB::table('atenciones_reseteo_clave as a')
                 ->select(
                     'a.id',
@@ -210,7 +228,8 @@ class AtencionReseteoClave extends Model
                     'a.numero_telefono_trabajador',
                     'a.restringido',
                     'o.name as oficio',
-                    'r.name as regimen'
+                    'r.name as regimen',
+                    'registros.cantidad_registros',
                 )
                 ->when($estado == 1, function($query) use ($usuarios) {
                     $query->joinSub($usuarios, 'usuario2', function($join) {
@@ -227,6 +246,9 @@ class AtencionReseteoClave extends Model
                 ->join('empresas as e', 'e.id', '=', 'a.empresa_id')
                 ->leftJoin('oficios as o', 'o.id', '=', 'a.oficio_id')
                 ->leftJoin('regimenes as r', 'r.id', '=', 'a.regimen_id')
+                ->leftJoinSub($registrosPorTrabajador, 'registros', function ($join) {
+                    $join->on('registros.id', '=', 'a.trabajador_id');
+                })
                 ->where('a.estado', $estado)
                 ->when($usuario_carga_id !== 0, function($query) use ($usuario_carga_id) {
                     $query->where('usuario.id', $usuario_carga_id);

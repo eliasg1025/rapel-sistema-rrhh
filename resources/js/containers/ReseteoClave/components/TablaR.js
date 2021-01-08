@@ -130,6 +130,10 @@ const getColumns = (
                 dataIndex: 'empresa',
             },
             {
+                title: '# Desbloqueos',
+                dataIndex: 'cantidad_registros'
+            },
+            {
                 title: 'Cargado por',
                 dataIndex: 'nombre_completo_usuario',
             },
@@ -214,7 +218,7 @@ const getColumns = (
                 </span>
             </div>
             <Table
-                rowSelection={rowSelection}
+                /* rowSelection={rowSelection} */
                 columns={getColumns(usuario, handleEliminar, handleResolver, handleVerCambio)}
                 dataSource={data}
                 bordered
