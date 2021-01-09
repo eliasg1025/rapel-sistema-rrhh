@@ -140,12 +140,12 @@ class AtencionReseteoClave extends Model
                 )
                 ->join('trabajadores as t', 't.id', '=', 'u.trabajador_id');
 
-            $registrosPorTrabajador = DB::table('atenciones_reseteo_clave as x')
-                ->select(
-                    'x.trabajador as id',
-                    DB::raw('COUNT(*) as cantidad_registros')
-                )
-                ->groupBy('x.trabajador_id');
+                $registrosPorTrabajador = DB::table('atenciones_reseteo_clave as x')
+                    ->select(
+                        'x.trabajador_id as id',
+                        DB::raw('COUNT(*) as cantidad_registros')
+                    )
+                    ->groupBy('x.trabajador_id');
 
             return DB::table('atenciones_reseteo_clave as a')
                 ->select(
