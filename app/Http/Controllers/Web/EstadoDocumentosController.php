@@ -61,4 +61,21 @@ class EstadoDocumentosController extends Controller
 
         return view('pages.estado-documentos', compact('data'));
     }
+
+    public function vacaciones(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ($usuario->estado_documentos == 0) {
+            $nombre_modulo = 'estado de documentos';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'vacaciones'
+        ];
+
+        return view('pages.estado-documentos', compact('data'));
+    }
 }

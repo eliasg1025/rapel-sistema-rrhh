@@ -3,7 +3,7 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, SnippetsOutlined } from "@ant-design/icons";
 import moment from 'moment';
 
-import { Home, Boletas, Prorrogas } from './submodules';
+import { Home, Boletas, Prorrogas, Vacaciones } from './submodules';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -36,6 +36,11 @@ export default function EstadoDocumentos() {
                             Prorrogas
                         </a>
                     </Menu.Item>
+                    <Menu.Item key="vacaciones" icon={<SnippetsOutlined />}>
+                        <a href="/estado-documentos/vacaciones">
+                            Vacaciones
+                        </a>
+                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -44,6 +49,7 @@ export default function EstadoDocumentos() {
                         {submodule === 'main' && <Home />}
                         {submodule === 'boletas' && <Boletas />}
                         {submodule === 'prorrogas' && <Prorrogas />}
+                        {submodule === 'vacaciones' && <Vacaciones />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>&copy;{ moment().format('YYYY') } - GRUPO VERFRUT</Footer>

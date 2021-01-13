@@ -53,6 +53,10 @@ class DocumentoTuRecibo extends Model
             ->orderBy('periodo', 'DESC')
             ->first();
 
+        if (!$ultimoPeriodo) {
+            return [];
+        }
+
         $result = DB::table('documentos_turecibo as dt')
             ->select(
                 'dt.id as key',

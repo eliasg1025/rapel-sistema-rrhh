@@ -80,6 +80,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\EstadoDocumentosController@index');
         Route::get('/boletas', 'Web\EstadoDocumentosController@boletas');
         Route::get('/prorrogas', 'Web\EstadoDocumentosController@prorrogas');
+        Route::get('/vacaciones', 'Web\EstadoDocumentosController@vacaciones');
     });
 
     Route::group(['prefix' => 'sctr'], function() {
