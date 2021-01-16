@@ -145,7 +145,7 @@
             <table style="width: 80%;">
                 <tr>
                     <td>EMPLEADO:</td>
-                    <td class="box">{{ $formulario->regimen->id === 1 || $formulario->regimen->id === 2 ? 'X' : ' ' }}</td>
+                    <td class="box">{{ ($formulario->regimen->id === 1 || $formulario->regimen->id === 2 || $formulario->regimen->id === 4) ? 'X' : ' ' }}</td>
                     <td></td>
                     <td>OBRERO:</td>
                     <td class="box">{{ $formulario->regimen->id === 3 ? 'X' : ' '  }}</td>
