@@ -1,19 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Select, notification, Button } from 'antd';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import { Select, notification, Button } from "antd";
+import moment from "moment";
 
 import {
     TrabajadorProvider,
     RegimenesProvider,
     TiposCesesProvider,
     FiniquitosProvider
-} from '../../../providers';
+} from "../../../providers";
 
-import { empresa } from '../../../data/default.json';
-import Axios from 'axios';
+import { empresa } from "../../../data/default.json";
+import Axios from "axios";
 
-export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm }) => {
-    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
+export const CreateFiniquitoFormIndividual = ({
+    reload,
+    setReload,
+    form,
+    setForm
+}) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
     const trabajadoresProvider = new TrabajadorProvider();
     const regimenesProvider = new RegimenesProvider();
@@ -50,19 +55,18 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                 grupo_finiquito_id: null,
                 usuario_id: usuario.id,
                 fecha_finiquito: form.fecha_finiquito,
-                zona_labor: form.zona_labor,
+                zona_labor: form.zona_labor
             });
 
             await notification[status]({
                 message: message
             });
 
-            if (status === 'success') {
+            if (status === "success") {
                 setForm(initalFormState);
                 setRut("");
                 setReload(!reload);
             }
-
         } catch (e) {
             console.log(e);
 
@@ -77,7 +81,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
     const handleSubmitBuscarTrabajador = e => {
         e.preventDefault();
         buscarTrabajador();
-    }
+    };
 
     const buscarTrabajador = async () => {
         setLoadingRut(true);
@@ -117,7 +121,7 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
 
         fetchData();
 
-        Axios.get('/api/zona-labor')
+        Axios.get("/api/zona-labor")
             .then(res => {
                 setZonasLabor(res.data);
             })
@@ -130,12 +134,18 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
         <>
             <div className="row">
                 <div className="col-md-4">
-                    Fecha Finiquito:<br />
+                    Fecha Finiquito:
+                    <br />
                     <input
                         type="date"
                         className="form-control"
                         value={form?.fecha_finiquito}
-                        onChange={e => setForm({ ...form, fecha_finiquito: e.target.value })}
+                        onChange={e =>
+                            setForm({
+                                ...form,
+                                fecha_finiquito: e.target.value
+                            })
+                        }
                         onBlur={() => {
                             if (form?.rut?.length >= 8) {
                                 buscarTrabajador();
@@ -143,8 +153,12 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         }}
                     />
                 </div>
-                <form className="col-md-4" onSubmit={handleSubmitBuscarTrabajador}>
-                    RUT:<br />
+                <form
+                    className="col-md-4"
+                    onSubmit={handleSubmitBuscarTrabajador}
+                >
+                    RUT:
+                    <br />
                     <div className="input-group">
                         <input
                             type="text"
@@ -164,14 +178,15 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                                 {!loadingRut ? (
                                     <i className="fas fa-search"></i>
                                 ) : (
-                                        <i className="fas fa-spinner fa-spin"></i>
-                                    )}
+                                    <i className="fas fa-spinner fa-spin"></i>
+                                )}
                             </button>
                         </div>
                     </div>
                 </form>
                 <div className="col-md-4">
-                    Trabajador:<br />
+                    Trabajador:
+                    <br />
                     <input
                         className="form-control"
                         value={`${form?.nombre ||
@@ -180,22 +195,6 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         readOnly={true}
                     />
                 </div>
-                {/* <div className="col-md-4">
-                    Empresa:
-                    <br />
-                    <select
-                        className="form-control"
-                        value={parseInt(form.empresa_id) || ""}
-                        onChange={e => setForm({ ...form, empresa_id: e })}
-                        disabled
-                    >
-                        {empresa.map(e => (
-                            <option value={e.id} key={e.id}>
-                                {`${e.id} - ${e.name}`}
-                            </option>
-                        ))}
-                    </select>
-                </div> */}
             </div>
             <br />
             <form onSubmit={handleSubmit}>
@@ -226,10 +225,13 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                         </Select>
                     </div> */}
                     <div className="col-md-4">
-                        Zona Labor Envio:<br />
+                        Zona Labor Envio:
+                        <br />
                         <Select
-                            value={form?.zona_labor || ''} showSearch
-                            style={{ width: '100%' }} optionFilterProp="children"
+                            value={form?.zona_labor || ""}
+                            showSearch
+                            style={{ width: "100%" }}
+                            optionFilterProp="children"
                             filterOption={(input, option) =>
                                 option.children
                                     .toLowerCase()
@@ -245,11 +247,36 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                             ))}
                         </Select>
                     </div>
+                    <div className="col-md-4">
+                        Empresa:
+                        <br />
+                        <select
+                            className="form-control"
+                            value={parseInt(form.empresa_id) || ""}
+                            onChange={e => setForm({ ...form, empresa_id: e })}
+                            disabled
+                        >
+                            {empresa.map(e => (
+                                <option value={e.id} key={e.id}>
+                                    {`${e.id} - ${e.name}`}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="col-md-4">
+                        Oficio:
+                        <br />
+                        <input
+                            className="form-control"
+                            value={form?.oficio?.name || ""}
+                            disabled
+                        />
+                    </div>
                 </div>
                 <br />
                 <div className="row">
                     <div className="col-md-4">
-                        Tiempo de Servicio (meses):
+                        Tiempo de Servicio a la fecha (meses):
                         <br />
                         <input
                             className="form-control"
@@ -305,11 +332,11 @@ export const CreateFiniquitoFormIndividual = ({ reload, setReload, form, setForm
                             loading={loading}
                             disabled={!form.zona_labor}
                         >
-                            Enviar
+                            Emitir
                         </Button>
                     </div>
                 </div>
             </form>
         </>
     );
-}
+};

@@ -46,7 +46,7 @@ class FiniquitosService
 
     public function create(
         $empresaId, $personaId, $tipoCeseId, $grupoFiniquitoId = null,
-        $fechaInicioPeriodo, $fechaTerminaoContrato, $regimenId, $oficioId, $usuarioId,
+        $fechaInicioPeriodo, $fechaTerminaoContrato, $ultimoDialaborado, $regimenId, $oficioId, $usuarioId,
         $fechaFiniquito = null, $zonaLabor = null, $id = null
     )
     {
@@ -95,6 +95,7 @@ class FiniquitosService
             $finiquito->grupo_finiquito_id = $grupoFiniquitoId;
             $finiquito->fecha_inicio_periodo = $fechaInicioPeriodo;
             $finiquito->fecha_termino_contrato = $fechaTerminaoContrato;
+            $finiquito->fecha_ultimo_dia_laborado = $ultimoDialaborado;
             $finiquito->usuario_id = $usuarioId;
             $finiquito->fecha_finiquito = $fechaFiniquito;
             $finiquito->zona_labor = $zonaLabor;
@@ -132,13 +133,15 @@ class FiniquitosService
         }
     }
 
-    public function delete($id)
+    public function delete($id, $justificacion)
     {
         $finiquito = Finiquito::find($id);
 
         if ($finiquito->getEstado()->name === 'SIN EFECTO') {
             $finiquito->delete();
         } else {
+            $finiquito->justificacion = $justificacion;
+            $finiquito->save();
             $this->changeState(3, $finiquito->id);
         }
 
@@ -228,6 +231,7 @@ class FiniquitosService
                         $grupoFiniquitoId,
                         $trabajador->fecha_inicio_periodo,
                         $trabajador->fecha_termino_contrato,
+                        $trabajador->ultimo_dia_laborado,
                         $trabajador->regimen_id,
                         $oficioId,
                         $usuarioId,

@@ -134,6 +134,7 @@ class Trabajador extends Model
                     'z.IdZona' => 't.IdZonaLabores'
                 ])
                 ->where('c.IndicadorVigencia', 1)
+                ->whereNull('c.FechaTermino')
                 ->where('t.RutTrabajador', $rut)
                 ->whereIn('t.idEmpresa', [9, 14])
                 ->first();
@@ -196,6 +197,7 @@ class Trabajador extends Model
                 }
 
                 $trabajador->zona_labor = $ultimaActividad->zona_name;
+                $trabajador->ultimo_dia_laborado = $ultimaActividad->fecha_actividad;
             } else {
                 $trabajador->zona_labor = $trabajador->zona_name;
             }
@@ -260,9 +262,9 @@ class Trabajador extends Model
                 }
             }
 
-            if ($trabajador->regimen_id == 2) {
+            if ($trabajador->regimen_id == 2 || $trabajador->regimen_id == 4) {
                 return [
-                    'message' => 'No se puede finiquitar a un trabajador del Regimen: EMPLEADO REGULAR por este medio',
+                    'message' => 'No se puede finiquitar a un TRABAJADOR RESTRINGIDO por este medio',
                     'data'  => [
                         'rut' => $rut,
                     ],

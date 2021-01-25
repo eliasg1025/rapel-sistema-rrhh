@@ -73,10 +73,10 @@ class GruposFiniquitosController extends Controller
         ]);
     }
 
-    public function delete(int $id)
+    public function delete(int $id, Request $request)
     {
         $estadoId = 4;
-        $result = $this->gruposFiniquitosService->changeState($estadoId, $id);
+        $result = $this->gruposFiniquitosService->changeState($estadoId, $id, $request->justificacion);
 
         return response()->json([
             'message' => 'Grupo borrado correctamente',

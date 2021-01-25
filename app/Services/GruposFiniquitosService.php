@@ -49,9 +49,11 @@ class GruposFiniquitosService
         return $grupo;
     }
 
-    public function changeState($estadoId, $id)
+    public function changeState($estadoId, $id, $justificacion)
     {
         $grupo = GrupoFiniquito::find($id);
+        $grupo->justificacion = $justificacion;
+        $grupo->save();
 
         if ($grupo->setEstado($estadoId)) {
 
@@ -149,7 +151,7 @@ class GruposFiniquitosService
 
                 $finiquito->setEstado(2);
             }
-    
+
             return [
                 'message' => 'Estado actualizado correctamente'
             ];

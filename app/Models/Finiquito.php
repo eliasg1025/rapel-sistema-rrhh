@@ -12,6 +12,10 @@ class Finiquito extends Model
 
     protected $table = 'finiquitos';
 
+    protected $fillable = [
+        'justificacion',
+    ];
+
     public function grupoFiniquito()
     {
         return $this->belongsTo(GrupoFiniquito::class, 'grupo_finiquito_id');
@@ -54,7 +58,7 @@ class Finiquito extends Model
         $mes = $meses[($fecha->format('n')) - 1];
         return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
     }
-    
+
     public function getFechaFiniquitoLargaAttribute($value)
     {
         if ($this->grupo_finiquito_id) {

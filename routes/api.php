@@ -287,7 +287,7 @@ Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::put('/{id}/finiquitos', 'GruposFiniquitosController@updateFiniquitos');
     Route::get('/{id}', 'GruposFiniquitosController@find')->where('id', '[0-9]+');
     Route::get('/{id}/print', 'GruposFiniquitosController@print');
-    Route::delete('/{id}', 'GruposFiniquitosController@delete');
+    Route::post('/{id}/delete', 'GruposFiniquitosController@delete');
     Route::group(['prefix' => 'usuarios-zonas'], function() {
         Route::get('/', 'GruposFiniquitosController@getUsuariosZonas');
         Route::post('/', 'GruposFiniquitosController@createUsuariosZonas');
@@ -300,7 +300,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/', 'FiniquitosController@create');
     Route::post('/import', 'FiniquitosController@import');
     Route::put('/{id}/state', 'FiniquitosController@changeState');
-    Route::delete('/{id}', 'FiniquitosController@delete');
+    Route::post('/{id}/delete', 'FiniquitosController@delete');
 });
 
 Route::group(['prefix' => 'tipos-ceses'], function() {

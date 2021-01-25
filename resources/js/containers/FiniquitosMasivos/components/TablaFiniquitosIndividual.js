@@ -3,6 +3,8 @@ import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker, Input } f
 import moment from 'moment';
 import Axios from 'axios';
 
+import ModalCustom from "../../Modal";
+
 import { FiniquitosProvider } from '../../../providers';
 
 const finiquitosProvider = new FiniquitosProvider();
@@ -22,15 +24,16 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     const [loading, setLoading] = useState(false);
     const [finiquitos, setFiniquitos] = useState([]);
 
+    const [viewModal, setViewModal] = useState(false);
+    const [deleteForm, setDeleteForm] = useState({
+        justificacion: "",
+        id: ""
+    });
+
     const confirmDelete = id => {
-        Modal.confirm({
-            title: 'Eliminar Finiquito',
-            content: '¿Desea eliminar este registro?',
-            okText: 'SI',
-            cancelText: 'Cancelar',
-            onOk: () => deleteFiniquito(id)
-        })
-    }
+        setDeleteForm({ id: id });
+        setViewModal(true);
+    };
 
     const confirmChangeState = id => {
         Modal.confirm({
@@ -63,8 +66,11 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         });
     }
 
-    const deleteFiniquito = async (id) => {
-        const { message, data } = await finiquitosProvider.delete(id);
+    const deleteFiniquito = async e => {
+        e.preventDefault();
+        const { message, data } = await finiquitosProvider.delete(deleteForm.id, {
+            justificacion: deleteForm.justificacion
+        });
 
         setReload(!reload);
         setForm({
@@ -77,12 +83,12 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             zona_labor: "",
             tiempo_servicio: 0,
             fecha_finiquito: moment().format("YYYY-MM-DD")
-        })
+        });
 
-        notification['success']({
+        notification["success"]({
             message: message
         });
-    }
+    };
 
     const getFiniquitos = async () => {
         setLoading(true);
@@ -111,6 +117,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             'OFICIO',
             'TIPO DOCUMENTO',
             'TIEMPO SERVICIO',
+            'ULTIMO DIA LABORADO',
             'ESTADO',
             'CARGADO POR'
         ];
@@ -126,6 +133,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                 oficio: item.oficio.name,
                 tipo_documento: item.tipo_cese.name,
                 tiempo_servicio: moment(item.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') >= 0 ? moment(item.fecha_finiquito).diff(moment(item.fecha_inicio_periodo), 'months') : 0,
+                ultimo_dia_laborado: item.fecha_ultimo_dia_laborado || '',
                 estado: item.estado.name,
                 cargado_por: `${item.usuario.trabajador.apellido_paterno} ${item.usuario.trabajador.apellido_materno} ${item.usuario.trabajador.nombre}`
             };
@@ -198,6 +206,11 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             render: (_, value) => moment(value.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') >= 0 ? moment(value.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), 'months') : 0
         },
         {
+            title: 'Último día laborado',
+            dataIndex: 'fecha_ultimo_dia_laborado',
+            render: (_, value) => value.fecha_ultimo_dia_laborado,
+        },
+        {
             title: 'Estado',
             dataIndex: 'estado',
             render: (record) => <Tag color={record.color}>{record.name}</Tag>
@@ -205,7 +218,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         {
             title: 'Cargado por',
             dataIndex: 'usuario',
-            render: (record) => `${record.trabajador.apellido_paterno} ${record.trabajador.apellido_materno} ${record.trabajador.nombre}` 
+            render: (record) => `${record.trabajador.apellido_paterno} ${record.trabajador.apellido_materno} ${record.trabajador.nombre}`
         },
         {
             title: 'Acciones',
@@ -308,6 +321,43 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                     };
                 }}
             />
+            <ModalCustom
+                title="Eliminar Finiquito"
+                isVisible={viewModal}
+                setIsVisible={setViewModal}
+            >
+                <form className="row" onSubmit={deleteFiniquito}>
+                    <div className="col-md-12">
+                        <textarea
+                            className="form-control"
+                            style={{ fontSize: "1.2rem" }}
+                            placeholder="Justificación de la anulación"
+                            value={deleteForm.justificacion}
+                            onChange={e =>
+                                setDeleteForm({ ...deleteForm, justificacion: e.target.value })
+                            }
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    <div className="col-md-12">
+                        <div className="btn-group btn-block mt-4">
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={() => setViewModal(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn btn-outline-danger"
+                            >
+                                Anular
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </ModalCustom>
         </>
     );
 }

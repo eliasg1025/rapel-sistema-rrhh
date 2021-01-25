@@ -72,6 +72,7 @@ class FiniquitosController extends Controller
                 $request->grupo_finiquito_id,
                 $request->fecha_inicio_periodo,
                 $request->fecha_termino_contrato,
+                $request->ultimo_dia_laborado,
                 $request->regimen_id,
                 $oficioId,
                 $request->usuario_id,
@@ -123,9 +124,9 @@ class FiniquitosController extends Controller
         return response()->json($result);
     }
 
-    public function delete(int $id)
+    public function delete(int $id, Request $request)
     {
-        $result = $this->finiquitosService->delete($id);
+        $result = $this->finiquitosService->delete($id, $request->justificacion);
         return response()->json($result);
     }
 }

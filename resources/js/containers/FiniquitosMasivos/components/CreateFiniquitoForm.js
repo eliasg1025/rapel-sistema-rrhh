@@ -117,18 +117,24 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                 <Spin spinning={loading}>
                     <div className="row">
                         <div className="col-md-12">
-                            <button
-                                className="btn btn-primary mr-3"
-                                onClick={() => setViewModal(true)}
-                            >
-                                <i className="fas fa-plus"></i> Agregar
-                            </button>
-                            <button
-                                className="btn btn-success mr-3"
-                                onClick={() => setViewModalImport(true)}
-                            >
-                                <i className="far fa-file-excel"></i> Importar
-                            </button>
+                            {(informe?.estado?.name !== 'PENDIENTE') && (
+                                usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                                    <>
+                                        <button
+                                            className="btn btn-primary mr-3"
+                                            onClick={() => setViewModal(true)}
+                                        >
+                                            <i className="fas fa-plus"></i> Agregar
+                                        </button>
+                                        <button
+                                            className="btn btn-success mr-3"
+                                            onClick={() => setViewModalImport(true)}
+                                        >
+                                            <i className="far fa-file-excel"></i> Importar
+                                        </button>
+                                    </>
+                                )
+                            )}
                             {informe?.importaciones_finiquitos?.length !== 0 && (
                                 <button
                                     className="btn btn-warning"
@@ -147,21 +153,23 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                 </button>
                             ) : (
                                 <>
-                                    <button
-                                        className="btn btn-primary"
-                                        style={{ float: "right" }}
-                                        onClick={() => handleImprimir()}
-                                    >
-                                        <i className="fas fa-file-alt"></i> Imprimir
-                                    </button>
                                     {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
-                                        <button
-                                            className="btn btn-primary mr-3"
-                                            style={{ float: "right" }}
-                                            onClick={() => handleFirmar()}
-                                        >
-                                            <i className="fas fa-check"></i> Firmar TODOS
-                                        </button>
+                                        <>
+                                            <button
+                                                className="btn btn-primary"
+                                                style={{ float: "right" }}
+                                                onClick={() => handleImprimir()}
+                                            >
+                                                <i className="fas fa-file-alt"></i> Imprimir
+                                            </button>
+                                            <button
+                                                className="btn btn-primary mr-3"
+                                                style={{ float: "right" }}
+                                                onClick={() => handleFirmar()}
+                                            >
+                                                <i className="fas fa-check"></i> Firmar TODOS
+                                            </button>
+                                        </>
                                     )}
                                 </>
                             )}
@@ -580,11 +588,11 @@ const TableObservaciones = ({ informe, reload, setReload }) => {
     ];
 
     return (
-        <Table 
+        <Table
             bordered
             size="small"
             columns={columns}
-            dataSource={informe?.importaciones_finiquitos.map(item => ({ ...item, key: item.id })) || []}      
+            dataSource={informe?.importaciones_finiquitos.map(item => ({ ...item, key: item.id })) || []}
         />
     );
 };

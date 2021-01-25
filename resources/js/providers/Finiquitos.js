@@ -78,9 +78,9 @@ export class FiniquitosProvider {
         }
     }
 
-    async delete(id) {
+    async delete(id, { justificacion }) {
         try {
-            const res = await Axios.delete(`${this.url}/${id}`);
+            const res = await Axios.post(`${this.url}/${id}/delete`, { justificacion });
             return {
                 ...res.data,
                 status: 'success'
