@@ -41,6 +41,10 @@
     .justify {
         text-align: justify;
     }
+
+    .page-break {
+        page-break-after: always;
+    }
 </style>
 
 
@@ -49,10 +53,10 @@
         <table style="width: 100%;">
             <tr>
                 <td style="text-align: center">
-                    
+
                 </td>
                 <td style="text-align: center">
-                    
+
                 </td>
                 <td style="text-align: right">
                     <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
@@ -66,21 +70,10 @@
                     <h3 class="text-center">CARTA DE RENUNCIA</h3>
                 </td>
                 <td style="text-align: center">
-                    
+
                 </td>
             </tr>
         </table>
-{{--         <table style="width: 100%;">
-            <td style="text-align: center">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </td>
-            <td style="text-align: center">
-                <h2 class="text-center">CARTA DE RENUNCIA</h2>
-            </td>
-            <td style="text-align: center">
-                <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
-            </td>
-        </table> --}}
         <br /><br />
         @if ($finiquito->empresa->shortname == 'RAPEL')
             <div>
@@ -129,5 +122,11 @@
         <div style="margin-top: 80px">
             <b>El Papayo, {{ $finiquito->fecha_finiquito_larga }}</b>
         </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section style="border: 2px solid black; padding: 15px">
+
     </section>
 @endsection

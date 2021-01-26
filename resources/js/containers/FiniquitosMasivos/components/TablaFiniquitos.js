@@ -155,16 +155,21 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
         {
             title: "Tiempo Servicio",
             dataIndex: "tiempo_servicio",
-            render: (_, value) =>
-                moment(informe.fecha_finiquito).diff(
-                    moment(value.fecha_inicio_periodo),
-                    "months"
-                ) >= 0
-                    ? moment(informe.fecha_finiquito).diff(
-                          moment(value.fecha_inicio_periodo),
-                          "months"
-                      )
-                    : 0
+            //render: (_, value) => moment(informe.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), "months") >= 0 ? moment(informe.fecha_finiquito).diff(moment(value.fecha_inicio_periodo), "months") : 0,
+            render: (_, value) => {
+                let a = moment(informe.fecha_finiquito);
+                let b = moment(value.fecha_inicio_periodo);
+
+                const years = a.diff(b, 'year');
+                b.add(years, 'years');
+
+                const months = a.diff(b, 'months');
+                b.add(months, 'months');
+
+                const days = a.diff(b, 'days');
+
+                return `${years} años ${months} meses ${days} días`;
+            }
         },
         {
             title: "Último día laborado",
