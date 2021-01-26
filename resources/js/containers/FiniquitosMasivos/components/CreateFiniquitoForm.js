@@ -41,6 +41,30 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
         errores: []
     });
 
+    const handleTerminar = async () => {
+        ModalAnt.confirm({
+            title: 'Terminar Informe',
+            content: "¿Desea marcar este grupo como TERMINADO?",
+            cancelText: "Cancelar",
+            okText: "Si, TERMINAR",
+            onOk: async function() {
+                const {
+                    message,
+                    status
+                } = await gruposFiniquitosProvider.setState(
+                    { estado_id: 3 },
+                    informe.id
+                );
+
+                notification[status]({
+                    message: message
+                });
+
+                setReload(!reload);
+            }
+        });
+    }
+
     const handleEnviar = async () => {
         ModalAnt.confirm({
             title: "Enviar Grupo",
@@ -190,26 +214,35 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                     <i className="fas fa-share"></i> Enviar
                                 </button>
                             ) : (
-                                <>
-                                    {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
-                                        <>
-                                            <button
-                                                className="btn btn-primary"
-                                                style={{ float: "right" }}
-                                                onClick={() => handleImprimir()}
-                                            >
-                                                <i className="fas fa-file-alt"></i> Imprimir
-                                            </button>
-                                            <button
-                                                className="btn btn-primary mr-3"
-                                                style={{ float: "right" }}
-                                                onClick={() => handleFirmar()}
-                                            >
-                                                <i className="fas fa-check"></i> Firmar TODOS
-                                            </button>
-                                        </>
-                                    )}
-                                </>
+                                informe?.estado?.name === 'ENVIADO' && (
+                                    <>
+                                        {!['ARCHIVO', 'ANALISTA DE GESTION'].includes(usuario.modulo_rol.tipo.name) && (
+                                            <>
+                                                <button
+                                                    className="btn btn-primary ml-3"
+                                                    style={{ float: "right" }}
+                                                    onClick={() => handleTerminar()}
+                                                >
+                                                    <i className="fas fa-tasks"></i> <b>TERMINAR</b>
+                                                </button>
+                                                <button
+                                                    className="btn btn-primary"
+                                                    style={{ float: "right" }}
+                                                    onClick={() => handleImprimir()}
+                                                >
+                                                    <i className="fas fa-file-alt"></i> Imprimir
+                                                </button>
+                                                <button
+                                                    className="btn btn-primary mr-3"
+                                                    style={{ float: "right" }}
+                                                    onClick={() => handleFirmar()}
+                                                >
+                                                    <i className="fas fa-check"></i> Firmar TODOS
+                                                </button>
+                                            </>
+                                        )}
+                                    </>
+                                )
                             )}
                         </div>
                     </div>

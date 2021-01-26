@@ -201,38 +201,48 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
-                    {usuario.modulo_rol.tipo.name !== "ANALISTA DE GESTION" &&
-                        value.estado.name === "NO FIRMADO" && (
-                            <Tooltip title="Estado">
-                                <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => confirmChangeState(value.id)}
-                                >
-                                    <i className="fas fa-check"></i>
-                                </button>
-                            </Tooltip>
-                        )}
-                    {value.estado.name === "SIN EFECTO" ? (
-                        usuario.modulo_rol.tipo.name === "ADMINISTRADOR" && (
-                            <Tooltip title="Eliminar Registro">
+                    {!["TERMINADO", "ANULADO"].includes(
+                        informe?.estado?.name
+                    ) &&
+                        usuario.modulo_rol.tipo.name !==
+                            "ANALISTA DE GESTION" &&
+                            value?.estado?.name === "NO FIRMADO" && (
+                                <Tooltip title="Estado">
+                                    <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() =>
+                                            confirmChangeState(value.id)
+                                        }
+                                    >
+                                        <i className="fas fa-check"></i>
+                                    </button>
+                                </Tooltip>
+                            )}
+                    {!["TERMINADO", "ANULADO"].includes(
+                        informe?.estado?.name
+                    ) &&
+                        (value?.estado?.name === "SIN EFECTO" ? (
+                            usuario.modulo_rol.tipo.name ===
+                                "ADMINISTRADOR" && (
+                                <Tooltip title="Eliminar Registro">
+                                    <button
+                                        className="btn btn-danger btn-sm"
+                                        onClick={() => confirmDelete(value.id)}
+                                    >
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </Tooltip>
+                            )
+                        ) : (
+                            <Tooltip title="Anular registro">
                                 <button
                                     className="btn btn-danger btn-sm"
                                     onClick={() => confirmDelete(value.id)}
                                 >
-                                    <i className="fas fa-trash"></i>
+                                    <i className="fas fa-ban"></i>
                                 </button>
                             </Tooltip>
-                        )
-                    ) : (
-                        <Tooltip title="Anular registro">
-                            <button
-                                className="btn btn-danger btn-sm"
-                                onClick={() => confirmDelete(value.id)}
-                            >
-                                <i className="fas fa-ban"></i>
-                            </button>
-                        </Tooltip>
-                    )}
+                        ))}
                 </Button.Group>
             )
         }
@@ -279,7 +289,10 @@ export const TablaFiniquitos = ({ reload, setReload, informe }) => {
                             placeholder="Justificación de la anulación"
                             value={form.justificacion}
                             onChange={e =>
-                                setForm({ ...form, justificacion: e.target.value })
+                                setForm({
+                                    ...form,
+                                    justificacion: e.target.value
+                                })
                             }
                             rows="3"
                         ></textarea>

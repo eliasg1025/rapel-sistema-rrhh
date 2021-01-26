@@ -48,12 +48,11 @@ class GruposFiniquitosService
 
         $finiquitos = $grupo->finiquitos;
 
-        /* foreach ($finiquitos as $finiquito) {
-            $nuevoFiniquito = $finiquito->replicate()->fill([
-                'grupo_finiquito_id' => $id
-            ]);
+        foreach ($finiquitos as $finiquito) {
+            $nuevoFiniquito = $finiquito->replicate();
+            $nuevoFiniquito->grupo_finiquito_id = $id;
             $nuevoFiniquito->save();
-        } */
+        }
 
         return $nuevoGrupo;
     }
