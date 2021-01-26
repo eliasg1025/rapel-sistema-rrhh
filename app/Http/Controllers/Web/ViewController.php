@@ -22,6 +22,7 @@ class ViewController extends Controller
         $usuario = $request->session()->get('usuario');
         $data = [
             'usuario'   => $usuario,
+            //'modulos'   => $this->modulosService->getByUser($usuario)
             'modulos'   => $this->modulosService->get()
         ];
         return view('pages.panel', compact('data'));

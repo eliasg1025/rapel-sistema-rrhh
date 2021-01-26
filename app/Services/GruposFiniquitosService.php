@@ -36,6 +36,28 @@ class GruposFiniquitosService
         return $grupo;
     }
 
+    public function copy(int $id, $fechaFiniquito)
+    {
+        $grupo = GrupoFiniquito::find($id);
+        $nuevoGrupo = $grupo->replicate()->fill([
+            'fecha_finiquito' => $fechaFiniquito
+        ]);
+        $nuevoGrupo->save();
+
+        $id = $nuevoGrupo->id;
+
+        $finiquitos = $grupo->finiquitos;
+
+        /* foreach ($finiquitos as $finiquito) {
+            $nuevoFiniquito = $finiquito->replicate()->fill([
+                'grupo_finiquito_id' => $id
+            ]);
+            $nuevoFiniquito->save();
+        } */
+
+        return $nuevoGrupo;
+    }
+
     public function update($id, $usuarioId, $fechaFiniquito, $zonaLabor, $ruta, $codigoBus)
     {
         $grupo = GrupoFiniquito::find($id);
@@ -49,7 +71,7 @@ class GruposFiniquitosService
         return $grupo;
     }
 
-    public function changeState($estadoId, $id, $justificacion)
+    public function changeState($estadoId, $id, $justificacion = null)
     {
         $grupo = GrupoFiniquito::find($id);
         $grupo->justificacion = $justificacion;

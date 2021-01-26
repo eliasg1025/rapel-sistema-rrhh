@@ -12,6 +12,10 @@ class GrupoFiniquito extends Model
 
     protected $table = 'grupos_finiquitos';
 
+    protected $fillable = [
+        'fecha_finiquito'
+    ];
+
     public function getFechaFiniquitoLargaAttribute($value)
     {
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");

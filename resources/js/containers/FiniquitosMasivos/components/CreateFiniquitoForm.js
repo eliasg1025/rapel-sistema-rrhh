@@ -117,8 +117,8 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                 <Spin spinning={loading}>
                     <div className="row">
                         <div className="col-md-12">
-                            {(informe?.estado?.name !== 'PENDIENTE') && (
-                                usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
+                            {(informe?.estado?.name === 'PENDIENTE') ? (
+                                !['ARCHIVO', 'RRHH'].includes(usuario.modulo_rol.tipo.name) && (
                                     <>
                                         <button
                                             className="btn btn-primary mr-3"
@@ -133,6 +133,44 @@ export const CreateFiniquitoForm = ({ reload, setReload, informe }) => {
                                             <i className="far fa-file-excel"></i> Importar
                                         </button>
                                     </>
+                                )
+                            ) : (
+                                informe?.estado?.name === 'ENVIADO' ? (
+                                    !['ARCHIVO', 'RRHH', 'ANALISTA DE GESTION'].includes(usuario.modulo_rol.tipo.name) && (
+                                        <>
+                                            <button
+                                                className="btn btn-primary mr-3"
+                                                onClick={() => setViewModal(true)}
+                                            >
+                                                <i className="fas fa-plus"></i> Agregar
+                                            </button>
+                                            <button
+                                                className="btn btn-success mr-3"
+                                                onClick={() => setViewModalImport(true)}
+                                            >
+                                                <i className="far fa-file-excel"></i> Importar
+                                            </button>
+                                        </>
+                                    )
+                                ) : (
+                                    informe?.estado?.name === 'TERMINADO' && (
+                                        !['ARCHIVO', 'RRHH', 'ANALISTA DE GESTION', 'SUPERVISOR'].includes(usuario.modulo_rol.tipo.name) && (
+                                            <>
+                                                <button
+                                                    className="btn btn-primary mr-3"
+                                                    onClick={() => setViewModal(true)}
+                                                >
+                                                    <i className="fas fa-plus"></i> Agregar
+                                                </button>
+                                                <button
+                                                    className="btn btn-success mr-3"
+                                                    onClick={() => setViewModalImport(true)}
+                                                >
+                                                    <i className="far fa-file-excel"></i> Importar
+                                                </button>
+                                            </>
+                                        )
+                                    )
                                 )
                             )}
                             {informe?.importaciones_finiquitos?.length !== 0 && (

@@ -16,6 +16,12 @@ export const TablaGrupo = ({ reload, setReload }) => {
         id: ""
     });
 
+    const [viewModal2, setViewModal2] = useState(false);
+    const [copyForm, setCopyForm] = useState({
+        id: "",
+        fecha_finiquito: ""
+    });
+
     const columns = [
         {
             title: "Código",
@@ -64,18 +70,19 @@ export const TablaGrupo = ({ reload, setReload }) => {
                             <i className="fas fa-edit"></i>
                         </Button>
                     </Tooltip>
-                    {/* <Tooltip title="Exportar Registros">
-                        <Button type="success" style={{ backgroundColor: '#3FB618', borderColor: '#3FB618', color: 'white' }}>
-                            <i className="fas fa-file-excel"></i>
-                        </Button>
-                    </Tooltip> */}
-                    {value.estado.name !== "ANULADO" && (
+                    {value.estado.name !== "ANULADO" ? (
                         <Tooltip title="Anular Informe">
                             <Button
                                 type="danger"
                                 onClick={() => confirmDelete(value.id)}
                             >
                                 <i className="fas fa-ban"></i>
+                            </Button>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title="Copiar Grupo">
+                            <Button onClick={() => confirmCopy(value.id)}>
+                                <i className="far fa-copy"></i>
                             </Button>
                         </Tooltip>
                     )}
@@ -96,10 +103,45 @@ export const TablaGrupo = ({ reload, setReload }) => {
         setViewModal(true);
     };
 
-    const softDelete = (e) => {
+    const confirmCopy = id => {
+        /* Modal.confirm({
+            title: "¿Desea crear otro grupo a partir de estos registros?",
+            content:
+                "Se conservarán los datos del grupo asi como los registros de este",
+            okText: "SI",
+            cancelText: "Cancelar",
+            onOk: () => copyGroup(id)
+        }); */
+        setCopyForm({ id: id });
+        setViewModal2(true);
+    };
+
+    const softDelete = e => {
         e.preventDefault();
         setReload(!reload);
-        Axios.post(`/api/grupos-finiquitos/${deleteForm.id}/delete`, { justificacion: deleteForm.justificacion })
+        Axios.post(`/api/grupos-finiquitos/${deleteForm.id}/delete`, {
+            justificacion: deleteForm.justificacion
+        })
+            .then(res => {
+                console.log(res);
+
+                notification["success"]({
+                    message: res.data.message
+                });
+            })
+            .catch(err => {
+                console.error(err);
+            })
+            .finally(() => setReload(!reload));
+    };
+
+    const copyGroup = e => {
+        e.preventDefault();
+
+        setReload(!reload);
+        Axios.post(`/api/grupos-finiquitos/${copyForm.id}/copy`, {
+            fecha_finiquito: copyForm.fecha_finiquito
+        })
             .then(res => {
                 console.log(res);
 
@@ -144,7 +186,7 @@ export const TablaGrupo = ({ reload, setReload }) => {
                 loading={loading}
             />
             <ModalCustom
-                title="Eliminar Finiquito"
+                title="Eliminar Grupo"
                 isVisible={viewModal}
                 setIsVisible={setViewModal}
             >
@@ -168,7 +210,7 @@ export const TablaGrupo = ({ reload, setReload }) => {
                         <div className="btn-group btn-block mt-4">
                             <button
                                 type="button"
-                                className="btn btn-outline-secondary"
+                                className="btn btn-secondary"
                                 onClick={() => setViewModal(false)}
                             >
                                 Cancelar
@@ -176,10 +218,38 @@ export const TablaGrupo = ({ reload, setReload }) => {
                             <button
                                 type="submit"
                                 className="btn btn-outline-danger"
+                                disabled={deleteForm.justificacion === ''}
                             >
                                 Anular
                             </button>
                         </div>
+                    </div>
+                </form>
+            </ModalCustom>
+            <ModalCustom
+                title="Copiar Grupo"
+                isVisible={viewModal2}
+                setIsVisible={setViewModal2}
+            >
+                <form className="row" onSubmit={copyGroup}>
+                    <div className="col-md-12">
+                        Nueva fecha de finiquito:<br />
+                        <input
+                            type="date"
+                            className="form-control"
+                            value={copyForm.fecha_finiquito}
+                            onChange={e =>
+                                setCopyForm({
+                                    ...copyForm,
+                                    fecha_finiquito: e.target.value
+                                })
+                            }
+                        />
+                    </div>
+                    <div className="col-md-12 mt-3">
+                        <button type="submit" className="btn btn-primary" disabled={!copyForm.fecha_finiquito}>
+                            Copiar
+                        </button>
                     </div>
                 </form>
             </ModalCustom>

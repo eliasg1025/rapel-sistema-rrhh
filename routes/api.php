@@ -288,6 +288,7 @@ Route::group(['prefix' => 'grupos-finiquitos'], function() {
     Route::get('/{id}', 'GruposFiniquitosController@find')->where('id', '[0-9]+');
     Route::get('/{id}/print', 'GruposFiniquitosController@print');
     Route::post('/{id}/delete', 'GruposFiniquitosController@delete');
+    Route::post('/{id}/copy', 'GruposFiniquitosController@copy');
     Route::group(['prefix' => 'usuarios-zonas'], function() {
         Route::get('/', 'GruposFiniquitosController@getUsuariosZonas');
         Route::post('/', 'GruposFiniquitosController@createUsuariosZonas');
@@ -325,6 +326,11 @@ Route::group(['prefix' => 'sqlsrv'], function () {
 
     Route::group(['prefix' => 'rutas'], function() {
         Route::get('/', 'Sqlsrv\RutasController@getAll');
+    });
+
+    Route::group(['prefix' => 'actividad-trabajador'], function() {
+        Route::get('/{rut}/ultima', 'Sqlsrv\ActividadTrabajadorController@ultima');
+        Route::post('/importar', 'Sqlsrv\ActividadTrabajadorController@importar');
     });
 });
 /*

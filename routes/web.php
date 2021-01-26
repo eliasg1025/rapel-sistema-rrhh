@@ -136,6 +136,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\SegurosVidaController@index');
     });
 
+    Route::group(['prefix' => 'consulta-ultima-actividad'], function() {
+        Route::get('/', 'Web\ConsultaUltimaActividad@index');
+    });
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');

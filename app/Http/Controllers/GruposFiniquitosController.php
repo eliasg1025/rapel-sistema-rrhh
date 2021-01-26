@@ -84,6 +84,16 @@ class GruposFiniquitosController extends Controller
         ]);
     }
 
+    public function copy(int $id, Request $request)
+    {
+        $result = $this->gruposFiniquitosService->copy($id, $request->fecha_finiquito);
+
+        return response()->json([
+            'message' => 'Grupo creado correctamente',
+            'data' => $result
+        ]);
+    }
+
     public function getUsuariosZonas()
     {
         $result = DB::table('usuarios_zonas')->get();
