@@ -124,9 +124,223 @@
         </div>
     </section>
 
-    <div class="page-break"></div>
+    @if (is_null($finiquito->grupo_finquito_id) && $finiquito->regimen->name === 'Empleados Agrarios')
+        <div class="page-break"></div>
 
-    <section style="border: 2px solid black; padding: 15px">
-
-    </section>
+        <div style="font-size: 11px">
+            <table class="table" style="width: 100%">
+                <tr>
+                    <td></td>
+                    <td><b>FORMATO DE ENCUESTA DE SALUDA</b></td>
+                    <td>FPGRRHH<br />Revisión. 01<br />Pag. 1 de 1</td>
+                </tr>
+                <tr>
+                    <td><b>{{ $finiquito->empresa->name }}</b></td>
+                    <td>RUC: {{ $finiquito->empresa->ruc }}</td>
+                    <td>{{ $finiquito->empresa->direccion }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ $finiquito->empresa->name }}; {{ $finiquito->empresa->id === 9 ? 'empresa dedicada al cultivo, procesamiento y comercialización de uva de mesa' : 'empresa dedicada al cultivo, procesamiento y comercialización de uva,banano y fruta de mesa.' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>APELLIDOS Y NOMBRES</td>
+                                <td>{{ $finiquito->persona->nombre }} {{ $finiquito->persona->apellido_paterno }} {{ $finiquito->persona->apellido_materno }}</td>
+                                <td>FECHA DE INGRESO</td>
+                                <td>{{ $finiquito->fecha_inicio_periodo }}</td>
+                            </tr>
+                            <tr>
+                                <td>CARGO</td>
+                                <td>{{ $finiquito->oficio->name }}</td>
+                                <td>FECHA DE SALIDA</td>
+                                <td>{{ $finiquito->fecha_finiquito }}</td>
+                            </tr>
+                            <tr>
+                                <td>FUNDO</td>
+                                <td>{{ $finiquito->zona_labor }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Por favor, dedique unos minutos a completar esta encuesta, sus respuestas serán tratadas de forma CONFIDENCIAL y nos ayudarana mejorar como empresa.
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        MARCA CON UN (X) LAS ALTERNATIVAS QUE USTED CREA CONVENIENTE
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>1. ¿QUÉ ES LO QUE MÁS LE AGRADÓ DE LA EMPRESA?</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>a. El ambiente laboral </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>b. El trato de los jefe y supervisores</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>c. Posibilidad de crecimiento profesional</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>d. Horarios</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>e. Sueldo</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>f. Beneficios complementarios</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>2. ¿CUÁLES SON LOS MOTIVOS PORQUE DEJA DE TRABAJAR EN {{ $finiquito->empresa->name }}?</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>a. Interesado en estudios</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>b. Mejores condiciones económicas</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>c. Oportunidad de crecimiento profesional</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>d. Horario de trabajo</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>e. Descontento con Supervisor o Jefe </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>f. Movilidad</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>3. RESPONSABILIDADES</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td></td>
+                                <td>SI</td>
+                                <td>NO</td>
+                            </tr>
+                            <tr>
+                                <td>a. ¿Se le comunicó claramente los objetivos y metas de su puesto de trabajo?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>b. ¿Se le dieron las herramientas para desempeñar su trabajo?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>c. ¿Se le capacitó para el desempeño de sus labores?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>d. ¿Sintió un buen ambiente de trabajo?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>e. ¿Las relaciones con su jefe fueron satisfactorias?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>f. ¿Las relaciones con sus compañeros fueron agradables y positivas?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>g. ¿Fue tratado con respeto y equidad?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>h. ¿Se cumplieron sus expectativas?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>i. ¿Recomendaría a Rapel como un lugar donde trabajar?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>4. ¿Cuán satisfecho se siente usted con la gestión que realiza RECURSOS HUMANOS como área de servicio?</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>Muy satisfecho</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Satisfecho</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Poco satisfecho</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Nada satisfecho</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>5. ¿Tiene alguna sugerencia para mejorar las condiciones laborales en {{ $finiquito->empresa->name }}?</b>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    @endif
 @endsection

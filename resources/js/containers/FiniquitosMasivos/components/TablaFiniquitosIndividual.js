@@ -155,6 +155,14 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             });
     }
 
+    const selectRow = record => {
+        setForm({
+            ...record,
+            tiempo_servicio: moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') >= 0 ? moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') : 0
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     useEffect(() => {
         if (filtro.rut.length === 0 || filtro.rut.length >= 8) {
             getFiniquitos();
@@ -239,19 +247,21 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             dataIndex: 'acciones',
             render: (item, value) => (
                 <div className="btn-group">
-                    {/* <Tooltip title="Editar Registro">
-                        <button className="btn btn-primary btn-sm">
-                            <i className="fas fa-edit"></i>
-                        </button>
-                    </Tooltip> */}
                     <Tooltip title="Ver documento">
                         <a href={`/ficha/cese/${value.id}`} className="btn btn-primary btn-sm" target="_blank">
                             <i className="fas fa-search"></i>
                         </a>
                     </Tooltip>
+                    {!['ARCHIVO', 'RRHH'].includes(usuario.modulo_rol.tipo.name) && (
+                        <Tooltip title="Editar Registro">
+                            <button className="btn btn-primary btn-sm" onClick={() => selectRow(value)}>
+                                <i className="fas fa-edit"></i>
+                            </button>
+                        </Tooltip>
+                    )}
                     {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
                         value.estado.name === 'NO FIRMADO' && (
-                            <Tooltip title="Estado">
+                            <Tooltip title="Firmado">
                                 <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
                                     <i className="fas fa-check"></i>
                                 </button>
@@ -320,20 +330,6 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                 columns={columns}
                 dataSource={finiquitos.map(item => ({ ...item, key: item.id })) || []}
                 scroll={{ x: 1100 }}
-                onRow={(record, rowIndex) => {
-                    return {
-                        onClick: e => {
-                            console.log(record);
-                            setForm({
-                                ...record,
-                                tiempo_servicio: moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') >= 0 ? moment(record.fecha_finiquito).diff(moment(record.fecha_inicio_periodo), 'months') : 0
-                            });
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, // click row
-                        onDoubleClick: e => {}, // double click row
-                        onContextMenu: e => {}, // right button click row
-                    };
-                }}
             />
             <ModalCustom
                 title="Eliminar Finiquito"
