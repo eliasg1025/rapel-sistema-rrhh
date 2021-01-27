@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Table, notification } from "antd";
+import { Card, Table, Button, notification } from "antd";
 import Axios from "axios";
 
 import Modal from '../../Modal';
@@ -9,6 +9,7 @@ import { SubirArchivo } from '../../shared/SubirArchivo';
 export const Inicio = () => {
 
     const [reload, setReload] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [actividades, setActividades] = useState([]);
     const [viewModal, setViewModal] = useState(false);
     const [form, setForm] = useState({
@@ -16,9 +17,10 @@ export const Inicio = () => {
     });
 
     const consultar = () => {
-        console.log(form.rut);
+        console.log(loading);
 
         setReload(!reload);
+        setLoading(true);
         Axios.get(`/api/sqlsrv/actividad-trabajador/${form.rut}/ultima`)
             .then(res => {
                 setActividades(res.data.data.map(item => {
@@ -38,7 +40,10 @@ export const Inicio = () => {
                     message: err.response.data.message
                 });
             })
-            .finally(() => setReload(!reload));
+            .finally(() => {
+                setReload(!reload);
+                setLoading(false);
+            });
     }
 
     const importar = () => {
@@ -50,6 +55,7 @@ export const Inicio = () => {
             }
         }
 
+        setLoading(true);
         Axios.post(`/api/sqlsrv/actividad-trabajador/importar`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -69,11 +75,14 @@ export const Inicio = () => {
             })
             .catch(err => {
                 console.error(err.response);
-
                 notification["warning"]({
                     message: err.response.data.message
                 });
             })
+            .finally(() => {
+                setViewModal(false);
+                setLoading(false);
+            });
     }
 
     const handleSubmit = e => {
@@ -183,12 +192,22 @@ export const Inicio = () => {
                     </div>
                     <div className="row mt-3">
                         <div className="col-md-12">
-                            <button
+                            {/* <button
                                 type="submit"
                                 className="btn btn-primary"
                             >
+                            </button> */}
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                size="small"
+                                className="btn btn-primary"
+                                style={{ height: '25.45px' }}
+                                loading={loading}
+                                disabled={form.rut.length < 8}
+                            >
                                 <i className="fas fa-search"></i> Consultar
-                            </button>
+                            </Button>
                             <button
                                 type="button"
                                 className="btn btn-success ml-2"
@@ -222,6 +241,7 @@ export const Inicio = () => {
                 scroll={{ x: 500 }}
                 columns={columns}
                 dataSource={actividades}
+                loading={loading}
             />
             <Modal
                 title="Consulta Ultimo Dia"
@@ -234,11 +254,19 @@ export const Inicio = () => {
                         setForm={setForm}
                     />
                     <br />
-                    <button
+                    {/* <button
                         className="btn btn-primary"
                     >
                         Importar
-                    </button>
+                    </button> */}
+                    <Button
+                        htmlType="submit"
+                        type="primary"
+                        loading={loading}
+                        disabled={!form.file}
+                    >
+                        Importar
+                    </Button>
                 </form>
             </Modal>
         </>
