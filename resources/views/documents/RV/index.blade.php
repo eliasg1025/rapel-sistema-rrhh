@@ -27,6 +27,10 @@
         font-weight: bold;
     }
 
+    .b-none {
+        border: none !important;
+    }
+
     .w-100 {
         width: 100%;
     }
@@ -127,43 +131,50 @@
     @if (is_null($finiquito->grupo_finquito_id) && $finiquito->regimen->name === 'Empleados Agrarios')
         <div class="page-break"></div>
 
-        <div style="font-size: 11px">
-            <table class="table" style="width: 100%">
+        <div style="font-size: 8px;">
+            <table class="table text-center" style="width: 100%">
                 <tr>
-                    <td></td>
-                    <td><b>FORMATO DE ENCUESTA DE SALUDA</b></td>
-                    <td>FPGRRHH<br />Revisión. 01<br />Pag. 1 de 1</td>
+                    <td>
+                        <img src="{{ public_path() . '/img/Logo Documentos' . ($finiquito->empresa_id === 9 ? '2' : '1') . '.jpg'}}" width="50px" />
+                    </td>
+                    <td colspan="15">
+                        <h3 style="margin-top: 0%; margin-bottom: 0%;">FORMATO DE ENCUESTA DE SALUDA</h3>
+                    </td>
+                    <td colspan="2">FPGRRHH<br />Revisión. 01<br />Pag. 1 de 1</td>
                 </tr>
                 <tr>
                     <td><b>{{ $finiquito->empresa->name }}</b></td>
-                    <td>RUC: {{ $finiquito->empresa->ruc }}</td>
-                    <td>{{ $finiquito->empresa->direccion }}</td>
-                    <td></td>
+                    <td colspan="3">RUC: {{ $finiquito->empresa->ruc }}</td>
+                    <td colspan="12">{{ $finiquito->empresa->direccion }}</td>
+                    <td colspan="2"></td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         {{ $finiquito->empresa->name }}; {{ $finiquito->empresa->id === 9 ? 'empresa dedicada al cultivo, procesamiento y comercialización de uva de mesa' : 'empresa dedicada al cultivo, procesamiento y comercialización de uva,banano y fruta de mesa.' }}
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td colspan="18">
+                        <table style="border-collapse: collapse; margin: auto; width: 70%">
                             <tr>
-                                <td>APELLIDOS Y NOMBRES</td>
-                                <td>{{ $finiquito->persona->nombre }} {{ $finiquito->persona->apellido_paterno }} {{ $finiquito->persona->apellido_materno }}</td>
-                                <td>FECHA DE INGRESO</td>
-                                <td>{{ $finiquito->fecha_inicio_periodo }}</td>
+                                <td class="b-none"><b>APELLIDOS Y NOMBRES</b></td>
+                                <td class="b-none">{{ $finiquito->persona->nombre }} {{ $finiquito->persona->apellido_paterno }} {{ $finiquito->persona->apellido_materno }}</td>
+                                <td class="b-none"><b>FECHA DE INGRESO</b></td>
+                                <td class="b-none">{{ $finiquito->fecha_inicio_periodo }}</td>
                             </tr>
                             <tr>
-                                <td>CARGO</td>
-                                <td>{{ $finiquito->oficio->name }}</td>
-                                <td>FECHA DE SALIDA</td>
-                                <td>{{ $finiquito->fecha_finiquito }}</td>
+                                <td class="b-none"><b>CARGO</b></td>
+                                <td class="b-none">{{ $finiquito->oficio->name }}</td>
+                                <td class="b-none"><b>FECHA DE SALIDA</b></td>
+                                <td class="b-none">{{ $finiquito->fecha_finiquito }}</td>
                             </tr>
                             <tr>
-                                <td>FUNDO</td>
-                                <td>{{ $finiquito->zona_labor }}</td>
+                                <td class="b-none"><b>FUNDO</b></td>
+                                <td class="b-none">{{ $finiquito->zona_labor }}</td>
                             </tr>
+                        </table>
+                        <br />
+                        <table style="border-collapse: collapse; margin: 5px 20px 5px 20px;">
                             <tr>
                                 <td>
                                     Por favor, dedique unos minutos a completar esta encuesta, sus respuestas serán tratadas de forma CONFIDENCIAL y nos ayudarana mejorar como empresa.
@@ -173,135 +184,135 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        MARCA CON UN (X) LAS ALTERNATIVAS QUE USTED CREA CONVENIENTE
+                    <td colspan="18">
+                        <b>MARCA CON UN (X) LAS ALTERNATIVAS QUE USTED CREA CONVENIENTE</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         <b>1. ¿QUÉ ES LO QUE MÁS LE AGRADÓ DE LA EMPRESA?</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td colspan="18">
+                        <table style="border-collapse: collapse;">
                             <tr>
-                                <td>a. El ambiente laboral </td>
+                                <td class="b-none">a. El ambiente laboral </td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="b-none">b. El trato de los jefe y supervisores</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>b. El trato de los jefe y supervisores</td>
+                                <td class="b-none">c. Posibilidad de crecimiento profesional</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>c. Posibilidad de crecimiento profesional</td>
+                                <td class="b-none">d. Horarios</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>d. Horarios</td>
+                                <td class="b-none">e. Sueldo</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>e. Sueldo</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>f. Beneficios complementarios</td>
+                                <td class="b-none">f. Beneficios complementarios</td>
                                 <td></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         <b>2. ¿CUÁLES SON LOS MOTIVOS PORQUE DEJA DE TRABAJAR EN {{ $finiquito->empresa->name }}?</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td colspan="18">
+                        <table style="border-collapse: collapse;">
                             <tr>
-                                <td>a. Interesado en estudios</td>
+                                <td class="b-none">a. Interesado en estudios</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="b-none">b. Mejores condiciones económicas</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>b. Mejores condiciones económicas</td>
+                                <td class="b-none">c. Oportunidad de crecimiento profesional</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>c. Oportunidad de crecimiento profesional</td>
+                                <td class="b-none">d. Horario de trabajo</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>d. Horario de trabajo</td>
+                                <td class="b-none">e. Descontento con Supervisor o Jefe </td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>e. Descontento con Supervisor o Jefe </td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>f. Movilidad</td>
+                                <td class="b-none">f. Movilidad</td>
                                 <td></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         <b>3. RESPONSABILIDADES</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td></td>
-                                <td>SI</td>
-                                <td>NO</td>
+                    <td colspan="18">
+                        <table style="border-collapse: collapse;">
+                            <tr class="text-center">
+                                <td class="b-none"></td>
+                                <td><b>SI</b></td>
+                                <td><b>NO</b></td>
                             </tr>
                             <tr>
-                                <td>a. ¿Se le comunicó claramente los objetivos y metas de su puesto de trabajo?</td>
-                                <td></td>
-                                <td></td>
+                                <td class="b-none">a. ¿Se le comunicó claramente los objetivos y metas de su puesto de trabajo?</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                             </tr>
                             <tr>
-                                <td>b. ¿Se le dieron las herramientas para desempeñar su trabajo?</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>c. ¿Se le capacitó para el desempeño de sus labores?</td>
+                                <td class="b-none">b. ¿Se le dieron las herramientas para desempeñar su trabajo?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>d. ¿Sintió un buen ambiente de trabajo?</td>
+                                <td class="b-none">c. ¿Se le capacitó para el desempeño de sus labores?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>e. ¿Las relaciones con su jefe fueron satisfactorias?</td>
+                                <td class="b-none">d. ¿Sintió un buen ambiente de trabajo?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>f. ¿Las relaciones con sus compañeros fueron agradables y positivas?</td>
+                                <td class="b-none">e. ¿Las relaciones con su jefe fueron satisfactorias?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>g. ¿Fue tratado con respeto y equidad?</td>
+                                <td class="b-none">f. ¿Las relaciones con sus compañeros fueron agradables y positivas?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>h. ¿Se cumplieron sus expectativas?</td>
+                                <td class="b-none">g. ¿Fue tratado con respeto y equidad?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>i. ¿Recomendaría a Rapel como un lugar donde trabajar?</td>
+                                <td class="b-none">h. ¿Se cumplieron sus expectativas?</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="b-none">i. ¿Recomendaría a Rapel como un lugar donde trabajar?</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -309,35 +320,54 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         <b>4. ¿Cuán satisfecho se siente usted con la gestión que realiza RECURSOS HUMANOS como área de servicio?</b>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <table>
+                    <td colspan="18">
+                        <table style="border-collapse: collapse;">
                             <tr>
-                                <td>Muy satisfecho</td>
+                                <td class="b-none">Muy satisfecho</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="b-none">Satisfecho</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>Satisfecho</td>
+                                <td class="b-none">Poco satisfecho</td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>Poco satisfecho</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Nada satisfecho</td>
+                                <td class="b-none">Nada satisfecho</td>
                                 <td></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="18">
                         <b>5. ¿Tiene alguna sugerencia para mejorar las condiciones laborales en {{ $finiquito->empresa->name }}?</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="18">
+                        <div style="height: 22px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="18">
+                        <div style="text-align: left">
+                            <b>DNI:</b> {{ $finiquito->persona_id }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <b>Fecha:</b> {{ $finiquito->fecha_finiquito }}
+                            <br /><br />
+                            <b>Firma</b>
+                            <br /><br />
+                        </div>
+                        <div style="text-align: right">
+                            <b>GESTIÓN DEL TALENTO HUMANO</b>
+                        </div>
                     </td>
                 </tr>
             </table>
