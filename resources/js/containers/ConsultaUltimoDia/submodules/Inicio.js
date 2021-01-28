@@ -192,11 +192,6 @@ export const Inicio = () => {
                     </div>
                     <div className="row mt-3">
                         <div className="col-md-12">
-                            {/* <button
-                                type="submit"
-                                className="btn btn-primary"
-                            >
-                            </button> */}
                             <Button
                                 type="primary"
                                 htmlType="submit"
@@ -254,11 +249,6 @@ export const Inicio = () => {
                         setForm={setForm}
                     />
                     <br />
-                    {/* <button
-                        className="btn btn-primary"
-                    >
-                        Importar
-                    </button> */}
                     <Button
                         htmlType="submit"
                         type="primary"

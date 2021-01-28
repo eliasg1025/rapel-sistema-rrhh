@@ -38,7 +38,7 @@ class ActividadTrabajadorController extends Controller
         });
 
         return response()->json([
-            'message' => 'Funciona',
+            'message' => 'Operación completada correctamente',
             'data' => $data
         ]);
     }
