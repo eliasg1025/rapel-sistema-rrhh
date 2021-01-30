@@ -13,7 +13,7 @@ export const Prorrogas = () => {
     const [filter, setFilter] = useState({
         empresa_id: 9,
         regimen_id: 1,
-        zona_labor_id: 0,
+        zona_labor_id: usuario.estado_documentos === 2 ? '51' : '51',
         estado: 'NO FIRMADO'
     });
 
