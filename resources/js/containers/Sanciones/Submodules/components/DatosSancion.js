@@ -152,15 +152,36 @@ export const DatosSancion = ({
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     Incidencia: <br />
-                    <select
+                    {/* <select
                         name="incidencia_id" placeholder="Incidencia"
                         className="form-control"
-                        value={form.incidencia_id}
+                        value={form.}
                         onChange={e => setForm({ ...form, incidencia_id: e.target.value })}
                     >
                         <option value="" key="0" disabled />
                         {incidencias.map(e => <option value={e.id} key={e.id}>{e.name}</option>)}
-                    </select>
+                    </select> */}
+                    <Select
+                        value={form.incidencia_id}
+                        showSearch
+                        size="small"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setForm({ ...form, incidencia_id: e })}
+                        style={{
+                            width: '100%',
+                        }}
+                    >
+                        {incidencias.map(e => (
+                            <Select.Option value={e.id} key={e.id}>
+                                {`${e.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     Tipo documento: <br />
