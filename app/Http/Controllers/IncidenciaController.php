@@ -9,7 +9,7 @@ class IncidenciaController extends Controller
 {
     public function all()
     {
-        $incidencias = Incidencia::all();
+        $incidencias = Incidencia::where('visible', true)->get();
 
         return response()->json($incidencias, 200);
     }

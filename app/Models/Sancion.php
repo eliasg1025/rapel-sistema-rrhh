@@ -125,10 +125,6 @@ class Sancion extends Model
         return $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
     }
 
-    public static function getDiasSancion($incio, int $cantidad_dias)
-    {
-    }
-
     public function getCorrelativo($fecha_incidencia)
     {
         $anio = Carbon::parse($fecha_incidencia)->format('Y');
@@ -388,7 +384,8 @@ class Sancion extends Model
                     'e.shortname as empresa',
                     'f.estado',
                     're.name as regimen',
-                    'o.name  as oficio'
+                    'o.name  as oficio',
+                    'f.reiterativo'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
@@ -436,7 +433,8 @@ class Sancion extends Model
                     'f.estado',
                     're.name as regimen',
                     'o.name  as oficio',
-                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'f.reiterativo'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
@@ -490,7 +488,8 @@ class Sancion extends Model
                     'f.estado',
                     're.name as regimen',
                     'o.name  as oficio',
-                    'usuario.nombre_completo_usuario as nombre_completo_usuario'
+                    'usuario.nombre_completo_usuario as nombre_completo_usuario',
+                    'f.reiterativo'
                 )
                 ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                 ->join('empresas as e', 'e.id', '=', 'f.empresa_id')

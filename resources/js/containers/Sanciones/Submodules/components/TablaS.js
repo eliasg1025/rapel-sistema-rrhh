@@ -164,7 +164,7 @@ export const TablaS = ({
             </div>
             <Table
                 rowSelection={rowSelection}
-                rowClassName={(record, index) => record.horas === 40 ? 'table-row-warning' : ( record.desvinculacion === 1 ? 'table-row-danger' : ( record.horas === 16 && 'table-row-red') )}
+                rowClassName={(record, index) => record.documento === 'SUSPENCION' && (record.reiterativo == 1 ? 'table-row-red' : (record.desvinculacion === 0 ? 'table-row-warning' : 'table-row-daner'))}
                 columns={getColumns(usuario, handleEliminar, handleMarcarEnviado, handleMarcarSubido)}
                 dataSource={sanciones}
                 scroll={{ x: 1000 }}
