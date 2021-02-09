@@ -27,6 +27,7 @@ import Bonos from './containers/Bonos';
 import FiniquitosMasivos from './containers/FiniquitosMasivos';
 import SegurosVida from './containers/SegurosVida';
 import ConsultaUltimaActividad from './containers/ConsultaUltimoDia';
+import RegistroFotocheck from './containers/RegistroFotocheck';
 
 require("./bootstrap");
 require("./containers/Login");
@@ -124,6 +125,10 @@ const containers = [
     {
         id: 'consulta-ultima-actividad',
         component: <ConsultaUltimaActividad />
+    },
+    {
+        id: 'registro-fotochecks',
+        component: <RegistroFotocheck />
     }
 ];
 

@@ -4,8 +4,8 @@ import Axios from 'axios';
 import Swal from 'sweetalert2';
 
 import { EtiquetaAdministrador } from "../../shared";
-import BuscarTrabajador from '../../shared/BuscarTrabajador'
-import { DatosReseteoClave, TablaPendientes } from '../components'
+import BuscarTrabajador from '../../shared/BuscarTrabajador';
+import { DatosReseteoClave, TablaPendientes } from '../components';
 
 const initialState = {
     nombre_completo: '',
