@@ -325,6 +325,7 @@ Route::group(['prefix' => 'motivos-fotocheck'], function() {
 Route::group(['prefix' => 'renovacion-fotocheck'], function() {
     Route::get('/', 'RenovacionesFotocheckController@get');
     Route::post('/', 'RenovacionesFotocheckController@create');
+    Route::delete('/{id}', 'RenovacionesFotocheckController@delete');
 });
 
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {

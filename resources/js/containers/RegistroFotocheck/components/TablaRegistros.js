@@ -1,8 +1,9 @@
 import React from 'react';
-import { Table, DatePicker, Input, Select } from 'antd';
+import { Table, DatePicker, Input, Select, Modal } from 'antd';
 import moment from 'moment';
+import Axios from 'axios';
 
-export const TablaRegistros = ({ data, setData, filtro, setFiltro }) => {
+export const TablaRegistros = ({ data, setData, filtro, setFiltro, handleEliminar }) => {
 
     const columns = [
         {
@@ -68,7 +69,7 @@ export const TablaRegistros = ({ data, setData, filtro, setFiltro }) => {
                             <i className="fas fa-file-alt"></i>
                         </a>
                     )}
-                    <button className="btn btn-sm btn-danger" onClick={() => handleEliminar(record)}>
+                    <button className="btn btn-sm btn-danger" onClick={() => confirmEliminar(record)}>
                         <i className="fas fa-trash"></i>
                     </button>
                 </div>
@@ -77,11 +78,59 @@ export const TablaRegistros = ({ data, setData, filtro, setFiltro }) => {
     ];
 
     const handleExportar = () => {
+        const headings = [
+            'EMPRESA',
+            'FECHA SOLICITUD',
+            'RUT',
+            'TRABAJADOR',
+            'REGIMEN',
+            'FUNDO',
+            'SOLICITANTE',
+            'MOTIVO',
+            'COSTO',
+            'COLOR',
+            'OBSERVACION',
+        ];
 
+        const d = data.map(item => {
+            return {
+                empresa: item.empresa.name,
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.trabajador.rut,
+                trabajador: item.trabajador.apellido_materno + ' ' + item.trabajador.apellido_materno + ' ' + item.trabajador.nombre,
+                regimen: item?.regimen.name || '',
+                fundo: item?.zona_labor.name || '',
+                solicitante: item?.usuario.trabajador.apellido_paterno + ' ' + item?.usuario.trabajador.apellido_materno + ' ' + item?.usuario.trabajador.nombre,
+                motivo: item?.motivo.descripcion,
+                costo: item?.motivo.costo,
+                color: item?.color.color,
+                observacion: item?.observacion || '',
+            }
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data: d},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'REGISTROS-FOTOCHECKS_' + filtro.desde + '_' + filtro.hasta + '.xlsx';
+                link.click();
+            });
     }
 
-    const handleEliminar = (record) => {
-        console.log(record);
+    const confirmEliminar = record => {
+        Modal.confirm({
+            title: 'Eliminar registro',
+            content: '¿Desea eliminar el registro?',
+            okText: 'Si, ELIMINAR',
+            cancelText: 'Cancelar',
+            onOk: () => handleEliminar(record.id)
+        })
     }
 
     return (

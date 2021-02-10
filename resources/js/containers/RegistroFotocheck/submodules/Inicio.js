@@ -54,6 +54,20 @@ export const Inicio = () => {
             });
     }
 
+    const handleEliminar = (id) => {
+        Axios.delete(`/api/renovacion-fotocheck/${id}`)
+            .then(res => {
+                notification['success']({
+                    message: res.data.message
+                });
+
+                setReloadDatos(!reloadDatos);
+            })
+            .catch(err => {
+
+            });
+    }
+
     useEffect(() => {
         Axios.get(`/api/renovacion-fotocheck?desde=${filtro.desde}&hasta=${filtro.hasta}&usuario_id=${usuario.id}&tipo=${filtro.tipo}`)
             .then(res => {
@@ -96,6 +110,7 @@ export const Inicio = () => {
                 setData={setData}
                 filtro={filtro}
                 setFiltro={setFiltro}
+                handleEliminar={handleEliminar}
             />
         </>
     );

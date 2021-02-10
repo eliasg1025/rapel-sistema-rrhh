@@ -39,6 +39,16 @@ class RenovacionesFotocheckController extends Controller
         ]);
     }
 
+    public function delete(Request $request, $id)
+    {
+        $result = RenovacionFotocheck::find($id)->delete();
+
+        return response()->json([
+            'message' => 'Registro borrado correctamente',
+            'data' => $result
+        ]);
+    }
+
     public function get(Request $request)
     {
         $usuarioId = $request->get('usuario_id');
