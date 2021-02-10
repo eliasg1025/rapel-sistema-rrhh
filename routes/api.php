@@ -314,6 +314,19 @@ Route::group(['prefix' => 'seguros-vida'], function() {
     Route::delete('/{id}', 'SegurosVidaController@delete');
 });
 
+Route::group(['prefix' => 'colores-fotocheck'], function() {
+    Route::get('/', 'ColoresFotocheckController@get');
+});
+
+Route::group(['prefix' => 'motivos-fotocheck'], function() {
+    Route::get('/', 'MotivosFotocheckController@get');
+});
+
+Route::group(['prefix' => 'renovacion-fotocheck'], function() {
+    Route::get('/', 'RenovacionesFotocheckController@get');
+    Route::post('/', 'RenovacionesFotocheckController@create');
+});
+
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {
     Route::get('/{importacionFiniquito}/export', 'ImportacionesFiniquitosController@export');
 });

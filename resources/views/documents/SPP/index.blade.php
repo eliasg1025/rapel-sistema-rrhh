@@ -45,7 +45,7 @@
 
 
 @section('contenido')
-    <section style="font-size: 13px; padding: 25px;">
+    <section style="font-size: 12.5px; padding: 25px;">
         <img style="float: right;" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate($codigo)) !!}" />
         <div >
             Piura, {{ $finiquito->fecha_finiquito_larga }}

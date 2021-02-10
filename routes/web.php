@@ -152,6 +152,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/sancion/{sancion}', 'SancionesController@verFicha');
         Route::get('/descanso-medico/{informe}', 'InformesDescansosController@verFicha');
         Route::get('/cese/{finiquito}', 'Web\FiniquitosMasivosController@verFicha');
+        Route::get('/carta-descuento/{renovacion}', 'Web\RegistroFotocheckController@verFicha');
     });
 
     Route::group(['prefix' => 'descargar'], function() {
