@@ -29,7 +29,8 @@ export const Inicio = () => {
         desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
         usuario_carga_id: '',
-        tipo: 'TODOS'
+        tipo: 'TODOS',
+        rut: '',
     });
 
     const handleSubmit = (e) => {
@@ -69,23 +70,29 @@ export const Inicio = () => {
     }
 
     useEffect(() => {
-        Axios.get(`/api/renovacion-fotocheck?desde=${filtro.desde}&hasta=${filtro.hasta}&usuario_id=${usuario.id}&tipo=${filtro.tipo}`)
-            .then(res => {
-                message['success']({
-                    content: 'Se encontraron ' + res.data.data.length + ' registros'
-                });
+        function fetchRenovaciones() {
+            Axios.get(`/api/renovacion-fotocheck?desde=${filtro.desde}&hasta=${filtro.hasta}&usuario_id=${usuario.id}&tipo=${filtro.tipo}`)
+                .then(res => {
+                    message['success']({
+                        content: 'Se encontraron ' + res.data.data.length + ' registros'
+                    });
 
-                setData(res.data.data.map(item => {
-                    return {
-                        ...item,
-                        key: item.id
-                    }
-                }));
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    }, [reloadDatos, filtro]);
+                    setData(res.data.data.map(item => {
+                        return {
+                            ...item,
+                            key: item.id
+                        }
+                    }));
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+
+        if (filtro.rut === '' || filtro.rut.length >= 8) {
+            fetchRenovaciones();
+        }
+    }, [reloadDatos, filtro.desde, filtro.hasta, filtro.tipo, filtro.rut]);
 
     return (
         <>
