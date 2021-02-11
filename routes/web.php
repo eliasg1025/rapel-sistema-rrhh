@@ -144,6 +144,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\RegistroFotocheckController@index');
     });
 
+    Route::group(['prefix' => 'retorno-vacaciones', 'middleware' => 'module:retorno-vacaciones'], function() {
+        Route::get('/', 'Web\RetornoVacacionesController@index');
+    });
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');

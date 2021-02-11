@@ -131,7 +131,7 @@ export const Inicio = () => {
                 let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
                 let link = document.createElement('a')
                 link.href = window.URL.createObjectURL(blob)
-                link.download = `CONSULTA_ULTIMO_DIA_LABORADO.xlsx`
+                link.download = 'CONSULTA_ULTIMO_DIA_LABORADO.xlsx'
                 link.click();
             });
     }

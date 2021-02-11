@@ -346,6 +346,10 @@ Route::group(['prefix' => 'sqlsrv'], function () {
         Route::get('/{rut}/ultima', 'Sqlsrv\ActividadTrabajadorController@ultima');
         Route::post('/importar', 'Sqlsrv\ActividadTrabajadorController@importar');
     });
+
+    Route::group(['prefix' => 'vacaciones'], function() {
+        Route::get('/programacion-retornos', 'Sqlsrv\VacacionesController@programacionRetornos');
+    });
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

@@ -28,6 +28,7 @@ import FiniquitosMasivos from './containers/FiniquitosMasivos';
 import SegurosVida from './containers/SegurosVida';
 import ConsultaUltimaActividad from './containers/ConsultaUltimoDia';
 import RegistroFotocheck from './containers/RegistroFotocheck';
+import RetornoVacaciones from './containers/RetornoVacaciones';
 
 require("./bootstrap");
 require("./containers/Login");
@@ -129,7 +130,11 @@ const containers = [
     {
         id: 'registro-fotochecks',
         component: <RegistroFotocheck />
-    }
+    },
+    {
+        id: 'retorno-vacaciones',
+        component: <RetornoVacaciones />
+    },
 ];
 
 initContainers(containers);
