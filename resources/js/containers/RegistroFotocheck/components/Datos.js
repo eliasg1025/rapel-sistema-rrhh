@@ -215,6 +215,16 @@ export const Datos = ({ trabajador, contratoActivo, form, setForm, handleSubmit 
                         </Select>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="form-group col">
+                        Observación:<br />
+                        <textarea
+                            className="form-control"
+                            value={form.observacion}
+                            onChange={e => setForm({ ...form, observacion: e.target.value })}
+                        ></textarea>
+                    </div>
+                </div>
                 <br />
                 <div className="row">
                     <div className="col-md-12">

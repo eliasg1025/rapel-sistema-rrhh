@@ -13,6 +13,7 @@ const initialState = {
     zona_labor_id: '',
     motivo_perdida_fotocheck_id: '',
     color_fotocheck_id: '',
+    observacion: '',
 }
 
 export const Inicio = () => {
