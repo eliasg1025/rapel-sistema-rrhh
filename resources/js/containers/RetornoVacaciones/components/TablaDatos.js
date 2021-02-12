@@ -6,7 +6,8 @@ export const TablaDatos = ({ data, loading }) => {
     const columns = [
         {
             title: 'Empresa',
-            dataIndex: 'Empresa'
+            dataIndex: 'Empresa',
+            ellipsis: true,
         },
         {
             title: 'RUT',
@@ -14,11 +15,12 @@ export const TablaDatos = ({ data, loading }) => {
         },
         {
             title: 'Trabajador',
-            dataIndex: 'Trabajador'
+            dataIndex: 'Trabajador',
+            ellipsis: true,
         },
         {
             title: 'Fecha Inicio',
-            dataIndex: 'FechaInicio'
+            dataIndex: 'FechaInicio',
         },
         {
             title: 'Fecha Retorno',
@@ -30,7 +32,8 @@ export const TablaDatos = ({ data, loading }) => {
         },
         {
             title: 'Oficio',
-            dataIndex: 'Oficio'
+            dataIndex: 'Oficio',
+            ellipsis: true,
         },
         {
             title: 'Regimen',
@@ -38,7 +41,8 @@ export const TablaDatos = ({ data, loading }) => {
         },
         {
             title: 'Zona Labor',
-            dataIndex: 'ZonaLabor'
+            dataIndex: 'ZonaLabor',
+            ellipsis: true,
         },
     ];
 
@@ -46,6 +50,7 @@ export const TablaDatos = ({ data, loading }) => {
         <>
             <Table
                 columns={columns}
+                scroll={{ x: 1000 }}
                 dataSource={data}
                 loading={loading}
                 size="small"
