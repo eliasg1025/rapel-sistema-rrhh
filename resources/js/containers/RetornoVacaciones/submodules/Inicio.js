@@ -13,10 +13,10 @@ export const Inicio = () => {
     const [empresas, setEmpresas] = useState([]);
     const [form, setForm] = useState({
         desde: moment()
-            .subtract(7, "days")
-            .format("YYYY-MM-DD")
-            .toString(),
+        .format("YYYY-MM-DD")
+        .toString(),
         hasta: moment()
+            .add(7, "days")
             .format("YYYY-MM-DD")
             .toString(),
         empresa_id: 9
@@ -59,10 +59,8 @@ export const Inicio = () => {
                         key: fecha,
                         fecha_retorno: fecha,
                         data: tempData,
-                        "Empleados Agrarios": tempData.filter(item => item.Regimen === "Empleados Agrarios").length,
-                        "Empleados Regulares": tempData.filter(item => item.Regimen === "Empleados Regulares").length,
+                        "Empleados": tempData.filter(item => ["Empleados Agrarios", "Empleados Regulares", "Administrativos"].includes(item.Regimen)).length,
                         "Obreros": tempData.filter(item => item.Regimen === "Obreros").length,
-                        "Administrativos": tempData.filter(item => item.Regimen === "Administrativos").length,
                         children: zonasLabor.map(zonaLabor => {
                             const tempData2 = tempData.filter(item => item.ZonaLabor === zonaLabor);
 
@@ -71,10 +69,8 @@ export const Inicio = () => {
                                 fecha_retorno: fecha,
                                 zona_labor: zonaLabor,
                                 data: tempData2,
-                                "Empleados Agrarios": tempData2.filter(item => item.Regimen === "Empleados Agrarios").length,
-                                "Empleados Regulares": tempData2.filter(item => item.Regimen === "Empleados Regulares").length,
+                                "Empleados": tempData2.filter(item => ["Empleados Agrarios", "Empleados Regulares", "Administrativos"].includes(item.Regimen)).length,
                                 "Obreros": tempData2.filter(item => item.Regimen === "Obreros").length,
-                                "Administrativos": tempData2.filter(item => item.Regimen === "Administrativos").length,
                             }
                         })
                     }
@@ -85,6 +81,50 @@ export const Inicio = () => {
             .catch(err => {})
             .finally(() => setLoading(false));
     }, [form]);
+
+    const handleExportar = () => {
+        const headings = [
+            "EMPRESA",
+            "RUT",
+            "TRABAJADOR",
+            "FECHA INICIO",
+            "FECHA RETORNO",
+            "DIAS",
+            "OFICIO",
+            "REGIMEN",
+            "ZONA LABOR",
+        ];
+
+        const d = data.map(item => {
+            return {
+                empresa: item.Empresa,
+                rut: item.RutTrabajador,
+                trabajador: item.Trabajador,
+                fecha_inicio: item.FechaInicio,
+                fehca_retorno: item.FechaRetorno,
+                dias: item.Dias,
+                oficio: item.Oficio,
+                regimen: item.Regimen,
+                zona_labor: item.ZonaLabor
+            };
+        });
+
+        Axios({
+            url: "/descargar",
+            data: { headings, data: d },
+            method: "POST",
+            responseType: "blob"
+        }).then(response => {
+            let blob = new Blob([response.data], {
+                type:
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            });
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `PROGRAMACION-RETORNO-VACACIONES_${form.empresa_id}_${form.desde}_${form.hasta}.xlsx`;
+            link.click();
+        });
+    }
 
     return (
         <>
@@ -148,6 +188,15 @@ export const Inicio = () => {
             </Card>
             <br />
             <hr />
+            <b style={{ fontSize: "13px" }}>
+                Cantidad: {data.length} registros&nbsp;
+                <button
+                    className="btn btn-success btn-sm"
+                    onClick={handleExportar}
+                >
+                    <i className="fas fa-file-excel" /> Exportar
+                </button>
+            </b>
             <br />
             <Tabs defaultActiveKey="1">
                 <Tabs.TabPane tab="Resumen" key="1">

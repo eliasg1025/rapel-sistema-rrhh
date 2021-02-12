@@ -6,32 +6,38 @@ export const TablaResumen = ({ data, loading }) => {
     const columns = [
         {
             title: "Fecha Retorno",
-            dataIndex: "fecha_retorno"
+            dataIndex: "fecha_retorno",
+            align: "center",
         },
         {
             title: "Zona Labor",
-            dataIndex: "zona_labor"
+            dataIndex: "zona_labor",
+            align: "center",
+            ellipsis: true
         },
         {
             title: "Regimen",
             children: [
                 {
-                    title: "Empleados Agrarios",
-                    dataIndex: "Empleados Agrarios"
-                },
-                {
-                    title: "Empleados Regulares",
-                    dataIndex: "Empleados Regulares"
+                    title: "Empleados",
+                    dataIndex: "Empleados",
+                    align: "center",
+                    width: 150
                 },
                 {
                     title: "Obreros",
-                    dataIndex: "Obreros"
+                    dataIndex: "Obreros",
+                    align: "center",
+                    width: 150
                 },
-                {
-                    title: "Administrativos",
-                    dataIndex: "Administrativos"
-                }
             ]
+        },
+        {
+            title: 'TOTAL',
+            dataIndex: 'total',
+            align: "center",
+            width: 150,
+            render: (_, record) => <b>{record.Empleados + record.Obreros}</b>
         }
     ];
 
@@ -58,5 +64,16 @@ export const TablaResumen = ({ data, loading }) => {
         }
     ]; */
 
-    return <Table size="small" columns={columns} dataSource={data} bordered loading={loading} />;
+    return (
+        <>
+            <Table
+                size="small"
+                scroll={{ x: 1000 }}
+                columns={columns}
+                dataSource={data}
+                bordered
+                loading={loading}
+            />
+        </>
+    );
 };
