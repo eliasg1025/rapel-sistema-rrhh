@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('titulo')
-    Retorno Vacaciones | Grupo Verfrut
+    Programación de Retornos | Grupo Verfrut
 @endsection
 
 @section('contenido')

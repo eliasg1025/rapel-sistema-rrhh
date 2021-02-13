@@ -347,8 +347,9 @@ Route::group(['prefix' => 'sqlsrv'], function () {
         Route::post('/importar', 'Sqlsrv\ActividadTrabajadorController@importar');
     });
 
-    Route::group(['prefix' => 'vacaciones'], function() {
-        Route::get('/programacion-retornos', 'Sqlsrv\VacacionesController@programacionRetornos');
+    Route::group(['prefix' => 'programacion-retornos'], function() {
+        Route::get('/vacaciones', 'Sqlsrv\RetornosController@programacionVacaciones');
+        Route::get('/spl', 'Sqlsrv\RetornosController@programacionSPL');
     });
 });
 /*

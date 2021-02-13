@@ -19,7 +19,8 @@ export const Inicio = () => {
             .add(7, "days")
             .format("YYYY-MM-DD")
             .toString(),
-        empresa_id: 9
+        empresa_id: 9,
+        tipo: 'VACACIONES',
     });
     const [data, setData] = useState([]);
     const [dataResumen, setDataResumen] = useState([]);
@@ -37,7 +38,7 @@ export const Inicio = () => {
 
     useEffect(() => {
         setLoading(true);
-        Axios.get(`/api/sqlsrv/vacaciones/programacion-retornos?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`)
+        Axios.get(`/api/sqlsrv/programacion-retornos/${form.tipo.toLowerCase()}?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`)
             .then(res => {
                 setData(res.data.data.map(item => {
                     return {
@@ -102,7 +103,7 @@ export const Inicio = () => {
                 trabajador: item.Trabajador,
                 fecha_inicio: item.FechaInicio,
                 fehca_retorno: item.FechaRetorno,
-                dias: item.Dias,
+                dias: item.Dias || '',
                 oficio: item.Oficio,
                 regimen: item.Regimen,
                 zona_labor: item.ZonaLabor
@@ -121,7 +122,7 @@ export const Inicio = () => {
             });
             let link = document.createElement("a");
             link.href = window.URL.createObjectURL(blob);
-            link.download = `PROGRAMACION-RETORNO-VACACIONES_${form.empresa_id}_${form.desde}_${form.hasta}.xlsx`;
+            link.download = `PROGRAMACION-RETORNO_${form.tipo}_${form.empresa_id}_${form.desde}_${form.hasta}.xlsx`;
             link.click();
         });
     }
@@ -173,6 +174,29 @@ export const Inicio = () => {
                                 {empresas.map(e => (
                                     <Select.Option value={e.id} key={e.id}>
                                         {`${e.id} - ${e.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="col-md-4">
+                            Tipo:<br />
+                            <Select
+                                value={form.tipo}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, tipo: e })}
+                                style={{
+                                    width: "100%"
+                                }}
+                            >
+                                {[{id: 'VACACIONES'}, {id: 'SPL'}].map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {e.id}
                                     </Select.Option>
                                 ))}
                             </Select>
