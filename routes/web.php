@@ -24,7 +24,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::get('/', 'Web\ViewController@index');
     Route::get('/perfil', 'Web\ViewController@perfil');
 
-    Route::group(['prefix' => 'ingresos'], function() {
+    Route::group(['prefix' => 'ingresos', 'middleware' => 'module:ingresos'], function() {
         Route::get('/', 'Web\IngresosController@index');
         Route::get('/trabajadores', 'Web\IngresosController@trabajadores');
         Route::get('/registro-individual', 'Web\IngresosController@registroIndividual');

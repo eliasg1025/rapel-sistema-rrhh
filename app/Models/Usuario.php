@@ -144,7 +144,7 @@ class Usuario extends Model
     {
         try {
             $username = trim($data['username']);
-            $password = trim(strtolower($data['password']));
+            $password = trim(($data['password']));
 
             $usuario = Usuario::whereUsername($username)->first();
             if ($usuario) {

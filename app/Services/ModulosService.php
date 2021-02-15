@@ -22,6 +22,7 @@ class ModulosService
                 'ru.usuario_id' => $usuario->id,
                 'ru.activo' => 1,
             ])
+            ->orderBy('m.id', 'ASC')
             ->get();
         return $modulos;
     }

@@ -141,7 +141,7 @@ const RightSide = ({ rolesUsuario, usuario, setIsVisible }) => {
         <div className="col-md-6">
             <Card>
                 <h3>{ `${usuario.trabajador.nombre} ${usuario.trabajador.apellido_paterno} ${usuario.trabajador.apellido_materno}` }<br /><small>{ usuario.username }</small></h3>
-                <button className="btn btn-sm btn-primary" onClick={() => setIsVisible(true)} disabled={true}>
+                <button className="btn btn-sm btn-primary" onClick={() => setIsVisible(true)}>
                     Cambiar contraseña
                 </button>
             </Card>

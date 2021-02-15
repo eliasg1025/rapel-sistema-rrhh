@@ -20,10 +20,11 @@ class ViewController extends Controller
     public function index(Request $request)
     {
         $usuario = $request->session()->get('usuario');
+
         $data = [
             'usuario'   => $usuario,
-            //'modulos'   => $this->modulosService->getByUser($usuario)
-            'modulos'   => $this->modulosService->get()
+            'modulos'   => $this->modulosService->getByUser($usuario)
+            // 'modulos'   => $this->modulosService->get()
         ];
         return view('pages.panel', compact('data'));
     }
