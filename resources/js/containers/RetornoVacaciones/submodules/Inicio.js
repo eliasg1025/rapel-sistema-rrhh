@@ -11,6 +11,7 @@ export const Inicio = () => {
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
     const [empresas, setEmpresas] = useState([]);
+    const [zonasLabor, setZonasLabor] = useState([]);
     const [form, setForm] = useState({
         desde: moment()
         .format("YYYY-MM-DD")
@@ -20,6 +21,7 @@ export const Inicio = () => {
             .format("YYYY-MM-DD")
             .toString(),
         empresa_id: 9,
+        zona_labor_id: 0,
         tipo: 'VACACIONES',
     });
     const [data, setData] = useState([]);
@@ -37,8 +39,20 @@ export const Inicio = () => {
     }, []);
 
     useEffect(() => {
+        function fetchZonasLabores() {
+            Axios.get(`/api/zona-labor/${form.empresa_id}`)
+                .then(res => setZonasLabor(res.data))
+                .catch(err => {});
+        }
+
+        if (form.empresa_id !== '') {
+            fetchZonasLabores();
+        }
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
-        Axios.get(`/api/sqlsrv/programacion-retornos/${form.tipo.toLowerCase()}?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`)
+        Axios.get(`/api/sqlsrv/programacion-retornos/${form.tipo.toLowerCase()}?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}&zona_labor_id=${form.zona_labor_id}`)
             .then(res => {
                 setData(res.data.data.map(item => {
                     return {
@@ -197,6 +211,32 @@ export const Inicio = () => {
                                 {[{id: 'VACACIONES'}, {id: 'SPL'}].map(e => (
                                     <Select.Option value={e.id} key={e.id}>
                                         {e.id}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="col-md-4">
+                            Zona Labor:<br />
+                            <Select
+                                value={form.zona_labor_id}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, zona_labor_id: e })}
+                                style={{
+                                    width: "100%"
+                                }}
+                            >
+                                <Select.Option value={0} key={0}>
+                                    {`0 - TODOS`}
+                                </Select.Option>
+                                {zonasLabor.map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id} - ${e.name}`}
                                     </Select.Option>
                                 ))}
                             </Select>

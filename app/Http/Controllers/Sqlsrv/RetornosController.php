@@ -12,6 +12,7 @@ class RetornosController extends Controller
     public function programacionVacaciones(Request $request)
     {
         $empresaId = $request->get('empresa_id');
+        $zonaLaborId = $request->get('zona_labor_id');
         $desde = Carbon::parse($request->get('desde'));
         $hasta = Carbon::parse($request->get('hasta'));
 
@@ -73,6 +74,9 @@ class RetornosController extends Controller
             ->when($empresaId == 0, function($query) {
                 $query->whereIn('v.IdEmpresa', [9, 14]);
             })
+            ->when($zonaLaborId != 0, function($query) use ($zonaLaborId) {
+                $query->where('t.IdZonaLabores', $zonaLaborId);
+            })
             ->orderBy('v.FechaFinal', 'ASC')
             ->orderBy('z.Nombre', 'ASC')
             ->orderBy('r.IdTipo', 'ASC')
@@ -89,6 +93,7 @@ class RetornosController extends Controller
     public function programacionSPL(Request $request)
     {
         $empresaId = $request->get('empresa_id');
+        $zonaLaborId = $request->get('zona_labor_id');
         $desde = Carbon::parse($request->get('desde'));
         $hasta = Carbon::parse($request->get('hasta'));
 
@@ -123,7 +128,7 @@ class RetornosController extends Controller
             ])
             ->join('dbo.Zona as z', [
                 'z.IdEmpresa' => 't.IdEmpresa',
-                'z.IdZona' => 't.IdZonaLabores'
+                'z.IdZona' => 'sus.IdZonaAccidente'
             ])
             ->join('dbo.TipoRegimen as r', [
                 'r.IdTipo' => 'c.IdRegimen'
@@ -133,6 +138,9 @@ class RetornosController extends Controller
             ->whereDate('sus.FechaInicio', '>=', $desde)
             ->whereDate('sus.FechaInicio', '<=', $hasta)
             ->where('sus.MotivoAusencia', 'like', '%S.P.L%')
+            ->when($zonaLaborId != 0, function($query) use ($zonaLaborId) {
+                $query->where('sus.IdZonaAccidente', $zonaLaborId);
+            })
             ->groupBy(
                 'sus.IdTrabajador', 'sus.IdEmpresa', 'sus.USUARIO', 'sus.FechaDigitacion', 'sus.RutTrabajador',
                 'z.Nombre', 'r.Descripcion', 'e.Nombre', 'o.Descripcion', 't.ApellidoPaterno', 't.ApellidoMaterno', 't.Nombre'
