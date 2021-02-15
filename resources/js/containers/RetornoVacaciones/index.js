@@ -20,7 +20,7 @@ export default function RetornoVacaciones() {
                 <br />
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                     <Menu.Item key="main" icon={<QuestionCircleOutlined />}>
-                        <a href="/registro-fotocheck">
+                        <a href="/retorno-vacaciones">
                             Inicio
                         </a>
                     </Menu.Item>
