@@ -35,7 +35,7 @@ class RenovacionesFotocheckService
         // Verificar si ya existe el mismo dia
         $existeElMismoDia = RenovacionFotocheck::where([
             'trabajador_id' => $trabajadorId,
-        ])->exists();
+        ])->whereBetween('fecha_solicitud', [now()->subDay()->toDateString(), now()->toDateString()])->exists();
 
         if ($existeElMismoDia) {
             return [
