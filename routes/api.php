@@ -333,6 +333,7 @@ Route::group(['prefix' => 'renovacion-fotocheck'], function() {
 
 Route::group(['prefix' => 'planillas-manuales'], function() {
     Route::get('/', 'PlanillasManualesController@get');
+    Route::put('/{planilla}', 'PlanillasManualesController@update');
 });
 
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {

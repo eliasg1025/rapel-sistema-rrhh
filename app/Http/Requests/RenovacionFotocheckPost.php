@@ -32,4 +32,9 @@ class RenovacionFotocheckPost extends FormRequest
             'empresa_id' => 'required|numeric'
         ];
     }
+
+    public function messages()
+    {
+        //
+    }
 }

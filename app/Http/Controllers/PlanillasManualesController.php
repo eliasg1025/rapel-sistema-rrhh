@@ -22,4 +22,27 @@ class PlanillasManualesController extends Controller
             'data' => $planillas,
         ]);
     }
+
+    public function update(PlanillaManual $planilla, Request $request)
+    {
+        try {
+            $planilla->fecha_inicio = $request->get('fecha_inicio');
+            $planilla->fecha_fin = $request->get('fecha_fin');
+            $planilla->horas = $request->get('horas');
+
+            $planilla->save();
+
+            return response()->json([
+                'message' => 'Registro actualizado correctamente',
+                'data' => $planilla
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al actualizar el registro',
+                'data' => [
+                    'error' => $e->getMessage()
+                ]
+            ], 400);
+        }
+    }
 }

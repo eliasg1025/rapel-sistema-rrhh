@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Card, DatePicker, Select, Table } from "antd";
-import moment from 'moment';
-import Axios from 'axios';
+import moment from "moment";
+import Axios from "axios";
 import { TablaResumen } from "../components";
 
 export const Datos = () => {
-
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
     const [empresas, setEmpresas] = useState([]);
     const [form, setForm] = useState({
         desde: moment()
-            .subtract(7, 'days')
+            .subtract(7, "days")
             .format("YYYY-MM-DD")
             .toString(),
         hasta: moment()
             .format("YYYY-MM-DD")
             .toString(),
-        empresa_id: 9,
+        empresa_id: 9
     });
     const [data, setData] = useState([]);
     const [dataResumen, setDataResumen] = useState([]);
@@ -26,28 +25,28 @@ export const Datos = () => {
 
     const initialStateColumns = [
         {
-            title: 'FUNDO',
-            dataIndex: 'zona_labor',
+            title: "FUNDO",
+            dataIndex: "zona_labor"
         },
         {
-            title: 'SOLICITANTE',
-            dataIndex: 'solicitante'
+            title: "SOLICITANTE",
+            dataIndex: "solicitante"
         },
         {
-            title: 'DNI/RUT',
-            dataIndex: 'rut'
+            title: "DNI/RUT",
+            dataIndex: "rut"
         },
         {
-            title: 'APELLIDOS Y NOMBRES',
-            dataIndex: 'trabajador'
-        },
+            title: "APELLIDOS Y NOMBRES",
+            dataIndex: "trabajador"
+        }
     ];
 
     useEffect(() => {
         function fetchEmpresas() {
-            Axios.get('/api/empresa')
+            Axios.get("/api/empresa")
                 .then(res => setEmpresas(res.data))
-                .catch(err => {})
+                .catch(err => {});
         }
 
         fetchEmpresas();
@@ -55,41 +54,55 @@ export const Datos = () => {
 
     useEffect(() => {
         setLoading(true);
-        Axios.get(`/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`)
+        Axios.get(
+            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`
+        )
             .then(res => {
                 const data = res.data.data;
 
-                setData(data.map(item => {
-                    return {
-                        ...item,
-                        key: item.id
-                    }
-                }));
+                setData(
+                    data.map(item => {
+                        return {
+                            ...item,
+                            key: item.id
+                        };
+                    })
+                );
 
-                const colores = Array.from(new Set(data.map(item => item.color))).sort();
+                const colores = Array.from(
+                    new Set(data.map(item => item.color))
+                ).sort();
 
                 const columnColores = {
-                    title: 'COLORES',
+                    title: "COLORES",
                     children: colores.map(color => {
                         return {
                             title: color,
                             dataIndex: color
-                        }
+                        };
                     })
                 };
 
                 setColumns([...initialStateColumns, columnColores]);
 
-                const zonas = Array.from(new Set(data.map(item => item.zona_labor))).sort();
+                const zonas = Array.from(
+                    new Set(data.map(item => item.zona_labor))
+                ).sort();
 
                 const dataPorZona = zonas.map(zona => {
-                    const tempData = data.filter(item => item.zona_labor === zona);
+                    const tempData = data.filter(
+                        item => item.zona_labor === zona
+                    );
 
-                    const solicitantes = Array.from(new Set(tempData.map(item => item.solicitante))).sort()
+                    const solicitantes = Array.from(
+                        new Set(tempData.map(item => item.solicitante))
+                    ).sort();
 
                     let cantColores = {};
                     for (const color of colores) {
-                        cantColores[color] = tempData.filter(item => item.color === color).length;
+                        cantColores[color] = tempData.filter(
+                            item => item.color === color
+                        ).length;
                     }
 
                     return {
@@ -97,11 +110,15 @@ export const Datos = () => {
                         zona_labor: zona,
                         ...cantColores,
                         children: solicitantes.map(solicitante => {
-                            const tempData2 = tempData.filter(item => item.solicitante === solicitante);
+                            const tempData2 = tempData.filter(
+                                item => item.solicitante === solicitante
+                            );
 
                             let cantColores = {};
                             for (const color of colores) {
-                                cantColores[color] = tempData2.filter(item => item.color === color).length;
+                                cantColores[color] = tempData2.filter(
+                                    item => item.color === color
+                                ).length;
                             }
 
                             return {
@@ -112,20 +129,68 @@ export const Datos = () => {
                                 children: tempData2.map(item => {
                                     return {
                                         ...item,
-                                        key: item.rut,
-                                    }
+                                        key: item.rut
+                                    };
                                 })
-                            }
-                        }),
-                    }
+                            };
+                        })
+                    };
                 });
-
 
                 setDataResumen(dataPorZona);
             })
             .catch(err => {})
             .finally(() => setLoading(false));
     }, [form]);
+
+    const handleExportar = () => {
+        const headings = [
+            "CODIGO",
+            "FECHA SOLICITUD",
+            "RUT",
+            "TRABAJADOR",
+            "FUNDO",
+            "SOLICITANTE",
+            "MOTIVO",
+            "COLOR",
+            "OBSERVACION",
+        ];
+
+        const d = data.map(item => {
+            return {
+                codigo: item.id,
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.rut,
+                trabajador: item.trabajador,
+                zona_labor: item.zona_labor,
+                solicitante: item.solicitante,
+                motivo: item.motivo,
+                color: item.color,
+                observacion: item?.observacion || ''
+            };
+        });
+
+        Axios({
+            url: "/descargar",
+            data: { headings, data: d },
+            method: "POST",
+            responseType: "blob"
+        }).then(response => {
+            let blob = new Blob([response.data], {
+                type:
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            });
+            let link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download =
+                "REGISTROS-FOTOCHECKS_" +
+                form.desde +
+                "_" +
+                form.hasta +
+                ".xlsx";
+            link.click();
+        });
+    };
 
     return (
         <>
@@ -186,7 +251,7 @@ export const Datos = () => {
                 Cantidad: {data.length} registros&nbsp;
                 <button
                     className="btn btn-success btn-sm"
-                    onClick={() => console.log('hi')}
+                    onClick={handleExportar}
                 >
                     <i className="fas fa-file-excel" /> Exportar
                 </button>

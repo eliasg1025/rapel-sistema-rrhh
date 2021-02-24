@@ -20,6 +20,7 @@ export const PlanillasManuales = () => {
             .toString(),
         empresa_id: 9,
     });
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
         function fetchEmpresas() {
@@ -48,7 +49,7 @@ export const PlanillasManuales = () => {
         }
 
         fetchPlanillas();
-    }, [form]);
+    }, [form, reload]);
 
     return (
         <>
@@ -107,6 +108,8 @@ export const PlanillasManuales = () => {
             <TablaPlanillas
                 data={planillas}
                 loading={loading}
+                reload={reload}
+                setReload={setReload}
             />
         </>
     );

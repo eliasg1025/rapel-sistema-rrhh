@@ -138,7 +138,8 @@ export const TablaRegistros = ({
             "MOTIVO",
             "COSTO",
             "COLOR",
-            "OBSERVACION"
+            "OBSERVACION",
+            "ESTADO",
         ];
 
         const d = data.map(item => {
@@ -163,7 +164,8 @@ export const TablaRegistros = ({
                 motivo: item?.motivo.descripcion,
                 costo: item?.motivo.costo,
                 color: item?.color.color,
-                observacion: item?.observacion || ""
+                observacion: item?.observacion || "",
+                estado: item?.estado === 0 ? 'GENERADO' : 'ENVIADO',
             };
         });
 
