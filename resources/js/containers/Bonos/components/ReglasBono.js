@@ -6,7 +6,7 @@ export const ReglasBono = ({ bono, reglas, setReglas, reload, setReload }) => {
 
     return (
         <>
-            <p style={{ fontWeight: 'bold' }}>Define a que trabajadores se les dará bono</p>
+            <p style={{ fontWeight: 'bold' }}>Define a que trabajadores se les <b>considerará o no</b> bono</p>
             <AgregarRegla bono={bono} reload={reload} setReload={setReload} />
             <br />
             <TablaReglas bono={bono} reload={reload} setReload={setReload} reglas={reglas} setReglas={setReglas} />

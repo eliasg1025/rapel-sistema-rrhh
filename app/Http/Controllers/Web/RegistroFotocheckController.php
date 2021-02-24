@@ -29,6 +29,32 @@ class RegistroFotocheckController extends Controller
         return view('pages.registro-fotocheck', compact('data'));
     }
 
+    public function datos(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'datos',
+            'editar'    => 0
+        ];
+
+        return view('pages.registro-fotocheck', compact('data'));
+    }
+
+    public function planillasManuales(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'planillas-manuales',
+            'editar'    => 0
+        ];
+
+        return view('pages.registro-fotocheck', compact('data'));
+    }
+
     public function verFicha(RenovacionFotocheck $renovacion)
     {
         try {

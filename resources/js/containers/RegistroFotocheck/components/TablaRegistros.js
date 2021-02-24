@@ -1,5 +1,5 @@
-import React from "react";
-import { Table, DatePicker, Input, Select, Modal } from "antd";
+import React, { useState } from "react";
+import { Table, DatePicker, Input, Select, Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import Axios from "axios";
 
@@ -8,8 +8,13 @@ export const TablaRegistros = ({
     setData,
     filtro,
     setFiltro,
+    loading,
+    handleCambiarEstado,
     handleEliminar
 }) => {
+
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
     const columns = [
         {
             title: "Empresa",
@@ -75,25 +80,46 @@ export const TablaRegistros = ({
             dataIndex: "observacion"
         },
         {
+            title: "Estado",
+            dataIndex: "estado",
+            render: item => (item === 0 ? <Tag color="blue">GENERADO</Tag> : <Tag color="green">ENVIADO</Tag>)
+        },
+        {
             title: "Acciones",
             dataIndex: "acciones",
             render: (_, record) => (
                 <div className="btn-group">
                     {record.motivo.costo > 0 && (
-                        <a
-                            className="btn btn-sm btn-primary"
-                            target="_blank"
-                            href={"/ficha/carta-descuento/" + record.id}
-                        >
-                            <i className="fas fa-file-alt"></i>
-                        </a>
+                        <Tooltip title="Ver CARTA DE DESCUENTO">
+                            <a
+                                className="btn btn-sm btn-primary"
+                                target="_blank"
+                                href={"/ficha/carta-descuento/" + record.id}
+                            >
+                                <i className="fas fa-file-alt"></i>
+                            </a>
+                        </Tooltip>
                     )}
-                    <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => confirmEliminar(record)}
-                    >
-                        <i className="fas fa-trash"></i>
-                    </button>
+                    {record.estado === 0 && (
+                        <>
+                            <Tooltip title="Marcar como ENVIADO">
+                                <button
+                                    className="btn btn-sm btn-primary"
+                                    onClick={() => confirmCambiarEstado(record)}
+                                >
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                            <Tooltip title="Eliminar Registro">
+                                <button
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => confirmEliminar(record)}
+                                >
+                                    <i className="fas fa-trash"></i>
+                                </button>
+                            </Tooltip>
+                        </>
+                    )}
                 </div>
             )
         }
@@ -172,6 +198,16 @@ export const TablaRegistros = ({
         });
     };
 
+    const confirmCambiarEstado = record => {
+        Modal.confirm({
+            title: 'Marcar Enviado',
+            content: '¿Desea marcar este registro como enviado?',
+            okText: 'Si, MARCAR COMO ENVIADO',
+            cancelText: 'Cancelar',
+            onOk: () => handleCambiarEstado(record.id, 1)
+        });
+    }
+
     return (
         <>
             <br />
@@ -235,22 +271,36 @@ export const TablaRegistros = ({
             </div>
             <br />
             <b style={{ fontSize: "13px" }}>
-                Cantidad: {data.length} registros&nbsp;
+                Cantidad: {data.length} registros {selectedRowKeys.length > 0 && `(${selectedRowKeys.length} seleccionados)`}&nbsp;
                 <button
                     className="btn btn-success btn-sm"
                     onClick={handleExportar}
                 >
                     <i className="fas fa-file-excel" /> Exportar
                 </button>
+                {selectedRowKeys.length > 0 && (
+                    <button
+                        className="ml-2 btn btn-primary btn-sm"
+                    >
+                        <i className="fas fa-file" /> Generar planilla manual
+                    </button>
+                )}
             </b>
             <br />
             <br />
             <Table
+                rowSelection={{
+                    onChange: selectedRowKeys => setSelectedRowKeys(selectedRowKeys),
+ /*                    getCheckboxProps: (record) => ({
+                        disabled: record.
+                    }) */
+                }}
                 size="small"
                 scroll={{ x: 1000 }}
                 bordered
                 columns={columns}
                 dataSource={data}
+                loading={loading}
             />
         </>
     );

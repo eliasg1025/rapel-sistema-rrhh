@@ -142,6 +142,8 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'registro-fotochecks', 'middleware' => 'module:registro-fotochecks'], function() {
         Route::get('/', 'Web\RegistroFotocheckController@index');
+        Route::get('/datos', 'Web\RegistroFotocheckController@datos');
+        Route::get('/planillas-manuales', 'Web\RegistroFotocheckController@planillasManuales');
     });
 
     Route::group(['prefix' => 'retorno-vacaciones', 'middleware' => 'module:retorno-vacaciones'], function() {

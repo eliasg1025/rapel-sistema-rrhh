@@ -25,6 +25,7 @@ export const Inicio = () => {
     const [form, setForm] = useState({...initialState});
     const [data, setData] = useState([]);
     const [reloadDatos, setReloadDatos] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [filtro, setFiltro] = useState({
         desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
@@ -44,7 +45,17 @@ export const Inicio = () => {
             trabajador
         })
             .then(res => {
+                const data = res.data.data;
                 setReloadDatos(!reloadDatos);
+
+                setForm({ ... initialState });
+                setTrabajador(null);
+                setContratoActivo(null);
+
+                if (data.motivo.costo > 0) {
+                    window.open(`/ficha/carta-descuento/${data.id}`, '_blank');
+                }
+
                 notification['success']({
                     message: res.data.message
                 });
@@ -56,6 +67,10 @@ export const Inicio = () => {
             });
     }
 
+    const handleEnviar = () => {
+        console.log('enviar');
+    }
+
     const handleEliminar = (id) => {
         Axios.delete(`/api/renovacion-fotocheck/${id}`)
             .then(res => {
@@ -65,14 +80,27 @@ export const Inicio = () => {
 
                 setReloadDatos(!reloadDatos);
             })
-            .catch(err => {
+            .catch(err => {});
+    }
 
-            });
+    const handleCambiarEstado = (id, estado) => {
+        Axios.put(`/api/renovacion-fotocheck/${id}`, {
+            estado,
+        })
+            .then(res => {
+                notification['success']({
+                    message: res.data.message
+                });
+
+                setReloadDatos(!reloadDatos);
+            })
+            .catch(err => {});
     }
 
     useEffect(() => {
         function fetchRenovaciones() {
-            Axios.get(`/api/renovacion-fotocheck?desde=${filtro.desde}&hasta=${filtro.hasta}&usuario_id=${usuario.id}&tipo=${filtro.tipo}`)
+            setLoading(true);
+            Axios.get(`/api/renovacion-fotocheck?desde=${filtro.desde}&hasta=${filtro.hasta}&usuario_id=${usuario.id}&tipo=${filtro.tipo}&rut=${filtro.rut}`)
                 .then(res => {
                     message['success']({
                         content: 'Se encontraron ' + res.data.data.length + ' registros'
@@ -87,7 +115,8 @@ export const Inicio = () => {
                 })
                 .catch(err => {
                     console.error(err);
-                });
+                })
+                .finally(() => setLoading(false));
         }
 
         if (filtro.rut === '' || filtro.rut.length >= 8) {
@@ -119,6 +148,8 @@ export const Inicio = () => {
                 filtro={filtro}
                 setFiltro={setFiltro}
                 handleEliminar={handleEliminar}
+                handleCambiarEstado={handleCambiarEstado}
+                loading={loading}
             />
         </>
     );

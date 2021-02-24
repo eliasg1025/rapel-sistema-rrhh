@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RenovacionFotocheckPost;
 use App\Models\MotivoFotocheck;
 use App\Models\RenovacionFotocheck;
+use App\Models\Trabajador;
 use App\Models\Usuario;
 use App\Models\ZonaLabor;
 use App\Services\RenovacionesFotocheckService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RenovacionesFotocheckController extends Controller
 {
@@ -33,9 +35,28 @@ class RenovacionesFotocheckController extends Controller
             $request->usuario_id
         );
 
+        if (isset($result['error'])) {
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
         return response()->json([
             'message' => 'Registro ingresado correctamente',
             'data' => $result
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $renovacion = RenovacionFotocheck::find($id);
+
+        $renovacion->estado = $request->estado;
+        $renovacion->save();
+
+        return response()->json([
+            'message' => 'Registro actualizado correctamente',
+            'data' => $renovacion
         ]);
     }
 
@@ -76,6 +97,8 @@ class RenovacionesFotocheckController extends Controller
             return $item['id'];
         }, $motivosConDescuento);
 
+        $trabajador = Trabajador::where('rut', $rut)->first();
+
         $renovaciones = $renovacionesQuery->whereBetween('fecha_solicitud', [$desde, $hasta])
             ->when($tipo === 'CON DESCUENTO', function($query) use ($motivosConDescuentoId) {
                 $query->whereIn('motivo_perdida_fotocheck_id', $motivosConDescuentoId);
@@ -83,7 +106,46 @@ class RenovacionesFotocheckController extends Controller
             ->when($tipo === 'SIN DESCUENTO', function($query) use ($motivosConDescuentoId) {
                 $query->whereNotIn('motivo_perdida_fotocheck_id', $motivosConDescuentoId);
             })
+            ->when(!is_null($trabajador), function($query) use ($trabajador) {
+                $query->where('trabajador_id', $trabajador->id);
+            })
             ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'message' => 'Data obtenida',
+            'data' => $renovaciones,
+        ]);
+    }
+
+    public function getResumen(Request $request)
+    {
+        $desde = $request->get('desde');
+        $hasta = $request->get('hasta');
+        $empresaId = $request->get('empresa_id');
+
+        $renovaciones = DB::table('renovaciones_fotocheck as rf')
+            ->select(
+                'rf.id',
+                'rf.fecha_solicitud',
+                'rf.observacion',
+                't.rut',
+                DB::raw("CONCAT(t.apellido_paterno, ' ', t.apellido_materno, ' ', t.nombre) as trabajador"),
+                'cf.color',
+                'zl.name as zona_labor',
+                'mpf.descripcion as motivo',
+                DB::raw("CONCAT(ts.apellido_paterno, ' ', ts.apellido_materno, ' ', ts.nombre) as solicitante"),
+            )
+            ->join('trabajadores as t', 't.id', '=', 'rf.trabajador_id')
+            ->join('colores_fotocheck as cf', 'cf.id', '=', 'rf.color_fotocheck_id')
+            ->join('motivos_perdida_fotocheck as mpf', 'mpf.id', '=', 'rf.motivo_perdida_fotocheck_id')
+            ->join('zona_labores as zl', 'zl.id', '=', 'rf.zona_labor_id')
+            ->join('usuarios as u', 'u.id', '=', 'rf.usuario_id')
+            ->join('trabajadores as ts', 'ts.id', '=', 'u.trabajador_id')
+            ->where([
+                'rf.empresa_id' => $empresaId,
+                'rf.estado' => 1,
+            ])
             ->get();
 
         return response()->json([
