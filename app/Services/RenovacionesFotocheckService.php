@@ -34,13 +34,17 @@ class RenovacionesFotocheckService
 
         // Verificar si ya existe el mismo dia
         $existeElMismoDia = RenovacionFotocheck::where([
-            'trabajador_id' => $trabajadorId,
-        ])->whereBetween('fecha_solicitud', [now()->subDay()->toDateString(), now()->toDateString()])->exists();
+                'trabajador_id' => $trabajadorId,
+            ])
+            ->whereBetween('fecha_solicitud', [now()->subDay()->toDateString(), now()->toDateString()])
+            ->first();
 
         if ($existeElMismoDia) {
+            $solicitante = $existeElMismoDia->usuario->trabajador;
+
             return [
                 'error' => true,
-                'message' => 'No se puede registrar a un trabajador dos veces en un periodo de 2 días'
+                'message' => 'No se puede registrar a un trabajador dos veces en un periodo de 2 días. Registrado por: ' . $solicitante->nombre_completo . ' el ' . $existeElMismoDia->fecha_solicitud
             ];
         }
 
