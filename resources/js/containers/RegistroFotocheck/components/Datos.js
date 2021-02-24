@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Select } from 'antd';
+import { Select, Button } from 'antd';
 import Axios from 'axios';
 
-export const Datos = ({ trabajador, contratoActivo, form, setForm, handleSubmit }) => {
+export const Datos = ({ trabajador, contratoActivo, form, setForm, handleSubmit, submiting }) => {
 
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
@@ -228,9 +228,9 @@ export const Datos = ({ trabajador, contratoActivo, form, setForm, handleSubmit 
                 <br />
                 <div className="row">
                     <div className="col-md-12">
-                        <button type="submit" className="btn btn-primary btn-block">
+                        <Button htmlType="submit" type="primary" block loading={submiting}>
                             Guardar
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </form>

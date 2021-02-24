@@ -22,7 +22,9 @@ export const Datos = () => {
     const [data, setData] = useState([]);
     const [dataResumen, setDataResumen] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [columns, setColumns] = useState([
+    const [columns, setColumns] = useState(initialStateColumns);
+
+    const initialStateColumns = [
         {
             title: 'FUNDO',
             dataIndex: 'zona_labor',
@@ -39,7 +41,7 @@ export const Datos = () => {
             title: 'APELLIDOS Y NOMBRES',
             dataIndex: 'trabajador'
         },
-    ]);
+    ];
 
     useEffect(() => {
         function fetchEmpresas() {
@@ -76,7 +78,7 @@ export const Datos = () => {
                     })
                 };
 
-                setColumns([...columns, columnColores]);
+                setColumns([...initialStateColumns, columnColores]);
 
                 const zonas = Array.from(new Set(data.map(item => item.zona_labor))).sort();
 

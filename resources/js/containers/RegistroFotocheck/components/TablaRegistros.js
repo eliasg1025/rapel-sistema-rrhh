@@ -10,7 +10,8 @@ export const TablaRegistros = ({
     setFiltro,
     loading,
     handleCambiarEstado,
-    handleEliminar
+    handleEliminar,
+    handleGenerarPlanillaManual,
 }) => {
 
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -188,6 +189,16 @@ export const TablaRegistros = ({
         });
     };
 
+    const confirmGenerarPlanillaManual = () => {
+        Modal.confirm({
+            title: "Generar Planilla Manual",
+            content: `¿Desea generar planilla manual a estos ${selectedRowKeys.length} registros?`,
+            okText: "Si, GENERAR",
+            cancelText: "Cancelar",
+            onOk: () => handleGenerarPlanillaManual(selectedRowKeys),
+        });
+    }
+
     const confirmEliminar = record => {
         Modal.confirm({
             title: "Eliminar registro",
@@ -281,6 +292,7 @@ export const TablaRegistros = ({
                 {selectedRowKeys.length > 0 && (
                     <button
                         className="ml-2 btn btn-primary btn-sm"
+                        onClick={confirmGenerarPlanillaManual}
                     >
                         <i className="fas fa-file" /> Generar planilla manual
                     </button>

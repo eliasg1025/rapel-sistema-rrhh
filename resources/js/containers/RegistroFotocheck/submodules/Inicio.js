@@ -25,6 +25,7 @@ export const Inicio = () => {
     const [form, setForm] = useState({...initialState});
     const [data, setData] = useState([]);
     const [reloadDatos, setReloadDatos] = useState(false);
+    const [submiting, setSubmiting] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const [filtro, setFiltro] = useState({
@@ -37,8 +38,8 @@ export const Inicio = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(form);
 
+        setSubmiting(true);
         Axios.post('/api/renovacion-fotocheck', {
             ...form,
             usuario_id: usuario.id,
@@ -64,11 +65,8 @@ export const Inicio = () => {
                 notification['error']({
                     message: err.response.data.message
                 });
-            });
-    }
-
-    const handleEnviar = () => {
-        console.log('enviar');
+            })
+            .finally(() => setSubmiting(false));
     }
 
     const handleEliminar = (id) => {
@@ -95,6 +93,21 @@ export const Inicio = () => {
                 setReloadDatos(!reloadDatos);
             })
             .catch(err => {});
+    }
+
+    const handleGenerarPlanillaManual = (ids) => {
+        setLoading(true);
+        Axios.post('/api/renovacion-fotocheck/planillas-manuales', {
+            ids,
+            usuario_id: usuario.id,
+        })
+            .then(res => {
+                notification['success']({
+                    message: res.data.message
+                });
+            })
+            .catch(err => {})
+            .finally(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -140,6 +153,7 @@ export const Inicio = () => {
                 form={form}
                 setForm={setForm}
                 handleSubmit={handleSubmit}
+                submiting={submiting}
             />
             <hr />
             <TablaRegistros
@@ -149,6 +163,7 @@ export const Inicio = () => {
                 setFiltro={setFiltro}
                 handleEliminar={handleEliminar}
                 handleCambiarEstado={handleCambiarEstado}
+                handleGenerarPlanillaManual={handleGenerarPlanillaManual}
                 loading={loading}
             />
         </>

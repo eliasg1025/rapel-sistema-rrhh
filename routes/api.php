@@ -326,8 +326,13 @@ Route::group(['prefix' => 'renovacion-fotocheck'], function() {
     Route::get('/', 'RenovacionesFotocheckController@get');
     Route::get('/resumen', 'RenovacionesFotocheckController@getResumen');
     Route::post('/', 'RenovacionesFotocheckController@create');
+    Route::post('/planillas-manuales', 'RenovacionesFotocheckController@createPlanillasManuales');
     Route::put('/{id}', 'RenovacionesFotocheckController@update');
     Route::delete('/{id}', 'RenovacionesFotocheckController@delete');
+});
+
+Route::group(['prefix' => 'planillas-manuales'], function() {
+    Route::get('/', 'PlanillasManualesController@get');
 });
 
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {

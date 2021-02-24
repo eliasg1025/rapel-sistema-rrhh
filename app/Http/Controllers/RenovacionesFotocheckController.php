@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RenovacionFotocheckPost;
 use App\Models\MotivoFotocheck;
+use App\Models\PlanillaManual;
 use App\Models\RenovacionFotocheck;
 use App\Models\Trabajador;
 use App\Models\Usuario;
@@ -146,11 +147,44 @@ class RenovacionesFotocheckController extends Controller
                 'rf.empresa_id' => $empresaId,
                 'rf.estado' => 1,
             ])
+            ->whereBetween('rf.fecha_solicitud', [$desde, $hasta])
             ->get();
 
         return response()->json([
             'message' => 'Data obtenida',
             'data' => $renovaciones,
+        ]);
+    }
+
+    public function createPlanillasManuales(Request $request)
+    {
+        $ids = $request->get('ids');
+        $usuarioId = $request->get('usuario_id');
+
+        $count = 0;
+        foreach ($ids as $renovacionId) {
+            $renovacion = RenovacionFotocheck::find($renovacionId);
+
+            $planilla = DB::table('planillas_manuales')->updateOrInsert(
+                ['tipo_entidad' => 'renovaciones_fotocheck', 'entidad_id' => $renovacion->id],
+                [
+                    'empresa_id' => $renovacion->empresa_id,
+                    'regimen_id' => $renovacion->regimen_id,
+                    'zona_labor_id' => $renovacion->zona_labor_id,
+                    'trabajador_id' => $renovacion->trabajador_id,
+                    'usuario_id' => $usuarioId,
+                    'fecha_solicitud' => now()->toDateString(),
+                ]
+            );
+
+            if ($planilla) {
+                $count++;
+            }
+        }
+
+        return response()->json([
+            'message' => "Se han creado $count registros de planilla manual",
+            'data' => [],
         ]);
     }
 }
