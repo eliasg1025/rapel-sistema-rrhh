@@ -74,7 +74,7 @@ class BonosService
                     $condicional = $value < $condicion->valor_meta;
                     break;
                 case '=':
-                    $condicional = $value = $condicion->valor_meta;
+                    $condicional = $value == $condicion->valor_meta;
                     break;
                 case '>=':
                     $condicional = $value >= $condicion->valor_meta;
@@ -84,15 +84,7 @@ class BonosService
                     break;
             }
 
-            /* $newValue = !is_null($value) ? (
-                $condicional ? (double) $condicion->valor_bono : ((double) $condicion->valor_descuento) * (-1)
-            ) : null; */
-
             $hayInasistencia = in_array($key, $inasistencias);
-
-            /* $newValue = !is_null($value) ? (
-                $condicional ? (double) $condicion->valor_bono : null
-            ) : null; */
 
             if (!$hayInasistencia) {
                 $newValue = !is_null($value) ? (
@@ -181,115 +173,36 @@ class BonosService
         return $columns;
     }
 
-    private function getResumen(Bono $bono, $_desde, $_hasta)
+    private function getResumen($condicion, $actividades)
     {
-        $desde = Carbon::parse($_desde)->subDay()->format('Ymd h:i:s');
-        $hasta = Carbon::parse($_hasta)->format('Ymd h:i:s');
-        $periodo = CarbonPeriod::create($_desde, $_hasta);
-
-        $bono->reglas;
-        $bono->condicion = BonoCondicionPago::where('bono_id', $bono->id)
-            ->orderBy('created_at', 'DESC')
-            ->first();
-
-        $i = 0;
-        foreach ($bono->reglas as $regla) {
-            $q = DB::connection('sqlsrv')->table('dbo.ActividadTrabajador as a')
-                ->select(
-                    DB::raw("COUNT(a.IdTrabajador) cantidad"),
-                    DB::raw('CAST(a.FechaActividad as date) as fecha_actividad'),
-                    'a.idEmpresa as empresa_id',
-                    'cu.Nombre as cuartel',
-                    //'a.'. $bono->condicion->variable_utilizada . ' as horas',
-                    'z.Nombre as zona_labor',
-                )
-                ->join('dbo.Trabajador as t', [
-                    'a.idTrabajador' => 't.idTrabajador',
-                    'a.idEmpresa' => 't.idEmpresa'
-                ])
-                ->join('dbo.Contratos as c', [
-                    'c.idContrato' => 'a.idContrato',
-                    'a.idEmpresa' => 'c.idEmpresa'
-                ])
-                ->join('dbo.Cuartel as cu', [
-                    'cu.idEmpresa' => 'a.idEmpresa',
-                    'cu.idZona' => 'a.idZona',
-                    'cu.idCuartel' => 'a.idCuartel'
-                ])
-                ->join('dbo.Actividades as act', [
-                    'act.idFamilia' => 'a.idFamilia',
-                    'act.idEmpresa' => 'a.idEmpresa',
-                    'act.idActividad' => 'a.idActividad'
-                ])
-                ->join('dbo.Banco as b', [
-                    'b.idBanco' => 't.idBanco',
-                    'b.idEmpresa' => 't.idEmpresa'
-                ])
-                ->join('dbo.Zona as z', [
-                    'z.IdZona' => 'a.IdZona',
-                    'z.IdEmpresa' => 'a.IdEmpresa'
-                ])
-                ->when($regla->zona_id !== '0', function($query) use ($regla) {
-                    $query->where('a.IdZona', $regla->zona_id);
-                })
-                ->when($regla->labor_id !== '0', function($query) use ($regla) {
-                    $query->where('act.IdActividad', $regla->labor_id);
-                })
-                ->when($regla->actividad_id !== '0', function($query) use ($regla) {
-                    $query->where('act.IdFamilia', $regla->actividad_id);
-                })
-                ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
-                    $query->where('c.IdCuartel', $regla->cuartel_id);
-                })
-                ->when($regla->rut, function($query) use ($regla) {
-                    $query->where('a.RutTrabajador', $regla->rut);
-                })
-                ->when($regla->ciclo, function($query) use ($regla) {
-                    $query->where('a.Ciclo', $regla->ciclo);
-                })
-                ->whereBetween('a.FechaActividad', [$desde, $hasta])
-                ->where('a.idEmpresa', $bono->empresa_id)
-                ->whereRaw("a." . $bono->condicion->variable_utilizada . " " . $bono->condicion->condicion . " ?", [$bono->condicion->valor_meta])
-                ->groupBy('a.idEmpresa', 'a.FechaActividad', 'cu.Nombre', 'z.Nombre');
-
-            if ($i < 1) {
-                $actividades = $q;
-            } else {
-                $actividades->union($q);
+        foreach ($actividades as $actividad) {
+            $condicional = 0;
+            switch ($condicion->condicion) {
+                case '>':
+                    $condicional = $actividad->horas > $condicion->valor_meta;
+                    break;
+                case '<':
+                    $condicional = $actividad->horas < $condicion->valor_meta;
+                    break;
+                case '=':
+                    $condicional = $actividad->horas == $condicion->valor_meta;
+                    break;
+                case '>=':
+                    $condicional = $actividad->horas >= $condicion->valor_meta;
+                    break;
+                case '<=':
+                    $condicional = $actividad->horas <= $condicion->valor_meta;
+                    break;
             }
-            $i++;
+
+            $valor = !is_null($actividad->horas) ? (
+                $condicional ? (double) $condicion->valor_bono : null
+            ) : null;
+
+            $actividad->valor = $valor;
         }
 
-        $grupoActividades = $actividades->get()->toArray();
-
-        $zonasLabor = array_unique(array_map(function($item) {
-            return $item->zona_labor;
-        }, $grupoActividades));
-
-        $dias = [];
-        foreach ($periodo as $dia) {
-            array_push($dias, $dia->toDateString());
-        }
-
-        $result = array_map(function($zonaLabor) use ($grupoActividades, $dias) {
-            return [
-                'zona_labor' => $zonaLabor,
-                'data' => array_filter($grupoActividades, function($grupo) use ($zonaLabor, $dias) {
-                    /* array_filter($dias, function($dia) use ($grupo) {
-                        return $dia === $grupo->$dia;
-                    }); */
-                    return $grupo->zona_labor === $zonaLabor;
-                }),
-            ];
-        }, $zonasLabor);
-
-        dd($result);
-
-        dd(
-            array_filter($grupoActividades, function ($item) {
-                return $item->fecha_actividad === '2021-01-16';
-            })
-        );
+        return $actividades;
     }
 
     public function getPlanilla(Bono $bono, $_desde, $_hasta)
@@ -333,7 +246,7 @@ class BonosService
                     // DB::raw("CAST(ROUND(a." . $bono->condicion->variable_utilizada . ", 2, 0) as decimal(18, 2)) horas"),
                     'a.'. $bono->condicion->variable_utilizada . ' as horas',
                     'b.Nombre as banco',
-                    'z.Nombre as zona_labor',
+                    DB::raw("(cast(z.IdZona as varchar) + ' ' + z.Nombre) zona_labor"),
                 )
                 ->join('dbo.Trabajador as t', [
                     'a.idTrabajador' => 't.idTrabajador',
@@ -390,7 +303,7 @@ class BonosService
             $i++;
         }
 
-        // dd($this->getResumen($bono, $_desde, $_hasta));
+        $dataSinProcesar = $this->getResumen($bono->condicion, $actividades->get());
 
         $pivotQuery = "
             asistencias.codigo,
@@ -501,7 +414,8 @@ class BonosService
                 ],
                 'recuentos' => $recuentos
             ],
-            'output' => $result
+            'output' => $result,
+            'rows' => $dataSinProcesar,
         ];
     }
 }

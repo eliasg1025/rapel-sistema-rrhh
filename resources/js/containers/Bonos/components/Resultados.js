@@ -19,7 +19,17 @@ export const Resultados = ({ bono }) => {
     const [actividades, setActividades] = useState([]);
     const [resultados, setResultados] = useState([]);
 
+    const [data, setData] = useState([]);
+
     const [dataToExport, setDataToExport] = useState(null);
+    const [columns, setColumns] = useState(initialStateColumns);
+
+    const initialStateColumns = [
+        {
+            title: "FUNDO",
+            dataIndex: "zona_labor"
+        }
+    ];
 
     const getData = () => {
         setLoading(true);
@@ -32,6 +42,46 @@ export const Resultados = ({ bono }) => {
                 notification["success"]({
                     message: message
                 });
+
+                const dias = Array.from(
+                    new Set(data.rows.map(item => item.dia))
+                ).sort();
+
+                const columnDias = {
+                    title: "DIAS",
+                    children: dias.map(color => {
+                        return {
+                            title: color,
+                            dataIndex: color
+                        };
+                    })
+                };
+
+                setColumns([...initialStateColumns, columnDias]);
+
+                const zonas = Array.from(
+                    new Set(data.rows.map(item => item.zona_labor))
+                ).sort();
+
+                const dataPorZona = zonas.map(zona => {
+                    const tempData = data.rows.filter(
+                        item => item.zona_labor === zona
+                    );
+
+                    let sumValorPorDia = {};
+                    for (const dia of dias) {
+                        // sumValorPorDia[dia] = tempData.filter(item => item.dia === dia).length;
+                        sumValorPorDia[dia] = Math.round(tempData.filter(item => item.dia === dia).reduce((acc, cur) => acc + cur.valor, 0) * 100) / 100;
+                    }
+
+                    return {
+                        key: zona,
+                        zona_labor: zona,
+                        ...sumValorPorDia
+                    }
+                });
+
+                setData(dataPorZona);
 
                 setDataToExport(data);
 
@@ -138,7 +188,16 @@ export const Resultados = ({ bono }) => {
             </div>
             <Spin spinning={loading} tip="Generando Planilla de Bonos">
                 <Tabs defaultActiveKey="1">
-                    <Tabs.TabPane tab="Actividades" key="1">
+                    <Tabs.TabPane tab="Resumen" key="1">
+                        <Table
+                            size="small"
+                            dataSource={data}
+                            columns={columns}
+                            scroll={{ x: 1100 }}
+                            bordered
+                        />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Actividades" key="2">
                         <Table
                             size="small"
                             dataSource={actividades}
@@ -147,7 +206,7 @@ export const Resultados = ({ bono }) => {
                             bordered
                         />
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Reporte Publicar" key="2">
+                    <Tabs.TabPane tab="Reporte Publicar" key="3">
                         <Table
                             size="small"
                             dataSource={resultados}
