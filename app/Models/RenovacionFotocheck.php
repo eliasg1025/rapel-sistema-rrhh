@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasEstado;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class RenovacionFotocheck extends Model
 {
+    use HasEstado;
+
     protected $table = 'renovaciones_fotocheck';
 
     public function empresa()

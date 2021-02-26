@@ -83,7 +83,7 @@ export const Inicio = () => {
 
     const handleCambiarEstado = (id, estado) => {
         Axios.put(`/api/renovacion-fotocheck/${id}`, {
-            estado,
+            estado_documento: estado,
         })
             .then(res => {
                 notification['success']({

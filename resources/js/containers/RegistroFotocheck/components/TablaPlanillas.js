@@ -42,7 +42,7 @@ const EditableCell = ({
                     rules={[
                         {
                             required: true,
-                            message: `Please Input ${title}!`
+                            message: `Completa el campo ${title}!`
                         }
                     ]}
                 >
@@ -84,8 +84,6 @@ export const TablaPlanillas = ({ data, loading, reload, setReload }) => {
             if (index > -1) {
                 const item = newData[index];
                 newData.splice(index, 1, { ...item, ...row });
-
-                console.log({ id: key, ...row });
 
                 const result = await Axios.put(
                     `/api/planillas-manuales/${key}`,
@@ -159,17 +157,12 @@ export const TablaPlanillas = ({ data, loading, reload, setReload }) => {
                 item === 0 ? (
                     <Tag color="blue">GENERADO</Tag>
                 ) : (
-                    <Tag color="green">ENVIADO</Tag>
+                    <Tag color="green">GUARDADO</Tag>
                 )
         },
         {
             title: "Acciones",
             dataIndex: "id",
-            /* render: (id, record) => (
-                <button className="btn btn-primary btn-sm">
-                    <i className="fas fa-edit"></i>
-                </button>
-            ) */
             render: (_, record) => {
                 const editable = isEditing(record);
                 return editable ? (

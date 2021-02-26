@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Models\DocumentoTuRecibo;
 use App\Models\Finiquito;
 use App\Models\GrupoFiniquito;
+use App\Models\RenovacionFotocheck;
 use App\Observers\FiniquitoObserver;
 use App\Observers\GrupoFiniquitoObserver;
 use App\Observers\DocumentoTuReciboObserver;
+use App\Observers\RenovacionFotocheckObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         GrupoFiniquito::observe(GrupoFiniquitoObserver::class);
         Finiquito::observe(FiniquitoObserver::class);
         DocumentoTuRecibo::observe(DocumentoTuReciboObserver::class);
+        RenovacionFotocheck::observe(RenovacionFotocheckObserver::class);
     }
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Table, DatePicker, Input, Select, Modal, Tag, Tooltip } from "antd";
 import moment from "moment";
 import Axios from "axios";
+import { isNull } from "lodash";
 
 export const TablaRegistros = ({
     data,
@@ -20,20 +21,24 @@ export const TablaRegistros = ({
         {
             title: "Empresa",
             dataIndex: "empresa",
+            width: 60,
             render: item => item.shortname
         },
         {
             title: "Fecha",
-            dataIndex: "fecha_solicitud"
+            dataIndex: "created_at",
+            render: item => moment(item).format('DD/MM/YY hh:mm:ss').toString()
         },
         {
             title: "DNI",
             dataIndex: "trabajador",
+            width: 70,
             render: item => item.rut
         },
         {
             title: "Apellidos y Nombres",
             dataIndex: "trabajador",
+            ellipsis: true,
             render: item =>
                 item.apellido_paterno +
                 " " +
@@ -44,16 +49,19 @@ export const TablaRegistros = ({
         {
             title: "Régimen",
             dataIndex: "regimen",
+            ellipsis: true,
             render: item => item.name
         },
         {
             title: "Fundo",
             dataIndex: "zona_labor",
+            ellipsis: true,
             render: item => item.name
         },
         {
             title: "Solicitante",
             dataIndex: "usuario",
+            ellipsis: true,
             render: item =>
                 item.trabajador.apellido_paterno +
                 " " +
@@ -64,26 +72,40 @@ export const TablaRegistros = ({
         {
             title: "Motivo",
             dataIndex: "motivo",
+            ellipsis: true,
             render: item => item.descripcion
         },
         {
             title: "Costo",
             dataIndex: "motivo",
+            width: 50,
             render: item => item.costo
         },
         {
             title: "Color",
             dataIndex: "color",
+            width: 70,
             render: item => item.color
         },
         {
             title: "Observación",
+            ellipsis: true,
             dataIndex: "observacion"
         },
         {
             title: "Estado",
             dataIndex: "estado",
-            render: item => (item === 0 ? <Tag color="blue">GENERADO</Tag> : <Tag color="green">ENVIADO</Tag>)
+            align: "center",
+            width: 110,
+            render: item => (item === 0 ? <Tag color="default">SOLICITADO</Tag> : <Tag color="blue">IMPRESO</Tag>)
+        },
+        {
+            title: "Estado Documento",
+            dataIndex: "estado_documento",
+            ellipsis: true,
+            align: "center",
+            width: 110,
+            render: item => !isNull(item) ? (item == 0 ? <Tag color="default">PENDIENTE</Tag> : <Tag color="blue">ENVIADO</Tag>) : '-'
         },
         {
             title: "Acciones",
@@ -103,14 +125,16 @@ export const TablaRegistros = ({
                     )}
                     {record.estado === 0 && (
                         <>
-                            <Tooltip title="Marcar como ENVIADO">
-                                <button
-                                    className="btn btn-sm btn-primary"
-                                    onClick={() => confirmCambiarEstado(record)}
-                                >
-                                    <i className="fas fa-check"></i>
-                                </button>
-                            </Tooltip>
+                            {(!isNull(record.estado_documento) && record.estado_documento === 0) && (
+                                <Tooltip title="Marcar DOCUMENTO como ENVIADO">
+                                    <button
+                                        className="btn btn-sm btn-outline-primary"
+                                        onClick={() => confirmCambiarEstado(record)}
+                                    >
+                                        <i className="fas fa-check"></i>
+                                    </button>
+                                </Tooltip>
+                            )}
                             <Tooltip title="Eliminar Registro">
                                 <button
                                     className="btn btn-sm btn-danger"
@@ -310,7 +334,7 @@ export const TablaRegistros = ({
                     }) */
                 }}
                 size="small"
-                scroll={{ x: 1000 }}
+                scroll={{ x: 1200 }}
                 bordered
                 columns={columns}
                 dataSource={data}

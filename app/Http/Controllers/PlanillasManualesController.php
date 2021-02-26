@@ -30,6 +30,8 @@ class PlanillasManualesController extends Controller
             $planilla->fecha_fin = $request->get('fecha_fin');
             $planilla->horas = $request->get('horas');
 
+            $planilla->estado = 1;
+
             $planilla->save();
 
             return response()->json([

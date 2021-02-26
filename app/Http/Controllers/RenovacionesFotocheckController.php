@@ -51,8 +51,17 @@ class RenovacionesFotocheckController extends Controller
     public function update(Request $request, $id)
     {
         $renovacion = RenovacionFotocheck::find($id);
+        $estado = $renovacion->estado;
+        $estado_documento = $request->estado_documento;
 
-        $renovacion->estado = $request->estado;
+        if ($estado) {
+            $renovacion->estado = $estado;
+        }
+
+        if ($estado_documento) {
+            $renovacion->estado_documento = $estado_documento;
+        }
+
         $renovacion->save();
 
         return response()->json([
@@ -123,6 +132,7 @@ class RenovacionesFotocheckController extends Controller
     {
         $desde = $request->get('desde');
         $hasta = $request->get('hasta');
+        $tipo = $request->get('tipo');
         $empresaId = $request->get('empresa_id');
 
         $renovaciones = DB::table('renovaciones_fotocheck as rf')
@@ -133,9 +143,11 @@ class RenovacionesFotocheckController extends Controller
                 't.rut',
                 DB::raw("CONCAT(t.apellido_paterno, ' ', t.apellido_materno, ' ', t.nombre) as trabajador"),
                 'cf.color',
-                'zl.name as zona_labor',
+                DB::raw("CONCAT(zl.code, ' ', zl.name) as zona_labor"),
                 'mpf.descripcion as motivo',
                 DB::raw("CONCAT(ts.apellido_paterno, ' ', ts.apellido_materno, ' ', ts.nombre) as solicitante"),
+                'rf.estado',
+                'rf.estado_documento'
             )
             ->join('trabajadores as t', 't.id', '=', 'rf.trabajador_id')
             ->join('colores_fotocheck as cf', 'cf.id', '=', 'rf.color_fotocheck_id')
@@ -145,9 +157,14 @@ class RenovacionesFotocheckController extends Controller
             ->join('trabajadores as ts', 'ts.id', '=', 'u.trabajador_id')
             ->where([
                 'rf.empresa_id' => $empresaId,
-                'rf.estado' => 1,
             ])
             ->whereBetween('rf.fecha_solicitud', [$desde, $hasta])
+            ->when($tipo === 'CON DESCUENTO', function($query)  {
+                $query->where('mpf.costo', '>', 0);
+            })
+            ->when($tipo === 'SIN DESCUENTO', function($query)  {
+                $query->where('mpf.costo', '<=', 0);
+            })
             ->get();
 
         return response()->json([

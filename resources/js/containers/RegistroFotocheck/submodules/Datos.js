@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Card, DatePicker, Select, Table } from "antd";
+import { Card, DatePicker, Select, Table, Tag } from "antd";
 import moment from "moment";
 import Axios from "axios";
 import { TablaResumen } from "../components";
+import { isNull, isUndefined } from "lodash";
 
 export const Datos = () => {
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
@@ -16,7 +17,8 @@ export const Datos = () => {
         hasta: moment()
             .format("YYYY-MM-DD")
             .toString(),
-        empresa_id: 9
+        empresa_id: 9,
+        tipo: 'CON DESCUENTO'
     });
     const [data, setData] = useState([]);
     const [dataResumen, setDataResumen] = useState([]);
@@ -38,7 +40,17 @@ export const Datos = () => {
         },
         {
             title: "APELLIDOS Y NOMBRES",
-            dataIndex: "trabajador"
+            dataIndex: "trabajador",
+        },
+        {
+            title: 'ESTADO',
+            dataIndex: 'estado',
+            render: item => (!isUndefined(item) && !isNull(item)) ? (item === 0 ? <Tag color="default">SOLICITADO</Tag> : <Tag color="blue">IMPRESO</Tag>) : '-'
+        },
+        {
+            title: 'ESTADO DOC.',
+            dataIndex: 'estado_documento',
+            render: item => (!isUndefined(item) && !isNull(item)) ? (item == 0 ? <Tag color="default">PENDIENTE</Tag> : <Tag color="blue">ENVIADO</Tag>) : '-'
         }
     ];
 
@@ -55,7 +67,7 @@ export const Datos = () => {
     useEffect(() => {
         setLoading(true);
         Axios.get(
-            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}`
+            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}&tipo=${form.tipo}`
         )
             .then(res => {
                 const data = res.data.data;
@@ -83,7 +95,7 @@ export const Datos = () => {
                     })
                 };
 
-                setColumns([...initialStateColumns, columnColores]);
+                setColumns([...initialStateColumns, columnColores, { title: 'TOTAL', dataIndex: 'total' }]);
 
                 const zonas = Array.from(
                     new Set(data.map(item => item.zona_labor))
@@ -99,16 +111,19 @@ export const Datos = () => {
                     ).sort();
 
                     let cantColores = {};
+                    let totalPorFila = 0;
                     for (const color of colores) {
                         cantColores[color] = tempData.filter(
                             item => item.color === color
                         ).length;
+                        totalPorFila += cantColores[color];
                     }
 
                     return {
                         key: zona,
                         zona_labor: zona,
                         ...cantColores,
+                        total: totalPorFila,
                         children: solicitantes.map(solicitante => {
                             const tempData2 = tempData.filter(
                                 item => item.solicitante === solicitante
@@ -122,7 +137,7 @@ export const Datos = () => {
                             }
 
                             return {
-                                key: solicitante,
+                                key: zona + ' ' + solicitante,
                                 solicitante,
                                 zona_labor: zona,
                                 ...cantColores,
@@ -135,6 +150,22 @@ export const Datos = () => {
                             };
                         })
                     };
+                });
+
+                let cantColores = {};
+                let totalPorFila = 0;
+                for (const color of colores) {
+                    cantColores[color] = data.filter(
+                        item => item.color === color
+                    ).length;
+                    totalPorFila += cantColores[color];
+                }
+
+                dataPorZona.push({
+                    key: 'TOTAL',
+                    zona_labor: 'TOTAL',
+                    ...cantColores,
+                    total: totalPorFila
                 });
 
                 setDataResumen(dataPorZona);
@@ -238,6 +269,32 @@ export const Datos = () => {
                                 {empresas.map(e => (
                                     <Select.Option value={e.id} key={e.id}>
                                         {`${e.id} - ${e.name}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="col-md-4">
+                            Tipo:<br />
+                            <Select
+                                value={form.tipo}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, tipo: e })}
+                                style={{
+                                    width: "100%"
+                                }}
+                            >
+                                {[
+                                    { id: "CON DESCUENTO" },
+                                    { id: "SIN DESCUENTO" }
+                                ].map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id}`}
                                     </Select.Option>
                                 ))}
                             </Select>

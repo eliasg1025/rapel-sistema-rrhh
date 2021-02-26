@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MotivoFotocheck;
 use App\Models\RenovacionFotocheck;
 use App\Models\Trabajador;
 use App\Models\ZonaLabor;
@@ -32,6 +33,8 @@ class RenovacionesFotocheckService
             'empresa_id' => $empresaId
         ])->first();
 
+        $motivo = MotivoFotocheck::find($motivoPeridaFotocheckId);
+
         // Verificar si ya existe el mismo dia
         $existeElMismoDia = RenovacionFotocheck::where([
                 'trabajador_id' => $trabajadorId,
@@ -58,6 +61,11 @@ class RenovacionesFotocheckService
         $renovacion->color_fotocheck_id = $colorFotocheckId;
         $renovacion->usuario_id = $usuarioId;
         $renovacion->trabajador_id = $trabajadorId;
+
+        if ($motivo->costo > 0) {
+            $renovacion->estado_documento = 0;
+        }
+
         $renovacion->save();
 
         $renovacion->motivo;
