@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Card, DatePicker, Select, Table, Tag } from "antd";
+import { Card, DatePicker, notification, Select, Table, Tag } from "antd";
 import moment from "moment";
 import Axios from "axios";
 import { TablaResumen } from "../components";
-import { isNull, isUndefined } from "lodash";
+import { isNull, isNumber, isUndefined } from "lodash";
 
 export const Datos = () => {
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedRowKeysCorte, setSelectedRowKeysCorte] = useState([]);
+
+    const [reload, setReload] = useState(false);
     const [empresas, setEmpresas] = useState([]);
     const [form, setForm] = useState({
         desde: moment()
@@ -18,12 +22,17 @@ export const Datos = () => {
             .format("YYYY-MM-DD")
             .toString(),
         empresa_id: 9,
-        tipo: 'CON DESCUENTO'
+        tipo: "CON DESCUENTO"
     });
     const [data, setData] = useState([]);
+    const [dataCorte, setDataCorte] = useState([]);
     const [dataResumen, setDataResumen] = useState([]);
+    const [dataResumenCorte, setDataResumenCorte] = useState([]);
     const [loading, setLoading] = useState(false);
     const [columns, setColumns] = useState(initialStateColumns);
+    const [columnsCorte, setColumnsCorte] = useState(initialStateColumns);
+
+    const [ultimoCorte, setUltimoCorte] = useState(null);
 
     const initialStateColumns = [
         {
@@ -40,17 +49,35 @@ export const Datos = () => {
         },
         {
             title: "APELLIDOS Y NOMBRES",
-            dataIndex: "trabajador",
+            dataIndex: "trabajador"
         },
         {
-            title: 'ESTADO',
-            dataIndex: 'estado',
-            render: item => (!isUndefined(item) && !isNull(item)) ? (item === 0 ? <Tag color="default">SOLICITADO</Tag> : <Tag color="blue">IMPRESO</Tag>) : '-'
+            title: "ESTADO",
+            dataIndex: "estado",
+            render: item =>
+                !isUndefined(item) && !isNull(item) ? (
+                    item === 0 ? (
+                        <Tag color="default">SOLICITADO</Tag>
+                    ) : (
+                        <Tag color="blue">IMPRESO</Tag>
+                    )
+                ) : (
+                    "-"
+                )
         },
         {
-            title: 'ESTADO DOC.',
-            dataIndex: 'estado_documento',
-            render: item => (!isUndefined(item) && !isNull(item)) ? (item == 0 ? <Tag color="default">PENDIENTE</Tag> : <Tag color="blue">ENVIADO</Tag>) : '-'
+            title: "ESTADO DOC.",
+            dataIndex: "estado_documento",
+            render: item =>
+                !isUndefined(item) && !isNull(item) ? (
+                    item == 0 ? (
+                        <Tag color="default">PENDIENTE</Tag>
+                    ) : (
+                        <Tag color="blue">ENVIADO</Tag>
+                    )
+                ) : (
+                    "-"
+                )
         }
     ];
 
@@ -61,7 +88,18 @@ export const Datos = () => {
                 .catch(err => {});
         }
 
+        function fetchUltimoCorte() {
+            Axios.get("/api/cortes-renovaciones-fotocheck/ultimo")
+                .then(res => {
+                    setUltimoCorte(res.data.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
         fetchEmpresas();
+        fetchUltimoCorte();
     }, []);
 
     useEffect(() => {
@@ -95,7 +133,11 @@ export const Datos = () => {
                     })
                 };
 
-                setColumns([...initialStateColumns, columnColores, { title: 'TOTAL', dataIndex: 'total' }]);
+                setColumns([
+                    ...initialStateColumns,
+                    columnColores,
+                    { title: "TOTAL", dataIndex: "total" }
+                ]);
 
                 const zonas = Array.from(
                     new Set(data.map(item => item.zona_labor))
@@ -137,14 +179,14 @@ export const Datos = () => {
                             }
 
                             return {
-                                key: zona + ' ' + solicitante,
+                                key: zona + " - " + solicitante,
                                 solicitante,
                                 zona_labor: zona,
                                 ...cantColores,
                                 children: tempData2.map(item => {
                                     return {
                                         ...item,
-                                        key: item.rut
+                                        key: item.id
                                     };
                                 })
                             };
@@ -162,8 +204,8 @@ export const Datos = () => {
                 }
 
                 dataPorZona.push({
-                    key: 'TOTAL',
-                    zona_labor: 'TOTAL',
+                    key: "TOTAL",
+                    zona_labor: "TOTAL",
                     ...cantColores,
                     total: totalPorFila
                 });
@@ -172,7 +214,118 @@ export const Datos = () => {
             })
             .catch(err => {})
             .finally(() => setLoading(false));
-    }, [form]);
+
+        Axios.get(
+            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}&tipo=${form.tipo}&corte=${true}`
+        )
+            .then(res => {
+                const data = res.data.data;
+
+                setDataCorte(
+                    data.map(item => {
+                        return {
+                            ...item,
+                            key: item.id
+                        };
+                    })
+                );
+
+                const colores = Array.from(
+                    new Set(data.map(item => item.color))
+                ).sort();
+
+                const columnColores = {
+                    title: "COLORES",
+                    children: colores.map(color => {
+                        return {
+                            title: color,
+                            dataIndex: color
+                        };
+                    })
+                };
+
+                setColumnsCorte([
+                    ...initialStateColumns,
+                    columnColores,
+                    { title: "TOTAL", dataIndex: "total" }
+                ]);
+
+                const zonas = Array.from(
+                    new Set(data.map(item => item.zona_labor))
+                ).sort();
+
+                const dataPorZona = zonas.map(zona => {
+                    const tempData = data.filter(
+                        item => item.zona_labor === zona
+                    );
+
+                    const solicitantes = Array.from(
+                        new Set(tempData.map(item => item.solicitante))
+                    ).sort();
+
+                    let cantColores = {};
+                    let totalPorFila = 0;
+                    for (const color of colores) {
+                        cantColores[color] = tempData.filter(
+                            item => item.color === color
+                        ).length;
+                        totalPorFila += cantColores[color];
+                    }
+
+                    return {
+                        key: zona,
+                        zona_labor: zona,
+                        ...cantColores,
+                        total: totalPorFila,
+                        children: solicitantes.map(solicitante => {
+                            const tempData2 = tempData.filter(
+                                item => item.solicitante === solicitante
+                            );
+
+                            let cantColores = {};
+                            for (const color of colores) {
+                                cantColores[color] = tempData2.filter(
+                                    item => item.color === color
+                                ).length;
+                            }
+
+                            return {
+                                key: zona + " - " + solicitante,
+                                solicitante,
+                                zona_labor: zona,
+                                ...cantColores,
+                                children: tempData2.map(item => {
+                                    return {
+                                        ...item,
+                                        key: item.id
+                                    };
+                                })
+                            };
+                        })
+                    };
+                });
+
+                let cantColores = {};
+                let totalPorFila = 0;
+                for (const color of colores) {
+                    cantColores[color] = data.filter(
+                        item => item.color === color
+                    ).length;
+                    totalPorFila += cantColores[color];
+                }
+
+                dataPorZona.push({
+                    key: "TOTAL",
+                    zona_labor: "TOTAL",
+                    ...cantColores,
+                    total: totalPorFila
+                });
+
+                setDataResumenCorte(dataPorZona);
+            })
+            .catch(err => {})
+            .finally(() => setLoading(false));
+    }, [form, reload]);
 
     const handleExportar = () => {
         const headings = [
@@ -184,7 +337,7 @@ export const Datos = () => {
             "SOLICITANTE",
             "MOTIVO",
             "COLOR",
-            "OBSERVACION",
+            "OBSERVACION"
         ];
 
         const d = data.map(item => {
@@ -197,7 +350,7 @@ export const Datos = () => {
                 solicitante: item.solicitante,
                 motivo: item.motivo,
                 color: item.color,
-                observacion: item?.observacion || ''
+                observacion: item?.observacion || ""
             };
         });
 
@@ -221,6 +374,27 @@ export const Datos = () => {
                 ".xlsx";
             link.click();
         });
+    };
+
+    const handleCortar = () => {
+        const keys = selectedRowKeys.filter(key => isNumber(key));
+
+        Axios.post("/api/cortes-renovaciones-fotocheck", {
+            renovaciones_ids: keys,
+            usuario_id: usuario.id
+        })
+            .then(res => {
+                setReload(!reload);
+
+                notification["success"]({
+                    message: res.data.message
+                });
+            })
+            .catch(err => {
+                notification["error"]({
+                    message: err.response.data.message
+                });
+            });
     };
 
     return (
@@ -274,7 +448,8 @@ export const Datos = () => {
                             </Select>
                         </div>
                         <div className="col-md-4">
-                            Tipo:<br />
+                            Tipo:
+                            <br />
                             <Select
                                 value={form.tipo}
                                 showSearch
@@ -304,13 +479,57 @@ export const Datos = () => {
             </Card>
             <br />
             <hr />
+            <br />
+            {ultimoCorte ? (
+                <>
+                    <h4 style={{ textDecoration: 'underline' }}>Último Corte:</h4>
+                    <b style={{ fontSize: "13px" }}>
+                        Cantidad: {dataCorte.length} registros&nbsp;
+                        <button
+                            className="btn btn-success btn-sm mr-1"
+                            onClick={handleExportar}
+                        >
+                            <i className="fas fa-file-excel" /> Exportar
+                        </button>
+                        <button
+                            className="btn btn-primary btn-sm mr-1"
+                            onClick={handleCortar}
+                            disabled={selectedRowKeysCorte.length === 0}
+                        >
+                            <i className="fas fa-table" /> Realizar corte
+                        </button>
+                    </b>
+                    <br />
+                    <br />
+                    <TablaResumen
+                        loading={loading}
+                        data={dataResumenCorte}
+                        columns={columnsCorte}
+                    />
+                </>
+            ) : (
+                <>
+                    <div className="alert alert-secondary" role="alert">
+                        <b>No hay último corte disponible</b>
+                    </div>
+                </>
+            )}
+            <br />
+            <h4 style={{ textDecoration: 'underline' }}>Pendientes</h4>
             <b style={{ fontSize: "13px" }}>
                 Cantidad: {data.length} registros&nbsp;
                 <button
-                    className="btn btn-success btn-sm"
+                    className="btn btn-success btn-sm mr-1"
                     onClick={handleExportar}
                 >
                     <i className="fas fa-file-excel" /> Exportar
+                </button>
+                <button
+                    className="btn btn-primary btn-sm mr-1"
+                    onClick={handleCortar}
+                    disabled={selectedRowKeys.length === 0}
+                >
+                    <i className="fas fa-table" /> Realizar corte
                 </button>
             </b>
             <br />
@@ -319,6 +538,8 @@ export const Datos = () => {
                 loading={loading}
                 data={dataResumen}
                 columns={columns}
+                selectedRowKeys={selectedRowKeys}
+                setSelectedRowKeys={setSelectedRowKeys}
             />
         </>
     );

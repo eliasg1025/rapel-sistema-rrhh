@@ -331,6 +331,11 @@ Route::group(['prefix' => 'renovacion-fotocheck'], function() {
     Route::delete('/{id}', 'RenovacionesFotocheckController@delete');
 });
 
+Route::group(['prefix' => 'cortes-renovaciones-fotocheck'], function() {
+    Route::get('/ultimo', 'CortesRenovacionesFotocheckController@getUltimo');
+    Route::post('/', 'CortesRenovacionesFotocheckController@create');
+});
+
 Route::group(['prefix' => 'planillas-manuales'], function() {
     Route::get('/', 'PlanillasManualesController@get');
     Route::put('/{planilla}', 'PlanillasManualesController@update');

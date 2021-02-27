@@ -26,7 +26,7 @@ export default function RegistroFotochecks() {
                     </Menu.Item>
                     <Menu.Item key="datos" icon={<ProfileOutlined />}>
                         <a href="/registro-fotochecks/datos">
-                            Datos
+                            Proceso
                         </a>
                     </Menu.Item>
                     <Menu.Item key="planillas-manuales" icon={<FileAddOutlined />}>

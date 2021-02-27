@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RenovacionFotocheckPost;
+use App\Models\CorteRenovacionFotocheck;
 use App\Models\MotivoFotocheck;
 use App\Models\PlanillaManual;
 use App\Models\RenovacionFotocheck;
@@ -134,6 +135,16 @@ class RenovacionesFotocheckController extends Controller
         $hasta = $request->get('hasta');
         $tipo = $request->get('tipo');
         $empresaId = $request->get('empresa_id');
+        $esCorte = $request->get('corte');
+
+        $corte = CorteRenovacionFotocheck::where('activo', true)->first();
+
+        if ($esCorte && !$corte) {
+            return response()->json([
+                'message' => 'Data obtenida',
+                'data' => []
+            ]);
+        }
 
         $renovaciones = DB::table('renovaciones_fotocheck as rf')
             ->select(
@@ -159,6 +170,12 @@ class RenovacionesFotocheckController extends Controller
                 'rf.empresa_id' => $empresaId,
             ])
             ->whereBetween('rf.fecha_solicitud', [$desde, $hasta])
+            ->when($esCorte == false, function($query) {
+                $query->whereNull('corte_renovacion_id');
+            })
+            ->when($esCorte == true, function($query) use ($corte) {
+                $query->where('corte_renovacion_id', $corte->id);
+            })
             ->when($tipo === 'CON DESCUENTO', function($query)  {
                 $query->where('mpf.costo', '>', 0);
             })
