@@ -12,9 +12,8 @@ export const TablaRegistros = ({
     loading,
     handleCambiarEstado,
     handleEliminar,
-    handleGenerarPlanillaManual,
+    handleGenerarPlanillaManual
 }) => {
-
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     const columns = [
@@ -27,7 +26,10 @@ export const TablaRegistros = ({
         {
             title: "Fecha",
             dataIndex: "created_at",
-            render: item => moment(item).format('DD/MM/YY hh:mm:ss').toString()
+            render: item =>
+                moment(item)
+                    .format("DD/MM/YY hh:mm:ss")
+                    .toString()
         },
         {
             title: "DNI",
@@ -96,16 +98,38 @@ export const TablaRegistros = ({
             title: "Estado",
             dataIndex: "estado",
             align: "center",
-            width: 110,
-            render: item => (item === 0 ? <Tag color="default">SOLICITADO</Tag> : <Tag color="blue">IMPRESO</Tag>)
+            width: 130,
+            render: item =>
+                item === 0 ? (
+                    <Tag color="default">SOLICITADO</Tag>
+                ) : (
+                    item === 1 ? (
+                        <Tag color="blue">IMPRESO</Tag>
+                    ) : (
+                        <Tag color="green">TERMINADO</Tag>
+                    )
+                )
         },
         {
             title: "Estado Documento",
             dataIndex: "estado_documento",
             ellipsis: true,
             align: "center",
-            width: 110,
-            render: item => !isNull(item) ? (item == 0 ? <Tag color="default">PENDIENTE</Tag> : <Tag color="blue">ENVIADO</Tag>) : '-'
+            width: 130,
+            render: item =>
+                !isNull(item) ? (
+                    item == 0 ? (
+                        <Tag color="default">PENDIENTE</Tag>
+                    ) : (
+                        item == 1 ? (
+                            <Tag color="blue">ENVIADO</Tag>
+                        ) : (
+                            <Tag color="green">RECEPCIONADO</Tag>
+                        )
+                    )
+                ) : (
+                    "-"
+                )
         },
         {
             title: "Acciones",
@@ -125,16 +149,19 @@ export const TablaRegistros = ({
                     )}
                     {record.estado === 0 && (
                         <>
-                            {(!isNull(record.estado_documento) && record.estado_documento === 0) && (
-                                <Tooltip title="Marcar DOCUMENTO como ENVIADO">
-                                    <button
-                                        className="btn btn-sm btn-outline-primary"
-                                        onClick={() => confirmCambiarEstado(record)}
-                                    >
-                                        <i className="fas fa-check"></i>
-                                    </button>
-                                </Tooltip>
-                            )}
+                            {!isNull(record.estado_documento) &&
+                                record.estado_documento === 0 && (
+                                    <Tooltip title="Marcar DOCUMENTO como ENVIADO">
+                                        <button
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() =>
+                                                confirmCambiarEstado(record)
+                                            }
+                                        >
+                                            <i className="fas fa-check"></i>
+                                        </button>
+                                    </Tooltip>
+                                )}
                             <Tooltip title="Eliminar Registro">
                                 <button
                                     className="btn btn-sm btn-danger"
@@ -163,7 +190,7 @@ export const TablaRegistros = ({
             "COSTO",
             "COLOR",
             "OBSERVACION",
-            "ESTADO",
+            "ESTADO"
         ];
 
         const d = data.map(item => {
@@ -189,7 +216,7 @@ export const TablaRegistros = ({
                 costo: item?.motivo.costo,
                 color: item?.color.color,
                 observacion: item?.observacion || "",
-                estado: item?.estado === 0 ? 'GENERADO' : 'ENVIADO',
+                estado: item?.estado === 0 ? "GENERADO" : "ENVIADO"
             };
         });
 
@@ -221,9 +248,9 @@ export const TablaRegistros = ({
             content: `¿Desea generar planilla manual a estos ${selectedRowKeys.length} registros?`,
             okText: "Si, GENERAR",
             cancelText: "Cancelar",
-            onOk: () => handleGenerarPlanillaManual(selectedRowKeys),
+            onOk: () => handleGenerarPlanillaManual(selectedRowKeys)
         });
-    }
+    };
 
     const confirmEliminar = record => {
         Modal.confirm({
@@ -237,13 +264,13 @@ export const TablaRegistros = ({
 
     const confirmCambiarEstado = record => {
         Modal.confirm({
-            title: 'Marcar Enviado',
-            content: '¿Desea marcar este registro como enviado?',
-            okText: 'Si, MARCAR COMO ENVIADO',
-            cancelText: 'Cancelar',
+            title: "Marcar Enviado",
+            content: "¿Desea marcar este registro como enviado?",
+            okText: "Si, MARCAR COMO ENVIADO",
+            cancelText: "Cancelar",
             onOk: () => handleCambiarEstado(record.id, 1)
         });
-    }
+    };
 
     return (
         <>
@@ -308,7 +335,10 @@ export const TablaRegistros = ({
             </div>
             <br />
             <b style={{ fontSize: "13px" }}>
-                Cantidad: {data.length} registros {selectedRowKeys.length > 0 && `(${selectedRowKeys.length} seleccionados)`}&nbsp;
+                Cantidad: {data.length} registros{" "}
+                {selectedRowKeys.length > 0 &&
+                    `(${selectedRowKeys.length} seleccionados)`}
+                &nbsp;
                 <button
                     className="btn btn-success btn-sm"
                     onClick={handleExportar}
@@ -328,8 +358,9 @@ export const TablaRegistros = ({
             <br />
             <Table
                 rowSelection={{
-                    onChange: selectedRowKeys => setSelectedRowKeys(selectedRowKeys),
- /*                    getCheckboxProps: (record) => ({
+                    onChange: selectedRowKeys =>
+                        setSelectedRowKeys(selectedRowKeys)
+                    /*                    getCheckboxProps: (record) => ({
                         disabled: record.
                     }) */
                 }}
