@@ -11,11 +11,19 @@ class PlanillasManualesController extends Controller
     {
         $tipoEntidad = $request->get('tipo');
         $empresaId = $request->get('empresa_id');
+        $estado = $request->get('estado');
+        $desde = $request->get('desde');
+        $hasta = $request->get('hasta');
 
         $planillas = PlanillaManual::with('trabajador', 'usuario.trabajador')->where([
             'tipo_entidad' => $tipoEntidad,
             'empresa_id' => $empresaId,
-        ])->get();
+            'estado' => $estado
+        ])
+        ->when($estado == 1, function($query) use ($desde, $hasta) {
+            $query->whereBetween('fecha_planilla', [$desde, $hasta]);
+        })
+        ->get();
 
         return response()->json([
             'message' => 'Data obtenida correctamente',
@@ -26,17 +34,22 @@ class PlanillasManualesController extends Controller
     public function update(PlanillaManual $planilla, Request $request)
     {
         try {
-            $planilla->fecha_inicio = $request->get('fecha_inicio');
-            $planilla->fecha_fin = $request->get('fecha_fin');
-            $planilla->horas = $request->get('horas');
+            $rows = $request->get('fechas');
 
-            $planilla->estado = 1;
+            foreach ($rows as $row) {
+                $newPlanilla = $planilla->replicate();
+                $newPlanilla->fecha_planilla = $row['fecha_planilla'];
+                $newPlanilla->hora_entrada = $row['hora_entrada'];
+                $newPlanilla->hora_salida = $row['hora_salida'];
+                $newPlanilla->estado = 1;
+                $newPlanilla->save();
+            }
 
-            $planilla->save();
+            $planilla->delete();
 
             return response()->json([
                 'message' => 'Registro actualizado correctamente',
-                'data' => $planilla
+                'data' => []
             ]);
         } catch (\Exception $e) {
             return response()->json([

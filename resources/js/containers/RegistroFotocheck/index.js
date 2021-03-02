@@ -24,11 +24,13 @@ export default function RegistroFotochecks() {
                             Inicio
                         </a>
                     </Menu.Item>
-                    <Menu.Item key="datos" icon={<ProfileOutlined />}>
-                        <a href="/registro-fotochecks/datos">
-                            Proceso
-                        </a>
-                    </Menu.Item>
+                    {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
+                        <Menu.Item key="datos" icon={<ProfileOutlined />}>
+                            <a href="/registro-fotochecks/datos">
+                                Proceso
+                            </a>
+                        </Menu.Item>
+                    )}
                     <Menu.Item key="planillas-manuales" icon={<FileAddOutlined />}>
                         <a href="/registro-fotochecks/planillas-manuales">
                             Planillas manuales
