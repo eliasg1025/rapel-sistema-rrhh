@@ -49,10 +49,36 @@ class RenovacionesFotocheckController extends Controller
         ]);
     }
 
+    public function masiveUpdate(Request $request)
+    {
+        $ids = $request->get('keys');
+        $estado = $request->estado;
+        $estado_documento = $request->estado_documento;
+
+        foreach ($ids as $id) {
+            $renovacion = RenovacionFotocheck::find($id);
+
+            if ($estado) {
+                $renovacion->estado = $estado;
+            }
+
+            if ($estado_documento) {
+                $renovacion->estado_documento = $estado_documento;
+            }
+
+            $renovacion->save();
+        }
+
+        return response()->json([
+            'message' => 'Registros actualizados correctamente',
+            'data' => []
+        ]);
+    }
+
     public function update(Request $request, $id)
     {
         $renovacion = RenovacionFotocheck::find($id);
-        $estado = $renovacion->estado;
+        $estado = $request->estado;
         $estado_documento = $request->estado_documento;
 
         if ($estado) {
@@ -146,6 +172,10 @@ class RenovacionesFotocheckController extends Controller
             ]);
         }
 
+        /*
+            Retorna los datos de las renovaciones por fecha exepto cuando se trata de un corte, ahi
+            siempre retorna los valores correspondintes al mismo
+        */
         $renovaciones = DB::table('renovaciones_fotocheck as rf')
             ->select(
                 'rf.id',
@@ -169,8 +199,7 @@ class RenovacionesFotocheckController extends Controller
             ->where([
                 'rf.empresa_id' => $empresaId,
             ])
-            ->whereBetween('rf.fecha_solicitud', [$desde, $hasta])
-            ->when($esCorte == false, function($query) {
+            ->when($esCorte == false, function($query) use ($desde, $hasta) {
                 $query->whereNull('corte_renovacion_id');
             })
             ->when($esCorte == true, function($query) use ($corte) {

@@ -12,4 +12,9 @@ class CorteRenovacionFotocheck extends Model
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
     }
+
+    public function renovaciones()
+    {
+        return $this->belongsTo(RenovacionFotocheck::class, 'renovaciones_fotocheck_id');
+    }
 }

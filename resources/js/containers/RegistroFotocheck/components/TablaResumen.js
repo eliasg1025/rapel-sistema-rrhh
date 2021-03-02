@@ -19,6 +19,7 @@ export const TablaResumen = ({ data, columns, loading, selectedRowKeys, setSelec
             dataSource={data}
             columns={columns}
             loading={loading}
+            defaultExpandAllRows
         />
     );
 }

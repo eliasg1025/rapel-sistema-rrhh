@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, DatePicker, notification, Select, Table, Tag } from "antd";
+import { Card, DatePicker, notification, Select, Tag, Modal, Tabs } from "antd";
 import moment from "moment";
 import Axios from "axios";
-import { TablaResumen } from "../components";
+import { HistorialGrupos, TablaResumen } from "../components";
 import { isNull, isNumber, isUndefined } from "lodash";
 
 export const Datos = () => {
@@ -58,8 +58,10 @@ export const Datos = () => {
                 !isUndefined(item) && !isNull(item) ? (
                     item === 0 ? (
                         <Tag color="default">SOLICITADO</Tag>
-                    ) : (
+                    ) : item == 1 ? (
                         <Tag color="blue">IMPRESO</Tag>
+                    ) : (
+                        <Tag color="green">ENVIADO</Tag>
                     )
                 ) : (
                     "-"
@@ -72,8 +74,10 @@ export const Datos = () => {
                 !isUndefined(item) && !isNull(item) ? (
                     item == 0 ? (
                         <Tag color="default">PENDIENTE</Tag>
-                    ) : (
+                    ) : item == 1 ? (
                         <Tag color="blue">ENVIADO</Tag>
+                    ) : (
+                        <Tag color="green">RECEPCIONADO</Tag>
                     )
                 ) : (
                     "-"
@@ -88,6 +92,10 @@ export const Datos = () => {
                 .catch(err => {});
         }
 
+        fetchEmpresas();
+    }, []);
+
+    useEffect(() => {
         function fetchUltimoCorte() {
             Axios.get("/api/cortes-renovaciones-fotocheck/ultimo")
                 .then(res => {
@@ -95,15 +103,17 @@ export const Datos = () => {
                 })
                 .catch(err => {
                     console.log(err);
-                })
+                });
         }
 
-        fetchEmpresas();
         fetchUltimoCorte();
-    }, []);
+    }, [reload]);
 
     useEffect(() => {
         setLoading(true);
+        setSelectedRowKeys([]);
+        setSelectedRowKeysCorte([]);
+
         Axios.get(
             `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}&tipo=${form.tipo}`
         )
@@ -125,10 +135,13 @@ export const Datos = () => {
 
                 const columnColores = {
                     title: "COLORES",
+                    ellipsis: true,
                     children: colores.map(color => {
                         return {
                             title: color,
-                            dataIndex: color
+                            dataIndex: color,
+                            ellipsis: true,
+                            width: 60
                         };
                     })
                 };
@@ -136,7 +149,12 @@ export const Datos = () => {
                 setColumns([
                     ...initialStateColumns,
                     columnColores,
-                    { title: "TOTAL", dataIndex: "total" }
+                    {
+                        title: "TOTAL",
+                        dataIndex: "total",
+                        width: 70,
+                        ellipsis: true
+                    }
                 ]);
 
                 const zonas = Array.from(
@@ -216,7 +234,9 @@ export const Datos = () => {
             .finally(() => setLoading(false));
 
         Axios.get(
-            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${form.hasta}&empresa_id=${form.empresa_id}&tipo=${form.tipo}&corte=${true}`
+            `/api/renovacion-fotocheck/resumen?desde=${form.desde}&hasta=${
+                form.hasta
+            }&empresa_id=${form.empresa_id}&tipo=${form.tipo}&corte=${true}`
         )
             .then(res => {
                 const data = res.data.data;
@@ -236,10 +256,13 @@ export const Datos = () => {
 
                 const columnColores = {
                     title: "COLORES",
+                    ellipsis: true,
                     children: colores.map(color => {
                         return {
                             title: color,
-                            dataIndex: color
+                            dataIndex: color,
+                            ellipsis: true,
+                            width: 60
                         };
                     })
                 };
@@ -247,7 +270,12 @@ export const Datos = () => {
                 setColumnsCorte([
                     ...initialStateColumns,
                     columnColores,
-                    { title: "TOTAL", dataIndex: "total" }
+                    {
+                        title: "TOTAL",
+                        dataIndex: "total",
+                        width: 70,
+                        ellipsis: true
+                    }
                 ]);
 
                 const zonas = Array.from(
@@ -397,94 +425,225 @@ export const Datos = () => {
             });
     };
 
+    const handleCambiarEstado = estado => {
+        const keys = selectedRowKeysCorte.filter(key => isNumber(key));
+
+        Axios.post("/api/renovacion-fotocheck/massive-update", {
+            keys,
+            ...estado
+        })
+            .then(res => {
+                setReload(!reload);
+
+                notification["success"]({
+                    message: res.data.message
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    const _handleCambiarEstado = estado => {
+        const keys = selectedRowKeys.filter(key => isNumber(key));
+
+        Axios.post("/api/renovacion-fotocheck/massive-update", {
+            keys,
+            ...estado
+        })
+            .then(res => {
+                setReload(!reload);
+
+                notification["success"]({
+                    message: res.data.message
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    const confirmTerminarGrupo = () => {
+        console.log('terminar');
+        Modal.confirm({
+            title: 'TERMINAR GRUPO',
+            content: '¿Desea terminar el proceso y cerrar este grupo? Se pasará a estado enviado tengan o no descuento',
+            okText: 'Si, TERMINAR',
+            cancelText: 'Cancelar',
+            onOk: () => {
+                Axios.put(`/api/cortes-renovaciones-fotocheck/${ultimoCorte.id}/terminar`)
+                    .then(res => {
+                        notification['success']({
+                            message: res.data.message
+                        });
+                    })
+                    .catch(err => {
+                        notification['error']({
+                            message: err.response.data.message,
+                        });
+                    })
+            }
+        })
+    }
+
     return (
         <>
-            <h4>Resumen de datos</h4>
-            <br />
-            <Card>
-                <form>
-                    <div className="row">
-                        <div className="col-md-4">
-                            Desde - Hasta:
+            <Tabs defaultActiveKey="1">
+                <Tabs.TabPane tab="Proceso" key="1">
+                    <Card>
+                        <form>
+                            <div className="row">
+                                {/* <div className="col-md-4">
+                                    Desde - Hasta:
+                                    <br />
+                                    <DatePicker.RangePicker
+                                        placeholder={["Desde", "Hasta"]}
+                                        style={{ width: "100%" }}
+                                        onChange={(date, dateString) => {
+                                            setForm({
+                                                ...form,
+                                                desde: dateString[0],
+                                                hasta: dateString[1]
+                                            });
+                                        }}
+                                        value={[moment(form.desde), moment(form.hasta)]}
+                                    />
+                                </div> */}
+                                <div className="col-md-4">
+                                    Empresa:
+                                    <br />
+                                    <Select
+                                        value={form.empresa_id}
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={e =>
+                                            setForm({ ...form, empresa_id: e })
+                                        }
+                                        style={{
+                                            width: "100%"
+                                        }}
+                                    >
+                                        {/* <Select.Option value={0} key={0}>TODOS</Select.Option> */}
+                                        {empresas.map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id} - ${e.name}`}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                                <div className="col-md-4">
+                                    Tipo:
+                                    <br />
+                                    <Select
+                                        value={form.tipo}
+                                        showSearch
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .indexOf(input.toLowerCase()) >= 0
+                                        }
+                                        onChange={e => setForm({ ...form, tipo: e })}
+                                        style={{
+                                            width: "100%"
+                                        }}
+                                    >
+                                        {[
+                                            { id: "CON DESCUENTO" },
+                                            { id: "SIN DESCUENTO" }
+                                        ].map(e => (
+                                            <Select.Option value={e.id} key={e.id}>
+                                                {`${e.id}`}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                            </div>
+                        </form>
+                    </Card>
+                    <br />
+                    <hr />
+                    <br />
+                    {ultimoCorte ? (
+                        <>
+                            <h4 style={{ textDecoration: "underline" }}>
+                                Último Grupo:
+                            </h4>
+                            <div className="alert alert-secondary" role="alert">
+                                <p>
+                                    <b>Fecha y hora:</b>{" "}
+                                    {moment(ultimoCorte.fecha_hora_corte)
+                                        .format("DD/MM/YYYY hh:mm")
+                                        .toString()}
+                                </p>
+                                <p>
+                                    <b>Creado por:</b>{" "}
+                                    {`${ultimoCorte.usuario.trabajador.apellido_paterno} ${ultimoCorte.usuario.trabajador.apellido_materno} ${ultimoCorte.usuario.trabajador.nombre}`}
+                                </p>
+                            </div>
                             <br />
-                            <DatePicker.RangePicker
-                                placeholder={["Desde", "Hasta"]}
-                                style={{ width: "100%" }}
-                                onChange={(date, dateString) => {
-                                    setForm({
-                                        ...form,
-                                        desde: dateString[0],
-                                        hasta: dateString[1]
-                                    });
-                                }}
-                                value={[moment(form.desde), moment(form.hasta)]}
+                            <b style={{ fontSize: "13px" }}>
+                                Cantidad: {dataCorte.length} registros&nbsp;
+                                <button
+                                    className="btn btn-success btn-sm mr-1"
+                                    onClick={handleExportar}
+                                >
+                                    <i className="fas fa-file-excel" /> Exportar
+                                </button>
+                                {form.tipo === "CON DESCUENTO" && (
+                                    <button
+                                        className="btn btn-primary btn-sm mr-1"
+                                        onClick={() =>
+                                            handleCambiarEstado({ estado_documento: 2 })
+                                        }
+                                        disabled={selectedRowKeysCorte.length === 0}
+                                    >
+                                        <i className="fas fa-check"></i> Marcar
+                                        RECEPCIONADO
+                                    </button>
+                                )}
+                                <button
+                                    className="btn btn-primary btn-sm mr-1"
+                                    onClick={() =>
+                                        handleCambiarEstado({ estado: 1 })
+                                    }
+                                    disabled={selectedRowKeysCorte.length === 0}
+                                >
+                                    <i className="fas fa-print"></i> Marcar IMPRESO
+                                </button>
+                                <button
+                                    className="btn btn-warning btn-sm mr-1"
+                                    onClick={confirmTerminarGrupo}
+                                >
+                                    <i className="fas fa-flag"></i> Terminar GRUPO
+                                </button>
+                            </b>
+                            <br />
+                            <br />
+                            <TablaResumen
+                                loading={loading}
+                                data={dataResumenCorte}
+                                columns={columnsCorte}
+                                selectedRowKeys={selectedRowKeysCorte}
+                                setSelectedRowKeys={setSelectedRowKeysCorte}
                             />
-                        </div>
-                        <div className="col-md-4">
-                            Empresa:
-                            <br />
-                            <Select
-                                value={form.empresa_id}
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setForm({ ...form, empresa_id: e })
-                                }
-                                style={{
-                                    width: "100%"
-                                }}
-                            >
-                                {/* <Select.Option value={0} key={0}>TODOS</Select.Option> */}
-                                {empresas.map(e => (
-                                    <Select.Option value={e.id} key={e.id}>
-                                        {`${e.id} - ${e.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </div>
-                        <div className="col-md-4">
-                            Tipo:
-                            <br />
-                            <Select
-                                value={form.tipo}
-                                showSearch
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e => setForm({ ...form, tipo: e })}
-                                style={{
-                                    width: "100%"
-                                }}
-                            >
-                                {[
-                                    { id: "CON DESCUENTO" },
-                                    { id: "SIN DESCUENTO" }
-                                ].map(e => (
-                                    <Select.Option value={e.id} key={e.id}>
-                                        {`${e.id}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </div>
-                    </div>
-                </form>
-            </Card>
-            <br />
-            <hr />
-            <br />
-            {ultimoCorte ? (
-                <>
-                    <h4 style={{ textDecoration: 'underline' }}>Último Corte:</h4>
+                        </>
+                    ) : (
+                        <>
+                            <div className="alert alert-secondary" role="alert">
+                                <b>No hay GRUPO Activo disponible</b>
+                            </div>
+                        </>
+                    )}
+                    <br />
+                    <h4 style={{ textDecoration: "underline" }}>Pendientes</h4>
                     <b style={{ fontSize: "13px" }}>
-                        Cantidad: {dataCorte.length} registros&nbsp;
+                        Cantidad: {data.length} registros&nbsp;
                         <button
                             className="btn btn-success btn-sm mr-1"
                             onClick={handleExportar}
@@ -494,53 +653,35 @@ export const Datos = () => {
                         <button
                             className="btn btn-primary btn-sm mr-1"
                             onClick={handleCortar}
-                            disabled={selectedRowKeysCorte.length === 0}
+                            disabled={selectedRowKeys.length === 0}
                         >
                             <i className="fas fa-table" /> Realizar corte
                         </button>
+                        {form.tipo === "CON DESCUENTO" && (
+                            <button
+                                className="btn btn-primary btn-sm mr-1"
+                                onClick={() => _handleCambiarEstado({ estado_documento: 2 })}
+                                disabled={selectedRowKeys.length === 0}
+                            >
+                                <i className="fas fa-check"></i> Marcar RECEPCIONADO
+                            </button>
+                        )}
                     </b>
                     <br />
                     <br />
                     <TablaResumen
                         loading={loading}
-                        data={dataResumenCorte}
-                        columns={columnsCorte}
+                        data={dataResumen}
+                        columns={columns}
+                        selectedRowKeys={selectedRowKeys}
+                        setSelectedRowKeys={setSelectedRowKeys}
                     />
-                </>
-            ) : (
-                <>
-                    <div className="alert alert-secondary" role="alert">
-                        <b>No hay último corte disponible</b>
-                    </div>
-                </>
-            )}
-            <br />
-            <h4 style={{ textDecoration: 'underline' }}>Pendientes</h4>
-            <b style={{ fontSize: "13px" }}>
-                Cantidad: {data.length} registros&nbsp;
-                <button
-                    className="btn btn-success btn-sm mr-1"
-                    onClick={handleExportar}
-                >
-                    <i className="fas fa-file-excel" /> Exportar
-                </button>
-                <button
-                    className="btn btn-primary btn-sm mr-1"
-                    onClick={handleCortar}
-                    disabled={selectedRowKeys.length === 0}
-                >
-                    <i className="fas fa-table" /> Realizar corte
-                </button>
-            </b>
-            <br />
-            <br />
-            <TablaResumen
-                loading={loading}
-                data={dataResumen}
-                columns={columns}
-                selectedRowKeys={selectedRowKeys}
-                setSelectedRowKeys={setSelectedRowKeys}
-            />
+
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Historial Grupos" key="2">
+                    <HistorialGrupos />
+                </Tabs.TabPane>
+            </Tabs>
         </>
     );
 };

@@ -8,6 +8,16 @@ use Illuminate\Support\Facades\DB;
 
 class CortesRenovacionesFotocheckController extends Controller
 {
+    public function get()
+    {
+        $cortes = CorteRenovacionFotocheck::with('usuario.trabajador')->orderBy('id', 'DESC')->get();
+
+        return response()->json([
+            'message' => 'Data obtenida correctamente',
+            'data' => $cortes
+        ]);
+    }
+
     public function getUltimo(Request $request)
     {
         $corte = CorteRenovacionFotocheck::where('activo', true)->first();
@@ -47,6 +57,30 @@ class CortesRenovacionesFotocheckController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al asignar corte',
+                'data' => [
+                    'error' => $e->getMessage()
+                ]
+            ], 400);
+        }
+    }
+
+    public function terminarProceso(Request $request, $id)
+    {
+        try {
+            $corte = CorteRenovacionFotocheck::find($id);
+
+            DB::table('renovaciones_fotocheck')->where('corte_renovacion_id', $corte->id)->update(['estado' => 2]);
+
+            $corte->activo = 0;
+            $corte->save();
+
+            return response()->json([
+                'message' => 'Proceso terminado correctamente',
+                'data' => [],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al terminar informe',
                 'data' => [
                     'error' => $e->getMessage()
                 ]
