@@ -95,7 +95,7 @@ class Trabajador extends Model
         ];
     }
 
-    public static function getTrabajadorParaFiniquito($rut, $fechaFiniquito, $masivo=false)
+    public static function getTrabajadorParaFiniquito($rut, $fechaFiniquito, $masivo=false, $access=false)
     {
         $fechaFiniquito = Carbon::parse($fechaFiniquito);
 
@@ -262,29 +262,50 @@ class Trabajador extends Model
                 }
             } */
 
-            if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
-                return [
-                    'message' => 'Este trabajador tiene 5 años de tiempo de servicio. No se puede finiquitar por este medio',
-                    'data'  => [
-                        'rut' => $rut,
-                    ],
-                    'error' => true,
-                ];
-            }
+            if (!$access) {
+                if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
+                    return [
+                        'message' => 'Este trabajador tiene 5 años de tiempo de servicio. No se puede finiquitar por este medio',
+                        'data'  => [
+                            'rut' => $rut,
+                        ],
+                        'error' => true,
+                    ];
+                }
 
-            if ($trabajador->regimen_id == 2 || $trabajador->regimen_id == 4) {
-                return [
-                    'message' => 'No se puede finiquitar a un TRABAJADOR RESTRINGIDO por este medio',
-                    'data'  => [
-                        'rut' => $rut,
-                    ],
-                    'error' => true,
-                ];
-            } else if ($trabajador->regimen_id == 1) {
-                return [
-                    'message' => 'Trabajador Obtenido. EMPLEADO AGRARIO',
-                    'data' => $trabajador,
-                ];
+                if ($trabajador->regimen_id == 2 || $trabajador->regimen_id == 4) {
+                    return [
+                        'message' => 'No se puede finiquitar a un TRABAJADOR RESTRINGIDO por este medio',
+                        'data'  => [
+                            'rut' => $rut,
+                        ],
+                        'error' => true,
+                    ];
+                } else if ($trabajador->regimen_id == 1) {
+                    return [
+                        'message' => 'Trabajador Obtenido. EMPLEADO AGRARIO',
+                        'data' => $trabajador,
+                    ];
+                }
+            } else {
+                if (Carbon::parse($trabajador->fecha_inicio_periodo)->diffInYears($fechaFiniquito) >= 5) {
+                    return [
+                        'message' => 'Este trabajador tiene 5 o más años de tiempo de servicio.',
+                        'data'  => $trabajador,
+                    ];
+                }
+
+                if ($trabajador->regimen_id == 2 || $trabajador->regimen_id == 4) {
+                    return [
+                        'message' => 'Adventencia, TRABAJADOR RESTRINGIDO',
+                        'data'  => $trabajador,
+                    ];
+                } else if ($trabajador->regimen_id == 1) {
+                    return [
+                        'message' => 'Trabajador Obtenido. EMPLEADO AGRARIO',
+                        'data' => $trabajador,
+                    ];
+                }
             }
 
             return [

@@ -143,7 +143,7 @@ export const TablaRegistros = ({
                                 target="_blank"
                                 href={"/ficha/carta-descuento/" + record.id}
                             >
-                                <i className="fas fa-file-alt"></i>
+                                <i className="fas fa-search"></i>
                             </a>
                         </Tooltip>
                     )}

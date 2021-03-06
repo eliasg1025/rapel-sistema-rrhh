@@ -20,6 +20,11 @@ class FiniquitosService
         $this->personasService = new PersonasService();
     }
 
+    public function estados()
+    {
+        return Finiquito::getEstados();
+    }
+
     public function prepare($request)
     {
         $personaId = $this->personasService->create(
@@ -69,7 +74,7 @@ class FiniquitosService
                 'fecha_finiquito' => $fechaFiniquito
             ])->first();
 
-            if ($exists) {
+            if ($exists && $exists->getEstado()->name !== 'SIN EFECTO') {
                 if (!$id) {
                     return [
                         'message' => 'Ya existe un registro de este trabajador para la fecha ' . $fechaFiniquito,

@@ -66,7 +66,9 @@ export const CreateFiniquitoFormIndividual = ({
                 setForm(initalFormState);
                 setRut("");
                 setReload(!reload);
+                window.open(`/ficha/cese/${data.id}`, '_blank');
             }
+
         } catch (e) {
             console.log(e);
 
@@ -92,7 +94,8 @@ export const CreateFiniquitoFormIndividual = ({
                 data
             } = await trabajadoresProvider.getParaFiniquito(
                 rut,
-                form.fecha_finiquito
+                form.fecha_finiquito,
+                1
             );
             notification["success"]({
                 message: message

@@ -302,6 +302,7 @@ Route::group(['prefix' => 'finiquitos'], function() {
     Route::post('/import', 'FiniquitosController@import');
     Route::put('/{id}/state', 'FiniquitosController@changeState');
     Route::post('/{id}/delete', 'FiniquitosController@delete');
+    Route::get('/estados', 'FiniquitosController@estados');
 });
 
 Route::group(['prefix' => 'tipos-ceses'], function() {

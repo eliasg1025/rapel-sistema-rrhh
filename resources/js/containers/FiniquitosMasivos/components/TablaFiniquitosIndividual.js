@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker, Input } from 'antd';
+import { Button, notification, Table, Tooltip, Modal, Tag, DatePicker, Input, Select } from 'antd';
 import moment from 'moment';
 import Axios from 'axios';
 
@@ -16,13 +16,14 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     const [filtro, setFiltro] = useState({
         desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
         hasta: moment().format('YYYY-MM-DD').toString(),
-        estado: 0,
+        estado_id: 0,
         usuario_carga_id: 0,
         rut: '',
     });
 
     const [loading, setLoading] = useState(false);
     const [finiquitos, setFiniquitos] = useState([]);
+    const [estados, setEstados] = useState([]);
 
     const [viewModal, setViewModal] = useState(false);
     const [deleteForm, setDeleteForm] = useState({
@@ -35,18 +36,18 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         setViewModal(true);
     };
 
-    const confirmChangeState = id => {
+    const confirmChangeState = (id, estado_id) => {
         Modal.confirm({
-            title: 'Marcar como Firmado',
-            content: '¿Desea marcar como firmado este registro?',
+            title: `Marcar como ${estado_id === 2 ? 'ENVIADO' : 'RECEPCIONADO'}`,
+            content: `¿Desea marcar como ${estado_id === 2 ? 'ENVIADO' : 'RECEPCIONADO'} este registro?`,
             okText: 'SI',
             cancelText: 'Cancelar',
-            onOk: () => changeState(id)
+            onOk: () => changeState(id, estado_id)
         });
     }
 
-    const changeState = async (id) => {
-        const { message, data } = await finiquitosProvider.changeState(id, { estado_id: 2 });
+    const changeState = async (id, estado_id) => {
+        const { message, data } = await finiquitosProvider.changeState(id, { estado_id });
 
         setReload(!reload);
         setForm({
@@ -169,6 +170,16 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
         }
     }, [reload, filtro]);
 
+    useEffect(() => {
+        Axios.get('/api/finiquitos/estados')
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
+
 
     const columns = [
         {
@@ -261,8 +272,17 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                     )}
                     {usuario.modulo_rol.tipo.name !== 'ANALISTA DE GESTION' && (
                         value.estado.name === 'NO FIRMADO' && (
-                            <Tooltip title="Firmado">
-                                <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id)}>
+                            <Tooltip title="Enviado">
+                                <button className="btn btn-primary btn-sm" onClick={() => confirmChangeState(value.id, 2)}>
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        )
+                    )}
+                    {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
+                        value.estado.name === 'ENVIADO' && (
+                            <Tooltip title="Recepcionado">
+                                <button className="btn btn-warning btn-sm" onClick={() => confirmChangeState(value.id, 4)}>
                                     <i className="fas fa-check"></i>
                                 </button>
                             </Tooltip>
@@ -277,11 +297,13 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                             </Tooltip>
                         )
                     ) : (
-                        <Tooltip title="Anular registro">
-                            <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                                <i className="fas fa-ban"></i>
-                            </button>
-                        </Tooltip>
+                        value.estado.name === 'NO FIRMADO' && (
+                            <Tooltip title="Anular registro">
+                                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                    <i className="fas fa-ban"></i>
+                                </button>
+                            </Tooltip>
+                        )
                     )}
                 </div>
             )
@@ -306,6 +328,30 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                         }}
                         value={[moment(filtro.desde), moment(filtro.hasta)]}
                     />
+                </div>
+                <div className="col-md-4 col-sm-6 col-xs-12">
+                    Estado:<br />
+                    <Select
+                        value={filtro.estado_id}
+                        showSearch
+                        style={{ width: "100%" }}
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setFiltro({ ...filtro, estado_id: e })}
+                    >
+                        <Select.Option value={0} key={0}>
+                            TODOS
+                        </Select.Option>
+                        {estados.map(e => (
+                            <Select.Option value={e.name} key={e.name}>
+                                {`${e.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </div>
                 <div className="col-md-4 col-sm-6 col-xs-12">
                     Búsqueda por DNI:<br />

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasEstado;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Finiquito extends Model
 {
@@ -49,6 +50,13 @@ class Finiquito extends Model
     public function oficio()
     {
         return $this->belongsTo(Oficio::class, 'oficio_id');
+    }
+
+    public static function getEstados()
+    {
+        $tipo = DB::table('tipos_estados')->where('name', 'finiquitos')->first();
+
+        return DB::table('estados')->where('tipo_estado_id', $tipo->id)->get();
     }
 
     public function getFechaInicioPeriodoLargaAttribute($value)

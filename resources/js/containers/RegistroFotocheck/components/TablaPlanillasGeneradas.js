@@ -1,5 +1,5 @@
 import React from "react";
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 import Axios from 'axios';
 
 export const TablaPlanillasGeneradas = ({
@@ -36,13 +36,22 @@ export const TablaPlanillasGeneradas = ({
             title: 'Hora Salida',
             dataIndex: 'hora_salida'
         },
-        /* {
+        {
+            title: 'Cargado por',
+            dataIndex: 'usuario',
+            render: item => `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
+        },
+        {
             title: "Acciones",
             dataIndex: "id",
             render: (_, record) => (
-                <p>hi</p>
+                <Tooltip title="Eliminar Registro">
+                    <button className="btn btn-danger btn-sm">
+                        <i className="fas fa-trash"></i>
+                    </button>
+                </Tooltip>
             )
-        } */
+        }
     ];
 
     const handleExportar = () => {

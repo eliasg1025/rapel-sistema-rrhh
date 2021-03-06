@@ -11,8 +11,9 @@ class TrabajadoresController extends Controller
     public function getParaFiniquito(Request $request, $rut)
     {
         $fechaFiniquito = $request->query('fecha_finiquito');
+        $access = $request->query('access') == 1 ? true : false;
 
-        $result = Trabajador::getTrabajadorParaFiniquito($rut, $fechaFiniquito);
+        $result = Trabajador::getTrabajadorParaFiniquito($rut, $fechaFiniquito, false, $access);
 
         if (isset($result['error'])) {
             return response()->json([

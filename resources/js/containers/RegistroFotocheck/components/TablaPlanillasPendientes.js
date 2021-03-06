@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Button, notification } from "antd";
+import { Table, Button, notification, Tooltip } from "antd";
 import Modal from "../../Modal";
 import Axios from "axios";
 
@@ -58,12 +58,21 @@ export const TablaPlanillasPendientes = ({
             title: "Acciones",
             dataIndex: "id",
             render: (_, record) => (
-                <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => edit(record)}
-                >
-                    <i className="fas fa-edit"></i>
-                </button>
+                <>
+                    <Tooltip title="Asignar Fecha">
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => edit(record)}
+                        >
+                            <i className="fas fa-calendar-plus"></i>
+                        </button>
+                    </Tooltip>
+                    <Tooltip title="Eliminar Registro">
+                        <button className="btn btn-danger btn-sm">
+                            <i className="fas fa-trash"></i>
+                        </button>
+                    </Tooltip>
+                </>
             )
         }
     ];

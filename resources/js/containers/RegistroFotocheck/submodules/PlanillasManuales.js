@@ -3,7 +3,7 @@ import { Card, DatePicker, Select, Tabs } from "antd";
 import moment from 'moment';
 import Axios from 'axios';
 
-import { TablaPlanillas, TablaPlanillasPendientes, TablaPlanillasGeneradas } from "../components";
+import { TablaPlanillasPendientes, TablaPlanillasGeneradas } from "../components";
 
 export const PlanillasManuales = () => {
 
@@ -38,20 +38,17 @@ export const PlanillasManuales = () => {
         function fetchPlanillas(estado) {
             Axios.get(`/api/planillas-manuales?tipo=renovaciones_fotocheck&empresa_id=${form.empresa_id}&estado=${estado}&desde=${form.desde}&hasta=${form.hasta}`)
                 .then(res => {
+                    const _data = res.data.data.map(item => {
+                        return {
+                            ...item,
+                            key: item.id,
+                        }
+                    });
+
                     if (estado === 0) {
-                        setPlanillas(res.data.data.map(item => {
-                            return {
-                                ...item,
-                                key: item.id,
-                            }
-                        }));
+                        setPlanillas(_data);
                     } else {
-                        setPlanillasG(res.data.data.map(item => {
-                            return {
-                                ...item,
-                                key: item.id,
-                            }
-                        }));
+                        setPlanillasG(_data);
                     }
                 })
                 .catch(err => {})
@@ -102,6 +99,9 @@ export const PlanillasManuales = () => {
                         </form>
                     </Card>
                     <br />
+                    <div className="alert alert-primary">
+                        Registro de trabajadores pendientes de planilla manual, <b>asigna</b> fecha(s) para hacer válida la planilla dando click en <i className="fas fa-calendar-plus"></i>
+                    </div>
                     <TablaPlanillasPendientes
                         data={planillas}
                         loading={loading}

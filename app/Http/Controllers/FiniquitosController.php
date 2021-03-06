@@ -19,6 +19,14 @@ class FiniquitosController extends Controller
         $this->finiquitosService = new FiniquitosService();
     }
 
+    public function estados(Request $request)
+    {
+        return response()->json([
+            'message' => 'Data obtenida correctamente',
+            'data' => $this->finiquitosService->estados(),
+        ]);
+    }
+
     public function get(Request $request)
     {
         $tipo = $request->get('tipo');
