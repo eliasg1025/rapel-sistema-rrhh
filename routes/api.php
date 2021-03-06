@@ -343,6 +343,7 @@ Route::group(['prefix' => 'cortes-renovaciones-fotocheck'], function() {
 Route::group(['prefix' => 'planillas-manuales'], function() {
     Route::get('/', 'PlanillasManualesController@get');
     Route::put('/{planilla}', 'PlanillasManualesController@update');
+    Route::delete('/{planilla}', 'PlanillasManualesController@delete');
 });
 
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {

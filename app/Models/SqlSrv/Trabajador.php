@@ -297,7 +297,7 @@ class Trabajador extends Model
 
                 if ($trabajador->regimen_id == 2 || $trabajador->regimen_id == 4) {
                     return [
-                        'message' => 'Adventencia, TRABAJADOR RESTRINGIDO',
+                        'message' => 'Advertencia, TRABAJADOR RESTRINGIDO',
                         'data'  => $trabajador,
                     ];
                 } else if ($trabajador->regimen_id == 1) {

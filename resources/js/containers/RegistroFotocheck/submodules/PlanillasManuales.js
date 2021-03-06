@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, DatePicker, Select, Tabs } from "antd";
+import { Card, DatePicker, Select, Tabs, Modal, notification } from "antd";
 import moment from 'moment';
 import Axios from 'axios';
 
@@ -59,6 +59,29 @@ export const PlanillasManuales = () => {
         fetchPlanillas(1);
     }, [form, reload]);
 
+    const handleDelete = (id) => {
+        Modal.confirm({
+            title: 'Borrar registros',
+            content: '¿Desea borrar este registro correctamente?',
+            onOk: () => {
+                Axios.delete(`/api/planillas-manuales/${id}`)
+                    .then(res => {
+                        notification['success']({
+                            message: res.data.message,
+                        });
+
+                        setReload(!reload);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        notification['error']({
+                            message: 'Error al eliminar registro'
+                        });
+                    })
+            }
+        })
+    }
+
     return (
         <>
             <h4>Planillas Manuales</h4>
@@ -107,6 +130,7 @@ export const PlanillasManuales = () => {
                         loading={loading}
                         reload={reload}
                         setReload={setReload}
+                        handleDelete={handleDelete}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane key="2" tab="Generados">
@@ -165,6 +189,7 @@ export const PlanillasManuales = () => {
                         loading={loading}
                         reload={reload}
                         setReload={setReload}
+                        handleDelete={handleDelete}
                     />
                 </Tabs.TabPane>
             </Tabs>

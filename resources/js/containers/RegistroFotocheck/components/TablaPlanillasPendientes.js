@@ -7,7 +7,8 @@ export const TablaPlanillasPendientes = ({
     data,
     loading,
     reload,
-    setReload
+    setReload,
+    handleDelete,
 }) => {
     const initialFormState = {
         fecha_planilla: '',
@@ -68,7 +69,7 @@ export const TablaPlanillasPendientes = ({
                         </button>
                     </Tooltip>
                     <Tooltip title="Eliminar Registro">
-                        <button className="btn btn-danger btn-sm">
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(record.id)}>
                             <i className="fas fa-trash"></i>
                         </button>
                     </Tooltip>
@@ -110,6 +111,11 @@ export const TablaPlanillasPendientes = ({
                     message: err.response.data.message
                 });
             });
+    }
+
+    const handleSacarLista = (key) => {
+        const pos = planillas.filter(planilla => planilla.fecha_planilla !== key);
+        setPlanillas(pos);
     }
 
     return (
@@ -198,9 +204,9 @@ export const TablaPlanillasPendientes = ({
                         },
                         {
                             title: 'Acciones',
-                            render: () => (
+                            render: (_, record) => (
                                 <>
-                                    <button className="btn btn-sm btn-danger">
+                                    <button className="btn btn-sm btn-danger" onClick={() => handleSacarLista(record.key)}>
                                         <i className="fas fa-trash"></i>
                                     </button>
                                 </>

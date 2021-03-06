@@ -60,4 +60,14 @@ class PlanillasManualesController extends Controller
             ], 400);
         }
     }
+
+    public function delete(PlanillaManual $planilla)
+    {
+        $planilla->delete();
+
+        return response()->json([
+            'message' => 'Planilla borrada correctamente',
+            'data' => []
+        ]);
+    }
 }

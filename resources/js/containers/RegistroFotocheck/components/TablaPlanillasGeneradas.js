@@ -6,7 +6,8 @@ export const TablaPlanillasGeneradas = ({
     data,
     loading,
     reload,
-    setReload
+    setReload,
+    handleDelete
 }) => {
     const columns = [
         {
@@ -46,7 +47,7 @@ export const TablaPlanillasGeneradas = ({
             dataIndex: "id",
             render: (_, record) => (
                 <Tooltip title="Eliminar Registro">
-                    <button className="btn btn-danger btn-sm">
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(record.id)}>
                         <i className="fas fa-trash"></i>
                     </button>
                 </Tooltip>
