@@ -79,7 +79,7 @@
                 En tal sentido, por medio del presente acepto mi responsabilidad por los daños indicados, e igualmente autorizo se realice el descuento en mi remuneración mensual, cuyo importe asciende a S/. {{ $renovacion->motivo->costo }} (DIEZ CON 00/100 SOLES), lo que significa la reparación de los daños antes mencionados.
             </p>
             <p>
-                El referido descuento se realizará en 1 cuota(s) de S/. {{ $renovacion->motivo->costo }} (DIEZ CON 00/100 SOLES) a partir del mes de {{ $renovacion->mes_pago }}.
+                El referido descuento se realizará en 1 cuota(s) de S/. {{ $renovacion->motivo->costo }} (CINCO CON 00/100 SOLES) a partir del mes de {{ $renovacion->mes_pago }}.
             </p>
             <p>
                 Así las cosas, en caso se termine la relación laboral y no se hubiese completado con el pago de la(s) cuota(s) indicada(s), autorizo se realice el cobro del saldo faltante de mi liquidación de beneficios sociales.
