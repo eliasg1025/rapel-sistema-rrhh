@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanillaManual;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class PlanillasManualesController extends Controller
@@ -14,6 +15,9 @@ class PlanillasManualesController extends Controller
         $estado = $request->get('estado');
         $desde = $request->get('desde');
         $hasta = $request->get('hasta');
+        $usuarioId = $request->get('usuario_id');
+
+        $rol = (Usuario::find($usuarioId))->getRol('registro-fotochecks');
 
         $planillas = PlanillaManual::with('trabajador', 'usuario.trabajador')->where([
             'tipo_entidad' => $tipoEntidad,
@@ -22,6 +26,9 @@ class PlanillasManualesController extends Controller
         ])
         ->when($estado == 1, function($query) use ($desde, $hasta) {
             $query->whereBetween('fecha_planilla', [$desde, $hasta]);
+        })
+        ->when($rol->name === 'SUPERVISOR', function($query) use ($usuarioId) {
+            $query->where('usuario_id', $usuarioId);
         })
         ->get();
 

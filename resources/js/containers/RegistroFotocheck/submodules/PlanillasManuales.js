@@ -7,6 +7,8 @@ import { TablaPlanillasPendientes, TablaPlanillasGeneradas } from "../components
 
 export const PlanillasManuales = () => {
 
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
+
     const [loading, setLoading] = useState(false);
     const [empresas, setEmpresas] = useState([]);
     const [planillas, setPlanillas] = useState([]);
@@ -36,7 +38,7 @@ export const PlanillasManuales = () => {
     useEffect(() => {
         setLoading(true);
         function fetchPlanillas(estado) {
-            Axios.get(`/api/planillas-manuales?tipo=renovaciones_fotocheck&empresa_id=${form.empresa_id}&estado=${estado}&desde=${form.desde}&hasta=${form.hasta}`)
+            Axios.get(`/api/planillas-manuales?tipo=renovaciones_fotocheck&empresa_id=${form.empresa_id}&estado=${estado}&desde=${form.desde}&hasta=${form.hasta}&usuario_id=${usuario.id}`)
                 .then(res => {
                     const _data = res.data.data.map(item => {
                         return {
