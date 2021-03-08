@@ -19,6 +19,7 @@ export const PlanillasManuales = () => {
             .format("YYYY-MM-DD")
             .toString(),
         hasta: moment()
+            .add(7, 'days')
             .format("YYYY-MM-DD")
             .toString(),
         empresa_id: 9,
