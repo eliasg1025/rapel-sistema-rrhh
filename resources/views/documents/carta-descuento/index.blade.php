@@ -76,7 +76,7 @@
                 </ul>
             </p>
             <p>
-                En tal sentido, por medio del presente acepto mi responsabilidad por los daños indicados, e igualmente autorizo se realice el descuento en mi remuneración mensual, cuyo importe asciende a S/. {{ $renovacion->motivo->costo }} (DIEZ CON 00/100 SOLES), lo que significa la reparación de los daños antes mencionados.
+                En tal sentido, por medio del presente acepto mi responsabilidad por los daños indicados, e igualmente autorizo se realice el descuento en mi remuneración mensual, cuyo importe asciende a S/. {{ $renovacion->motivo->costo }} (CINCO CON 00/100 SOLES), lo que significa la reparación de los daños antes mencionados.
             </p>
             <p>
                 El referido descuento se realizará en 1 cuota(s) de S/. {{ $renovacion->motivo->costo }} (CINCO CON 00/100 SOLES) a partir del mes de {{ $renovacion->mes_pago }}.
