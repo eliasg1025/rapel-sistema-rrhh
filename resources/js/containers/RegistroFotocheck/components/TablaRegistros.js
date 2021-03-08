@@ -199,7 +199,7 @@ export const TablaRegistros = ({
                 fecha_solicitud: item.fecha_solicitud,
                 dni: item.trabajador.rut,
                 trabajador:
-                    item.trabajador.apellido_materno +
+                    item.trabajador.apellido_paterno +
                     " " +
                     item.trabajador.apellido_materno +
                     " " +
