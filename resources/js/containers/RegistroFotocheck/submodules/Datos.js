@@ -22,7 +22,7 @@ export const Datos = () => {
             .format("YYYY-MM-DD")
             .toString(),
         empresa_id: 9,
-        tipo: "CON DESCUENTO"
+        tipo: "TODOS"
     });
     const [data, setData] = useState([]);
     const [dataCorte, setDataCorte] = useState([]);
@@ -554,6 +554,7 @@ export const Datos = () => {
                                         }}
                                     >
                                         {[
+                                            { id: "TODOS" },
                                             { id: "CON DESCUENTO" },
                                             { id: "SIN DESCUENTO" }
                                         ].map(e => (
@@ -595,7 +596,7 @@ export const Datos = () => {
                                 >
                                     <i className="fas fa-file-excel" /> Exportar
                                 </button>
-                                {form.tipo === "CON DESCUENTO" && (
+                                {form.tipo === "CON DESCUENTO" || form.tipo === 'TODOS' && (
                                     <button
                                         className="btn btn-primary btn-sm mr-1"
                                         onClick={() =>
@@ -657,7 +658,7 @@ export const Datos = () => {
                         >
                             <i className="fas fa-table" /> Realizar corte
                         </button>
-                        {form.tipo === "CON DESCUENTO" && (
+                        {form.tipo === "CON DESCUENTO" || form.tipo === 'TODOS' && (
                             <button
                                 className="btn btn-primary btn-sm mr-1"
                                 onClick={() => _handleCambiarEstado({ estado_documento: 2 })}

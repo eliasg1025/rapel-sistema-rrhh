@@ -63,7 +63,9 @@ class RenovacionesFotocheckController extends Controller
             }
 
             if ($estado_documento) {
-                $renovacion->estado_documento = $estado_documento;
+                if ($renovacion->estado_documento) {
+                    $renovacion->estado_documento = $estado_documento;
+                }
             }
 
             $renovacion->save();
@@ -205,11 +207,13 @@ class RenovacionesFotocheckController extends Controller
             ->when($esCorte == true, function($query) use ($corte) {
                 $query->where('corte_renovacion_id', $corte->id);
             })
-            ->when($tipo === 'CON DESCUENTO', function($query)  {
-                $query->where('mpf.costo', '>', 0);
-            })
-            ->when($tipo === 'SIN DESCUENTO', function($query)  {
-                $query->where('mpf.costo', '<=', 0);
+            ->when($tipo !== 'TODOS', function($query) use ($tipo) {
+                $query->when($tipo === 'CON DESCUENTO', function($query)  {
+                    $query->where('mpf.costo', '>', 0);
+                })
+                    ->when($tipo === 'SIN DESCUENTO', function($query)  {
+                        $query->where('mpf.costo', '<=', 0);
+                    });
             })
             ->get();
 
