@@ -50,16 +50,6 @@ export const TablaPlanillasPendientes = ({
             dataIndex: "usuario",
             render: item => `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
         },
-        /* {
-            title: "Estado",
-            dataIndex: "estado",
-            render: item =>
-                item === 0 ? (
-                    <Tag color="blue">GENERADO</Tag>
-                ) : (
-                    <Tag color="green">GUARDADO</Tag>
-                )
-        }, */
         {
             title: "Acciones",
             dataIndex: "id",

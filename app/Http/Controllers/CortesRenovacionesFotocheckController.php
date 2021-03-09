@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CorteRenovacionFotocheck;
+use App\Models\RenovacionFotocheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +11,16 @@ class CortesRenovacionesFotocheckController extends Controller
 {
     public function get()
     {
-        $cortes = CorteRenovacionFotocheck::with('usuario.trabajador')->orderBy('id', 'DESC')->get();
+        $cortes = CorteRenovacionFotocheck::with('usuario.trabajador')
+            ->orderBy('id', 'DESC')->get();
+
+        $cortes->transform(function($item) {
+            $item->registros = RenovacionFotocheck::with('trabajador', 'empresa', 'regimen', 'usuario.trabajador', 'color', 'motivo', 'zonaLabor')
+                ->where('corte_renovacion_id', $item->id)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+            return $item;
+        });
 
         return response()->json([
             'message' => 'Data obtenida correctamente',

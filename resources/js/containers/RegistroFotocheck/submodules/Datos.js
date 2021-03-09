@@ -36,12 +36,12 @@ export const Datos = () => {
 
     const initialStateColumns = [
         {
-            title: "FUNDO",
-            dataIndex: "zona_labor"
-        },
-        {
             title: "SOLICITANTE",
             dataIndex: "solicitante"
+        },
+        {
+            title: "FUNDO",
+            dataIndex: "zona_labor"
         },
         {
             title: "DNI/RUT",
@@ -157,18 +157,15 @@ export const Datos = () => {
                     }
                 ]);
 
-                const zonas = Array.from(
-                    new Set(data.map(item => item.zona_labor))
+                const solicitantes = Array.from(
+                    new Set(data.map(item => item.solicitante))
                 ).sort();
 
-                const dataPorZona = zonas.map(zona => {
-                    const tempData = data.filter(
-                        item => item.zona_labor === zona
-                    );
+                const dataPorSolicitante = solicitantes.map(solicitante => {
 
-                    const solicitantes = Array.from(
-                        new Set(tempData.map(item => item.solicitante))
-                    ).sort();
+                    const tempData = data.filter(
+                        item => item.solicitante === solicitante
+                    );
 
                     let cantColores = {};
                     let totalPorFila = 0;
@@ -180,33 +177,14 @@ export const Datos = () => {
                     }
 
                     return {
-                        key: zona,
-                        zona_labor: zona,
+                        key: solicitante,
+                        solicitante: solicitante,
                         ...cantColores,
                         total: totalPorFila,
-                        children: solicitantes.map(solicitante => {
-                            const tempData2 = tempData.filter(
-                                item => item.solicitante === solicitante
-                            );
-
-                            let cantColores = {};
-                            for (const color of colores) {
-                                cantColores[color] = tempData2.filter(
-                                    item => item.color === color
-                                ).length;
-                            }
-
+                        children: tempData.map(item => {
                             return {
-                                key: zona + " - " + solicitante,
-                                solicitante,
-                                zona_labor: zona,
-                                ...cantColores,
-                                children: tempData2.map(item => {
-                                    return {
-                                        ...item,
-                                        key: item.id
-                                    };
-                                })
+                                ...item,
+                                key: item.id
                             };
                         })
                     };
@@ -221,14 +199,14 @@ export const Datos = () => {
                     totalPorFila += cantColores[color];
                 }
 
-                dataPorZona.push({
+                dataPorSolicitante.push({
                     key: "TOTAL",
                     zona_labor: "TOTAL",
                     ...cantColores,
                     total: totalPorFila
                 });
 
-                setDataResumen(dataPorZona);
+                setDataResumen(dataPorSolicitante);
             })
             .catch(err => {})
             .finally(() => setLoading(false));
@@ -278,18 +256,15 @@ export const Datos = () => {
                     }
                 ]);
 
-                const zonas = Array.from(
-                    new Set(data.map(item => item.zona_labor))
+                const solicitantes = Array.from(
+                    new Set(data.map(item => item.solicitante))
                 ).sort();
 
-                const dataPorZona = zonas.map(zona => {
-                    const tempData = data.filter(
-                        item => item.zona_labor === zona
-                    );
+                const dataPorSolicitante = solicitantes.map(solicitante => {
 
-                    const solicitantes = Array.from(
-                        new Set(tempData.map(item => item.solicitante))
-                    ).sort();
+                    const tempData = data.filter(
+                        item => item.solicitante === solicitante
+                    );
 
                     let cantColores = {};
                     let totalPorFila = 0;
@@ -301,33 +276,14 @@ export const Datos = () => {
                     }
 
                     return {
-                        key: zona,
-                        zona_labor: zona,
+                        key: solicitante,
+                        solicitante: solicitante,
                         ...cantColores,
                         total: totalPorFila,
-                        children: solicitantes.map(solicitante => {
-                            const tempData2 = tempData.filter(
-                                item => item.solicitante === solicitante
-                            );
-
-                            let cantColores = {};
-                            for (const color of colores) {
-                                cantColores[color] = tempData2.filter(
-                                    item => item.color === color
-                                ).length;
-                            }
-
+                        children: tempData.map(item => {
                             return {
-                                key: zona + " - " + solicitante,
-                                solicitante,
-                                zona_labor: zona,
-                                ...cantColores,
-                                children: tempData2.map(item => {
-                                    return {
-                                        ...item,
-                                        key: item.id
-                                    };
-                                })
+                                ...item,
+                                key: item.id
                             };
                         })
                     };
@@ -342,16 +298,18 @@ export const Datos = () => {
                     totalPorFila += cantColores[color];
                 }
 
-                dataPorZona.push({
+                dataPorSolicitante.push({
                     key: "TOTAL",
                     zona_labor: "TOTAL",
                     ...cantColores,
                     total: totalPorFila
                 });
 
-                setDataResumenCorte(dataPorZona);
+                setDataResumenCorte(dataPorSolicitante);
             })
-            .catch(err => {})
+            .catch(err => {
+
+            })
             .finally(() => setLoading(false));
     }, [form, reload]);
 
@@ -493,22 +451,6 @@ export const Datos = () => {
                     <Card>
                         <form>
                             <div className="row">
-                                {/* <div className="col-md-4">
-                                    Desde - Hasta:
-                                    <br />
-                                    <DatePicker.RangePicker
-                                        placeholder={["Desde", "Hasta"]}
-                                        style={{ width: "100%" }}
-                                        onChange={(date, dateString) => {
-                                            setForm({
-                                                ...form,
-                                                desde: dateString[0],
-                                                hasta: dateString[1]
-                                            });
-                                        }}
-                                        value={[moment(form.desde), moment(form.hasta)]}
-                                    />
-                                </div> */}
                                 <div className="col-md-4">
                                     Empresa:
                                     <br />
