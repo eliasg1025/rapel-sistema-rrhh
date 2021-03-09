@@ -190,7 +190,8 @@ export const TablaRegistros = ({
             "COSTO",
             "COLOR",
             "OBSERVACION",
-            "ESTADO"
+            "ESTADO",
+            "ESTADO DOCUMENTO"
         ];
 
         const d = data.map(item => {
@@ -216,7 +217,14 @@ export const TablaRegistros = ({
                 costo: item?.motivo.costo,
                 color: item?.color.color,
                 observacion: item?.observacion || "",
-                estado: item?.estado === 0 ? "GENERADO" : "ENVIADO"
+                estado: item.estado === 0 ? 'SOLICITADO' : (
+                    item.estado === 1 ? 'IMPRESO' : 'TERMINADO'
+                ),
+                estado_documento: !isNull(item.estado_documento) ? (
+                    item.estado_documento == 0 ? 'PENDIENTE' : (
+                        item.estado_documento == 1 ? 'ENVIADO' : 'RECEPCIONADO'
+                    )
+                ) : "-"
             };
         });
 
