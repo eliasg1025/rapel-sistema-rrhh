@@ -45,6 +45,11 @@ export const TablaPlanillasPendientes = ({
                 " " +
                 item?.nombre
         },
+        {
+            title: "Cargado por",
+            dataIndex: "usuario",
+            render: item => `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
+        },
         /* {
             title: "Estado",
             dataIndex: "estado",
