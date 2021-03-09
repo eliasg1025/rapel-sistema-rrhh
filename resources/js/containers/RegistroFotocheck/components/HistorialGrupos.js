@@ -8,6 +8,7 @@ import { isNull } from "lodash";
 
 export const HistorialGrupos = () => {
     const [grupos, setGrupos] = useState([]);
+    const [registros, setRegistros] = useState([]);
     const [viewModal, setViewModal] = useState(false);
     const [activeRecord, setActiveRecord] = useState(null);
     const [reload, setReload] = useState(false);
@@ -21,6 +22,18 @@ export const HistorialGrupos = () => {
                 console.log(err);
             });
     }, [reload]);
+
+    useEffect(() => {
+        if (activeRecord !== null) {
+            Axios.get(`/api/cortes-renovaciones-fotocheck/${activeRecord.id}/registros`)
+                .then(res => {
+                    setRegistros(res.data.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }, [reload, activeRecord])
 
     const handleExportar = (record) => {
         const headings = [
@@ -106,9 +119,9 @@ export const HistorialGrupos = () => {
         });
     };
 
-    const handleCambiarEstado = async (record, estado) => {
+    const handleCambiarEstado = async (registro, estado) => {
         try {
-            const res =  await Axios.put(`/api/renovacion-fotocheck/${record.id}`, { estado_documento: estado })
+            const res =  await Axios.put(`/api/renovacion-fotocheck/${registro.id}`, { estado_documento: estado })
             notification['success']({
                 message: res.data.message
             });
@@ -173,7 +186,7 @@ export const HistorialGrupos = () => {
                                             <i className="fas fa-file-excel"></i> Exportar
                                         </button>
                                         <button className="ml-2 btn btn-primary" onClick={() => handleVerRegistros(grupo)}>
-                                            <i className="fas fa-eye"></i> Ver
+                                            <i className="fas fa-eye"></i> Ver Registros
                                         </button>
                                     </div>
                                 </div>
@@ -192,7 +205,7 @@ export const HistorialGrupos = () => {
                 <Table
                     bordered
                     size="small"
-                    dataSource={activeRecord?.registros.map(registro => {
+                    dataSource={registros.map(registro => {
                         return {
                             ...registro,
                             key: registro.id

@@ -28,6 +28,19 @@ class CortesRenovacionesFotocheckController extends Controller
         ]);
     }
 
+    public function getRegistros(Request $request, $id)
+    {
+        $registros = RenovacionFotocheck::with('trabajador', 'empresa', 'regimen', 'usuario.trabajador', 'color', 'motivo', 'zonaLabor')
+            ->where('corte_renovacion_id', $id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return response()->json([
+            'message' => 'Data obtenida correctamente',
+            'data' => $registros
+        ]);
+    }
+
     public function getUltimo(Request $request)
     {
         $corte = CorteRenovacionFotocheck::where('activo', true)->first();
