@@ -102,12 +102,10 @@ export const TablaRegistros = ({
             render: item =>
                 item === 0 ? (
                     <Tag color="default">SOLICITADO</Tag>
+                ) : item === 1 ? (
+                    <Tag color="blue">IMPRESO</Tag>
                 ) : (
-                    item === 1 ? (
-                        <Tag color="blue">IMPRESO</Tag>
-                    ) : (
-                        <Tag color="green">TERMINADO</Tag>
-                    )
+                    <Tag color="green">TERMINADO</Tag>
                 )
         },
         {
@@ -120,12 +118,10 @@ export const TablaRegistros = ({
                 !isNull(item) ? (
                     item == 0 ? (
                         <Tag color="default">PENDIENTE</Tag>
+                    ) : item == 1 ? (
+                        <Tag color="blue">ENVIADO</Tag>
                     ) : (
-                        item == 1 ? (
-                            <Tag color="blue">ENVIADO</Tag>
-                        ) : (
-                            <Tag color="green">RECEPCIONADO</Tag>
-                        )
+                        <Tag color="green">RECEPCIONADO</Tag>
                     )
                 ) : (
                     "-"
@@ -147,21 +143,19 @@ export const TablaRegistros = ({
                             </a>
                         </Tooltip>
                     )}
+                    {!isNull(record.estado_documento) &&
+                        record.estado_documento === 0 && (
+                            <Tooltip title="Marcar DOCUMENTO como ENVIADO">
+                                <button
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => confirmCambiarEstado(record)}
+                                >
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        )}
                     {record.estado === 0 && (
                         <>
-                            {!isNull(record.estado_documento) &&
-                                record.estado_documento === 0 && (
-                                    <Tooltip title="Marcar DOCUMENTO como ENVIADO">
-                                        <button
-                                            className="btn btn-sm btn-outline-primary"
-                                            onClick={() =>
-                                                confirmCambiarEstado(record)
-                                            }
-                                        >
-                                            <i className="fas fa-check"></i>
-                                        </button>
-                                    </Tooltip>
-                                )}
                             <Tooltip title="Eliminar Registro">
                                 <button
                                     className="btn btn-sm btn-danger"
@@ -217,14 +211,19 @@ export const TablaRegistros = ({
                 costo: item?.motivo.costo,
                 color: item?.color.color,
                 observacion: item?.observacion || "",
-                estado: item.estado === 0 ? 'SOLICITADO' : (
-                    item.estado === 1 ? 'IMPRESO' : 'TERMINADO'
-                ),
-                estado_documento: !isNull(item.estado_documento) ? (
-                    item.estado_documento == 0 ? 'PENDIENTE' : (
-                        item.estado_documento == 1 ? 'ENVIADO' : 'RECEPCIONADO'
-                    )
-                ) : "-"
+                estado:
+                    item.estado === 0
+                        ? "SOLICITADO"
+                        : item.estado === 1
+                        ? "IMPRESO"
+                        : "TERMINADO",
+                estado_documento: !isNull(item.estado_documento)
+                    ? item.estado_documento == 0
+                        ? "PENDIENTE"
+                        : item.estado_documento == 1
+                        ? "ENVIADO"
+                        : "RECEPCIONADO"
+                    : "-"
             };
         });
 
