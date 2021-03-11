@@ -39,7 +39,7 @@ export const PlanillasManuales = () => {
     useEffect(() => {
         setLoading(true);
         function fetchPlanillas(estado) {
-            Axios.get(`/api/planillas-manuales?tipo=renovaciones_fotocheck&empresa_id=${form.empresa_id}&estado=${estado}&desde=${form.desde}&hasta=${form.hasta}&usuario_id=${usuario.id}`)
+            Axios.get(`/api/planillas-manuales?tipo=renovaciones_fotocheck&empresa_id=${form.empresa_id}&estado=${estado}&desde=${form.desde}&hasta=${form.hasta}&usuario_id=${usuario.id}&motivo_id=${1}`)
                 .then(res => {
                     const _data = res.data.data.map(item => {
                         return {

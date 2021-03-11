@@ -323,6 +323,10 @@ Route::group(['prefix' => 'motivos-fotocheck'], function() {
     Route::get('/', 'MotivosFotocheckController@get');
 });
 
+Route::group(['prefix' => 'motivos-planillas-manuales'], function() {
+    Route::get('/', 'MotivosPlanillasManualesController@get');
+});
+
 Route::group(['prefix' => 'renovacion-fotocheck'], function() {
     Route::get('/', 'RenovacionesFotocheckController@get');
     Route::get('/resumen', 'RenovacionesFotocheckController@getResumen');
@@ -343,6 +347,7 @@ Route::group(['prefix' => 'cortes-renovaciones-fotocheck'], function() {
 
 Route::group(['prefix' => 'planillas-manuales'], function() {
     Route::get('/', 'PlanillasManualesController@get');
+    Route::post('/', 'PlanillasManualesController@create');
     Route::put('/{planilla}', 'PlanillasManualesController@update');
     Route::delete('/{planilla}', 'PlanillasManualesController@delete');
 });

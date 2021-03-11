@@ -29,6 +29,7 @@ import SegurosVida from './containers/SegurosVida';
 import ConsultaUltimaActividad from './containers/ConsultaUltimoDia';
 import RegistroFotocheck from './containers/RegistroFotocheck';
 import RetornoVacaciones from './containers/RetornoVacaciones';
+import PlanillasManuales from './containers/PlanillasManuales';
 
 require("./bootstrap");
 require("./containers/Login");
@@ -134,6 +135,10 @@ const containers = [
     {
         id: 'retorno-vacaciones',
         component: <RetornoVacaciones />
+    },
+    {
+        id: 'planillas-manuales',
+        component: <PlanillasManuales />
     },
 ];
 

@@ -150,6 +150,10 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/', 'Web\RetornoVacacionesController@index');
     });
 
+    Route::group(['prefix' => 'planillas-manuales', 'middleware' => 'module:planillas-manuales'], function() {
+        Route::get('/', 'Web\PlanillasManualesController@index');
+    });
+
     Route::group(['prefix' => 'ficha'], function() {
         Route::get('/{contrato}', 'ContratoController@verFichaIngreso');
         Route::get('/cambio-cuenta/{cuenta}', 'CuentasController@verFichaCuenta');

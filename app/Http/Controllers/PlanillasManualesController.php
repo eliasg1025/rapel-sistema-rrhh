@@ -11,6 +11,7 @@ class PlanillasManualesController extends Controller
     public function get(Request $request)
     {
         $tipoEntidad = $request->get('tipo');
+        $motivoId = $request->get('motivo_id');
         $empresaId = $request->get('empresa_id');
         $estado = $request->get('estado');
         $desde = $request->get('desde');
@@ -24,17 +25,28 @@ class PlanillasManualesController extends Controller
             'empresa_id' => $empresaId,
             'estado' => $estado
         ])
+        ->when($motivoId, function($query) use ($motivoId) {
+            $query->where('motivo_planilla_manual_id', $motivoId);
+        })
         ->when($estado == 1, function($query) use ($desde, $hasta) {
             $query->whereBetween('fecha_planilla', [$desde, $hasta]);
         })
         ->when($rol->name === 'SUPERVISOR', function($query) use ($usuarioId) {
             $query->where('usuario_id', $usuarioId);
         })
+        ->orderBy('fecha_planilla', 'DESC')
         ->get();
 
         return response()->json([
             'message' => 'Data obtenida correctamente',
             'data' => $planillas,
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        return response()->json([
+            'data' => $request->all()
         ]);
     }
 
