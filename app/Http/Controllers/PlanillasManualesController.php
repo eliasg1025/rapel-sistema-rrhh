@@ -56,6 +56,7 @@ class PlanillasManualesController extends Controller
                 $query->where('trabajador_id', $trabajador->id);
             })
             ->orderBy('fecha_planilla', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return response()->json([

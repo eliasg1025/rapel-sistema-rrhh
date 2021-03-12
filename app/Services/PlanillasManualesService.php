@@ -37,9 +37,17 @@ class PlanillasManualesService
             ->first();
 
         if ($existeElMismoDia) {
+            $nombreSolicitante = $existeElMismoDia->usuario->trabajador->apellido_paterno . ' ' . $existeElMismoDia->usuario->trabajador->apellido_materno . ' ' . $existeElMismoDia->usuario->trabajador->nombre;
             return [
                 'error' => true,
-                'message' => 'No se puede registrar a un trabajador dos veces en un periodo de 2 días. Registrado por: {{nombre}} el ' . $existeElMismoDia->fecha_solicitud
+                'message' => 'Ya existe un registros para ese día. Registrado por: ' . $nombreSolicitante . ' el ' . $existeElMismoDia->fecha_solicitud
+            ];
+        }
+
+        if ($horaEntrada === null && $horaSalida === null) {
+            return [
+                'error' => true,
+                'message' => 'Tiene que elegir al menos una hora de entrada o de salida'
             ];
         }
 
