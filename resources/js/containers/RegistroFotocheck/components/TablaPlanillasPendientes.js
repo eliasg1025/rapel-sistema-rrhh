@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Table, Button, notification, Tooltip } from "antd";
-import Modal from "../../Modal";
 import Axios from "axios";
+import moment from 'moment';
+
+import Modal from "../../Modal";
 
 export const TablaPlanillasPendientes = ({
     data,

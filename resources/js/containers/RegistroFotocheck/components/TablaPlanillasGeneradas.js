@@ -1,6 +1,7 @@
 import React from "react";
-import { Table, Tooltip } from 'antd';
-import Axios from 'axios';
+import { Table, Tooltip } from "antd";
+import Axios from "axios";
+import moment from 'moment';
 
 export const TablaPlanillasGeneradas = ({
     data,
@@ -9,10 +10,17 @@ export const TablaPlanillasGeneradas = ({
     setReload,
     handleDelete
 }) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
+
     const columns = [
         {
-            title: 'Fecha',
-            dataIndex: 'fecha_planilla'
+            title: "Fecha Planilla",
+            dataIndex: "fecha_planilla"
+        },
+        {
+            title: 'Fecha Hora Cargado',
+            dataIndex: 'created_at',
+            render: item => moment(item).format('YYYY-MM-DD hh:mm:ss').toString()
         },
         {
             title: "DNI",
@@ -30,51 +38,70 @@ export const TablaPlanillasGeneradas = ({
                 item?.nombre
         },
         {
-            title: 'Hora Entrada',
-            dataIndex: 'hora_entrada'
+            title: "Hora Entrada",
+            dataIndex: "hora_entrada"
         },
         {
-            title: 'Hora Salida',
-            dataIndex: 'hora_salida'
+            title: "Hora Salida",
+            dataIndex: "hora_salida"
         },
         {
-            title: 'Cargado por',
-            dataIndex: 'usuario',
-            render: item => `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
+            title: "Cargado por",
+            dataIndex: "usuario",
+            render: item =>
+                `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
         },
         {
             title: "Acciones",
             dataIndex: "id",
-            render: (_, record) => (
-                <Tooltip title="Eliminar Registro">
-                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(record.id)}>
-                        <i className="fas fa-trash"></i>
-                    </button>
-                </Tooltip>
-            )
+            render: (_, record) => {
+                return (
+                    <>
+                        <div className="btn-group">
+                            {(usuario.modulo_rol.tipo.name === "ADMINISTRADOR") || moment(record.fecha_planilla).isSameOrAfter(moment(new Date())) && (
+                                <Tooltip title="Eliminar Registro">
+                                    <button
+                                        className="btn btn-danger btn-sm"
+                                        onClick={() => handleDelete(record.id)}
+                                    >
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </Tooltip>
+                            )}
+                        </div>
+                    </>
+                );
+            }
         }
     ];
 
     const handleExportar = () => {
         const headings = [
+            "EMPRESA",
             "FECHA",
             "RUT",
             "TRABAJADOR",
             "HORA ENTRADA",
             "HORA SALIDA",
             "PATENTE",
-            "MOTIVO",
+            "MOTIVO"
         ];
 
         const d = data.map(item => {
             return {
+                empresa: item.empresa.name,
                 fecha_solicitud: item.fecha_planilla,
                 dni: item.trabajador.rut,
-                trabajador: item?.trabajador.apellido_paterno + " " + item?.trabajador.apellido_materno + " " + item?.trabajador.nombre,
+                trabajador:
+                    item?.trabajador.apellido_paterno +
+                    " " +
+                    item?.trabajador.apellido_materno +
+                    " " +
+                    item?.trabajador.nombre,
                 hora_entrada: item.hora_entrada,
                 hora_salida: item.hora_salida,
                 patente: "",
-                motivo: "",
+                motivo: item.motivo.descripcion,
             };
         });
 
@@ -93,7 +120,7 @@ export const TablaPlanillasGeneradas = ({
             link.download = "PLANILLAS-MANUALES.xlsx";
             link.click();
         });
-    }
+    };
 
     return (
         <>
@@ -106,7 +133,8 @@ export const TablaPlanillasGeneradas = ({
                     <i className="fas fa-file-excel" /> Exportar
                 </button>
             </b>
-            <br /><br />
+            <br />
+            <br />
             <Table
                 size="small"
                 bordered

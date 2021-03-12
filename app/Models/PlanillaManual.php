@@ -21,4 +21,12 @@ class PlanillaManual extends Model
     public function usuario() {
         return $this->belongsTo(Usuario::class, 'usuario_id');
     }
+
+    public function motivo() {
+        return $this->belongsTo(MotivoPlanillaManual::class, 'motivo_planilla_manual_id');
+    }
+
+    public function empresa() {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
+    }
 }

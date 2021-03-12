@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { notification } from 'antd';
 import Axios from 'axios';
 
@@ -9,7 +9,7 @@ const initialState = {
     empresa_id: '',
     regimen_id: '',
     zona_labor_id: '',
-    motivo_id: '',
+    motivo_planilla_manual_id: '',
     fecha_planilla: '',
     hora_entrada: '',
     hora_salida: '',
@@ -23,6 +23,7 @@ export const Inicio = () => {
     const [contratoActivo, setContratoActivo] = useState(null);
     const [form, setForm] = useState({...initialState});
     const [submiting, setSubmiting] = useState(false);
+    const [reload, setReload] = useState(false);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -35,7 +36,7 @@ export const Inicio = () => {
         })
             .then(res => {
                 const data = res.data.data;
-                setReloadDatos(!reloadDatos);
+                setReload(!reload);
 
                 setForm({ ...initialState });
                 setTrabajador(null);
@@ -46,11 +47,29 @@ export const Inicio = () => {
                 });
             })
             .catch(err => {
+                console.log(err);
                 notification['error']({
                     message: err.response.data.message
                 });
             })
             .finally(() => setSubmiting(false));
+    }
+
+    const handleEliminar = (id) => {
+        Axios.delete(`/api/planillas-manuales/${id}`)
+            .then(res => {
+                notification['success']({
+                    message: res.data.message,
+                });
+
+                setReload(!reload);
+            })
+            .catch(err => {
+                console.log(err);
+                notification['error']({
+                    message: 'Error al eliminar registro'
+                });
+        })
     }
 
     return (
@@ -72,7 +91,11 @@ export const Inicio = () => {
                 submiting={submiting}
             />
             <hr />
-            <TablaRegistros />
+            <TablaRegistros
+                reload={reload}
+                setReload={setReload}
+                handleEliminar={handleEliminar}
+            />
         </>
     );
 }

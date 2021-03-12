@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlanillaManualPost;
 use App\Models\PlanillaManual;
+use App\Models\Trabajador;
 use App\Models\Usuario;
+use App\Services\PlanillasManualesService;
 use Illuminate\Http\Request;
 
 class PlanillasManualesController extends Controller
 {
+    public PlanillasManualesService $planillasService;
+
+    public function __construct()
+    {
+        $this->planillasService = new PlanillasManualesService();
+    }
+
     public function get(Request $request)
     {
         $tipoEntidad = $request->get('tipo');
@@ -17,25 +27,36 @@ class PlanillasManualesController extends Controller
         $desde = $request->get('desde');
         $hasta = $request->get('hasta');
         $usuarioId = $request->get('usuario_id');
+        $rut = $request->get('rut');
 
         $rol = (Usuario::find($usuarioId))->getRol('registro-fotochecks');
 
-        $planillas = PlanillaManual::with('trabajador', 'usuario.trabajador')->where([
-            'tipo_entidad' => $tipoEntidad,
-            'empresa_id' => $empresaId,
-            'estado' => $estado
-        ])
-        ->when($motivoId, function($query) use ($motivoId) {
-            $query->where('motivo_planilla_manual_id', $motivoId);
-        })
-        ->when($estado == 1, function($query) use ($desde, $hasta) {
-            $query->whereBetween('fecha_planilla', [$desde, $hasta]);
-        })
-        ->when($rol->name === 'SUPERVISOR', function($query) use ($usuarioId) {
-            $query->where('usuario_id', $usuarioId);
-        })
-        ->orderBy('fecha_planilla', 'DESC')
-        ->get();
+        $trabajador = Trabajador::where('rut', $rut)->first();
+
+        $planillas = PlanillaManual::with('trabajador', 'usuario.trabajador', 'motivo', 'empresa')
+            ->where([
+                'estado' => $estado
+            ])
+            ->when($tipoEntidad, function($query) use ($tipoEntidad) {
+                $query->where('tipo_entidad', $tipoEntidad);
+            })
+            ->when($empresaId, function($query) use ($empresaId) {
+                $query->where('empresa_id', $empresaId);
+            })
+            ->when($motivoId, function($query) use ($motivoId) {
+                $query->where('motivo_planilla_manual_id', $motivoId);
+            })
+            ->when($estado == 1, function($query) use ($desde, $hasta) {
+                $query->whereBetween('fecha_planilla', [$desde, $hasta]);
+            })
+            ->when($rol->name === 'SUPERVISOR', function($query) use ($usuarioId) {
+                $query->where('usuario_id', $usuarioId);
+            })
+            ->when(!is_null($trabajador), function($query) use ($trabajador) {
+                $query->where('trabajador_id', $trabajador->id);
+            })
+            ->orderBy('fecha_planilla', 'DESC')
+            ->get();
 
         return response()->json([
             'message' => 'Data obtenida correctamente',
@@ -43,11 +64,39 @@ class PlanillasManualesController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(PlanillaManualPost $request)
     {
-        return response()->json([
-            'data' => $request->all()
-        ]);
+        try {
+            $result = $this->planillasService->create(
+                $request->trabajador,
+                $request->regimen_id,
+                $request->empresa_id,
+                $request->zona_labor_id,
+                $request->fecha_planilla,
+                $request->hora_entrada,
+                $request->hora_salida,
+                $request->motivo_planilla_manual_id,
+                $request->usuario_id
+            );
+
+            if (isset($result['error'])) {
+                return response()->json([
+                    'message' => $result['message']
+                ], 400);
+            }
+
+            return response()->json([
+                'message' => 'Registro ingresado correctamente',
+                'data' => $result
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al crear registro',
+                'data' => [
+                    'error' => $e->getMessage()
+                ]
+            ], 400);
+        }
     }
 
     public function update(PlanillaManual $planilla, Request $request)

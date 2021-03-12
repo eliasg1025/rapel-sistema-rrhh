@@ -206,7 +206,7 @@ export const Datos = ({
                         Motivo:
                         <br />
                         <Select
-                            value={form.motivo_id}
+                            value={form.motivo_planilla_manual_id}
                             showSearch
                             size="small"
                             optionFilterProp="children"
@@ -215,7 +215,7 @@ export const Datos = ({
                                     .toLowerCase()
                                     .indexOf(input.toLowerCase()) >= 0
                             }
-                            onChange={e => setForm({ ...form, motivo_id: e })}
+                            onChange={e => setForm({ ...form, motivo_planilla_manual_id: e })}
                             style={{
                                 width: "100%"
                             }}

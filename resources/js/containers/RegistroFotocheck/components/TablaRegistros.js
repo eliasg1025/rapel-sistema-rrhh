@@ -20,7 +20,6 @@ export const TablaRegistros = ({
         {
             title: "Empresa",
             dataIndex: "empresa",
-            width: 60,
             render: item => item.shortname
         },
         {
@@ -34,13 +33,11 @@ export const TablaRegistros = ({
         {
             title: "DNI",
             dataIndex: "trabajador",
-            width: 70,
             render: item => item.rut
         },
         {
             title: "Apellidos y Nombres",
             dataIndex: "trabajador",
-            ellipsis: true,
             render: item =>
                 item.apellido_paterno +
                 " " +
@@ -51,19 +48,16 @@ export const TablaRegistros = ({
         {
             title: "Régimen",
             dataIndex: "regimen",
-            ellipsis: true,
             render: item => item.name
         },
         {
             title: "Fundo",
             dataIndex: "zona_labor",
-            ellipsis: true,
             render: item => item.name
         },
         {
             title: "Solicitante",
             dataIndex: "usuario",
-            ellipsis: true,
             render: item =>
                 item.trabajador.apellido_paterno +
                 " " +
@@ -74,31 +68,25 @@ export const TablaRegistros = ({
         {
             title: "Motivo",
             dataIndex: "motivo",
-            ellipsis: true,
             render: item => item.descripcion
         },
         {
             title: "Costo",
             dataIndex: "motivo",
-            width: 50,
             render: item => item.costo
         },
         {
             title: "Color",
             dataIndex: "color",
-            width: 70,
             render: item => item.color
         },
         {
             title: "Observación",
-            ellipsis: true,
             dataIndex: "observacion"
         },
         {
             title: "Estado",
             dataIndex: "estado",
-            align: "center",
-            width: 130,
             render: item =>
                 item === 0 ? (
                     <Tag color="default">SOLICITADO</Tag>
@@ -111,9 +99,6 @@ export const TablaRegistros = ({
         {
             title: "Estado Documento",
             dataIndex: "estado_documento",
-            ellipsis: true,
-            align: "center",
-            width: 130,
             render: item =>
                 !isNull(item) ? (
                     item == 0 ? (
@@ -372,7 +357,7 @@ export const TablaRegistros = ({
                     }) */
                 }}
                 size="small"
-                scroll={{ x: 1200 }}
+                scroll={{ x: 1000 }}
                 bordered
                 columns={columns}
                 dataSource={data}
