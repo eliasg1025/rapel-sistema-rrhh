@@ -25,7 +25,7 @@ class ReniecService
     public function getPersona($dni, $imagenes=1)
     {
         $path = $dni . '/' . $imagenes;
-        $response = $this->sendRequest('GET', $path);
+        $response = $this->sendRequest('POST', $path);
 
         $content = json_decode($response['content']);
         if ($content->success) {
@@ -41,16 +41,25 @@ class ReniecService
         $estado = $data->estado_civil == "" ? "SOLTERO" : $data->estado_civil;
         $estado_civil_code = DB::table('estado_civiles')->where('name', $estado)->first()->code;
 
-        if ($data->departamento == "") {
+        if ($data->departamento == "")
+        {
             $provincia_id = 67; // CALLAO
-        } else {
-            if ($data->departamento == "CUSCO") { // CUZCO
+        }
+        else
+        {
+            if ($data->departamento == "CUSCO") // CUZCO
+            {
                 $departamento_id = 8;
-            } elseif ($data->departamento == "AMAZONAS") { // AMAMZONAS
+            }
+            elseif ($data->departamento == "AMAZONAS") // AMAMZONAS
+            {
                 $departamento_id = 1;
-            } else {
+            }
+            else
+            {
                 $departamento_id = DB::table('departamentos')->where('name', $data->departamento)->first()->id;
             }
+
             $provincia_id = DB::table('provincias')->where([
                 'name' => $data->provincia,
                 'departamento_id' => $departamento_id
@@ -65,8 +74,8 @@ class ReniecService
         return [
             'rut' => $data->dni,
             'nombre' => str_replace("Ãâ", "Ñ", $data->nombres),
-            'apellido_paterno' => str_replace("Ãâ", "Ñ", $data->paterno),
-            'apellido_materno' => str_replace("Ãâ", "Ñ", $data->materno),
+            'apellido_paterno' => str_replace("Ãâ", "Ñ", $data->apellido_paterno),
+            'apellido_materno' => str_replace("Ãâ", "Ñ", $data->apellido_materno),
             'direccion' => strtoupper($data->direccion) . " - " . $data->distrito,
             'fecha_nacimiento' => Carbon::createFromFormat('d/m/Y', $data->fecha_nacimiento)->format('Y-m-d'),
             'sexo' => $data->sexo === '1' ? 'M' : 'F',

@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Table, DatePicker, Input, Tooltip, Modal } from 'antd';
+import { Table, DatePicker, Input, Tooltip, Modal, Select, Button, notification } from 'antd';
 import Axios from 'axios';
 import moment from 'moment';
+
+import ModalCustom from '../../Modal';
 
 export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
 
     const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
 
+    const initialState = {
+        id: '',
+        hora_entrada: '',
+        hora_salida: '',
+        motivo_planilla_manual_id: '',
+    };
+
+    const [submiting, setSubmiting] = useState(false);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
+    const [viewModal, setViewModal] = useState(false);
+    const [activeRecord, setActiveRecord] = useState(null);
+
+    const [form, setForm] = useState(initialState);
+    const [motivos, setMotivos] = useState([]);
 
     const [filtro, setFiltro] = useState({
         desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
@@ -60,8 +75,16 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
             render: (_, record) => {
                 return (
                     <>
-                        {((usuario.modulo_rol.tipo.name === "ADMINISTRADOR") || moment(record.fecha_planilla).isSameOrBefore(moment())) && (
+                        {((usuario.modulo_rol.tipo.name === "ADMINISTRADOR") || moment(record.fecha_planilla).add(1, 'days').isSameOrAfter(moment(new Date()))) && (
                             <div className="btn-group">
+                                <Tooltip title="Editar Registro">
+                                    <button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => handleEditar(record)}
+                                    >
+                                        <i className="fas fa-edit"></i>
+                                    </button>
+                                </Tooltip>
                                 <Tooltip title="Eliminar Registro">
                                     <button
                                         className="btn btn-sm btn-danger"
@@ -134,6 +157,57 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
             onOk: () => handleEliminar(record.id)
         });
     };
+
+    const handleEditar = record => {
+        setActiveRecord(null);
+        setViewModal(true);
+        setActiveRecord(record);
+    }
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        setSubmiting(true);
+        Axios.put(`/api/planillas-manuales/${form.id}`, {
+            hora_entrada: form.hora_entrada,
+            hora_salida: form.hora_salida,
+            motivo_planilla_manual_id: form.motivo_planilla_manual_id
+        })
+            .then(res => {
+                notification['success']({
+                    message: res.data.message
+                });
+
+                setReload(!reload);
+            })
+            .catch(err => {
+                console.log(err);
+
+                notification['error']({
+                    message: err.response.data.message
+                });
+            })
+            .finally(() => setSubmiting(false));
+    }
+
+    useEffect(() => {
+        function fetchMotivosFotocheck() {
+            Axios.get("/api/motivos-planillas-manuales")
+                .then(res => setMotivos(res.data.data))
+                .catch(err => {});
+        }
+
+        fetchMotivosFotocheck();
+    }, []);
+
+    useEffect(() => {
+        setForm({
+            id: activeRecord?.id || '',
+            hora_entrada: activeRecord?.hora_entrada ? activeRecord?.hora_entrada : undefined,
+            hora_salida: activeRecord?.hora_salida ? activeRecord?.hora_salida : undefined,
+            motivo_planilla_manual_id: activeRecord?.motivo_planilla_manual_id
+        });
+    }, [activeRecord]);
 
     useEffect(() => {
         const fetchPlanillas = () => {
@@ -212,6 +286,91 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
                 dataSource={data}
                 loading={loading}
             />
+            <ModalCustom
+                title="Editar Registro"
+                isVisible={viewModal}
+                setIsVisible={setViewModal}
+                width={700}
+            >
+                <form onSubmit={handleSubmit}>
+                    <div className="row">
+                        <div className="col-md-4">
+                            RUT:<br />
+                            <input
+                                className="form-control"
+                                value={activeRecord?.trabajador.rut}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-md-8">
+                            Trabajador:<br />
+                            <input
+                                className="form-control"
+                                value={`${activeRecord?.trabajador.apellido_paterno} ${activeRecord?.trabajador.apellido_materno} ${activeRecord?.trabajador.nombre}`}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            Fecha Planilla:<br />
+                            <input
+                                className="form-control"
+                                value={`${activeRecord?.fecha_planilla}`}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            Hora Entrada:<br />
+                            <input
+                                className="form-control"
+                                value={form.hora_entrada || ''}
+                                onChange={e => setForm({ ...form, hora_entrada: e.target.value })}
+                                type="time"
+                            />
+                        </div>
+                        <div className="col-md-4">
+                            Hora Salida:<br />
+                            <input
+                                className="form-control"
+                                value={form.hora_salida || ''}
+                                onChange={e => setForm({ ...form, hora_salida: e.target.value })}
+                                type="time"
+                            />
+                        </div>
+                        <div className="col-md-8">
+                            Motivo: <br />
+                            <Select
+                                value={form.motivo_planilla_manual_id}
+                                showSearch
+                                size="small"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                                onChange={e => setForm({ ...form, motivo_planilla_manual_id: e })}
+                                style={{
+                                    width: "100%"
+                                }}
+                            >
+                                {motivos.map(e => (
+                                    <Select.Option value={e.id} key={e.id}>
+                                        {`${e.id} - ${e.descripcion}`}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+                    <br />
+                    <div className="row">
+                        <div className="col-md-12">
+                            <Button type="primary" htmlType="submit" loading={submiting} block>
+                                Actualizar
+                            </Button>
+                        </div>
+                    </div>
+                </form>
+            </ModalCustom>
         </>
     );
 }

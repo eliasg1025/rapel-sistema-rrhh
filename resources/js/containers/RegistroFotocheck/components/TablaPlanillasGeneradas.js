@@ -58,7 +58,7 @@ export const TablaPlanillasGeneradas = ({
                 return (
                     <>
                         <div className="btn-group">
-                            {(usuario.modulo_rol.tipo.name === "ADMINISTRADOR") || moment(record.fecha_planilla).isSameOrAfter(moment(new Date())) && (
+                            {((usuario.modulo_rol.tipo.name === "ADMINISTRADOR") || moment(record.fecha_planilla).add(1, 'days').isSameOrAfter(moment(new Date()))) && (
                                 <Tooltip title="Eliminar Registro">
                                     <button
                                         className="btn btn-danger btn-sm"

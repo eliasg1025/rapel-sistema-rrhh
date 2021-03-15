@@ -105,16 +105,23 @@ class PlanillasManualesController extends Controller
         try {
             $rows = $request->get('fechas');
 
-            foreach ($rows as $row) {
-                $newPlanilla = $planilla->replicate();
-                $newPlanilla->fecha_planilla = $row['fecha_planilla'];
-                $newPlanilla->hora_entrada = $row['hora_entrada'];
-                $newPlanilla->hora_salida = $row['hora_salida'];
-                $newPlanilla->estado = 1;
-                $newPlanilla->save();
-            }
+            if ($rows) {
+                foreach ($rows as $row) {
+                    $newPlanilla = $planilla->replicate();
+                    $newPlanilla->fecha_planilla = $row['fecha_planilla'];
+                    $newPlanilla->hora_entrada = $row['hora_entrada'];
+                    $newPlanilla->hora_salida = $row['hora_salida'];
+                    $newPlanilla->estado = 1;
+                    $newPlanilla->save();
+                }
 
-            $planilla->delete();
+                $planilla->delete();
+            } else {
+                $planilla->hora_entrada = $request->get('hora_entrada');
+                $planilla->hora_salida = $request->get('hora_salida');
+                $planilla->motivo_planilla_manual_id = $request->get('motivo_planilla_manual_id');
+                $planilla->save();
+            }
 
             return response()->json([
                 'message' => 'Registro actualizado correctamente',
