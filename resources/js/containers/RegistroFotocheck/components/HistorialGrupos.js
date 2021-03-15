@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Tag, Table, Tooltip, Modal as ModalAntd, notification } from "antd";
+import { Card, Tag, Table, Tooltip, Modal as ModalAntd, notification, Select } from "antd";
 import Axios from "axios";
 import moment from "moment";
 
@@ -12,6 +12,17 @@ export const HistorialGrupos = () => {
     const [viewModal, setViewModal] = useState(false);
     const [activeRecord, setActiveRecord] = useState(null);
     const [reload, setReload] = useState(false);
+
+    const [filtro, setFiltro] = useState({
+        estado_documento: 100,
+    });
+
+    const estados = [
+        { id: 100, name: 'TODOS' },
+        { id: 0, name: 'PENDIENTE' },
+        { id: 1, name: 'ENVIADO' },
+        { id: 2, name: 'RECEPCIONADO' },
+    ];
 
     useEffect(() => {
         Axios.get("/api/cortes-renovaciones-fotocheck")
@@ -27,13 +38,17 @@ export const HistorialGrupos = () => {
         if (activeRecord !== null) {
             Axios.get(`/api/cortes-renovaciones-fotocheck/${activeRecord.id}/registros`)
                 .then(res => {
-                    setRegistros(res.data.data);
+                    let regs = res.data.data;
+                    if (filtro.estado_documento !== 100) {
+                        regs = regs.filter(registro => registro.estado_documento === filtro.estado_documento);
+                    }
+                    setRegistros(regs);
                 })
                 .catch(err => {
                     console.log(err);
                 });
         }
-    }, [reload, activeRecord])
+    }, [reload, activeRecord, filtro])
 
     const handleExportar = (record) => {
         const headings = [
@@ -106,6 +121,7 @@ export const HistorialGrupos = () => {
 
     const handleVerRegistros = (record) => {
         setViewModal(true);
+        setFiltro({ estado_documento: 100 });
         setActiveRecord(record);
     }
 
@@ -202,9 +218,37 @@ export const HistorialGrupos = () => {
                 width={1000}
                 title={"Registros: GRUPO " + activeRecord?.id}
             >
+                <div className="row">
+                    <div className="col-md-4">
+                        Estado Documento:<br />
+                        <Select
+                            value={filtro.estado_documento}
+                            size="small"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            onChange={e => setFiltro({ ...filtro, estado_documento: e })}
+                            style={{
+                                width: "100%"
+                            }}
+                        >
+                            {estados.map(e => (
+                                <Select.Option value={e.id} key={e.id}>
+                                    {e.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                </div>
+                <br />
                 <Table
                     bordered
                     size="small"
+                    pagination={{ pageSize: 8 }}
                     dataSource={registros.map(registro => {
                         return {
                             ...registro,
@@ -216,7 +260,6 @@ export const HistorialGrupos = () => {
                         {
                             title: "Empresa",
                             dataIndex: "empresa",
-                            width: 60,
                             render: item => item.shortname
                         },
                         {
@@ -236,7 +279,7 @@ export const HistorialGrupos = () => {
                         {
                             title: "Apellidos y Nombres",
                             dataIndex: "trabajador",
-                            ellipsis: true,
+                            width: 150,
                             render: item =>
                                 item.apellido_paterno +
                                 " " +
@@ -247,13 +290,12 @@ export const HistorialGrupos = () => {
                         {
                             title: "Fundo",
                             dataIndex: "zona_labor",
-                            ellipsis: true,
                             render: item => item.name
                         },
                         {
                             title: "Solicitante",
                             dataIndex: "usuario",
-                            ellipsis: true,
+                            width: 150,
                             render: item =>
                                 item.trabajador.apellido_paterno +
                                 " " +
@@ -267,12 +309,6 @@ export const HistorialGrupos = () => {
                             ellipsis: true,
                             render: item => item.descripcion
                         }, */
-                        {
-                            title: "Color",
-                            dataIndex: "color",
-                            width: 70,
-                            render: item => item.color
-                        },
                         {
                             title: "Observación",
                             ellipsis: true,

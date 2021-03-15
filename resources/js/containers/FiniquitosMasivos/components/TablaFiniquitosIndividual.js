@@ -187,6 +187,11 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             dataIndex: 'fecha_finiquito',
         },
         {
+            title: 'Fecha Cargado',
+            dataIndex: 'created_at',
+            render: item => moment(item).format('YYYY-MM-DD hh:mm:ss')
+        },
+        {
             title: 'Zona Labor',
             dataIndex: 'zona_labor',
         },
