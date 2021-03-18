@@ -114,12 +114,16 @@ class Trabajador extends Model
                     DB::raw('CAST(c.FechaTerminoC as date) fecha_termino_contrato'),
                     DB::raw('CAST(c.IdRegimen as int) regimen_id'),
                     DB::raw('CAST(c.IdEmpresa as int) empresa_id'),
+                    DB::raw('CAST(c.FechaTermino as date) fecha_termino'),
                     'o.IdOficio as oficio_id',
                     'o.Descripcion as oficio_name',
                     'z.IdZona as zona_labor_id',
                     'z.Nombre as zona_name',
                     'c.Jornal as jornal',
-                    'c.IdEmpresa as empresa_id'
+                    'c.IdEmpresa as empresa_id',
+                    'i.IdArticulo as articulo_id',
+                    'i.IdInciso as inciso_id',
+                    'i.Texto as descripcion_inciso'
                 )
                 ->join('Trabajador as t', [
                     't.IdEmpresa' => 'c.IdEmpresa',
@@ -133,15 +137,21 @@ class Trabajador extends Model
                     'z.IdEmpresa' => 't.IdEmpresa',
                     'z.IdZona' => 't.IdZonaLabores'
                 ])
+                ->leftJoin('Inciso as i', [
+                    'i.IdArticulo' => 'c.IdArticulo',
+                    'i.IdInciso' => 'c.IdInciso'
+                ])
                 ->where('c.IndicadorVigencia', 1)
-                ->whereNull('c.FechaTermino')
+                ->when($access === false, function($query) {
+                    $query->whereNull('c.FechaTermino');
+                })
                 ->where('t.RutTrabajador', $rut)
                 ->whereIn('t.idEmpresa', [9, 14])
                 ->first();
 
             if (!$trabajador) {
                 return [
-                    'message' => 'RUT no encontrado',
+                    'message' => 'Trabajador no encontrado o no apto para cesar',
                     'data'  => [
                         'rut' => $rut,
                     ],
@@ -305,6 +315,22 @@ class Trabajador extends Model
                         'message' => 'Trabajador Obtenido. EMPLEADO AGRARIO',
                         'data' => $trabajador,
                     ];
+                }
+
+                /**
+                 * Evaluar caso de cese en caso tenga -> FechaTermino !== NULL
+                 */
+                if (!is_null($trabajador->fecha_termino)) {
+                    if (
+                        ($trabajador->articulo_id == 1 && (
+                            $trabajador->inciso_id == 10 || $trabajador->inciso_id == 12 || $trabajador->inciso_id == 13
+                        ))
+                    ) {
+                        return [
+                            'message' => 'Trabajador Obtenido. Advertencia: Trabajador cesado por ABANDONO ' . $trabajador->fecha_termino,
+                            'data' => $trabajador,
+                        ];
+                    }
                 }
             }
 

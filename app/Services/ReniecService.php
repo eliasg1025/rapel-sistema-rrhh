@@ -24,10 +24,12 @@ class ReniecService
 
     public function getPersona($dni, $imagenes=1)
     {
-        $path = $dni . '/' . $imagenes;
-        $response = $this->sendRequest('POST', $path);
+        // $path = $dni . '/' . $imagenes;
+        $path = '';
+        $response = $this->sendRequest('POST', $path, ['dni' => $dni]);
 
         $content = json_decode($response['content']);
+        dd($content);
         if ($content->success) {
             $result = $content->result;
             return $this->formatData($result);
