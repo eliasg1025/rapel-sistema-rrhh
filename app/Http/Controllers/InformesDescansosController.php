@@ -213,7 +213,8 @@ class InformesDescansosController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView('documents.descanso-medico.index', $data);
 
             $filename = $informe->informe . '.pdf';

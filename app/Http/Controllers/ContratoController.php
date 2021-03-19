@@ -47,7 +47,8 @@ class ContratoController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView($view, $data);
 
             $filename = $trabajador->apellido_paterno . '-' . $trabajador->apellido_materno . '-' . $trabajador->rut . '-FICHA.pdf';

@@ -73,7 +73,8 @@ class EleccionAfpController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView($view, $data);
 
             $filename = $eleccion_afp->trabajador->apellido_paterno . '-' . $eleccion_afp->trabajador->apellido_materno . '-' . $eleccion_afp->trabajador->rut . '-' . $eleccion_afp->empresa->nombre_corto . '-ELECCION-AFP.pdf';

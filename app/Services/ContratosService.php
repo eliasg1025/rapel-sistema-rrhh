@@ -88,7 +88,8 @@ class ContratosService
             ];
 
             $content = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView($view, $data)->output();
 
             $filename = $contrato->fecha_inicio . '/' . time() . '-' . $trabajador->nombre_archivo  .'-CONTRATO.pdf';

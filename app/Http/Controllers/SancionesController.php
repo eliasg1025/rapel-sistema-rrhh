@@ -83,7 +83,8 @@ class SancionesController extends Controller
             $template = 'documents.' . strtolower($documentType) . '.index';
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView($template, $data);
 
             $filename = $sancion->trabajador->apellido_paterno . '-' . $sancion->trabajador->apellido_materno . '-' . $sancion->trabajador->rut . '-' . $sancion->empresa->nombre_corto . '-' . $sancion->documento . '.pdf';

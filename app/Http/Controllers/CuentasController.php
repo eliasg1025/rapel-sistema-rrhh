@@ -76,7 +76,8 @@ class CuentasController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView($view, $data);
 
             $filename = $cuenta->trabajador->apellido_paterno . '-' . $cuenta->trabajador->apellido_materno . '-' . $cuenta->trabajador->rut . '-' . $cuenta->empresa->nombre_corto . '-CAMBIO-CUENTA.pdf';

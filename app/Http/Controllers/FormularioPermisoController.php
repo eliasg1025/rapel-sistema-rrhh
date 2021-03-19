@@ -206,7 +206,8 @@ class FormularioPermisoController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView('documents.formulario-permiso.index', $data);
 
             $filename = $formularioPermiso->trabajador->apellido_paterno . '-' . $formularioPermiso->trabajador->apellido_materno . '-' . $formularioPermiso->trabajador->rut . '-' . $formularioPermiso->empresa->nombre_corto . '-FORMULARIO-PERMISO.pdf';
