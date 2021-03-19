@@ -183,6 +183,6 @@ Route::get('/test-pusher', function() {
     return 'hi';
 });
 
-Route::get('/test', function() {
+/* Route::get('/test', function() {
     return md5(sha1("yl.1234"));
-});
+}); */

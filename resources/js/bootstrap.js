@@ -30,10 +30,10 @@ window.Swal = require('sweetalert2');
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
+window.Pusher = require('pusher-js');
 
 /* import Echo from 'laravel-echo';
 
-window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',

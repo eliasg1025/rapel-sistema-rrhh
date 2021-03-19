@@ -24,18 +24,21 @@ class ReniecService
 
     public function getPersona($dni, $imagenes=1)
     {
-        // $path = $dni . '/' . $imagenes;
-        $path = '';
-        $response = $this->sendRequest('POST', $path, ['dni' => $dni]);
+        try {
+            // $path = $dni . '/' . $imagenes;
+            $path = '';
+            $response = $this->sendRequest('POST', $path, ['dni' => $dni]);
 
-        $content = json_decode($response['content']);
-        dd($content);
-        if ($content->success) {
-            $result = $content->result;
-            return $this->formatData($result);
+            $content = json_decode($response['content']);
+            if ($content->success) {
+                $result = $content->result;
+                return $this->formatData($result);
+            }
+
+            return null;
+        } catch (\Exception $e) {
+            return null;
         }
-
-        return null;
     }
 
     private function formatData($data)
