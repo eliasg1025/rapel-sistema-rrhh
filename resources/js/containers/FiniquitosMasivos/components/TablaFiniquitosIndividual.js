@@ -165,7 +165,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     }
 
     useEffect(() => {
-        if (filtro.rut.length === 0 || filtro.rut.length >= 8) {
+        if (filtro.rut.length === 0 || filtro.rut.length >= 7) {
             getFiniquitos();
         }
     }, [reload, filtro]);
