@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PlanillaManualPost;
+use App\Models\MotivoPlanillaManual;
 use App\Models\PlanillaManual;
 use App\Models\Trabajador;
 use App\Models\Usuario;
@@ -59,7 +60,20 @@ class PlanillasManualesController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $planillas->transform(function($item) {
+
+        $motivosSancionables = MotivoPlanillaManual::where('sancionable', 1)->get()->toArray();
+        $motivosSancionablesId = array_map(function ($motivo) {
+            return $motivo['id'];
+        }, $motivosSancionables);
+
+        $planillas->transform(function($item) use ($motivosSancionablesId) {
+            $esMotivoSancionable = in_array($item->motivo_planilla_manual_id, $motivosSancionablesId);
+            if ($esMotivoSancionable) {
+                $item->cantidad_registros = PlanillaManual::where([
+                    'trabajador_id' => $item->trabajador_id,
+                ])->whereIn('motivo_planilla_manual_id', $motivosSancionablesId)
+                ->count();
+            }
             return $item;
         });
 
