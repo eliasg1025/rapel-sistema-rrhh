@@ -14,6 +14,8 @@ export const TablaRegistros = ({
     handleEliminar,
     handleGenerarPlanillaManual
 }) => {
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem("data"));
+
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     const columns = [
@@ -138,7 +140,21 @@ export const TablaRegistros = ({
                                     <i className="fas fa-check"></i>
                                 </button>
                             </Tooltip>
-                        )}
+                        )
+                    }
+                    {!isNull(record.estado_documento) &&
+                        (record.estado_documento === 0 || record.estado_documento === 1) &&
+                        usuario.modulo_rol.tipo.name === "ADMINISTRADOR" && (
+                            <Tooltip title="Marcar DOCUMENTO como RECEPCIONADO">
+                                <button
+                                    className="btn btn-sm btn-success"
+                                    onClick={() => confirmCambiarEstadoRecepcionado(record)}
+                                >
+                                    <i className="fas fa-check"></i>
+                                </button>
+                            </Tooltip>
+                        )
+                    }
                     {record.estado === 0 && (
                         <>
                             <Tooltip title="Eliminar Registro">
@@ -261,6 +277,16 @@ export const TablaRegistros = ({
             okText: "Si, MARCAR COMO ENVIADO",
             cancelText: "Cancelar",
             onOk: () => handleCambiarEstado(record.id, 1)
+        });
+    };
+
+    const confirmCambiarEstadoRecepcionado = record => {
+        Modal.confirm({
+            title: "Marcar Recepcionado",
+            content: "¿Desea marcar este registro como recepcionado?",
+            okText: "Si, MARCAR COMO RECEPCIONADO",
+            cancelText: "Cancelar",
+            onOk: () => handleCambiarEstado(record.id, 2)
         });
     };
 

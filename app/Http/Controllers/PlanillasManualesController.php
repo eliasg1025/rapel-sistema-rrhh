@@ -59,6 +59,10 @@ class PlanillasManualesController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
+        $planillas->transform(function($item) {
+            return $item;
+        });
+
         return response()->json([
             'message' => 'Data obtenida correctamente',
             'data' => $planillas,

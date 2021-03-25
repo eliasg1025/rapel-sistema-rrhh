@@ -60,6 +60,10 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
             dataIndex: 'hora_salida'
         },
         {
+            title: '# Registros',
+            dataIndex: 'cantidad_registros'
+        },
+        {
             title: 'Motivo',
             dataIndex: 'motivo',
             render: item => item.descripcion
