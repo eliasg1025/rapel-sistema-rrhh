@@ -97,6 +97,8 @@ class DocumentosTuReciboController extends Controller
             foreach ($contents_arr as $key => $value) {
                 $data = str_getcsv($value, "\t");
 
+                // dd($data);
+
                 try {
                     foreach ($data as $k => $v) {
                         $data[$k] = mb_convert_encoding($v, 'UTF-8', 'UTF-8');
@@ -113,7 +115,7 @@ class DocumentosTuReciboController extends Controller
                     $apellidos = explode(' ', $data[5]);
 
                     $regimen_id = 0;
-                    switch ($data[9]) {
+                    switch ($data[10]) {
                         case 'EMPLEADOS AGRARIOS':
                             $regimen_id = 1;
                             break;
@@ -124,6 +126,10 @@ class DocumentosTuReciboController extends Controller
 
                         case 'OBREROS':
                             $regimen_id = 3;
+                            break;
+
+                        case 'ADMINISTRATIVOS':
+                            $regimen_id = 4;
                             break;
                     }
 
@@ -136,8 +142,8 @@ class DocumentosTuReciboController extends Controller
                         'apellido_materno' => $apellidos[sizeof($apellidos) - 1],
                         'nombre' => $data[6],
                         'estado' => $data[3],
-                        'fecha_carga' => $data[11],
-                        'fecha_firma' => $data[12],
+                        'fecha_carga' => $data[12],
+                        'fecha_firma' => $data[13],
                         'regimen_id' => $regimen_id,
                         'zona_labor_id' => $regimen_id !== 3 ? ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id) : null,
                     ];
