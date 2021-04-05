@@ -110,11 +110,11 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
             "EMPRESA",
             "FECHA",
             "RUT",
-            "TRABAJADOR",
+            //"TRABAJADOR",
             "HORA ENTRADA",
             "HORA SALIDA",
             "PATENTE",
-            "MOTIVO"
+            "MOTIVO_ID"
         ];
 
         const d = data.map(item => {
@@ -122,16 +122,16 @@ export const TablaRegistros = ({ reload, setReload, handleEliminar }) => {
                 empresa: item.empresa.name,
                 fecha_solicitud: item.fecha_planilla,
                 dni: item.trabajador.rut,
-                trabajador:
+                /* trabajador:
                     item?.trabajador.apellido_paterno +
                     " " +
                     item?.trabajador.apellido_materno +
                     " " +
-                    item?.trabajador.nombre,
+                    item?.trabajador.nombre, */
                 hora_entrada: item.hora_entrada,
                 hora_salida: item.hora_salida,
                 patente: "",
-                motivo: item.motivo.descripcion,
+                motivo: item.motivo.id,
             };
         });
 
