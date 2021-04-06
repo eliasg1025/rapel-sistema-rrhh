@@ -128,7 +128,7 @@
         </div>
     </section>
 
-    @if (is_null($finiquito->grupo_finquito_id) && $finiquito->regimen->name === 'Empleados Agrarios')
+    @if (is_null($finiquito->grupo_finquito_id) && $finiquito->regimen->name !== 'Obreros')
         <div class="page-break"></div>
 
         <div style="font-size: 8px;">

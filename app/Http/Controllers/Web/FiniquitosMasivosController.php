@@ -77,7 +77,8 @@ class FiniquitosMasivosController extends Controller
             ];
 
             $pdf = \PDF::setOptions([
-                'images' => true
+                'images' => true,
+                'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true ,'chroot' => public_path()
             ])->loadView('documents.' . $finiquito->tipoCese->sigla . '.index', $data);
 
             $filename = $finiquito->persona->apellido_paterno . '-' .

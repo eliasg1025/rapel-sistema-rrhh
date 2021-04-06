@@ -376,7 +376,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
             <Table
                 loading={loading}
                 size="small"
-                rowClassName={(record, index) => 'hoverable ' + (record.regimen.id === 1 ? 'table-row-warning' : null)}
+                rowClassName={(record, index) => 'hoverable ' + (record.regimen.id !== 3 ? 'table-row-warning' : null)}
                 bordered
                 columns={columns}
                 dataSource={finiquitos.map(item => ({ ...item, key: item.id })) || []}
