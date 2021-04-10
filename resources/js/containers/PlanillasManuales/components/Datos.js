@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Button } from "antd";
+import { Select, Button, Tooltip } from "antd";
 import Axios from "axios";
 
 export const Datos = ({
@@ -16,6 +16,14 @@ export const Datos = ({
     const [regimenes, setRegimenes] = useState([]);
     const [zonasLabores, setZonasLabores] = useState([]);
     const [motivos, setMotivos] = useState([]);
+
+    const handleConsultarMarcaciones = e => {
+        e.preventDefault();
+
+        Axios.get(`/api/sqlsrv/marcaciones-android?fecha=${form.fecha_planilla}`)
+            .then(res => console.log(res))
+            .catch(err => console.log(err.response));
+    }
 
     useEffect(() => {
         function fetchEmpresas() {
@@ -162,17 +170,26 @@ export const Datos = ({
 
                     <div className="col-md-4">
                         Fecha Planilla: <br />
-                        <input
-                            type="date"
-                            className="form-control"
-                            value={form.fecha_planilla}
-                            onChange={e =>
-                                setForm({
-                                    ...form,
-                                    fecha_planilla: e.target.value
-                                })
-                            }
-                        />
+                        <div className="input-group">
+                            <input
+                                type="date"
+                                className="form-control"
+                                value={form.fecha_planilla}
+                                onChange={e =>
+                                    setForm({
+                                        ...form,
+                                        fecha_planilla: e.target.value
+                                    })
+                                }
+                            />
+                            <div className="input-group-append">
+                                <Tooltip title="Consula de marcaciones">
+                                    <button className="btn btn-primary" onClick={handleConsultarMarcaciones}>
+                                        <i className="fas fa-clipboard-list"></i>
+                                    </button>
+                                </Tooltip>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-md-4">
                         Hora Entrada: <br />

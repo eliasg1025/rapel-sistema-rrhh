@@ -375,6 +375,10 @@ Route::group(['prefix' => 'sqlsrv'], function () {
         Route::get('/vacaciones', 'Sqlsrv\RetornosController@programacionVacaciones');
         Route::get('/spl', 'Sqlsrv\RetornosController@programacionSPL');
     });
+
+    Route::group(['prefix' => 'marcaciones-android'], function() {
+        Route::get('/', 'Sqlsrv\MarcacionesAndroidController@get');
+    });
 });
 /*
 Route::group(['prefix' => 'sqlsrv'], function() {

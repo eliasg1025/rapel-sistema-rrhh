@@ -293,19 +293,19 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
                             </Tooltip>
                         )
                     )}
-                    {value.estado.name === 'SIN EFECTO' ? (
+                    {value.estado.name !== 'SIN EFECTO' ? (
+                            (value.estado.name === 'NO FIRMADO' || usuario.modulo_rol.tipo.name === 'ADMINISTRADOR') && (
+                                <Tooltip title="Anular registro">
+                                    <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
+                                        <i className="fas fa-ban"></i>
+                                    </button>
+                                </Tooltip>
+                            )
+                        ) : (
                         usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
                             <Tooltip title="Eliminar Registro">
                                 <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
                                     <i className="fas fa-trash"></i>
-                                </button>
-                            </Tooltip>
-                        )
-                    ) : (
-                        value.estado.name === 'NO FIRMADO' && (
-                            <Tooltip title="Anular registro">
-                                <button className="btn btn-danger btn-sm" onClick={() => confirmDelete(value.id)}>
-                                    <i className="fas fa-ban"></i>
                                 </button>
                             </Tooltip>
                         )
