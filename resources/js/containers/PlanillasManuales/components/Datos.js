@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Select, Button, Tooltip } from "antd";
+import { Select, Button, Tooltip, notification, Table } from "antd";
 import Axios from "axios";
+
+import Modal from '../../Modal';
 
 export const Datos = ({
     trabajador,
@@ -17,12 +19,34 @@ export const Datos = ({
     const [zonasLabores, setZonasLabores] = useState([]);
     const [motivos, setMotivos] = useState([]);
 
-    const handleConsultarMarcaciones = e => {
+    const [loadingMarcaciones, setLoadingMarcaciones] = useState(false);
+    const [viewModalMarcaciones, setViewModalMarcaciones] = useState(false);
+    const [marcaciones, setMarcaciones] = useState([]);
+
+    const handleConsultarMarcaciones = async e => {
         e.preventDefault();
 
-        Axios.get(`/api/sqlsrv/marcaciones-android?fecha=${form.fecha_planilla}`)
-            .then(res => console.log(res))
-            .catch(err => console.log(err.response));
+        setLoadingMarcaciones(true);
+        setViewModalMarcaciones(true);
+        try {
+            const { data: res } = await Axios.get(`/api/sqlsrv/marcaciones-android?rut=${trabajador.rut}&fecha=${form.fecha_planilla}&empresa_id=${form.empresa_id}`);
+            // console.log(res);
+            setMarcaciones(res.data.map(item => {
+                return {
+                    ...item,
+                    key: item.Hora
+                }
+            }));
+
+        } catch (err) {
+
+            setViewModalMarcaciones(false);
+            notification['error']({
+                message: err.response.data.message
+            });
+        } finally {
+            setLoadingMarcaciones(false);
+        }
     }
 
     useEffect(() => {
@@ -76,6 +100,30 @@ export const Datos = ({
 
     return (
         <>
+            <Modal
+                isVisible={viewModalMarcaciones}
+                setIsVisible={setViewModalMarcaciones}
+                title="Consulta de Marcaciones"
+            >
+                <Table
+                    loading={loadingMarcaciones}
+                    dataSource={marcaciones}
+                    columns={
+                        [
+                            {
+                                title: 'Hora',
+                                dataIndex: 'Hora'
+                            },
+                            {
+                                title: 'Estacion',
+                                dataIndex: 'NOMBRE_ESTACION'
+                            }
+                        ]
+                    }
+                >
+
+                </Table>
+            </Modal>
             <form onSubmit={handleSubmit}>
                 <div className="row">
                     <div className="col-md-4">

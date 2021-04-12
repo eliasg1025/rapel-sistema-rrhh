@@ -91,6 +91,18 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlsrv2' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB3_HOST', 'localhost'),
+            'port' => env('DB3_PORT', '1433'),
+            'database' => env('DB3_DATABASE', 'forge'),
+            'username' => env('DB3_USERNAME', 'forge'),
+            'password' => env('DB3_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
     ],
 
     /*
