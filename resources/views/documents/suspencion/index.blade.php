@@ -81,6 +81,9 @@
                 <ol>
                     <li><u>Que Ud. Ha incurrido en falta al cumplimiento de sus obligaciones en el sentido siguiente:</u></li>
                 </ol>
+                <div style="padding-left: 40px;">
+                    <p><b>Haber Incumplido con sus funciones asignadas.</b></p>
+                </div>
             @else
                 <ol>
                     <li><u>No cumplir con las Normas de Seguridad y Salud en el trabajo.</u></li>
