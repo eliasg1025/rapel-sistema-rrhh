@@ -77,9 +77,16 @@
                 {{ $sancion->empresa->direccion }}, centro donde usted labora, prestando los servicios de <b>{{ $sancion->oficio->name }}</b>,
                 a usted atentamente dice:
             </p>
-            <ol>
-                <li><u>No cumplir con las Normas de Seguridad y Salud en el trabajo.</u></li>
-            </ol>
+            @if ($sancion->incidencia->name === 'INCUMPLIMIENTO DE FUNCIONES (SUSPENCION)')
+                <ol>
+                    <li><u>Que Ud. Ha incurrido en falta al cumplimiento de sus obligaciones en el sentido siguiente:</u></li>
+                </ol>
+            @else
+                <ol>
+                    <li><u>No cumplir con las Normas de Seguridad y Salud en el trabajo.</u></li>
+                </ol>
+            @endif
+
             @if (in_array($sancion->incidencia->name, ['NO USAR MASCARILLA', 'NO USAR PROTECTOR FACIAL', 'NO USAR MASCARILLA (PLANTA)', 'NO USAR PROTECTOR FACIAL (PLANTA)']))
                 <p class="justify">
                     El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, según informe alcanzado por el supervisor de Recursos Humanos
@@ -146,6 +153,17 @@
                         Es la sanción disciplinaria aplicable cuando existan transgresiones de gravedad relativa, ya sea contra la normativa interna de la Empresa o contra las disposiciones laborales vigente.
                         La aplicación de una suspensión sin goce de haber se dará con  sujeción a criterios de razonabilidad y proporcionalidad. La suspensión sin goce de haber es impuesta única y exclusivamente por el departamento de Recursos Humanos a solicitud del Jefe, Supervisor, Coordinador, Encargado y/o Responsable del área en cuestión, con la finalidad de no afectar el funcionamiento regular del Área  y/o Servicio.
                     </p>
+                </div>
+            @elseif ($sancion->incidencia->name === 'INCUMPLIMIENTO DE FUNCIONES (SUSPENCION)')
+                <p><b>Artículo 55°.-</b>son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>a) Realizar las labores a su cargo de manera eficiente.</p>
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo, de las políticas de aseguramiento de la calidad.</p>
+                    <p>r) Seguir las instrucciones recibidas de los supervisores.</p>
+                </div>
+                <p><b>Artículo 56°.-</b>Todo trabajador de la empresa debe observar las siguientes prohibiciones:</p>
+                <div style="padding-left: 10px;">
+                    <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la Empresa.</p>
                 </div>
             @endif
             <p class="justify">
