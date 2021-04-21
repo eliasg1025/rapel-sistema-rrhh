@@ -26,7 +26,7 @@ class SegurosVidaController extends Controller
             return response()->json([
                 'message' => 'Ya existe un registro de este trabajador para la fecha ' . now()->toDateString(),
                 'data' => []
-            ], 400);
+            ], 200);
         }
 
         $seguro = new SeguroVida();
