@@ -378,6 +378,7 @@ Route::group(['prefix' => 'sqlsrv'], function () {
 
     Route::group(['prefix' => 'marcaciones-android'], function() {
         Route::get('/', 'Sqlsrv\MarcacionesAndroidController@get');
+        Route::get('/registro', 'Sqlsrv\MarcacionesAndroidController@getRegistro');
     });
 });
 /*

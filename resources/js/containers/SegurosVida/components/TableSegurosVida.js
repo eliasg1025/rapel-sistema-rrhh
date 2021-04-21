@@ -39,6 +39,16 @@ export const TableSegurosVida = ({ reload, setReload }) => {
             render: (item, record) => `${item.apellido_paterno} ${item.apellido_materno} ${item.nombre}`
         },
         {
+            title: 'Régimen',
+            dataIndex: 'regimen',
+            render: (item) => `${item.name}`
+        },
+        {
+            title: 'Zona Labor',
+            dataIndex: 'zona_labor',
+            render: (item) => `${item.name}`
+        },
+        {
             title: 'Cargado por',
             dataIndex: 'usuario',
             render: (item, record) => `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`
@@ -81,7 +91,7 @@ export const TableSegurosVida = ({ reload, setReload }) => {
             })
             .catch(err => {
                 notification['error']({
-                    message: 'Error al borrar registro'  
+                    message: 'Error al borrar registro'
                 });
                 console.log(err);
             });
@@ -171,6 +181,7 @@ export const TableSegurosVida = ({ reload, setReload }) => {
             <Table
                 size="small"
                 bordered
+                scroll={{ x: 1000 }}
                 columns={columns}
                 dataSource={seguros}
                 loading={loading}

@@ -22,4 +22,14 @@ class SeguroVida extends Model
     {
         return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
     }
+
+    public function regimen()
+    {
+        return $this->belongsTo(Regimen::class, 'regimen_id', 'id');
+    }
+
+    public function zona_labor()
+    {
+        return $this->belongsTo(ZonaLabor::class, 'zona_labor_id', 'id');
+    }
 }

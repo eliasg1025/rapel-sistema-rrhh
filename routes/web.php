@@ -152,6 +152,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'planillas-manuales', 'middleware' => 'module:planillas-manuales'], function() {
         Route::get('/', 'Web\PlanillasManualesController@index');
+        Route::get('/reportes', 'Web\PlanillasManualesController@reportes');
     });
 
     Route::group(['prefix' => 'ficha'], function() {

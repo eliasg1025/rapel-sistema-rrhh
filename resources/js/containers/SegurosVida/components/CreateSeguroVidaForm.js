@@ -24,6 +24,8 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
             ...form,
             trabajador: trabajador,
             empresa_id: contratoActivo.empresa_id,
+            zona_labor: contratoActivo.zona_labor,
+            regimen_id: contratoActivo.regimen.id,
             usuario_id: usuario.id
         })
             .then(res => {
@@ -115,7 +117,7 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
                             disabled
                         >
                             <option key={0} value={0}>
-                                
+
                             </option>
                             {empresas.map(item => (
                                 <option key={item.id} value={item.id}>
@@ -133,6 +135,24 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
                             onChange={e => setForm({ ...form, fecha_documento: e.target.value })}
                         />
                     </div> */}
+                    <div className="col-md-4">
+                        <span>Régimen:</span><br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={contratoActivo ? contratoActivo?.regimen?.name : ''}
+                            disabled
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <span>Zona Labor:</span><br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={contratoActivo ? contratoActivo?.zona_labor?.name : ''}
+                            disabled
+                        />
+                    </div>
                 </div>
                 <div className="row mt-4">
                     <div className="col-md-12">

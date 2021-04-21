@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import { Layout, Menu } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined, FileAddOutlined } from "@ant-design/icons";
 
-import { Inicio } from './submodules';
+import { Inicio, Reportes } from './submodules';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -22,6 +22,11 @@ export default function PlanillasManuales() {
                     <Menu.Item key="main" icon={<HomeOutlined />}>
                         <a href="/planillas-manuales">Inicio</a>
                     </Menu.Item>
+                    <Menu.Item key="reportes" icon={<FileAddOutlined />}>
+                        <a href="/planillas-manuales/reportes">
+                            Reportes
+                        </a>
+                    </Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -31,6 +36,7 @@ export default function PlanillasManuales() {
                         style={{ padding: 24, minHeight: "100vh" }}
                     >
                         {submodule === "main" && <Inicio />}
+                        {submodule === "reportes" && <Reportes />}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: "center" }}>

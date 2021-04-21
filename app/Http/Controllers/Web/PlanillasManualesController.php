@@ -27,4 +27,17 @@ class PlanillasManualesController extends Controller
 
         return view('pages.planillas-manuales', compact('data'));
     }
+
+    public function reportes(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario'   => $usuario,
+            'submodule' => 'reportes',
+            'editar'    => 0
+        ];
+
+        return view('pages.planillas-manuales', compact('data'));
+    }
 }
