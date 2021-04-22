@@ -42,6 +42,7 @@ class Trabajador extends Model
             ->where('t.RutTrabajador', $rut)
             //->where('c.IndicadorVigencia', true)
             ->whereIn('t.IdEmpresa', [$empresaId])
+            ->orderBy('c.IndicadorVigencia', 'DESC')
             ->orderBy('c.IdContrato', 'DESC')
             ->first();
 
