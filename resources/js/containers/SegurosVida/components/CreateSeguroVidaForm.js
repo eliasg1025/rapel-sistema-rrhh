@@ -45,7 +45,7 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
 
     const buscarTrabajador = () => {
         setLoadingRut(true);
-        Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info`)
+        Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info?activo=false`)
             .then(res => {
                 const { contrato_activo, trabajador } = res.data.data;
 
