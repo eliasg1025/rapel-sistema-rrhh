@@ -14,7 +14,10 @@ class SegurosVidaController extends Controller
     {
         $data = $request->all();
         $trabajadorId = Trabajador::findOrCreate($data['trabajador']);
-        $zonaLaborId = ZonaLabor::findOrCreate($data['zona_labor']);
+        $zonaLaborId = ZonaLabor::where([
+            'code' => $data['zona_labor'],
+            'empresa_id' => $data['empresa_id']
+        ])->first()->id;
 
         $exists = SeguroVida::where([
                 'trabajador_id' => $trabajadorId,

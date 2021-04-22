@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { notification, Card } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { notification, Card, Select } from 'antd';
 import Axios from 'axios';
 import moment from 'moment';
 
@@ -9,6 +9,8 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
 
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
+    const [regimenes, setRegimenes] = useState([]);
+    const [zonasLabor, setZonasLabor] = useState([]);
     const [trabajador, setTrabajador] = useState(null);
     const [contratoActivo, setContratoActivo] = useState(null);
     const [rut, setRut] = useState("");
@@ -17,6 +19,34 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
         fecha_documento: moment().format("YYYY-MM-DD")
     });
 
+    const fetchZonasLabor = (empresa_id) => {
+        if (empresa_id) {
+            Axios.get(`/api/zona-labor/${empresa_id}?habilitado=1`)
+                .then(res => {
+                    setZonasLabor(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }
+    const fetchRegimenes = async () => {
+        try {
+            const { data: { data } } = await Axios.get('http://192.168.60.16/api/regimen');
+            setRegimenes(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+        fetchRegimenes();
+    }, []);
+
+    useEffect(() => {
+        fetchZonasLabor(contratoActivo?.empresa_id);
+    }, [contratoActivo]);
+
     const handleSubmit = e => {
         e.preventDefault();
 
@@ -24,8 +54,8 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
             ...form,
             trabajador: trabajador,
             empresa_id: contratoActivo.empresa_id,
-            zona_labor: contratoActivo.zona_labor,
-            regimen_id: contratoActivo.regimen.id,
+            zona_labor: contratoActivo.zona_id,
+            regimen_id: contratoActivo.regimen_id,
             usuario_id: usuario.id
         })
             .then(res => {
@@ -45,7 +75,7 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
 
     const buscarTrabajador = () => {
         setLoadingRut(true);
-        Axios.get(`http://192.168.60.16/api/trabajador/${rut}/info?activo=false`)
+        Axios.get(`http://192.168.60.16/api/trabajador/${rut}?activo=${false}`)
             .then(res => {
                 const { contrato_activo, trabajador } = res.data.data;
 
@@ -137,21 +167,51 @@ export const CreateSeguroVidaForm = ({ reload, setReload }) => {
                     </div> */}
                     <div className="col-md-4">
                         <span>Régimen:</span><br />
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={contratoActivo ? contratoActivo?.regimen?.name : ''}
+                        <Select
+                            value={contratoActivo?.regimen_id}
                             disabled
-                        />
+                            size="small"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            {regimenes.map(e => (
+                                <Select.Option value={e.id} key={e.id}>
+                                    {`${e.id} - ${e.name}`}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </div>
                     <div className="col-md-4">
                         <span>Zona Labor:</span><br />
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={contratoActivo ? contratoActivo?.zona_labor?.name : ''}
+                        <Select
+                            value={contratoActivo?.zona_id}
                             disabled
-                        />
+                            size="small"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            {zonasLabor.map(e => (
+                                <Select.Option value={e.id} key={e.id}>
+                                    {`${e.id} - ${e.name}`}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     </div>
                 </div>
                 <div className="row mt-4">
