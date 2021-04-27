@@ -17,6 +17,10 @@ class SegurosVidaController extends Controller
     {
         $usuario = $request->session()->get('usuario');
 
+        if($usuario->getRol('seguros-vida') !== 'ADMINISTRADOR') {
+            return redirect('/seguros-vida/consulta');
+        }
+
         $data = [
             'usuario'   => $usuario,
             'submodule' => 'main',

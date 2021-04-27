@@ -7,16 +7,18 @@ import { HomeOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import { Home, Consultas } from './submodules';
 
 export default function SegurosVida() {
-    const { submodule } = JSON.parse(sessionStorage.getItem('data'));
+    const { usuario, submodule } = JSON.parse(sessionStorage.getItem('data'));
 
     const MenuA = () => {
         return (
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
-                <Menu.Item key="main" icon={<HomeOutlined />}>
-                    <a href="/seguros-vida">
-                        Registros
-                    </a>
-                </Menu.Item>
+                {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
+                    <Menu.Item key="main" icon={<HomeOutlined />}>
+                        <a href="/seguros-vida">
+                            Registros
+                        </a>
+                    </Menu.Item>
+                )}
                 <Menu.Item key="consulta" icon={<QuestionCircleOutlined />}>
                     <a href="/seguros-vida/consulta">
                         Consulta
