@@ -134,6 +134,7 @@ Route::group(['middleware' => 'web.auth'], function() {
 
     Route::group(['prefix' => 'seguros-vida', 'middleware' => 'module:seguros-vida'], function() {
         Route::get('/', 'Web\SegurosVidaController@index');
+        Route::get('/consulta', 'Web\SegurosVidaController@consultas');
     });
 
     Route::group(['prefix' => 'consulta-ultima-actividad', 'middleware' => 'module:consulta-ultima-actividad'], function() {

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { PrivateLayout } from '../../layouts';
 import { Menu } from "antd";
-import { HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 
-import { Home } from './submodules';
+import { Home, Consultas } from './submodules';
 
 export default function SegurosVida() {
     const { submodule } = JSON.parse(sessionStorage.getItem('data'));
@@ -14,7 +14,12 @@ export default function SegurosVida() {
             <Menu theme="dark" mode="inline" defaultSelectedKeys={[submodule]}>
                 <Menu.Item key="main" icon={<HomeOutlined />}>
                     <a href="/seguros-vida">
-                        Principal
+                        Registros
+                    </a>
+                </Menu.Item>
+                <Menu.Item key="consulta" icon={<QuestionCircleOutlined />}>
+                    <a href="/seguros-vida/consulta">
+                        Consulta
                     </a>
                 </Menu.Item>
             </Menu>
@@ -25,6 +30,8 @@ export default function SegurosVida() {
         switch (submodule) {
             case 'main':
                 return <Home />;
+            case 'consulta':
+                return <Consultas />;
             default:
                 return <Home />;
         }

@@ -25,4 +25,17 @@ class SegurosVidaController extends Controller
 
         return view('pages.seguros-vida', compact('data'));
     }
+
+    public function consultas(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        $data = [
+            'usuario' => $usuario,
+            'submodule' => 'consulta',
+            'editar' => 0
+        ];
+
+        return view('pages.seguros-vida', compact('data'));
+    }
 }

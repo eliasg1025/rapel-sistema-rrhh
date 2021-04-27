@@ -311,6 +311,7 @@ Route::group(['prefix' => 'tipos-ceses'], function() {
 
 Route::group(['prefix' => 'seguros-vida'], function() {
     Route::get('/', 'SegurosVidaController@get');
+    Route::get('/trabajadores', 'SegurosVidaController@getTrabajadores');
     Route::post('/', 'SegurosVidaController@create');
     Route::delete('/{id}', 'SegurosVidaController@delete');
 });
