@@ -76,7 +76,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         Route::get('/registrar-informes/{id}', 'Web\DescansosMedicosController@registrarInformesRegistros');
     });
 
-    Route::group(['prefix' => 'estado-documentos'], function() {
+    Route::group(['prefix' => 'estado-documentos', 'middleware' => 'module:estado-documentos'], function() {
         Route::get('/', 'Web\EstadoDocumentosController@index');
         Route::get('/boletas', 'Web\EstadoDocumentosController@boletas');
         Route::get('/prorrogas', 'Web\EstadoDocumentosController@prorrogas');

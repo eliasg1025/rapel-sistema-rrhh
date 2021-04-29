@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import Axios from 'axios';
 
 export const TablaDocumentos = ({ data, reloadData, loading, banDocument }) => {
+    const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
     const confirmBan = (id) => {
         Swal.fire({
@@ -60,11 +61,15 @@ export const TablaDocumentos = ({ data, reloadData, loading, banDocument }) => {
             title: 'Acciones',
             render: (_, record) => (
                 <div className="btn-group">
-                    <Tooltip title="Anular documento">
-                        <button className="btn btn-danger btn-sm" onClick={() => confirmBan(record.id)}>
-                            <i className="fas fa-ban"></i>
-                        </button>
-                    </Tooltip>
+                    {usuario.modulo_rol.tipo.name === 'ADMINISTRADOR' && (
+                        <>
+                            <Tooltip title="Anular documento">
+                                <button className="btn btn-danger btn-sm" onClick={() => confirmBan(record.id)}>
+                                    <i className="fas fa-ban"></i>
+                                </button>
+                            </Tooltip>
+                        </>
+                    )}
                 </div>
             )
         }
