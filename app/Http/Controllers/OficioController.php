@@ -10,17 +10,37 @@ class OficioController extends Controller
 {
     public function create(Request $request)
     {
-        $oficio = Oficio::findOrCreate($request->all());
+        try {
+            $data = $request->all();
 
-        if (is_numeric($oficio)) {
+            $isNew = false;
+            $oficio = Oficio::where([
+                'code' => $data['id'],
+                'empresa_id' => $data['empresa_id']
+            ])->first();
+
+            if (!$oficio) {
+                $isNew = true;
+                $oficio = new Oficio();
+            }
+
+            $oficio->code = $data['id'];
+            $oficio->empresa_id = $data['empresa_id'];
+            $oficio->cod_equ = $data['cod_equ'] ?? null;
+            $oficio->name = $data['name'];
+            if (isset($data['sctr'])) {
+                $oficio->sctr = $data['sctr'];
+            }
+            $oficio->save();
+
             return response()->json([
-                'message' => 'Agregado correctamente',
-                'oficio_id' => $oficio
-            ]);
-        } else {
+                'message' => $isNew ? 'Agregado correctamente' : 'El oficio ya habia sido agregado anteriormente',
+            ], 201);
+
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error al crear oficio',
-                'error' => $oficio
+                'message'   => 'Error al crear oficio',
+                'error'     => $e->getMessage()
             ], 400);
         }
     }
@@ -35,7 +55,9 @@ class OficioController extends Controller
             array_push($data, [
                 'empresa' => $oficio->empresa,
                 'oficio' => $oficio->oficio,
-                'codigo' => $oficio->code
+                'code' => $oficio->code,
+                'codigo' => $oficio->code,
+                'empresa_id' => $oficio->empresa_id,
             ]);
         }
 

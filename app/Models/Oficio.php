@@ -44,7 +44,8 @@ class Oficio extends Model
                 'o.id',
                 'o.code as code',
                 'o.name as oficio',
-                'e.shortname as empresa'
+                'e.shortname as empresa',
+                'e.id as empresa_id'
             )
             ->join('empresas as e', 'e.id', '=', 'o.empresa_id')
             ->where('o.sctr', true)
