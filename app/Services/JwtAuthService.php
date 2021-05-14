@@ -10,38 +10,54 @@ class JwtAuthService
 {
     public static function signin(string $username, string $password)
     {
-        $usuario = Usuario::where([
-            'username' => $username,
-            'password' => $password
-        ])->first();
+        try {
+            $usuario = Usuario::where([
+                'username' => $username,
+            ])->first();
 
-        if (!$usuario) {
-            return [
-                'error'   => true,
-                'message' => 'El usuario no existe'
-            ];
-        }
+            if (!$usuario) {
+                return [
+                    'error'   => true,
+                    'message' => 'El usuario no existe',
+                    'token' => null,
+                ];
+            }
 
-        $trabajador = Trabajador::where('id', $usuario->trabajador_id)
+            if ($usuario->password !== $password) {
+                return [
+                    'error' => true,
+                    'message' => 'Contraseña incorrecta',
+                    'token' => null,
+                ];
+            }
+
+            $trabajador = Trabajador::where('id', $usuario->trabajador_id)
                 ->select('id', 'rut', 'apellido_paterno', 'apellido_materno', 'nombre')
                 ->first();
 
-        $token = [
-            'sub' => $usuario->id,
-            'username' => $usuario->username,
-            'rol' => $usuario->rol,
-            'trabajador' => $trabajador,
-            'iat' => time(),
-            'exp' => time() + (7 * 24 * 60 * 60)
-        ];
+            $token = [
+                'sub' => $usuario->id,
+                'username' => $usuario->username,
+                'rol' => $usuario->rol,
+                'trabajador' => $trabajador,
+                'iat' => time(),
+                'exp' => time() + (7 * 24 * 60 * 60)
+            ];
 
-        $jwt = JWT::encode($token, env('JWT_KEY'), 'HS256');
+            $jwt = JWT::encode($token, env('JWT_KEY'), 'HS256');
 
-        return [
-            'error'   => false,
-            'message' => 'Usuario logeado correctamente',
-            'token'   => $jwt
-        ];
+            return [
+                'error'   => false,
+                'message' => 'Usuario logeado correctamente',
+                'token'   => $jwt
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'token' => null,
+                'message' => 'Error al iniciar sesión'
+            ];
+        }
     }
 
     public static function checkToken($jwt, $get_identity=false)

@@ -22,7 +22,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => $result['message'],
             'token'   => $result['token']
-        ], $result['error'] ? 400 : 200);
+        ], $result['error'] ? 401 : 200);
     }
 
     public function me(Request $request)
@@ -32,7 +32,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => $result['message'],
             'data' => $result['data']
-        ], $result['error'] ? 400 : 200);
+        ], $result['error'] ? 401 : 200);
     }
 
     public function logout(Request $request)

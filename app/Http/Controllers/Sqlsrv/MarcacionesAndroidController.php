@@ -69,29 +69,7 @@ class MarcacionesAndroidController extends Controller
 
     public function getRegistro(Request $request)
     {
-        DB::connection('sqlsrv2')->statement("
-            DECLARE @SQL NVARCHAR(4000);
-
-            if exists (select * from tempdb..sysobjects where id = object_id(N'tempdb..#EstacionAndroid'))
-            DROP TABLE #EstacionAndroid
-
-            CREATE TABLE #EstacionAndroid (ID varchar(35),TIPO_ESTACION VARCHAR(10),NOMBRE_ESTACION VARCHAR(150))
-
-            SET @SQL  = 'INSERT INTO #EstacionAndroid(ID,TIPO_ESTACION,NOMBRE_ESTACION)
-                (
-                SELECT ID=CAST([ID] AS nvarchar(35)),[TIPO_ESTACION],[NOMBRE_ESTACION]
-                FROM bsis_rem_afr.[dbo].Estacion_Marcacion WITH(NOLOCK)
-                UNION
-                SELECT ID=CAST([ID] AS nvarchar(35)),[TIPO_ESTACION],[NOMBRE_ESTACION]
-                FROM [192.168.60.8\SQLEXPRESS].[Marcaciones].[dbo].Estacion_Marcacion WITH(NOLOCK)
-                UNION
-                SELECT [ID],[TIPO_ESTACION],[NOMBRE_ESTACION]
-                FROM [192.168.60.8\SQLEXPRESS].[Marcaciones].[dbo].Estacion_Marcacion_Prueba WITH(NOLOCK)
-                ) OPTION (RECOMPILE);'
-            EXEC(@SQL);
-
-            CREATE CLUSTERED INDEX IDX_ESTACION ON #EstacionAndroid(ID);
-        ");
+        $empresaId = $request->get('empresa_id');
 
         $result = DB::connection('sqlsrv2')->select("
         SELECT DISTINCT
@@ -141,7 +119,13 @@ class MarcacionesAndroidController extends Controller
         LEFT OUTER JOIN TIPO_HORARIO TH WITH(NOLOCK) ON TH.IdEmpresa=C.IdEmpresa AND TH.IdTrabajador=C.IdTrabajador AND TH.FECHA = L.FECHA
         LEFT OUTER JOIN Horarios HO WITH(NOLOCK) ON HO.IdEmpresa=TH.IdEmpresa AND HO.IdHorario=TH.IdHorario
         INNER JOIN Empresa E WITH(NOLOCK) ON E.IdEmpresa= T.IdEmpresa
-        WHERE L.fecha='13/04/2021' AND L.IdEmpresa  = 9 and C.IdRegimen in (1, 4) and O.Descripcion not in ('CHOFER', 'CASETERO DE RIEGO')
+        WHERE L.fecha='13/04/2021' AND L.IdEmpresa  = $empresaId and C.IdRegimen in (1, 4) and O.Descripcion not in ('CHOFER', 'CASETERO DE RIEGO')
+        ");
+
+        $ruts = array_column($result, 'DNI');
+
+        $result2 = DB::connection('sqlsrv2')->select("
+            select
         ");
 
         return response()->json([

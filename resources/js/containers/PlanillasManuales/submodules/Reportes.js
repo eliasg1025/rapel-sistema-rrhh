@@ -8,8 +8,7 @@ export const Reportes = () => {
 
     const [loading, setLoading] = useState(false);
     const [filtro, setFiltro] = useState({
-        desde: moment().subtract(7, 'days').format('YYYY-MM-DD').toString(),
-        hasta: moment().format('YYYY-MM-DD').toString(),
+        fecha: moment().format('YYYY-MM-DD').toString(),
         empresa_id: 9,
     });
     const [registros, setRegistros] = useState([]);

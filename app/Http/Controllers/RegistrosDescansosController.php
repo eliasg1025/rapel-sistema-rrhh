@@ -85,6 +85,7 @@ class RegistrosDescansosController extends Controller
         $observaciones = [
             'permisos' => [],
             'asistencias' => [],
+            'registros_medicos' => [],
         ];
 
         $permisosInasistencias = DB::connection('sqlsrv')
@@ -105,12 +106,29 @@ class RegistrosDescansosController extends Controller
             ->whereDate('a.FechaActividad', '<=', $fechaFin)
             ->get();
 
+        $registrosMedicos = DB::connection('sqlsrv')
+            ->table('dbo.PermisosInasistencias as p')
+            ->select(
+                'AutorizadoPor as tipo',
+                DB::raw('SUM(HoraInasistencia) as horas')
+            )
+            ->where('IdEmpresa', $empresaId)
+            ->where('RutTrabajador', $rut)
+            ->whereYear('FechaInicio', now()->year)
+            ->whereIn('AutorizadoPor', ['CMP', 'ESSALUD'])
+            ->groupBy('AutorizadoPor')
+            ->get();
+
         foreach ($permisosInasistencias as $permiso) {
             array_push($observaciones['permisos'], 'El trabajador tiene ' . $permiso->MotivoAusencia . ' el dia ' . Carbon::parse($permiso->FechaInicio)->format('d/m/Y'));
         }
 
         foreach ($asistencias as $asistencia) {
             array_push($observaciones['asistencias'], 'El trabajador tiene ASISTENCIA el dia ' . Carbon::parse($asistencia->FechaActividad)->format('d/m/Y'));
+        }
+
+        foreach ($registrosMedicos as $registroMedico) {
+            array_push($observaciones['registros_medicos'], "El trabajador tiene {$registroMedico->horas} horas registradas en {$registroMedico->tipo} en el año " . now()->year);
         }
 
         if (!$request->get('id')) {
@@ -128,7 +146,11 @@ class RegistrosDescansosController extends Controller
         $registroDescanso->usuario_id = $usuarioId;
         $registroDescanso->numero_registro = !$tipoLicencia->permiso ? $numeroRegistro : null;
         $registroDescanso->fecha_emision = !$tipoLicencia->permiso ? $fechaEmision : null;
-        if (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) {
+        if (
+            sizeof($observaciones['permisos']) > 0 ||
+            sizeof($observaciones['asistencias']) > 0 ||
+            sizeof($observaciones['registros_medicos']) > 0
+        ) {
             $registroDescanso->consideracion = json_encode($observaciones);
         } else {
             $registroDescanso->consideracion = null;
@@ -137,7 +159,11 @@ class RegistrosDescansosController extends Controller
 
         return response()->json([
             'message' => 'Registro creado correctamente',
-            'observaciones' => (sizeof($observaciones['permisos']) > 0 || sizeof($observaciones['asistencias']) > 0) ? $observaciones : null
+            'observaciones' => (
+                sizeof($observaciones['permisos']) > 0 ||
+                sizeof($observaciones['asistencias']) > 0 ||
+                sizeof($observaciones['registros_medicos']) > 0
+            ) ? $observaciones : null
         ]);
     }
 

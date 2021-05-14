@@ -70,6 +70,25 @@ class Trabajador extends Model
             }
         }
 
+        $registrosMedicos = DB::connection('sqlsrv')
+            ->table('dbo.PermisosInasistencias as p')
+            ->select(
+                'AutorizadoPor as tipo',
+                DB::raw('SUM(HoraInasistencia) as horas')
+            )
+            ->where('IdEmpresa', $empresaId)
+            ->where('RutTrabajador', $rut)
+            ->whereYear('FechaInicio', now()->year)
+            ->whereIn('AutorizadoPor', ['CMP', 'ESSALUD'])
+            ->groupBy('AutorizadoPor')
+            ->get();
+
+        $alertas = [];
+
+        foreach ($registrosMedicos as $registroMedico) {
+            array_push($alertas, "El trabajador tiene {$registroMedico->horas} horas registradas en {$registroMedico->tipo} en el año " . now()->year);
+        }
+
         return [
             'message' => 'Trabajador obtenido. ' . ($t->Jornal ? 'CON': 'SIN') . ' DIGITACIÓN.' . ($t->Jornal ? ' Último día laborado: ' . Carbon::parse($ultimaDiaLaborado->FechaActividad)->format('d/m/Y') : ''),
             'trabajador' => [
@@ -92,7 +111,8 @@ class Trabajador extends Model
                 'empresa_id' => $empresaId,
                 'numero_cuenta' => $t->NumeroCuentaBancaria,
                 'zona_labor_id' => $t->IdZonaLabores
-            ]
+            ],
+            'alertas' => $alertas,
         ];
     }
 

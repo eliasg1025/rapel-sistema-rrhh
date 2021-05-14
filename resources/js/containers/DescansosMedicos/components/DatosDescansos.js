@@ -172,12 +172,17 @@ const FormDescanso = ({
                             <>
                                 <h4>Alertas:</h4>
                                 <ul style={{ padding: "0" }}>
-                                    {res.data.observaciones.permisos.map(
+                                    {res.data?.observaciones?.permisos?.map(
                                         item => {
                                             return <li key={item}>{item}</li>;
                                         }
                                     )}
-                                    {res.data.observaciones.asistencias.map(
+                                    {res.data?.observaciones?.asistencias?.map(
+                                        item => {
+                                            return <li key={item}>{item}</li>;
+                                        }
+                                    )}
+                                    {res.data?.observaciones?.registros_medicos?.map(
                                         item => {
                                             return <li key={item}>{item}</li>;
                                         }
@@ -206,6 +211,16 @@ const FormDescanso = ({
                 notification["success"]({
                     message: res.data.message
                 });
+                if (res.data.alertas) {
+                    notification["warning"]({
+                        message: (
+                            <>
+                                <b>Alertas:</b>
+                                {res.data.alertas.map(alerta => <p key={alerta}>- {alerta}</p>)}
+                            </>
+                        )
+                    });
+                }
                 setTrabajador(res.data.trabajador);
             })
             .catch(err => {

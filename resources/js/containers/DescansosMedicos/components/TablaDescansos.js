@@ -54,13 +54,19 @@ export const TablaDescansos = ({ informe, registros, deleteRow, editRow }) => {
             dataIndex: 'consideracion',
             width: 250,
             render: (value) => {
-                const consideracion = JSON.parse(value);
-                return value && (
-                    <>
-                        {consideracion.permisos.map(item => <div key={item}>- {item}</div>)}
-                        {consideracion.asistencias.map(item => <div key={item}>- {item}</div>)}
-                    </>
-                )
+                try {
+                    const consideracion = JSON.parse(value);
+                    return value && (
+                        <>
+                            {consideracion?.registros_medicos?.map(item => <div key={item}>- {item}</div>)}
+                            {consideracion?.permisos?.map(item => <div key={item}>- {item}</div>)}
+                            {consideracion?.asistencias?.map(item => <div key={item}>- {item}</div>)}
+                        </>
+                    )
+                } catch(err) {
+                    console.log(err);
+                    return <div style={{ 'color': 'red' }}><b>Error</b></div>;
+                }
             }
         },
         {
