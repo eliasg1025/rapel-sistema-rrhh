@@ -110,7 +110,7 @@ class RegistrosDescansosController extends Controller
             ->table('dbo.PermisosInasistencias as p')
             ->select(
                 'AutorizadoPor as tipo',
-                DB::raw('SUM(HoraInasistencia) as horas')
+                DB::raw('COUNT(IdPermiso) as dias')
             )
             ->where('IdEmpresa', $empresaId)
             ->where('RutTrabajador', $rut)
@@ -128,7 +128,7 @@ class RegistrosDescansosController extends Controller
         }
 
         foreach ($registrosMedicos as $registroMedico) {
-            array_push($observaciones['registros_medicos'], "El trabajador tiene {$registroMedico->horas} horas registradas en {$registroMedico->tipo} en el año " . now()->year);
+            array_push($observaciones['registros_medicos'], "El trabajador tiene {$registroMedico->dias} dias registrados en {$registroMedico->tipo} en el año " . now()->year);
         }
 
         if (!$request->get('id')) {

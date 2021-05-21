@@ -74,7 +74,7 @@ class Trabajador extends Model
             ->table('dbo.PermisosInasistencias as p')
             ->select(
                 'AutorizadoPor as tipo',
-                DB::raw('SUM(HoraInasistencia) as horas')
+                DB::raw('COUNT(IdPermiso) as dias')
             )
             ->where('IdEmpresa', $empresaId)
             ->where('RutTrabajador', $rut)
@@ -86,7 +86,7 @@ class Trabajador extends Model
         $alertas = [];
 
         foreach ($registrosMedicos as $registroMedico) {
-            array_push($alertas, "El trabajador tiene {$registroMedico->horas} horas registradas en {$registroMedico->tipo} en el año " . now()->year);
+            array_push($alertas, "El trabajador tiene {$registroMedico->dias} dias registrados en {$registroMedico->tipo} en el año " . now()->year);
         }
 
         return [
