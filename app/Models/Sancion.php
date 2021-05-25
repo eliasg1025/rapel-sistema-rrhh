@@ -93,6 +93,12 @@ class Sancion extends Model
         return $this->belongsTo('App\Models\ZonaLabor');
     }
 
+    public function getAnioAttribute($value)
+    {
+        $fecha = Carbon::parse($this->fecha_incidencia);
+        return $fecha->format('Y');
+    }
+
     public function getFechaIncidenciaLargoAttribute($value)
     {
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
