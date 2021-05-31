@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Tag, Space, Tooltip, notification } from 'antd';
 import {DeleteOutlined, WarningTwoTone} from '@ant-design/icons';
+import Axios from 'axios';
 import moment from 'moment';
 
 const TablaTrabajadoresObservados = ({

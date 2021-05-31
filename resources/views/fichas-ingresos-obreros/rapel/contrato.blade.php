@@ -1,7 +1,7 @@
 @extends('pdf-layout')
 
 @section('titulo')
-    FICHA PERSONAL contrato declaracion topico - <span style="text-transform: capitalize">{{ $contrato->oficio->name }}</span>
+    FICHA PERSONAL contrato declaracion topico - {{ $contrato->oficio->name }}
 @endsection
 
 <style>
@@ -435,7 +435,7 @@
         </div>
         <br /><br />
         <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>{{ $contrato->tipo_contrato->name }}</b></h4>
-        <p>Conste mediante el presente documento el <b>Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 27360, Ley de Promoción del Sector Agrario; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
+        <p>Conste mediante el presente documento el <b>Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
         <ul>
             <li>
                 <b>SOCIEDAD AGRICOLA RAPEL S.A.C.</b>, R.U.C. Nº 20451779711, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, Sr. Carrillo Curay Federico, identificado con Documento Nacional de Identidad Nº  44554215, a la que en adelante le denominará <b>EL EMPLEADOR</b>; y de la otra parte,
@@ -503,8 +503,8 @@
             </li>
             <li>
                 <b><u>NOVENO:</u> Remuneración.-</b>
-                <br>9.1	En contraprestación a los servicios prestados por <b>EL TRABAJADOR</b>, <b>EL EMPLEADOR</b> se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/. 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), monto del cual se deducirán las aportaciones y descuentos establecidos en la ley.
-                <br>9.2	<b>EL EMPLEADOR</b> al encontrarse acogido al régimen agrario, precisa que la remuneración abonada a <b>EL TRABAJADOR</b> incluye la compensación por tiempo de servicios y las gratificaciones de fiestas patrias y de navidad, conforme lo previsto por el Art.7° de la Ley N° 27360.
+                <br>9.1	En contraprestación a los servicios prestados por <b>EL TRABAJADOR</b>, <b>EL EMPLEADOR</b> se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/. 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), remuneración que se encuentra comprendida por el básico de S/ 31.01 (TREINTA Y UNO CON 01/100 SOLES) más el concepto de CTS equivalente al 9.72% de S/ 3.01 (TRES CON 01/100 SOLES) y el concepto de Gratificaciones de fiestras patrias y de navidad equivalente al 16.66% de S/ 5.17(CINCO CON 17/100 SOLES), monto del cual deducirán las aportaciones y descuentos establecidos en la ley. Adicionalmente una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo. <br />Así mismo el trabajador elegiría recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 2.
+                <br>9.2	<b>EL EMPLEADOR</b> al encontrarse acogido al régimen agrario, precisa que la remuneración abonada a <b>EL TRABAJADOR</b> incluye la compensación por tiempo de servicios y las gratificaciones de fiestas patrias y de navidad, más una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo, conforme lo previsto en los incisos c) y el e) de la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial. De la msima forma, de acuerdo al inciso d) del mismo cuerpo normativo, de forma facultativa, el trabajador elegirá recibir los conceptos de CTS y gratificaciones en los plazos que la let estable, sin que entren a ser prorrateados en la RD; elección que forma parte de integrante de este contrato como Anexo 3.
                 <br>9.3	<b>EL TRABAJADOR</b> declara que la remuneración señalada en esta cláusula constituye una adecuada compensación por los servicios prestados a <b>EL EMPLEADOR</b>, así como por las obligaciones asumidas en el presente contrato.
             </li>
             <li>
@@ -526,7 +526,7 @@
             </li>
             <li>
                 <b><u>DECIMO CUARTO:</u> Sistema de Pensiones.-</b>
-                <br>De acuerdo al inciso 5 del Art.9° de la Ley N° 27360 y de los artículos 15 y 16 de la Ley 28991,<b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su decisión respecto del derecho a afiliarse a cualquiera de los regímenes previsionales, en el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
+                <br>De acuerdo a los artículos 15 y 16 de la Ley 28991, <b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su desición respecto del derecho a afiliarse a cualquiera de los regímenes previsionales, en el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
             </li>
             <li>
                 <b><u>DECIMO QUINTO:</u> Seguridad y Salud.-</b>

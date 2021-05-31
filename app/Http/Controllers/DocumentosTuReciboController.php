@@ -115,7 +115,7 @@ class DocumentosTuReciboController extends Controller
                     $apellidos = explode(' ', $data[5]);
 
                     $regimen_id = 0;
-                    switch ($data[10]) {
+                    switch ($data[9]) {
                         case 'EMPLEADOS AGRARIOS':
                             $regimen_id = 1;
                             break;
@@ -142,8 +142,8 @@ class DocumentosTuReciboController extends Controller
                         'apellido_materno' => $apellidos[sizeof($apellidos) - 1],
                         'nombre' => $data[6],
                         'estado' => $data[3],
-                        'fecha_carga' => $data[12],
-                        'fecha_firma' => $data[13],
+                        'fecha_carga' => $data[11],
+                        'fecha_firma' => $data[12],
                         'regimen_id' => $regimen_id,
                         'zona_labor_id' => $regimen_id !== 3 ? ZonaLabor::getIdByTrabajador($nombre_archivo[0], $empresa_id) : null,
                     ];
