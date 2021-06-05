@@ -41,7 +41,13 @@ class AtencionReseteoClave extends Model
             $atencion->usuario_id = $data['usuario_id'];
             $atencion->regimen_id = $contrato_activo['regimen_id'];
             $atencion->oficio_id = Oficio::findOrCreate($contrato_activo['oficio']);
-            if ((isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000) || $contrato_activo['zona_labor']['id'] == 55) {
+            if (
+                (
+                    isset($contrato_activo['sueldo_bruto']) && $contrato_activo['sueldo_bruto'] >= 2000
+                ) || (
+                    $contrato_activo['zona_labor']['id'] == 55 && $contrato_activo['regimen']['id'] != 3
+                )
+            ) {
                 $atencion->sueldo_bruto = $contrato_activo['sueldo_bruto'];
                 $atencion->numero_telefono_trabajador = $data['numero_telefono_trabajador'];
                 $atencion->numero_telefono_rrhh = '981269819'; // TEMP

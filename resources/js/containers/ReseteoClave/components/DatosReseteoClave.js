@@ -27,7 +27,11 @@ export const DatosReseteoClave = ({ contratoActivo, handleSubmit, form, setForm 
     }, []);
 
     useEffect(() => {
-        if (contratoActivo?.sueldo_bruto >= 2000 || contratoActivo?.zona_labor?.id == 55) {
+        if (
+            contratoActivo?.sueldo_bruto >= 2000 || (
+                contratoActivo?.zona_labor?.id == 55 && contratoActivo?.regimen?.id != 3
+            )
+        ) {
             if (form.nombre_completo !== '' && form.numero_telefono_trabajador !== '') {
                 setValidForm(false);
             } else {
@@ -74,17 +78,23 @@ export const DatosReseteoClave = ({ contratoActivo, handleSubmit, form, setForm 
                         {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
                     </select>
                 </div>
-                {(contratoActivo?.sueldo_bruto >= 2000 || contratoActivo?.zona_labor?.id == 55 ) && (
-                    <div className="form-group col-md-6 col-lg-4">
-                        Telefono Trabajador:<br />
-                        <input
-                            type="text" name="numero_telefono_trabajador" placeholder="Telefono Trabajador"
-                            className="form-control"
-                            value={form.numero_telefono_trabajador}
-                            onChange={e => setForm({ ...form, numero_telefono_trabajador: e.target.value })}
-                        />
-                    </div>
-                )}
+                {
+                    (
+                        contratoActivo?.sueldo_bruto >= 2000 || (
+                            contratoActivo?.zona_labor?.id == 55 && contratoActivo?.regimen?.id != 3
+                        )
+                    ) && (
+                        <div className="form-group col-md-6 col-lg-4">
+                            Telefono Trabajador:<br />
+                            <input
+                                type="text" name="numero_telefono_trabajador" placeholder="Telefono Trabajador"
+                                className="form-control"
+                                value={form.numero_telefono_trabajador}
+                                onChange={e => setForm({ ...form, numero_telefono_trabajador: e.target.value })}
+                            />
+                        </div>
+                    )
+                }
             </div>
             <div className="row">
                 <div className="col">
