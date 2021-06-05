@@ -33,7 +33,7 @@ export default function Panel() {
                         modulosNormales.map(modulo => {
                             return (
                                 <div className="col-md-6" key={modulo.id}>
-                                    <a className={"btn btn-block btn-light " + (usuario[modulo.rol_name] === 0 && 'disabled')} href={modulo.slug}>
+                                    <a className="btn btn-block btn-light" href={modulo.slug}>
                                         <i className={modulo.fa_icon_classname}></i> {modulo.name}
                                     </a>
                                 </div>
