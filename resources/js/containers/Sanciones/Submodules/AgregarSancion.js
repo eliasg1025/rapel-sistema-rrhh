@@ -23,6 +23,7 @@ const AgregarSancion = () => {
         observacion: '',
         zona_labor_id: '',
         cuartel_id: '',
+        mismo_dia: false,
     });
     const [reloadDatos, setReloadDatos] = useState(false);
 

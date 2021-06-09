@@ -245,6 +245,7 @@ class Sancion extends Model
             $sancion->fecha_incidencia = $data['fecha_incidencia'];
             $sancion->empresa_id         = $data['empresa_id'];
             $sancion->incidencia_id   = $incidencia->id;
+            $sancion->mismo_dia = $data['mismo_dia'];
 
             if ($incidencia->documento == 'SUSPENCION') {
                 $suspencion = self::isRecidivist($data, $trabajador_id, $sancion);
@@ -265,7 +266,7 @@ class Sancion extends Model
                     }
                 }
 
-                $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
+                $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion, $data['mismo_dia']);
 
                 self::penalizeAsSanction($message, $data['observacion'], $sancion, $dias_sancion);
             } else if ($incidencia->documento == 'MEMORANDUM') {
@@ -285,7 +286,7 @@ class Sancion extends Model
                         $message = 'Este trabajador ya tiene 2 suspenciones anteriores. Se procederá a registrar una DESVINCULACIÓN.';
                     }
 
-                    $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion);
+                    $dias_sancion = new DiasSancion($data['fecha_incidencia'], $dias_suspencion, $data['mismo_dia']);
 
                     self::penalizeAsSanction($message, $data['observacion'], $sancion, $dias_sancion);
                 } else {

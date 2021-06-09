@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
-import {Select} from "antd";
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import { Checkbox, Select } from "antd";
 
 export const DatosSancion = ({
     handleSubmit,
@@ -11,13 +11,12 @@ export const DatosSancion = ({
     zonasLabor,
     setZonasLabor,
     cuarteles,
-    setCuarteles,
+    setCuarteles
 }) => {
-
     const [empresas, setEmpresas] = useState([]);
     const [loading, setLoading] = useState({
         empresas: false,
-        incidencias: false,
+        incidencias: false
     });
 
     const [loadingZonasLabor, setLoadingZonasLabor] = useState(false);
@@ -28,7 +27,7 @@ export const DatosSancion = ({
         let intento1 = 0;
         function fetchEmpresas() {
             intento++;
-            Axios.get('/api/empresa')
+            Axios.get("/api/empresa")
                 .then(res => {
                     setEmpresas(res.data);
                     setLoading({ ...loading, empresas: false });
@@ -42,10 +41,10 @@ export const DatosSancion = ({
 
         function fetchIncidencias() {
             intento1++;
-            Axios.get('/api/incidencia')
+            Axios.get("/api/incidencia")
                 .then(res => {
                     setIncidencias(res.data);
-                    setLoading({ ...loading, incidencias: false })
+                    setLoading({ ...loading, incidencias: false });
                 })
                 .catch(err => {
                     if (intento1 < 5) {
@@ -59,13 +58,15 @@ export const DatosSancion = ({
     }, []);
 
     useEffect(() => {
-        if (form.empresa_id !== '') {
+        if (form.empresa_id !== "") {
             let intento2 = 0;
             function fetchZonasLabor() {
                 intento2++;
-                Axios.get(`http://192.168.60.16/api/zona-labor/${form.empresa_id}`)
+                Axios.get(
+                    `http://192.168.60.16/api/zona-labor/${form.empresa_id}`
+                )
                     .then(res => {
-                        console.log(res);
+                        // console.log(res);
                         setZonasLabor(res.data.data);
                         setLoadingZonasLabor(false);
                     })
@@ -74,7 +75,7 @@ export const DatosSancion = ({
                         if (intento2 < 5) {
                             fetchZonasLabor();
                         }
-                    })
+                    });
             }
 
             fetchZonasLabor();
@@ -83,11 +84,13 @@ export const DatosSancion = ({
     }, [form.empresa_id]);
 
     useEffect(() => {
-        if (form.zona_labor_id !== '' && form.empresa_id !== '') {
+        if (form.zona_labor_id !== "" && form.empresa_id !== "") {
             let intento = 0;
             function fetchCuarteles() {
                 intento++;
-                Axios.get(`http://192.168.60.16/api/cuartel/${form.empresa_id}/${form.zona_labor_id}`)
+                Axios.get(
+                    `http://192.168.60.16/api/cuartel/${form.empresa_id}/${form.zona_labor_id}`
+                )
                     .then(res => {
                         console.log(res);
                         setCuarteles(res.data.data);
@@ -112,31 +115,55 @@ export const DatosSancion = ({
                 <div className="form-group col-md-6 col-lg-4">
                     Empresa: <br />
                     <select
-                        type="text" name="empresa_id" placeholder="Empresa"
+                        type="text"
+                        name="empresa_id"
+                        placeholder="Empresa"
                         className="form-control"
                         value={form.empresa_id}
-                        onChange={e => setForm({ ...form, empresa_id: e.target.value })}
+                        onChange={e =>
+                            setForm({ ...form, empresa_id: e.target.value })
+                        }
                     >
                         <option value="" key="0" disabled />
-                        {empresas.map(e => <option value={e.id} key={e.id}>{e.id} - {e.name}</option>)}
+                        {empresas.map(e => (
+                            <option value={e.id} key={e.id}>
+                                {e.id} - {e.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
                     Fecha solicitud: <br />
                     <input
-                        type="date" name="fecha_solicitud" placeholder="Fecha Solicitud" readOnly={true}
+                        type="date"
+                        name="fecha_solicitud"
+                        placeholder="Fecha Solicitud"
+                        readOnly={true}
                         className="form-control"
                         value={form.fecha_solicitud}
-                        onChange={e => setForm({ ...form, fecha_solicitud: e.target.value })}
+                        onChange={e =>
+                            setForm({
+                                ...form,
+                                fecha_solicitud: e.target.value
+                            })
+                        }
                     />
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
-                    Trabajador: <br/>
+                    Trabajador: <br />
                     <input
-                        type="text" name="nombre_completo" placeholder="Trabajador" readOnly={true}
+                        type="text"
+                        name="nombre_completo"
+                        placeholder="Trabajador"
+                        readOnly={true}
                         className="form-control"
                         value={form.nombre_completo}
-                        onChange={e => setForm({ ...form, nombre_completo: e.target.value })}
+                        onChange={e =>
+                            setForm({
+                                ...form,
+                                nombre_completo: e.target.value
+                            })
+                        }
                     />
                 </div>
             </div>
@@ -144,10 +171,17 @@ export const DatosSancion = ({
                 <div className="form-group col-md-6 col-lg-4">
                     Fecha incidencia: <br />
                     <input
-                        type="date" name="fecha_incidencia" placeholder="Fecha Incidencia"
+                        type="date"
+                        name="fecha_incidencia"
+                        placeholder="Fecha Incidencia"
                         className="form-control"
                         value={form.fecha_incidencia}
-                        onChange={e => setForm({ ...form, fecha_incidencia: e.target.value })}
+                        onChange={e =>
+                            setForm({
+                                ...form,
+                                fecha_incidencia: e.target.value
+                            })
+                        }
                     />
                 </div>
                 <div className="form-group col-md-6 col-lg-4">
@@ -173,7 +207,7 @@ export const DatosSancion = ({
                         }
                         onChange={e => setForm({ ...form, incidencia_id: e })}
                         style={{
-                            width: '100%',
+                            width: "100%"
                         }}
                     >
                         {incidencias.map(e => (
@@ -183,15 +217,33 @@ export const DatosSancion = ({
                         ))}
                     </Select>
                 </div>
-                <div className="form-group col-md-6 col-lg-4">
+                <div className="form-group col-md-3 col-lg-2">
                     Tipo documento: <br />
                     <input
-                        type="text" name="tipo_documento" placeholder="Tipo Documento" readOnly={true}
+                        type="text"
+                        name="tipo_documento"
+                        placeholder="Tipo Documento"
+                        readOnly={true}
                         className="form-control"
                         value={form.tipo_documento}
-                        onChange={e => setForm({ ...form, tipo_documento: e.target.value })}
+                        onChange={e =>
+                            setForm({ ...form, tipo_documento: e.target.value })
+                        }
                     />
                 </div>
+                {["SUSPENCION", "MIXT0"].includes(form?.tipo_documento) && (
+                    <div className="form-group col-md-3 col-lg-2">
+                        <br />
+                        <Checkbox checked={form.mismo_dia} onChange={e => {
+                            setForm({
+                                ...form,
+                                mismo_dia: e.target.checked
+                            })
+                        }}>
+                            Contar desde el mismo dia
+                        </Checkbox>
+                    </div>
+                )}
             </div>
             <div className="row">
                 <div className="form-group col-md-6 col-lg-6">
@@ -199,7 +251,8 @@ export const DatosSancion = ({
                         <div className="spinner-grow text-info" />
                     ) : (
                         <>
-                            Zona labor:<br />
+                            Zona labor:
+                            <br />
                             <Select
                                 value={form.zona_labor_id}
                                 showSearch
@@ -209,9 +262,11 @@ export const DatosSancion = ({
                                         .toLowerCase()
                                         .indexOf(input.toLowerCase()) >= 0
                                 }
-                                onChange={e => setForm({ ...form, zona_labor_id: e })}
+                                onChange={e =>
+                                    setForm({ ...form, zona_labor_id: e })
+                                }
                                 style={{
-                                    width: '100%',
+                                    width: "100%"
                                 }}
                             >
                                 {zonasLabor.map(e => (
@@ -228,7 +283,8 @@ export const DatosSancion = ({
                         <div className="spinner-grow text-info" />
                     ) : (
                         <>
-                            Área/Campo:<br />
+                            Área/Campo:
+                            <br />
                             <Select
                                 value={form.cuartel_id}
                                 showSearch
@@ -238,9 +294,11 @@ export const DatosSancion = ({
                                         .toLowerCase()
                                         .indexOf(input.toLowerCase()) >= 0
                                 }
-                                onChange={e => setForm({ ...form, cuartel_id: e })}
+                                onChange={e =>
+                                    setForm({ ...form, cuartel_id: e })
+                                }
                                 style={{
-                                    width: '100%',
+                                    width: "100%"
                                 }}
                             >
                                 {cuarteles.map(e => (
@@ -255,19 +313,27 @@ export const DatosSancion = ({
             </div>
             <div className="row">
                 <div className="form-group col">
-                    Observación:<br />
+                    Observación:
+                    <br />
                     <textarea
                         className="form-control"
                         value={form.observacion}
-                        onChange={e => setForm({ ...form, observacion: e.target.value })}
+                        onChange={e =>
+                            setForm({ ...form, observacion: e.target.value })
+                        }
                     />
                 </div>
             </div>
             <div className="row">
                 <div className="col">
                     <button
-                        type="submit" className="btn btn-primary btn-block"
-                        disabled={form.incidencia_id === '' || form.empresa_id === '' || form.nombre_completo === ''}
+                        type="submit"
+                        className="btn btn-primary btn-block"
+                        disabled={
+                            form.incidencia_id === "" ||
+                            form.empresa_id === "" ||
+                            form.nombre_completo === ""
+                        }
                     >
                         Registrar
                     </button>
@@ -275,4 +341,4 @@ export const DatosSancion = ({
             </div>
         </form>
     );
-}
+};

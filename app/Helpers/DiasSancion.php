@@ -8,17 +8,20 @@ class DiasSancion
 {
     public $fecha_incidencia;
     public $duracion;
+    public $mismo_dia;
 
-    public function __construct($fecha_incidencia, int $duracion)
+    public function __construct($fecha_incidencia, int $duracion, bool $mismo_dia)
     {
         $this->fecha_incidencia = Carbon::parse($fecha_incidencia);
         $this->duracion = $duracion;
+        $this->mismo_dia = $mismo_dia;
     }
 
     public function getDiaIncio()
     {
-        $dia_inicio = Carbon::parse($this->fecha_incidencia)->addDays(1);
-        return $dia_inicio->isSunday() ? $dia_inicio->addDays(1) : $dia_inicio;
+        $desc = $this->mismo_dia ? 1 : 0;
+        $dia_inicio = Carbon::parse($this->fecha_incidencia)->addDays(1 - $desc);
+        return $dia_inicio->isSunday() ? $dia_inicio->addDays(1 - $desc) : $dia_inicio;
     }
 
     private function getCantidadDomingos()
