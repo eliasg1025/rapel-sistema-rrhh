@@ -161,6 +161,7 @@ class Sancion extends Model
                 'f.fecha_incidencia',
                 'f.incidencia_id',
                 'f.observacion',
+                'f.mismo_dia',
                 'z.code as zona_labor_id',
                 'c.code as cuartel_id'
             )
