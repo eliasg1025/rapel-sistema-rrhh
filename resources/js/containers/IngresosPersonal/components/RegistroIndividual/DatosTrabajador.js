@@ -232,7 +232,266 @@ const DatosTrabajador = props => {
 
     return (
         <Card>
-            <Form {...layout} className="data-form">
+            <div className="row">
+                <div className="col-md-4">
+                    Nombre:<br />
+                    <Input
+                        autoComplete="off"
+                        name="nombre"
+                        size="small"
+                        value={trabajador.nombre}
+                        onChange={e => setTrabajador({ ...trabajador, nombre: e.target.value })}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Apellido Paterno:<br />
+                    <Input
+                        autoComplete="off"
+                        name="apellido_paterno"
+                        size="small"
+                        value={trabajador.apellido_paterno}
+                        onChange={e => setTrabajador({ ...trabajador, apellido_paterno: e.target.value })}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Apellido Materno:<br />
+                    <Input
+                        autoComplete="off"
+                        name="apellido_materno"
+                        size="small"
+                        value={trabajador.apellido_materno}
+                        onChange={e => setTrabajador({ ...trabajador, apellido_materno: e.target.value })}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Fecha Nacimiento:<br />
+                    <Item
+                        validateStatus={validacionEdad.validateStatus}
+                        help={validacionEdad.help}
+                    >
+                        <DatePicker
+                            name="fecha_nacimiento"
+                            size="small"
+                            style={{ width: '100%' }}
+                            value={trabajador.fecha_nacimiento && moment(
+                                trabajador.fecha_nacimiento,
+                                'DD/MM/YYYY'
+                            )}
+                            format={['DD/MM/YYYY']}
+                            allowClear={false}
+                            onChange={(date, dateString) => setTrabajador({ ...trabajador, fecha_nacimiento: date })}
+                        />
+                        <small>
+                            {trabajador.fecha_nacimiento !== ''
+                                ? `  ${edad} años`
+                                : ''}
+                        </small>
+                    </Item>
+                </div>
+                <div className="col-md-4">
+                    Sexo:<br />
+                    <Select
+                        name="sexo"
+                        placeholder="Sexo"
+                        size="small"
+                        style={{ width: '100%' }}
+                        onChange={e => {
+                            setTrabajador({ ...trabajador, sexo: e });
+                        }}
+                        value={trabajador.sexo}
+                        required={true}
+                    >
+                        {sexo.map(option => (
+                            <Select.Option
+                                key={option.id}
+                                value={option.id}
+                            >
+                                {option.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Estado Civil:<br />
+                    <Select
+                        name="estado_civil_id"
+                        placeholder="Estado Civil"
+                        size="small"
+                        style={{ width: '100%' }}
+                        onChange={e => {
+                            setTrabajador({ ...trabajador, estado_civil_id: e });
+                        }}
+                        value={trabajador.estado_civil_id}
+
+                    >
+                        {estado_civil.map(option => (
+                            <Select.Option
+                                key={option.id}
+                                value={option.id}
+                            >
+                                {option.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Nacionalidad:<br />
+                    <Select
+                        name="nacionalidad_id"
+                        showSearch
+                        placeholder="Nacionalidad"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => {
+                            setTrabajador({ ...trabajador, nacionalidad_id: e });
+                        }}
+                        value={trabajador.nacionalidad_id}
+
+                    >
+                        {nacionalidades.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Telefono:<br />
+                    <Input
+                        autoComplete="off"
+                        name="telefono"
+                        value={trabajador.telefono}
+                        onChange={handleChangeInput}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Email:<br />
+                    <Input
+                        autoComplete="off"
+                        name="email"
+                        value={trabajador.email}
+                        onChange={handleChangeInput}
+                    />
+                </div>
+                <div className="col-md-4">
+                    Departamento:<br />
+                    <Select
+                        name="departamento_id"
+                        showSearch
+                        placeholder="Departamento"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={handleChangeDepartamento}
+                        value={trabajador.departamento_id}
+
+                    >
+                        {departamentos.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Provincia:<br />
+                    <Select
+                        name="provincia_id"
+                        showSearch
+                        placeholder="Provincia"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={handleChangeProvincia}
+                        value={trabajador.provincia_id}
+
+                    >
+                        {provincias.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Distrito:<br />
+                    <Select
+                        name="distrito_id"
+                        showSearch
+                        placeholder="Distrito"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={handleChangeDistrito}
+                        value={trabajador.distrito_id}
+
+                    >
+                        {distritos.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Tipo Zona:<br />
+                    <Select
+                        name="tipo_zonas_id"
+                        showSearch
+                        placeholder="Tipo Zona"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setTrabajador({ ...trabajador, tipo_zona_id: e })
+                        }
+                        value={trabajador.tipo_zona_id}
+                    >
+                        {tiposZonas.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+
+                </div>
+            </div>
+            <Form layout="vertical" className="data-form">
                 <Row gutter={16}>
                     <Col md={8} sm={24} xs={24}>
                         <Item label="A. Paterno" required={true}>
@@ -372,6 +631,7 @@ const DatosTrabajador = props => {
                                 name="telefono"
                                 value={trabajador.telefono}
                                 onChange={handleChangeInput}
+                                size="small"
                             />
                         </Item>
                     </Col>
@@ -382,6 +642,7 @@ const DatosTrabajador = props => {
                                 name="email"
                                 value={trabajador.email}
                                 onChange={handleChangeInput}
+                                size="small"
                             />
                         </Item>
                     </Col>

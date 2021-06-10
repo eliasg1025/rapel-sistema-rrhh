@@ -126,7 +126,7 @@ export const TableSegurosVida = ({ reload, setReload }) => {
 
         const d = seguros.map(item => {
             return {
-                fecha_hora: item.fecha_hora,
+                fecha_hora: moment(item.created_at).format('DD/MM/YYYY hh:mm:ss'),
                 empresa: item.empresa.shortname,
                 rut: item.trabajador.rut,
                 apellidos_nombres: `${item.trabajador.apellido_paterno} ${item.trabajador.apellido_materno} ${item.trabajador.nombre}`,

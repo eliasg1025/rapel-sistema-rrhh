@@ -1,16 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import {Card, Form, Input, Select, Row, Col, DatePicker, notification, message} from 'antd';
-import Axios from 'axios';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import {
+    Card,
+    Form,
+    Input,
+    Select,
+    Row,
+    Col,
+    DatePicker,
+    notification,
+    message
+} from "antd";
+import Axios from "axios";
+import moment from "moment";
 
-import { empresa, tipos_trabajadores } from '../../../../data/default.json';
+import { empresa, tipos_trabajadores } from "../../../../data/default.json";
 
 const DatosContrato = props => {
     const {
         setDatosContratoValido,
-        contrato, setContrato, regimenes, oficios, actividades, agrupaciones, tiposContratos, cuarteles, labores, zonasLabor,
-        rutas, troncales, setRegimenes, setOficios, setActividades, setAgrupaciones, setTiposContratos, setCuarteles, setLabores,
-        setZonasLabor, setRutas, setTroncales
+        contrato,
+        setContrato,
+        regimenes,
+        oficios,
+        actividades,
+        agrupaciones,
+        tiposContratos,
+        cuarteles,
+        labores,
+        zonasLabor,
+        rutas,
+        troncales,
+        setRegimenes,
+        setOficios,
+        setActividades,
+        setAgrupaciones,
+        setTiposContratos,
+        setCuarteles,
+        setLabores,
+        setZonasLabor,
+        setRutas,
+        setTroncales
     } = props;
 
     const [loadingZonaLabores, setLoadingZonaLabores] = useState(false);
@@ -26,34 +55,36 @@ const DatosContrato = props => {
 
     const layout = {
         labelCol: {
-            md: 6,
-        },
+            md: 6
+        }
     };
 
     const handleChangeInput = e => {
         const { name, value } = e.target;
         setContrato({
             ...contrato,
-            [name]: value,
+            [name]: value
         });
     };
 
     const validacionDatosContrato = () => {
-        return contrato.codigo_bus !== '' &&
-            contrato.grupo !== '' &&
-            contrato.empresa_id !== '' &&
-            contrato.zona_labor_id !== '' &&
-            contrato.fecha_ingreso !== '' &&
-            contrato.cuartel_id !== '' &&
-            contrato.agrupacion_id !== '' &&
-            contrato.regimen_id !== '' &&
-            contrato.actividad_id !== '' &&
-            contrato.labor_id !== '' &&
-            contrato.tipo_contrato_id !== '' &&
-            contrato.oficio_id !== '' &&
-            contrato.troncal_id !== '' &&
-            contrato.ruta_id !== '' &&
-            contrato.tipo_trabajador !== '';
+        return (
+            contrato.codigo_bus !== "" &&
+            contrato.grupo !== "" &&
+            contrato.empresa_id !== "" &&
+            contrato.zona_labor_id !== "" &&
+            contrato.fecha_ingreso !== "" &&
+            contrato.cuartel_id !== "" &&
+            contrato.agrupacion_id !== "" &&
+            contrato.regimen_id !== "" &&
+            contrato.actividad_id !== "" &&
+            contrato.labor_id !== "" &&
+            contrato.tipo_contrato_id !== "" &&
+            contrato.oficio_id !== "" &&
+            contrato.troncal_id !== "" &&
+            contrato.ruta_id !== "" &&
+            contrato.tipo_trabajador !== ""
+        );
     };
 
     useEffect(() => {
@@ -69,9 +100,9 @@ const DatosContrato = props => {
             ...contrato,
             fecha_ingreso: dateString,
             fecha_termino: moment(dateString)
-                .add(91, 'days')
-                .format('YYYY-MM-DD')
-                .toString(),
+                .add(91, "days")
+                .format("YYYY-MM-DD")
+                .toString()
         });
     };
 
@@ -79,12 +110,22 @@ const DatosContrato = props => {
         if (contrato.regimen_id === 3) {
             setContrato({
                 ...contrato,
-                oficio_id: '3',
-                cuartel_id: 'SCG',
+                oficio_id: "3",
+                cuartel_id: "SCG",
                 agrupacion_id: 3,
                 actividad_id: "111",
                 labor_id: 61,
                 tipo_contrato_id: 10
+            });
+        } else {
+            setContrato({
+                ...contrato,
+                oficio_id: "",
+                cuartel_id: "",
+                agrupacion_id: '',
+                actividad_id: "",
+                labor_id: '',
+                tipo_contrato_id: ''
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +134,7 @@ const DatosContrato = props => {
     /**
      * Fetching data
      */
-    const url = 'http://192.168.60.16/api';
+    const url = "http://192.168.60.16/api";
 
     useEffect(() => {
         setLoadingRegimenes(true);
@@ -110,8 +151,9 @@ const DatosContrato = props => {
                     if (intentos < 5) {
                         fetchRegimenes();
                     } else {
-                        notification['warning']({
-                            message: 'Error al obtener los departamentos, vuelva a cargar la página',
+                        notification["warning"]({
+                            message:
+                                "Error al obtener los departamentos, vuelva a cargar la página"
                         });
                     }
                 });
@@ -128,10 +170,11 @@ const DatosContrato = props => {
         setLoadingTroncales(true);
 
         function fetchZonasLabores() {
-            Axios.get(`${url}/zona-labor/${contrato.empresa_id}`)
+            Axios.get(`/api/zona-labor/${contrato.empresa_id}`)
                 .then(res => {
-                    setZonasLabor(res.data.data);
-                    setLoadingZonaLabores(false)
+                    console.log(res);
+                    setZonasLabor(res.data);
+                    setLoadingZonaLabores(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -153,7 +196,7 @@ const DatosContrato = props => {
             Axios.get(`${url}/actividad/${contrato.empresa_id}`)
                 .then(res => {
                     setActividades(res.data.data);
-                    setLoadingActividades(false)
+                    setLoadingActividades(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -164,7 +207,7 @@ const DatosContrato = props => {
             Axios.get(`${url}/agrupacion/${contrato.empresa_id}`)
                 .then(res => {
                     setAgrupaciones(res.data.data);
-                    setLoadingAgrupaciones(false)
+                    setLoadingAgrupaciones(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -203,7 +246,9 @@ const DatosContrato = props => {
 
     useEffect(() => {
         function fetchRutas() {
-            Axios.get(`${url}/ruta/${contrato.empresa_id}/${contrato.troncal_id}`)
+            Axios.get(
+                `${url}/ruta/${contrato.empresa_id}/${contrato.troncal_id}`
+            )
                 .then(res => {
                     setRutas(res.data.data);
                     setLoadingRutas(false);
@@ -213,7 +258,7 @@ const DatosContrato = props => {
                     fetchRutas();
                 });
         }
-        if (contrato.troncal_id !== '') {
+        if (contrato.troncal_id !== "") {
             setLoadingRutas(true);
             fetchRutas();
         }
@@ -221,7 +266,9 @@ const DatosContrato = props => {
 
     useEffect(() => {
         function fetchCuarteles() {
-            Axios.get(`${url}/cuartel/${contrato.empresa_id}/${contrato.zona_labor_id}`)
+            Axios.get(
+                `${url}/cuartel/${contrato.empresa_id}/${contrato.zona_labor_id}`
+            )
                 .then(res => {
                     setCuarteles(res.data.data);
                     setLoadingCuarteles(false);
@@ -231,7 +278,7 @@ const DatosContrato = props => {
                     fetchCuarteles();
                 });
         }
-        if (contrato.zona_labor_id !== '') {
+        if (contrato.zona_labor_id !== "") {
             setLoadingCuarteles(true);
             fetchCuarteles();
         }
@@ -239,7 +286,9 @@ const DatosContrato = props => {
 
     useEffect(() => {
         function fetchActividades() {
-            Axios.get(`${url}/labor/${contrato.empresa_id}/${contrato.actividad_id}`)
+            Axios.get(
+                `${url}/labor/${contrato.empresa_id}/${contrato.actividad_id}`
+            )
                 .then(res => {
                     setLabores(res.data.data);
                     setLoadingLabores(false);
@@ -249,7 +298,7 @@ const DatosContrato = props => {
                     fetchActividades();
                 });
         }
-        if (contrato.actividad_id !== '') {
+        if (contrato.actividad_id !== "") {
             setLoadingLabores(true);
             fetchActividades();
         }
@@ -257,318 +306,368 @@ const DatosContrato = props => {
 
     return (
         <Card>
-            <Form {...layout}>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Empresa" initialValue={9} required={true}>
-                            <Select
-                                name="empresa_id"
-                                showSearch
-                                placeholder="Empresa"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, empresa_id: e })
-                                }
-                                value={contrato.empresa_id}
-                            >
-                                {empresa.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {option.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Zona Labor" required={true}>
-                            <Select
-                                name="zona_labor_id"
-                                showSearch
-                                placeholder="Zona Labor"
-                                optionFilterProp="children"
-                                loading={loadingZonaLabores}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, zona_labor_id: e })
-                                }
-                                value={contrato.zona_labor_id}
-                            >
-                                {zonasLabor.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Grupo" required={true}>
+            <div className="row">
+                <div className="col-md-4">
+                    Empresa:
+                    <br />
+                    <Select
+                        name="empresa_id"
+                        showSearch
+                        placeholder="Empresa"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, empresa_id: e })
+                        }
+                        value={contrato.empresa_id}
+                    >
+                        {empresa.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {option.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Zona Labor:
+                    <br />
+                    <Select
+                        name="zona_labor_id"
+                        showSearch
+                        placeholder="Zona Labor"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingZonaLabores}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, zona_labor_id: e })
+                        }
+                        value={contrato.zona_labor_id}
+                    >
+                        {zonasLabor.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+
+                <div className="col-md-4">
+                    Régimen
+                    <br />
+                    <Select
+                        name="regimen_id"
+                        showSearch
+                        placeholder="Regimen"
+                        optionFilterProp="children"
+                        loading={loadingRegimenes}
+                        size="small"
+                        style={{ width: "100%" }}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, regimen_id: e })
+                        }
+                        value={contrato.regimen_id}
+                    >
+                        {regimenes.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Fecha Ingreso:
+                    <br />
+                    <DatePicker
+                        placeholder="Fecha Ingreso"
+                        value={moment(contrato.fecha_ingreso)}
+                        onChange={setChangeFechaIngreso}
+                        allowClear={false}
+                        style={{ width: "100%" }}
+                        size="small"
+                    />
+                </div>
+                <div className="col-md-4">
+                    Fecha Termino:
+                    <br />
+                    <DatePicker
+                        placeholder="Fecha Termino"
+                        value={moment(contrato.fecha_termino)}
+                        allowClear={false}
+                        onChange={(date, dateString) => {
+                            setContrato({
+                                ...contrato,
+                                fecha_termino: dateString
+                            });
+                        }}
+                        style={{ width: "100%" }}
+                        size="small"
+                    />
+                </div>
+                <div className="col-md-4">
+                    Oficio:
+                    <br />
+                    <Select
+                        name="oficio_id"
+                        showSearch
+                        placeholder="Oficio"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingOficios}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, oficio_id: e })
+                        }
+                        value={contrato.oficio_id}
+                    >
+                        {oficios.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Cuartel:
+                    <br />
+                    <Select
+                        name="cuartel_id"
+                        showSearch
+                        placeholder="Cuartel"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingCuarteles}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, cuartel_id: e })
+                        }
+                        value={contrato.cuartel_id}
+                    >
+                        {cuarteles.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Agrupación:
+                    <br />
+                    <Select
+                        name="agrupacion_id"
+                        showSearch
+                        placeholder="Agrupacion"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingAgrupaciones}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, agrupacion_id: e })
+                        }
+                        value={contrato.agrupacion_id}
+                    >
+                        {agrupaciones.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Actividad:
+                    <br />
+                    <Select
+                        name="actividad_id"
+                        showSearch
+                        placeholder="Actividad"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingActividades}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, actividad_id: e })
+                        }
+                        value={contrato.actividad_id}
+                    >
+                        {actividades.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Labor:
+                    <br />
+                    <Select
+                        name="labor_id"
+                        showSearch
+                        placeholder="Labor"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingLabores}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, labor_id: e })
+                        }
+                        value={contrato.labor_id}
+                    >
+                        {labores.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Tipo Contrato:
+                    <br />
+                    <Select
+                        name="tipo_contrato_id"
+                        showSearch
+                        placeholder="Tipo Contrato"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingTiposContratos}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, tipo_contrato_id: e })
+                        }
+                        value={contrato.tipo_contrato_id}
+                    >
+                        {tiposContratos.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Troncal:
+                    <br />
+                    <Select
+                        name="troncal_id"
+                        showSearch
+                        placeholder="Troncal"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingTroncales}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setContrato({ ...contrato, troncal_id: e })
+                        }
+                        value={contrato.troncal_id}
+                    >
+                        {troncales.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Ruta:
+                    <br />
+                    <Select
+                        name="ruta_id"
+                        showSearch
+                        placeholder="Ruta"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        loading={loadingRutas}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setContrato({ ...contrato, ruta_id: e })}
+                        value={contrato.ruta_id}
+                    >
+                        {rutas.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                {[1, 4].includes(contrato.regimen_id) && (
+                    <>
+                        <div className="col-md-4">
+                            Sueldo:<br />
                             <Input
                                 type="number"
-                                name="grupo"
-                                value={contrato.grupo}
+                                name="sueldo"
+                                size="small"
+                                value={contrato.sueldo}
                                 onChange={handleChangeInput}
                             />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Regimen" required={true}>
-                            <Select
-                                name="regimen_id"
-                                showSearch
-                                placeholder="Regimen"
-                                optionFilterProp="children"
-                                loading={loadingRegimenes}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, regimen_id: e })
-                                }
-                                value={contrato.regimen_id}
-                            >
-                                {regimenes.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="F. Ingreso" required={true}>
-                            <DatePicker
-                                placeholder="Fecha Ingreso"
-                                value={moment(contrato.fecha_ingreso)}
-                                onChange={setChangeFechaIngreso}
-                                allowClear={false}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="F. Termino" required={true}>
-                            <DatePicker
-                                placeholder="Fecha Termino"
-                                value={moment(contrato.fecha_termino)}
-                                allowClear={false}
-                                onChange={(date, dateString) => {
-                                    setContrato({
-                                        ...contrato,
-                                        fecha_termino: dateString,
-                                    });
-                                }}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Oficio" required={true}>
-                            <Select
-                                name="oficio_id"
-                                showSearch
-                                placeholder="Oficio"
-                                optionFilterProp="children"
-                                loading={loadingOficios}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, oficio_id: e })
-                                }
-                                value={contrato.oficio_id}
-                            >
-                                {oficios.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Cuartel" required={true}>
-                            <Select
-                                name="cuartel_id"
-                                showSearch
-                                placeholder="Cuartel"
-                                optionFilterProp="children"
-                                loading={loadingCuarteles}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, cuartel_id: e })
-                                }
-                                value={contrato.cuartel_id}
-                            >
-                                {cuarteles.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Agrupación" required={true}>
-                            <Select
-                                name="agrupacion_id"
-                                showSearch
-                                placeholder="Agrupacion"
-                                optionFilterProp="children"
-                                loading={loadingAgrupaciones}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, agrupacion_id: e })
-                                }
-                                value={contrato.agrupacion_id}
-                            >
-                                {agrupaciones.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Actividad" required={true}>
-                            <Select
-                                name="actividad_id"
-                                showSearch
-                                placeholder="Actividad"
-                                optionFilterProp="children"
-                                loading={loadingActividades}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, actividad_id: e })
-                                }
-                                value={contrato.actividad_id}
-                            >
-                                {actividades.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Labor" required={true}>
-                            <Select
-                                name="labor_id"
-                                showSearch
-                                placeholder="Labor"
-                                optionFilterProp="children"
-                                loading={loadingLabores}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, labor_id: e })
-                                }
-                                value={contrato.labor_id}
-                            >
-                                {labores.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Tipo Contrato" required={true}>
-                            <Select
-                                name="tipo_contrato_id"
-                                showSearch
-                                placeholder="Tipo Contrato"
-                                optionFilterProp="children"
-                                loading={loadingTiposContratos}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, tipo_contrato_id: e })
-                                }
-                                value={contrato.tipo_contrato_id}
-                            >
-                                {tiposContratos.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Tipo" required={true}>
+                        </div>
+                    </>
+                )}
+                {contrato.regimen_id == 3 && (
+                    <>
+                        <div className="col-md-4">
+                            Tipo de Ingreso:
+                            <br />
                             <Select
                                 name="tipo_trabajador"
                                 showSearch
                                 placeholder="Tipo Trabajador"
                                 optionFilterProp="children"
+                                size="small"
+                                style={{ width: "100%" }}
                                 filterOption={(input, option) =>
                                     option.children
                                         .toLowerCase()
@@ -580,87 +679,36 @@ const DatosContrato = props => {
                                 value={contrato.tipo_trabajador}
                             >
                                 {tipos_trabajadores.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
+                                    <Select.Option value={option.id} key={option.id}>
                                         {option.name}
                                     </Select.Option>
                                 ))}
                             </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Troncal" required={true}>
-                            <Select
-                                name="troncal_id"
-                                showSearch
-                                placeholder="Troncal"
-                                optionFilterProp="children"
-                                loading={loadingTroncales}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, troncal_id: e })
-                                }
-                                value={contrato.troncal_id}
-                            >
-                                {troncales.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Ruta" required={true}>
-                            <Select
-                                name="ruta_id"
-                                showSearch
-                                placeholder="Ruta"
-                                optionFilterProp="children"
-                                loading={loadingRutas}
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setContrato({ ...contrato, ruta_id: e })
-                                }
-                                value={contrato.ruta_id}
-                            >
-                                {rutas.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Form.Item label="Código Bus">
+                        </div>
+                        <div className="col-md-4">
+                            Código Bus:
+                            <br />
                             <Input
                                 name="codigo_bus"
                                 value={contrato.codigo_bus}
                                 onChange={handleChangeInput}
+                                size="small"
                             />
-                        </Form.Item>
-                    </Col>
-                </Row>
-            </Form>
+                        </div>
+                        <div className="col-md-4">
+                            Grupo:
+                            <br />
+                            <Input
+                                type="number"
+                                name="grupo"
+                                size="small"
+                                value={contrato.grupo}
+                                onChange={handleChangeInput}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
         </Card>
     );
 };

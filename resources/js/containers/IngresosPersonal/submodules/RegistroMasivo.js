@@ -28,6 +28,7 @@ export const RegistroMasivo = () => {
         tipo_trabajador: '',
         ruta_id: '',
         troncal_id: '',
+        sueldo: 0,
     });
     const [trabajadores, setTrabajadores] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -277,7 +278,7 @@ export const RegistroMasivo = () => {
                     Datos de Reniec: <Switch defaultChecked onChange={checked => setRegistroReniec(checked)}/>
                 </Col>
             </Row>
-            <hr />
+            <br />
             <DatosContrato
                 contrato={contrato}
                 setDatosContratoValido={setDatosContratoValido}
