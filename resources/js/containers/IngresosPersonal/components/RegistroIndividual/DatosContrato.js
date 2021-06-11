@@ -95,7 +95,8 @@ const DatosContrato = props => {
         }
     }, [contrato]);
 
-    const setChangeFechaIngreso = (date, dateString) => {
+    const setChangeFechaIngreso = e => {
+        const dateString = e.target.value;
         setContrato({
             ...contrato,
             fecha_ingreso: dateString,
@@ -394,30 +395,29 @@ const DatosContrato = props => {
                 <div className="col-md-4">
                     Fecha Ingreso:
                     <br />
-                    <DatePicker
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={contrato?.fecha_ingreso}
+                        onChange={setChangeFechaIngreso}
+                    />
+                    {/* <DatePicker
                         placeholder="Fecha Ingreso"
                         value={moment(contrato.fecha_ingreso)}
                         onChange={setChangeFechaIngreso}
                         allowClear={false}
                         style={{ width: "100%" }}
                         size="small"
-                    />
+                    /> */}
                 </div>
                 <div className="col-md-4">
                     Fecha Termino:
                     <br />
-                    <DatePicker
-                        placeholder="Fecha Termino"
-                        value={moment(contrato.fecha_termino)}
-                        allowClear={false}
-                        onChange={(date, dateString) => {
-                            setContrato({
-                                ...contrato,
-                                fecha_termino: dateString
-                            });
-                        }}
-                        style={{ width: "100%" }}
-                        size="small"
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={contrato?.fecha_termino}
+                        onChange={e => setContrato({ ...contrato, fecha_termino: e.target.value })}
                     />
                 </div>
                 <div className="col-md-4">
@@ -589,7 +589,7 @@ const DatosContrato = props => {
                     </Select>
                 </div>
                 <div className="col-md-4">
-                    Troncal:
+                    Troncal {contrato.regimen_id != 3 && '(opcional)'}:
                     <br />
                     <Select
                         name="troncal_id"
@@ -617,7 +617,7 @@ const DatosContrato = props => {
                     </Select>
                 </div>
                 <div className="col-md-4">
-                    Ruta:
+                    Ruta {contrato.regimen_id != 3 && '(opcional)'}:
                     <br />
                     <Select
                         name="ruta_id"

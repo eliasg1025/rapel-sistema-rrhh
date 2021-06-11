@@ -85,7 +85,7 @@ export const RegistroMasivo = () => {
     };
 
     const ListaNoRegistrados = no_registrados => {
-        console.log('No registrados: ', no_registrados);
+        // console.log('No registrados: ', no_registrados);
         return (
             <ul>
                 {no_registrados.no_registrados.map(e => <li key={e.key}>{e.rut}</li>)}
@@ -228,22 +228,31 @@ export const RegistroMasivo = () => {
     };
 
     const validForm = () => {
-        return contrato.codigo_bus !== '' &&
-            contrato.grupo !== '' &&
+        const result =
             contrato.empresa_id !== '' &&
+            contrato.regimen_id !== '' &&
             contrato.zona_labor_id !== '' &&
             contrato.fecha_ingreso !== '' &&
             contrato.cuartel_id !== '' &&
             contrato.agrupacion_id !== '' &&
-            contrato.regimen_id !== '' &&
             contrato.actividad_id !== '' &&
             contrato.labor_id !== '' &&
             contrato.tipo_contrato_id !== '' &&
-            contrato.oficio_id !== '' &&
-            contrato.troncal_id !== '' &&
-            contrato.ruta_id !== '' &&
-            contrato.tipo_trabajador !== '';
+            contrato.oficio_id !== '';
 
+        if (contrato.regimen_id == 3) {
+            return result && (
+                contrato.codigo_bus !== '' &&
+                contrato.grupo !== '' &&
+                contrato.tipo_trabajador !== '' &&
+                contrato.troncal_id !== '' &&
+                contrato.ruta_id !== ''
+            );
+        } else {
+            return result && (
+                contrato.sueldo !== 0
+            );
+        }
     };
 
     const empezarRegistro = () => {

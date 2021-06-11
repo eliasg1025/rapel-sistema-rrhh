@@ -58,7 +58,7 @@ export const RegistroIndividual = () => {
         apellido_materno: '',
         direccion: '',
         telefono: '',
-        fecha_nacimiento: moment(),
+        fecha_nacimiento: '',
         nombre_zona: '',
         nombre_via: '',
         sexo: '',
@@ -100,7 +100,7 @@ export const RegistroIndividual = () => {
     const clearData = () => {
         let _trabajador = { ...trabajador };
         console.log('antes', _trabajador.fecha_nacimiento);
-        _trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
+        //_trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
         console.log('despues', _trabajador.fecha_nacimiento);
         for (const key in _trabajador) {
             if (_trabajador[key] == null) {

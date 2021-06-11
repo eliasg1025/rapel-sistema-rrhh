@@ -69,7 +69,7 @@ Route::group(['prefix' => 'trabajador'], function() {
     Route::get('/{rut}/horarios', 'TrabajadorController@getHorarios');
     Route::put('/{rut}/sctr', 'TrabajadorController@sctr');
     Route::group(['prefix' => 'reniec'], function() {
-        Route::get('/{rut}', 'TrabajadorController@obtencionReniecIndividual');
+        // Route::get('/{rut}', 'TrabajadorController@obtencionReniecIndividual')->where(['rut' => '']);
         Route::post('/masiva', 'TrabajadorController@obtencionReniecMasiva');
     });
 });

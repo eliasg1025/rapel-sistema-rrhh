@@ -66,7 +66,7 @@ const BusquedaTrabajador = props => {
             apellido_materno:  _trabajador.apellido_materno,
             direccion: _trabajador.direccion,
             telefono: _trabajador.telefono,
-            fecha_nacimiento: moment(_trabajador.fecha_nacimiento).format('DD/MM/YYYY'),
+            fecha_nacimiento: moment(_trabajador.fecha_nacimiento).format('YYYY-MM-DD').toString(),
             nombre_zona: _trabajador.nombre_zona,
             nombre_via: _trabajador.nombre_via,
             sexo: _trabajador.sexo,

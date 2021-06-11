@@ -20,7 +20,7 @@ const DatosTrabajador = props => {
     });
 
     useEffect(() => {
-        const edad = moment().diff(moment(trabajador.fecha_nacimiento, 'DD/MM/YYYY'), 'years');
+        const edad = moment().diff(moment(trabajador.fecha_nacimiento, 'YYYY-MM-DD'), 'years');
         setEdad(edad);
 
         if (edad <= 18 || edad >= 55) {
@@ -235,58 +235,47 @@ const DatosTrabajador = props => {
             <div className="row">
                 <div className="col-md-4">
                     Nombre:<br />
-                    <Input
+                    <input
+                        className="form-control"
                         autoComplete="off"
                         name="nombre"
-                        size="small"
                         value={trabajador.nombre}
                         onChange={e => setTrabajador({ ...trabajador, nombre: e.target.value })}
                     />
                 </div>
                 <div className="col-md-4">
                     Apellido Paterno:<br />
-                    <Input
+                    <input
+                        className="form-control"
                         autoComplete="off"
                         name="apellido_paterno"
-                        size="small"
                         value={trabajador.apellido_paterno}
                         onChange={e => setTrabajador({ ...trabajador, apellido_paterno: e.target.value })}
                     />
                 </div>
                 <div className="col-md-4">
                     Apellido Materno:<br />
-                    <Input
+                    <input
+                        className="form-control"
                         autoComplete="off"
                         name="apellido_materno"
-                        size="small"
                         value={trabajador.apellido_materno}
                         onChange={e => setTrabajador({ ...trabajador, apellido_materno: e.target.value })}
                     />
                 </div>
                 <div className="col-md-4">
                     Fecha Nacimiento:<br />
-                    <Item
-                        validateStatus={validacionEdad.validateStatus}
-                        help={validacionEdad.help}
-                    >
-                        <DatePicker
-                            name="fecha_nacimiento"
-                            size="small"
-                            style={{ width: '100%' }}
-                            value={trabajador.fecha_nacimiento && moment(
-                                trabajador.fecha_nacimiento,
-                                'DD/MM/YYYY'
-                            )}
-                            format={['DD/MM/YYYY']}
-                            allowClear={false}
-                            onChange={(date, dateString) => setTrabajador({ ...trabajador, fecha_nacimiento: date })}
-                        />
-                        <small>
-                            {trabajador.fecha_nacimiento !== ''
-                                ? `  ${edad} años`
-                                : ''}
-                        </small>
-                    </Item>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={trabajador?.fecha_nacimiento}
+                        onChange={e => setTrabajador({ ...trabajador, fecha_nacimiento: e.target.value })}
+                    />
+                    <small>
+                        {trabajador.fecha_nacimiento !== ''
+                            ? `  ${edad} años`
+                            : ''}
+                    </small>
                 </div>
                 <div className="col-md-4">
                     Sexo:<br />
@@ -366,16 +355,19 @@ const DatosTrabajador = props => {
                 </div>
                 <div className="col-md-4">
                     Telefono:<br />
-                    <Input
+                    <input
+                        className="form-control"
                         autoComplete="off"
                         name="telefono"
                         value={trabajador.telefono}
                         onChange={handleChangeInput}
+                        size="small"
                     />
                 </div>
                 <div className="col-md-4">
                     Email:<br />
-                    <Input
+                    <input
+                        className="form-control"
                         autoComplete="off"
                         name="email"
                         value={trabajador.email}
@@ -389,6 +381,8 @@ const DatosTrabajador = props => {
                         showSearch
                         placeholder="Departamento"
                         optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
                         filterOption={(input, option) =>
                             option.children
                                 .toLowerCase()
@@ -415,6 +409,8 @@ const DatosTrabajador = props => {
                         showSearch
                         placeholder="Provincia"
                         optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
                         filterOption={(input, option) =>
                             option.children
                                 .toLowerCase()
@@ -441,6 +437,8 @@ const DatosTrabajador = props => {
                         showSearch
                         placeholder="Distrito"
                         optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
                         filterOption={(input, option) =>
                             option.children
                                 .toLowerCase()
@@ -467,6 +465,8 @@ const DatosTrabajador = props => {
                         showSearch
                         placeholder="Tipo Zona"
                         optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
                         filterOption={(input, option) =>
                             option.children
                                 .toLowerCase()
@@ -487,347 +487,66 @@ const DatosTrabajador = props => {
                         ))}
                     </Select>
                 </div>
+                <div className="col-md-8">
+                    Nombre Zona:<br />
+                    <input
+                        className="form-control"
+                        autoComplete="off"
+                        name="nombre_zona"
+                        value={trabajador.nombre_zona}
+                        onChange={handleChangeInput}
+                    />
+                </div>
                 <div className="col-md-4">
-
+                    Tipo Vía:<br />
+                    <Select
+                        name="tipo_via_id"
+                        showSearch
+                        placeholder="Tipo Via"
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: '100%' }}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e =>
+                            setTrabajador({ ...trabajador, tipo_via_id: e })
+                        }
+                        value={trabajador.tipo_via_id}
+                    >
+                        {tiposVias.map(option => (
+                            <Select.Option
+                                value={option.id}
+                                key={option.id}
+                            >
+                                {`${option.id} - ${option.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-8">
+                    Nombre Vía:<br />
+                    <input
+                        className="form-control"
+                        autoComplete="off"
+                        name="nombre_via"
+                        value={trabajador.nombre_via}
+                        onChange={handleChangeInput}
+                    />
+                </div>
+                <div className="col-md-12">
+                    Dirección:<br />
+                    <input
+                        className="form-control"
+                        autoComplete="off"
+                        name="direccion"
+                        value={trabajador.direccion}
+                        onChange={e => setTrabajador({ ...trabajador, direccion: e.target.value })}
+                    />
                 </div>
             </div>
-            <Form layout="vertical" className="data-form">
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="A. Paterno" required={true}>
-                            <Input
-                                autoComplete="off"
-                                name="apellido_paterno"
-                                value={trabajador.apellido_paterno}
-                                onChange={e => setTrabajador({ ...trabajador, apellido_paterno: e.target.value })}
-                            />
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="A. Materno" required={true}>
-                            <Input
-                                autoComplete="off"
-                                name="apellido_materno"
-                                value={trabajador.apellido_materno}
-                                onChange={e => setTrabajador({ ...trabajador, apellido_materno: e.target.value })}
-                            />
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Nombre" required={true}>
-                            <Input
-                                autoComplete="off"
-                                name="nombre"
-                                value={trabajador.nombre}
-                                onChange={e => setTrabajador({ ...trabajador, nombre: e.target.value })}
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item
-                            label="F. Nacimiento"
-                            validateStatus={validacionEdad.validateStatus}
-                            help={validacionEdad.help}
-                        >
-                            <DatePicker
-                                name="fecha_nacimiento"
-                                value={trabajador.fecha_nacimiento && moment(
-                                    trabajador.fecha_nacimiento,
-                                    'DD/MM/YYYY'
-                                )}
-                                format={['DD/MM/YYYY']}
-                                allowClear={false}
-                                onChange={(date, dateString) => setTrabajador({ ...trabajador, fecha_nacimiento: date })}
-                            />
-                            <small>
-                                {trabajador.fecha_nacimiento !== ''
-                                    ? `  ${edad} años`
-                                    : ''}
-                            </small>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Sexo" required={true}>
-                            <Select
-                                name="sexo"
-                                placeholder="Sexo"
-                                onChange={e => {
-                                    setTrabajador({ ...trabajador, sexo: e });
-                                }}
-                                value={trabajador.sexo}
-                                required={true}
-                            >
-                                {sexo.map(option => (
-                                    <Select.Option
-                                        key={option.id}
-                                        value={option.id}
-                                    >
-                                        {option.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="E. Civil" required={true}>
-                            <Select
-                                name="estado_civil_id"
-                                placeholder="Estado Civil"
-                                onChange={e => {
-                                    setTrabajador({ ...trabajador, estado_civil_id: e });
-                                }}
-                                value={trabajador.estado_civil_id}
-
-                            >
-                                {estado_civil.map(option => (
-                                    <Select.Option
-                                        key={option.id}
-                                        value={option.id}
-                                    >
-                                        {option.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Nacionalidad" required={true}>
-                            <Select
-                                name="nacionalidad_id"
-                                showSearch
-                                placeholder="Nacionalidad"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e => {
-                                    setTrabajador({ ...trabajador, nacionalidad_id: e });
-                                }}
-                                value={trabajador.nacionalidad_id}
-
-                            >
-                                {nacionalidades.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Telefono">
-                            <Input
-                                autoComplete="off"
-                                name="telefono"
-                                value={trabajador.telefono}
-                                onChange={handleChangeInput}
-                                size="small"
-                            />
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Email">
-                            <Input
-                                autoComplete="off"
-                                name="email"
-                                value={trabajador.email}
-                                onChange={handleChangeInput}
-                                size="small"
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Departamento" required={true}>
-                            <Select
-                                name="departamento_id"
-                                showSearch
-                                placeholder="Departamento"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={handleChangeDepartamento}
-                                value={trabajador.departamento_id}
-
-                            >
-                                {departamentos.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Provincia" required={true}>
-                            <Select
-                                name="provincia_id"
-                                showSearch
-                                placeholder="Provincia"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={handleChangeProvincia}
-                                value={trabajador.provincia_id}
-
-                            >
-                                {provincias.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Distrito" required={true}>
-                            <Select
-                                name="distrito_id"
-                                showSearch
-                                placeholder="Distrito"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={handleChangeDistrito}
-                                value={trabajador.distrito_id}
-
-                            >
-                                {distritos.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Zona">
-                            <Select
-                                name="tipo_zonas_id"
-                                showSearch
-                                placeholder="Tipo Zona"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setTrabajador({ ...trabajador, tipo_zona_id: e })
-                                }
-                                value={trabajador.tipo_zona_id}
-                            >
-                                {tiposZonas.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Nombre">
-                            <Input
-                                autoComplete="off"
-                                name="nombre_zona"
-                                value={trabajador.nombre_zona}
-                                onChange={handleChangeInput}
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Via">
-                            <Select
-                                name="tipo_via_id"
-                                showSearch
-                                placeholder="Tipo Via"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                onChange={e =>
-                                    setTrabajador({ ...trabajador, tipo_via_id: e })
-                                }
-                                value={trabajador.tipo_via_id}
-                            >
-                                {tiposVias.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {`${option.id} - ${option.name}`}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Item>
-                    </Col>
-                    <Col md={8} sm={24} xs={24}>
-                        <Item label="Nombre">
-                            <Input
-                                autoComplete="off"
-                                name="nombre_via"
-                                value={trabajador.nombre_via}
-                                onChange={handleChangeInput}
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={2} sm={24} xs={24}>
-                        <Item required={true}>
-                            Dirección:
-                        </Item>
-                    </Col>
-                    <Col md={14} sm={24} xs={24}>
-                        <Item>
-                            <Input
-                                autoComplete="off"
-                                name="direccion"
-                                value={trabajador.direccion}
-                                onChange={e => setTrabajador({ ...trabajador, direccion: e.target.value })}
-                            />
-                        </Item>
-                    </Col>
-                </Row>
-            </Form>
         </Card>
     );
 };
