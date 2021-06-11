@@ -69,7 +69,7 @@ function Acciones({ record, eliminarContrato }) {
             <Tooltip title="Editar registro">
                 <Button
                     type="primary"
-                    onClick={() => window.open(`/registro-individual/editar/${record.contrato_id}`)}
+                    onClick={() => window.open(`/ingresos/registro-individual/editar/${record.contrato_id}`)}
                 >
                     <EditOutlined />
                 </Button>

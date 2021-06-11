@@ -19,7 +19,6 @@ export const RegistroIndividual = () => {
             setTrabajador({
                 ...trabajador,
                 ..._trabajador,
-                fecha_nacimiento: moment(_trabajador.fecha_nacimiento).format('DD/MM/YYYY')
             });
 
             setContrato({
