@@ -10,6 +10,7 @@ use App\Models\Provincia;
 use App\Traits\ConsumeApi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ReniecService
 {
@@ -32,6 +33,14 @@ class ReniecService
             $content = json_decode($response['content']);
             if ($content->success) {
                 $result = $content->result;
+
+                if ($content->images) {
+                    Storage::disk('public')->put(
+                        "trabajadores/{$result->num_doc}.png",
+                        base64_decode($content->images->foto)
+                    );
+                }
+
                 return $this->formatData($result);
             }
 
@@ -80,12 +89,46 @@ class ReniecService
                 'provincia_id'  => $provincia_id,
             ])->first()->code;
 
+            /**
+             * Direccion
+             */
+            $direccion = '';
+            if ($data->dir_urb) {
+                $direccion .= $data->dir_urb;
+            }
+
+            if ($data->dir_bloque) {
+                $direccion .= ' ' . $data->dir_bloque;
+            }
+
+            if ($data->dir_dpto_piso) {
+                $direccion .= ' ' . $data->dir_dpto_piso;
+            }
+
+            if ($data->dir_etapa) {
+                $direccion .= ' ' . $data->dir_etapa;
+            }
+
+            if ($data->dir_manzana) {
+                $direccion .= ' MZ. ' . $data->dir_manzana;
+            }
+
+            if ($data->dir_lote) {
+                $direccion .= ' LT. ' . $data->dir_lite;
+            }
+
+            if (trim($direccion) === '') {
+                $direccion = isset($data->dir_nombre) && !is_null($data->dir_nombre)
+                    ? $data->dir_nombre
+                    : 'S/N';
+            }
+
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
                 'apellido_paterno'  => $data->apellido_paterno,
                 'apellido_materno'  => $data->apellido_materno,
-                'direccion'         => strtoupper($data->dir_nombre) . ' - ' . $data->ubi_dir_dist_desc,
+                'direccion'         => strtoupper($direccion),
                 'fecha_nacimiento'  => $data->fecha_nacimiento,
                 'sexo'              => $data->cod_sexo === '1' ? 'M' : 'F',
                 'nacionalidad_id'   => 'PE',
