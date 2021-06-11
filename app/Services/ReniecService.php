@@ -114,7 +114,7 @@ class ReniecService
             }
 
             if ($data->dir_lote) {
-                $direccion .= ' LT. ' . $data->dir_lite;
+                $direccion .= ' LT. ' . $data->dir_lote;
             }
 
             if (trim($direccion) === '') {
