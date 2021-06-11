@@ -93,27 +93,27 @@ class ReniecService
              * Direccion
              */
             $direccion = '';
-            if ($data->dir_urb) {
+            if (isset($data->dir_urb) && !is_null($data->dir_urb)) {
                 $direccion .= $data->dir_urb;
             }
 
-            if ($data->dir_bloque) {
+            if (isset($data->dir_bloque) && !is_null($data->dir_bloque)) {
                 $direccion .= ' ' . $data->dir_bloque;
             }
 
-            if ($data->dir_dpto_piso) {
+            if (isset($data->dir_dpto_piso) && !is_null($data->dir_dpto_piso)) {
                 $direccion .= ' ' . $data->dir_dpto_piso;
             }
 
-            if ($data->dir_etapa) {
+            if (isset($data->dir_etapa) && !is_null($data->dir_etapa)) {
                 $direccion .= ' ' . $data->dir_etapa;
             }
 
-            if ($data->dir_manzana) {
+            if (isset($data->dir_manzana) && !is_null($data->dir_manzana)) {
                 $direccion .= ' MZ. ' . $data->dir_manzana;
             }
 
-            if ($data->dir_lote) {
+            if (isset($data->dir_lote) && !is_null($data->dir_lote)) {
                 $direccion .= ' LT. ' . $data->dir_lote;
             }
 
