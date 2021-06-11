@@ -123,6 +123,8 @@ class ReniecService
                     : 'S/N';
             }
 
+            $direccion = $direccion . ' - ' . $data->ubi_dir_dist_desc;
+
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
