@@ -644,52 +644,6 @@
 
     <div class="page-break"></div>
 
-    {{-- <section id="page8">
-        <h4 class="titulo">CONVENIO DE AUTORIZACIÓN PARA LA TRAMITACIÓN DE ANTECEDENTES POLICIALES </h4>
-        <div style="font-size: 15px">
-            <p>
-                Conste por el presente documento, el CONVENIO DE AUTORIZACIÓN PARA LA TRAMITACIÓN DE ANTECEDENTES POLICIALES (en adelante “<b>EL CONVENIO</b>”) que suscriben de una parte <b>SOCIEDAD AGRICOLA RAPEL SAC</b>, identificado con RUC Nº 20451779711, inscrita en la Partida Electrónica N° 12619278, del Registro de Personas Jurídicas de Lima, con domicilio en Caserío el Papayo Mz O, Distrito de Castilla, debidamente representada por el Jefe de Recursos Humanos, Carrillo Curay Federico, identificado con D.N.I N° 44554215, a quien en lo sucesivo se denominará <b>EL EMPLEADOR</b>, y de la otra parte <b>{{ $trabajador->apellidos }} {{ $trabajador->nombre }}</b>, identificado (a) con D.N.I. N° <b>{{ $trabajador->rut }}</b>, con domicilio en <b>{{ $trabajador->direccion }}</b>, a quien en adelante se le denominará <b>EL TRABAJADOR</b>, en los términos y condiciones siguientes:
-            </p>
-            <ul class="espacios-lista-md">
-                <li>
-                    <b><u>PRIMERO:</u> ANTECEDENTES</b><br>
-                    <b>EL EMPLEADOR</b> dentro de su Política de Contratación, en el artículo 2° establece los requisitos aplicables todos los trabajadores sin distinción  del cargo que ocupan y la naturaleza de sus funciones. Superado el proceso de selección EL EMPLEADOR,  conforme lo dispuesto en la Ley 29607, exige a <b>EL TRABAJADOR</b> la presentación del certificado de antecedentes policiales. </li>
-                <li>
-                    <b><u>SEGUNDO:</u> OBJETO DEL CONVENIO</b><br>
-                    <b>EL EMPLEADOR</b> con la finalidad de otorgar facilidades suscribe el presente convenio, mediante el cual <b>EL TRABAJADOR</b>  autoriza expresamente a <b>EL EMPLEADOR</b>  la tramitación y obtención del certificado de antecedentes policiales.
-                </li>
-                <li>
-                    <b><u>TERCERO:</u> DEL COSTO DE LOS CERTIFICADOS</b><br>
-                    <b>EL TRABAJADOR</b> será quien asuma el costo de los certificados de antecedentes policiales, siendo el importe de S/. 11.00 (ONCE CON 00/100 SOLES), el cual será descontado de su remuneración en una (1) sola cuota, en el mes de {{ strtoupper($contrato->mes_contrato) }} - {{ $contrato->anio_contrato }}.
-
-                    <b>EL TRABAJADOR</b> conoce y entiende que en el supuesto que se compruebe que mantiene deuda por el trámite de antecedentes policiales, el  costo será descontado del pago por los días efectivamente laborados  o de la liquidación de beneficios sociales respectiva o, por lo cual <b>EL TRABAJADOR</b> deja expresa constancia que autoriza a <b>EL EMPLEADOR</b> a realizar el descuento que corresponda.
-                </li>
-                <li>
-                    <b><u>CUARTO:</u></b><br>
-                    En todo lo no previsto en el presente Convenio, que se mantiene como documento privado, es aplicable la legislación laboral vigente.
-
-                    En señal de conformidad, suscriben el presente documento las partes, en Piura, al <i>{{ $contrato->fecha_larga }}</i>.
-                </li>
-            </ul>
-            <div>
-                <table style="width: 100%; margin-top: 50px; text-align: center">
-                    <tr>
-                        <td>
-                            <img src="{{ public_path() . '/img/Firma-Federico.jpg' }}" style="width: 200px">
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>___________________________<br>EL EMPLEADOR</b></td>
-                        <td><b>___________________________<br>EL TRABAJADOR</b></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </section> --}}
-
-    <div class="page-break"></div>
-
     <section id="page10">
         <h4 class="titulo">CONSTANCIA DE ENTREGA DE REGLAMENTO INTERNO DE TRABAJO</h4>
         <br>
@@ -721,6 +675,10 @@
             </div>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -756,6 +714,10 @@
             </div>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -802,6 +764,10 @@
 
     <div class="page-break"></div>
 
+    <section></section>
+
+    <div class="page-break"></div>
+
     <section id="page13">
         <table>
             <tr>
@@ -839,6 +805,10 @@
             </tr>
         </table>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -914,6 +884,10 @@
             </table>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -1006,6 +980,10 @@
             </table>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -1679,32 +1657,8 @@
                     </ul>
                 </li>
             </ol>
-            <br>
-            <div style="text-align: center">
-                <p style="font-weight: bold">
-                    _____________________________<br>
-                    {{ $trabajador->nombre_completo }}<br>
-                    DNI: {{ $trabajador->rut }}
-                </p>
-            </div>
         </div>
     </section>
-
-    <div class="page-break"></div>
-
-    <section>
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <br /><br /><br /><br /><br /><br /><br /><br /><br />
-        <div style="text-align: center">
-            _______________________________<br />
-            <b>{{ $trabajador->nombre_completo }}</b><br />
-            <b>DNI: {{ $trabajador->rut }}</b>
-        </div>
-    </section>
-
-
-    <div class="page-break"></div>
 
     <div class="page-break"></div>
 
@@ -1782,8 +1736,151 @@
 
     <div class="page-break"></div>
 
+    <section></section>
+
+    <div class="page-break"></div>
+
     <section>
-        <img src="{{ public_path() . '/img/vida-ley.png'}}" width="100%" />
+        <img src="{{ public_path() . '/img/la-positiva.png'}}" width="150px" />
+        <h4 class="titulo" style="font-size: 13px;">
+            DECLARACION DE BENEFICIARIOS PARA SEGUROS DE VIDA LEY D. LEG. 688
+        </h4>
+        <h4 style="text-align: center;" style="font-size: 12px">
+            DECLARACION JURADA
+        </h4>
+        <div style="font-size: 13px;">
+            <p style="text-align: center;">
+                Quien suscribe, en cumplimiento de lo dispuesto en el artículo 6 del Decreto Legislativo 688, efectúa su Declaración de Beneficiarios.
+            </p>
+
+            <p>
+                <u>PRIMER BENEFICIARIO: Cónyuge o Conviviente y sus descendientes (hijos, nietos, bisnietos).</u><br /> Para efectos de acreditar la convivencia, se debe tener declaración notarial o judicial de convivencia.
+            </p>
+
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <u><b>Nombres y Apellidos</b></u>
+                    </td>
+                    <td>
+                        <u><b>Parentesco</b></u>
+                    </td>
+                    <td>
+                        <u><b>Edad</b></u>
+                    </td>
+                    <td>
+                        <u><b>Dirección</b></u>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>2. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>3. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>4. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>5. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>6. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+            </table>
+            <br />
+            <p>
+                <u>A FALTA DE PRIMEROS BENEFICIARIOS: Padres, Abuelos y hermanos menores de dieciocho (18) años</u>
+            </p>
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <u><b>Nombres y Apellidos</b></u>
+                    </td>
+                    <td>
+                        <u><b>Parentesco</b></u>
+                    </td>
+                    <td>
+                        <u><b>Edad</b></u>
+                    </td>
+                    <td>
+                        <u><b>Dirección</b></u>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>2. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>3. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>4. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>5. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>6. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+            </table>
+            <br />
+            <p>
+                <b>Nombres y Apellidos del trabajador Asegurado</b>
+            </p>
+            <p>........................................................................................................................................................................</p>
+            <p>
+                <b>DNI N°:</b> .............................................
+            </p>
+            <br />
+            <p>
+                <b>Firma de Asegurado que debe ser certificada notarialemente:</b> ........................................................................
+            </p>
+        </div>
     </section>
+
+    <div class="page-break"></div>
+
 
 @endsection

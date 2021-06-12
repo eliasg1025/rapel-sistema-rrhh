@@ -116,28 +116,30 @@ const DatosContrato = props => {
     };
 
     useEffect(() => {
-        if (contrato.regimen_id === 3) {
-            setContrato({
-                ...contrato,
-                oficio_id: "3",
-                cuartel_id: "SCG",
-                agrupacion_id: 3,
-                actividad_id: "111",
-                labor_id: 61,
-                tipo_contrato_id: 10
-            });
-        } else {
-            setContrato({
-                ...contrato,
-                oficio_id: "",
-                cuartel_id: "",
-                agrupacion_id: '',
-                actividad_id: "",
-                labor_id: '',
-                tipo_contrato_id: '',
-                troncal_id: '',
-                ruta_id: '',
-            });
+        if (!contrato.id) {
+            if (contrato.regimen_id === 3) {
+                setContrato({
+                    ...contrato,
+                    oficio_id: "3",
+                    cuartel_id: "SCG",
+                    agrupacion_id: 3,
+                    actividad_id: "111",
+                    labor_id: 61,
+                    tipo_contrato_id: 10
+                });
+            } else {
+                setContrato({
+                    ...contrato,
+                    oficio_id: "",
+                    cuartel_id: "",
+                    agrupacion_id: '',
+                    actividad_id: "",
+                    labor_id: '',
+                    tipo_contrato_id: '',
+                    troncal_id: '',
+                    ruta_id: '',
+                });
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contrato.regimen_id]);

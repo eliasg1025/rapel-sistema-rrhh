@@ -614,6 +614,9 @@
 
     <div class="page-break"></div>
 
+    <section></section>
+
+    <div class="page-break"></div>
 
     <section id="page11">
         <table>
@@ -700,6 +703,10 @@
 
     <div class="page-break"></div>
 
+    <section></section>
+
+    <div class="page-break"></div>
+
     <section id="page13">
         <table>
             <tr>
@@ -737,6 +744,10 @@
             </tr>
         </table>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -812,6 +823,10 @@
             </table>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -904,6 +919,10 @@
             </table>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 
@@ -1492,6 +1511,144 @@
     <div class="page-break"></div>
 
     <section>
-        <img src="{{ public_path() . '/img/vida-ley.png'}}" width="100%" />
+        <img src="{{ public_path() . '/img/la-positiva.png'}}" width="150px" />
+        <h4 class="titulo" style="font-size: 13px;">
+            DECLARACION DE BENEFICIARIOS PARA SEGUROS DE VIDA LEY D. LEG. 688
+        </h4>
+        <h4 style="text-align: center;" style="font-size: 12px">
+            DECLARACION JURADA
+        </h4>
+        <div style="font-size: 13px;">
+            <p style="text-align: center;">
+                Quien suscribe, en cumplimiento de lo dispuesto en el artículo 6 del Decreto Legislativo 688, efectúa su Declaración de Beneficiarios.
+            </p>
+
+            <p>
+                <u>PRIMER BENEFICIARIO: Cónyuge o Conviviente y sus descendientes (hijos, nietos, bisnietos).</u><br /> Para efectos de acreditar la convivencia, se debe tener declaración notarial o judicial de convivencia.
+            </p>
+
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <u><b>Nombres y Apellidos</b></u>
+                    </td>
+                    <td>
+                        <u><b>Parentesco</b></u>
+                    </td>
+                    <td>
+                        <u><b>Edad</b></u>
+                    </td>
+                    <td>
+                        <u><b>Dirección</b></u>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>2. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>3. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>4. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>5. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>6. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+            </table>
+            <br />
+            <p>
+                <u>A FALTA DE PRIMEROS BENEFICIARIOS: Padres, Abuelos y hermanos menores de dieciocho (18) años</u>
+            </p>
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <u><b>Nombres y Apellidos</b></u>
+                    </td>
+                    <td>
+                        <u><b>Parentesco</b></u>
+                    </td>
+                    <td>
+                        <u><b>Edad</b></u>
+                    </td>
+                    <td>
+                        <u><b>Dirección</b></u>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>2. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>3. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>4. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>5. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+                <tr>
+                    <td>6. .........................</td>
+                    <td>....................</td>
+                    <td>.......</td>
+                    <td>....................</td>
+                </tr>
+            </table>
+            <br />
+            <p>
+                <b>Nombres y Apellidos del trabajador Asegurado</b>
+            </p>
+            <p>........................................................................................................................................................................</p>
+            <p>
+                <b>DNI N°:</b> .............................................
+            </p>
+            <br />
+            <p>
+                <b>Firma de Asegurado que debe ser certificada notarialemente:</b> ........................................................................
+            </p>
+        </div>
     </section>
+
+    <div class="page-break"></div>
 @endsection
