@@ -14,6 +14,7 @@ export const RegistroIndividual = () => {
     const { usuario, trabajador: _trabajador, contrato: _contrato } = JSON.parse(sessionStorage.getItem("data"));
 
     useEffect(() => {
+        console.log(_contrato);
         if (_contrato && _trabajador) {
 
             setTrabajador({
@@ -46,6 +47,7 @@ export const RegistroIndividual = () => {
         tipo_trabajador: '',
         ruta_id: '',
         troncal_id: '',
+        sueldo: 0,
     });
     const [trabajador, setTrabajador] = useState({
         rut: '',

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Contrato extends Model
 {
+    use SoftDeletes;
+
     protected $connection = 'mysql';
 
     protected $table = 'contratos';
@@ -113,8 +116,13 @@ class Contrato extends Model
             $actividad =  Actividad::findOrFail($contrato->actividad_id);
             $labor = Labor::findOrFail($contrato->labor_id);
             $tipo_contrato = TipoContrato::findOrFail($contrato->tipo_contrato_id);
-            $ruta = Ruta::findOrFail($contrato->ruta_id);
-            $troncal = Troncal::findOrFail($contrato->troncal_id);
+
+            if ($contrato->ruta_id) {
+                $ruta = Ruta::findOrFail($contrato->ruta_id);
+            }
+            if ($contrato->troncal_id) {
+                $troncal = Troncal::findOrFail($contrato->troncal_id);
+            }
 
             return [
                 'contrato' => [
@@ -132,10 +140,11 @@ class Contrato extends Model
                     'actividad_id' => $actividad->code,
                     'labor_id' => $labor->code,
                     'tipo_contrato_id' => $tipo_contrato->code,
-                    'ruta_id' => $ruta->code,
-                    'troncal_id' => $troncal->code,
+                    'ruta_id' => $ruta->code ?? null,
+                    'troncal_id' => $troncal->code ?? null,
                     'codigo_bus' => $contrato->codigo_bus,
                     'tipo_trabajador' => $contrato->tipo_trabajador,
+                    'sueldo' => $contrato->sueldo_base,
                 ],
                 'trabajador' => [
                     'rut' => $trabajador->rut,
@@ -351,8 +360,12 @@ class Contrato extends Model
             $cuartel_id = Cuartel::findOrCreate($contrato_data['cuartel'], $zona_labor_id);
             $tipo_contrato_id = TipoContrato::findOrCreate($contrato_data['tipo_contrato']);
             $labor_id = Labor::findOrCreate($contrato_data['labor'], $actividad_id);
-            $troncal_id = Troncal::findOrCreate($contrato_data['troncal']);
-            $ruta_id = Ruta::findOrCreate($contrato_data['ruta'], $troncal_id);
+            if (isset($contrato_data['troncal'])) {
+                $troncal_id = Troncal::findOrCreate($contrato_data['troncal']);
+                if (isset($contrato_data['ruta'])) {
+                    $ruta_id = Ruta::findOrCreate($contrato_data['ruta'], $troncal_id);
+                }
+            }
 
             $contrato_activo = $data['contrato_activo'] ?? [];
             $alertas = $data['alertas'] ?? [];
@@ -420,7 +433,7 @@ class Contrato extends Model
             $contrato->empresa_id = $contrato_data['empresa_id'];
             $contrato->group = $contrato_data['grupo'];
             $contrato->codigo_bus = $contrato_data['codigo_bus'] ?? null;
-            $contrato->tipo_trabajador = $contrato_data['tipo_trabajador'];
+            $contrato->tipo_trabajador = $contrato_data['tipo_trabajador'] ?? null;
             $contrato->zona_labor_id = $zona_labor_id;
             $contrato->trabajador_id = $trabajador_id;
             $contrato->oficio_id = $oficio_id;
@@ -430,8 +443,21 @@ class Contrato extends Model
             $contrato->tipo_contrato_id = $tipo_contrato_id;
             $contrato->cuartel_id = $cuartel_id;
             $contrato->labor_id = $labor_id;
-            $contrato->troncal_id = $troncal_id;
-            $contrato->ruta_id = $ruta_id;
+            if (
+                isset($contrato_data['sueldo']) &&
+                !is_null($contrato_data['sueldo']) &&
+                $contrato_data['sueldo'] > 0
+            ) {
+                $contrato->sueldo_base = $contrato_data['sueldo'];
+            }
+
+            if (isset($troncal_id) && !is_null($troncal_id)) {
+                $contrato->troncal_id = $troncal_id;
+                if (isset($ruta_id) && !is_null($ruta_id)) {
+                    $contrato->ruta_id = $ruta_id;
+                }
+            }
+
             if ( $contrato->save() ) {
                 DB::commit();
                 return [

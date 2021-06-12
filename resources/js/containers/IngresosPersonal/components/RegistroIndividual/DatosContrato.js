@@ -68,23 +68,31 @@ const DatosContrato = props => {
     };
 
     const validacionDatosContrato = () => {
-        return (
-            contrato.codigo_bus !== "" &&
-            contrato.grupo !== "" &&
-            contrato.empresa_id !== "" &&
-            contrato.zona_labor_id !== "" &&
-            contrato.fecha_ingreso !== "" &&
-            contrato.cuartel_id !== "" &&
-            contrato.agrupacion_id !== "" &&
-            contrato.regimen_id !== "" &&
-            contrato.actividad_id !== "" &&
-            contrato.labor_id !== "" &&
-            contrato.tipo_contrato_id !== "" &&
-            contrato.oficio_id !== "" &&
-            contrato.troncal_id !== "" &&
-            contrato.ruta_id !== "" &&
-            contrato.tipo_trabajador !== ""
-        );
+        const result =
+            contrato.empresa_id !== '' &&
+            contrato.regimen_id !== '' &&
+            contrato.zona_labor_id !== '' &&
+            contrato.fecha_ingreso !== '' &&
+            contrato.cuartel_id !== '' &&
+            contrato.agrupacion_id !== '' &&
+            contrato.actividad_id !== '' &&
+            contrato.labor_id !== '' &&
+            contrato.tipo_contrato_id !== '' &&
+            contrato.oficio_id !== '';
+
+        if (contrato.regimen_id == 3) {
+            return result && (
+                contrato.codigo_bus !== '' &&
+                contrato.grupo !== '' &&
+                contrato.tipo_trabajador !== '' &&
+                contrato.troncal_id !== '' &&
+                contrato.ruta_id !== ''
+            );
+        } else {
+            return result && (
+                contrato.sueldo !== 0
+            );
+        }
     };
 
     useEffect(() => {
@@ -126,7 +134,9 @@ const DatosContrato = props => {
                 agrupacion_id: '',
                 actividad_id: "",
                 labor_id: '',
-                tipo_contrato_id: ''
+                tipo_contrato_id: '',
+                troncal_id: '',
+                ruta_id: '',
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,7 +183,6 @@ const DatosContrato = props => {
         function fetchZonasLabores() {
             Axios.get(`/api/zona-labor/${contrato.empresa_id}`)
                 .then(res => {
-                    console.log(res);
                     setZonasLabor(res.data);
                     setLoadingZonaLabores(false);
                 })
@@ -439,7 +448,7 @@ const DatosContrato = props => {
                         onChange={e =>
                             setContrato({ ...contrato, oficio_id: e })
                         }
-                        value={contrato.oficio_id}
+                        value={contrato.oficio_id ?? ''}
                     >
                         {oficios.map(option => (
                             <Select.Option value={option.id} key={option.id}>
@@ -676,7 +685,7 @@ const DatosContrato = props => {
                                 onChange={e =>
                                     setContrato({ ...contrato, tipo_trabajador: e })
                                 }
-                                value={contrato.tipo_trabajador}
+                                value={contrato.tipo_trabajador ?? ''}
                             >
                                 {tipos_trabajadores.map(option => (
                                     <Select.Option value={option.id} key={option.id}>
@@ -690,7 +699,7 @@ const DatosContrato = props => {
                             <br />
                             <Input
                                 name="codigo_bus"
-                                value={contrato.codigo_bus}
+                                value={contrato.codigo_bus ?? ''}
                                 onChange={handleChangeInput}
                                 size="small"
                             />
@@ -702,7 +711,7 @@ const DatosContrato = props => {
                                 type="number"
                                 name="grupo"
                                 size="small"
-                                value={contrato.grupo}
+                                value={contrato.grupo ?? ''}
                                 onChange={handleChangeInput}
                             />
                         </div>

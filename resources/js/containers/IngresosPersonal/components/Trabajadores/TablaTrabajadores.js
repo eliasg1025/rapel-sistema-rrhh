@@ -14,6 +14,10 @@ const getColumns = (eliminarContrato) => {
             dataIndex: 'empresa',
         },
         {
+            title: 'Regimen',
+            dataIndex: 'regimen'
+        },
+        {
             title: 'DNI',
             dataIndex: 'dni',
         },

@@ -45,6 +45,7 @@ export const Trabajadores = () => {
                             zona_labor: trabajador.zona_labor_name,
                             empresa: trabajador.empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
                             empresa_id: trabajador.empresa_id,
+                            regimen: trabajador.regimen,
                             grupo: trabajador.grupo,
                             fecha_ingreso: moment(trabajador.fecha_inicio).format(
                                 'DD/MM/YYYY'

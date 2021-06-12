@@ -75,6 +75,46 @@
 </style>
 
 @section('contenido')
+    <section style="font-size: 14px">
+        <h3 style="text-align: center;">
+            CONSENTIMIENTO INFORMADO PARA EVALUACION MÉDICA DE INGRESO  Y CUSTODIA DE HISTORIA CLÍNICA
+        </h3>
+        <br />
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo }}</b> de <b>{{ $trabajador->age }}</b> años de edad; identificado con DNI N° <b>{{ $contrato->trabajador->rut }}</b>, domiciliado en: <b>{{ $contrato->trabajador->direccion }}</b> Postulante de la empresa <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C</b>.
+        </p>
+        <br />
+        <p>
+            Certifico que he sido informado acerca de la naturaleza, propósito y posibles complicaciones de las evaluaciones de ingreso, lo cual he comprendido claramente; ya que todas mis dudas y preguntas han sido absueltas; por lo cual, autorizo se me realice la Evaluación de Ingreso y todos los estudios requeridos de acuerdo al programa de Vigilancia de Salud Ocupacional  y en conformidad de las normas vigentes, y a la vez, autorizo la custodia de estos documentos en mi Historia Clínica de la empresa la  cual se encuentra en el archivo del área de Salud Ocupacional.
+        </p>
+        <br />
+        <p>
+            Hago de conocimiento y firmo este documento sin presión alguna y por propia voluntad.<br />
+            Quedando en conformidad de lo anterior descrito firmo a continuación.
+        </p>
+        <br />
+        <p><b>Fecha:</b> 11 de junio del 2021</p>
+        <br />
+        <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+            <tr>
+                <td>
+                    <div style="width: 100px; height: 140px;"></div>
+                </td>
+                <td>
+                    <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 50%">_______________________________<br>{{ $trabajador->nombre_completo }} <br> DNI/CE: {{ $trabajador->rut }}</td>
+                <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+            </tr>
+        </table>
+        <br />
+        <small>NOTA: Si el paciente no puede firmar (Describir motivos)</small>
+    </section>
+
+    <div class="page-break"></div>
+
     <section id="page23">
         <h5 style="text-align: center">
             Ficha de Sintomatología COVID-19 para Regreso al Trabajo<br/>
@@ -89,7 +129,7 @@
                 Dirección: <span style="font-weight: normal">{{ $trabajador->direccion }}</span> &nbsp;&nbsp;Numero (celular): _____________
             </p>
             <div>
-                <p style="font-weight: bold">En los últimos 14 días calendario ha tenido algunos de los síntomas siguientes</p>
+                <p style="font-weight: bold">A) En los últimos 14 días calendario ha tenido algunos de los síntomas siguientes</p>
                 <table>
                     <tr>
                         <th></th>
@@ -126,38 +166,33 @@
                         <td style="border: 1px solid black"></td>
                     </tr>
                 </table>
-                <p>
-                    Todos los datos expresados en esta ficha constituyen declaración jurada de mi parte<br /><br />
-                    He sido informado que de omitir o falsear información puedo perjudicar la salud de mis compañeros, y la mía propia, lo cual de constituir una falta grave a la salud pública, asumo sus consecuencias
-                </p>
             </div>
             <div>
-                <p style="font-weight: bold;">Fecha: {{ $contrato->fecha_larga }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Firma: ___________________</p>
-                <p>Por favor lea detenidamente y marque con una X en el cajón correspondiente si tuvo la condición:</p>
+                <p style="font-weight: bold;">B) Padece de alguna de estas enfermedades y/o condiciones vulnerables:</p>
                 <table>
                     <tr>
                         <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>Dolor de cabeza crónico</td>
+                        <td>Edad mayor a 65 años</td>
                         <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>Neumonía recurrente</td>
+                        <td>Asma Moderada o Grave</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfermedades del cerebro</td>
+                        <td>Asma Moderada o Grave</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Bronquitis crónica</td>
+                        <td>Enfermedad Pulmonar Crónica</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Desordenes del sistema nervioso central</td>
+                        <td>Enfermedades cardiovasculares graves</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfisema</td>
+                        <td>Enfermedades cardiovasculares graves</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Epilepsia (convulsiones)</td>
+                        <td>Cáncer</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfermedad pleural</td>
+                        <td>Enfermedad o tratamiento inmunosupresor</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
@@ -167,230 +202,14 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Mareos y/o vértigo</td>
+                        <td>Diabetes Mellitus</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Resfríos recurrentes (más de 1 ves a la semana)</td>
+                        <td>Obesidad con IMC de 40 a más</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Sincope o desmayo</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor de oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Pérdida de conciencia</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>sangrado por algún oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Depresión</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>supuración (salida de material purulento) por el oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ansiedad</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>zumbido de oídos</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Transtorno bipolar (maniaco-depresivo)</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Disminución de la audición</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Intento de suicidio</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Sensación de oído tapado (más de una ves a la semana)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Tuberculosis pulmonar</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad cardiovascular</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Asma bronquial</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades de la piel</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Tos persistente</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ulcera persistente en la piel</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Palpitaciones</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Lunar que cambia de forma, tamaño y/o color</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Arritmia</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>sensibilidad a la luz solar</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor o disconfort en el tórax</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de mamas (tumoraciones, cambios de color en la piel, etc.)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hipertensión arterial                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad 1endocrinológica</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hinchazón de los miembros inferiores</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Diabetes</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en piernas al caminar</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dislipidemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Episodio coronario de algún tipo</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de tiroides</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dificultad para deglutir</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Gota</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ardor en el estómago
-                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de las articulaciones</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Úlcera Gástrica o duodena</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Reumatismo</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Desordenes intestinales</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Artritis</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor abdominal recurrente</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Movilidad limitada de miembros superiores o inferiores</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hernias en la pared abdominal</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad ósea (de los huesos)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Sangrado por el sistema digestivo (como
-                            vómitos o con deposiciones)</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de la columna</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades del hígado</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Anemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Vómitos recurrentes</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Desorden de Coagulación o sangrado</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hepatitis tipo A, B o C</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hemolisis</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Cálculos en la vesícula</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Policitemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Síndrome con colon irritable</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hemofilia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Síndrome con colon irritable</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en la columna dorsal
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades de trasmisión sexual</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Lumbalgia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>SIDA, portador de VIH</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en el cuello</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Disturbios visuales
-                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Movilidad Limitada de la columna</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Alergias a medicinas, comidas u otros agentes</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Otras enfermedades o condiciones no mencionadas arriba
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Infección o enfermedad urinaria</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Cálculos renales</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Presencia de sangre en la orina,
-                            Proteínas o glucosa</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hiperplasia de Próstata </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dificultad al orinar</td>
-                        <td></td>
+                        <td>Otros: ___________________________</td>
+                        <td style="border-top: 1px solid black"></td>
                         <td></td>
                     </tr>
                 </table>
@@ -434,7 +253,7 @@
         </div>
         <br /><br />
         <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>{{ $contrato->tipo_contrato->name }}</b></h4>
-        <p>Conste mediante el presente documento el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 27360, Ley de Promoción del Sector Agrario; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
+        <p>Conste mediante el presente documento el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
         <ul>
             <li>
                 <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C.</b>, R.U.C. Nº 20601438586, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, <b>Daniel José Eyheralde Munita</b>, identificado con Documento Nacional de Identidad C.E. Nº 001555417, a la que en adelante le denominará <b>EL EMPLEADOR</b>; y de la otra parte,
@@ -464,7 +283,7 @@
                 <br>3.3	<b>EL EMPLEADOR</b> en función de sus necesidades y requerimientos podrá modificar las condiciones de la prestación de los servicios objeto de la relación laboral, siendo pasibles de variación lo referente a la jornada y horario de trabajo, designación del centro de labores a cualquiera de las sedes que existan en su oportunidad, forma, funciones, categoría, modalidad dentro de los límites que la razonabilidad y la ley establecen. <b>EL TRABAJADOR</b> entiende que dichas variaciones no significan una rebaja de categoría y/o remuneración.
             </li>
             <li>
-                <b><u>CLÁUSULA CUARTA:</u> Obligaciones del Trabajador.-</b>
+                <b><u>CLÁUSULA CUARTA:</u> Prestaciones del Trabajador.-</b>
                 <br>8.1	La prestación de los servicios de <b>EL TRABAJADOR</b> comprende todas aquellas actividades relacionadas y complementarias al cargo indicado en la Cláusula Tercera de <b>EL CONTRATO</b>, así como aquellas que se le indiquen en función del cumplimiento de las actividades de <b>EL EMPLEADOR</b>.
                 <br>8.2	<b>EL TRABAJADOR</b>, en base al principio de buena fe laboral, debe cumplir de manera diligente todas las órdenes, disposiciones y directivas que, por necesidades del servicio, imparta <b>EL EMPLEADOR</b> conforme a los términos prescritos en <b>EL CONTRATO</b> y a las facultades de dirección y reglamentación que le corresponden conforme a la legislación vigente.
             </li>
@@ -490,22 +309,16 @@
             </li>
             <li>
                 <b><u>CLÁUSULA OCTAVA:</u> Remuneración.-</b>
-                <br>8.1	En contraprestación a los servicios prestados por <b>EL TRABAJADOR</b>, <b>EL EMPLEADOR</b> se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/. 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), monto del cual se deducirán las aportaciones y descuentos establecidos en la ley.
-                <br>8.3 Ambas partes acuerdan que la modalidad y fecha de pago de la remuneración será fijada y modificada por <b>EL EMPLEADOR</b> de acuerdo con sus necesidades operativas y/o administrativas.
-                <br>8.2	<b>EL EMPLEADOR</b> al encontrarse acogido al régimen agrario, precisa que la remuneración abonada a <b>EL TRABAJADOR</b> incluye la compensación por tiempo de servicios y las gratificaciones de fiestas patrias y de navidad, conforme lo previsto por el Art.7° de la Ley N° 27360.
-                <br>8.3	<b>EL TRABAJADOR</b> declara que la remuneración señalada en esta cláusula constituye una adecuada compensación por los servicios prestados a <b>EL EMPLEADOR</b>, así como por las obligaciones asumidas en el presente contrato.
-                <br>8.4 Las ausencias injustificadas por parte de <b>EL TRABAJADOR</b> implican la pérdida de la remuneración proporcional a la duración de dicha ausencia, sin perjuicio del ejercicio de las facultades disciplinarias propias de <b>EL EMPLEADOR</b> previstas en las normas laborales y en las normas internas de este último
-                <br>8.5 Adicionalmente, las partes acuerdan que, de conformidad con el artículo 19° del Decreto Supremo N° 001-98-TR, modificado
-                por el Decreto Supremo N° 009-2011-TR, <b>EL EMPLEADOR</b> podrá utilizar su firma digitalizada en las boletas de pago.
-                Asimismo, <b>EL EMPLEADOR</b> podrá valerse de tecnologías de la información o comunicación tales como intranet, correo
-                electrónico u otras de similar naturaleza para entregar virtualmente las boletas de pago a <b>EL TRABAJADOR</b>, quien se obliga
-                a acusar recibo por escrito o en forma virtual, dentro del día útil siguiente de recibida virtualmente la boleta de pago, sin
-                perjuicio que <b>EL EMPLEADOR</b> pueda hacer uso de medio distinto, virtual o físico, para acreditar dicha recepción.
-                <br>8.6 <b>EL TRABAJADOR</b> declara que la remuneración señalada en esta cláusula constituye una adecuada compensación por los servicios prestados a <b>EL EMPLEADOR</b>, así como por las obligaciones asumidas en el presente contrato.
+                <br><b>8.1</b> En contraprestación a los servicios prestados por EL TRABAJADOR, EL EMPLEADOR se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/ 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), remuneración que se encuentra comprendida por el básico de S/ 31.01 (TREINTA Y UNO CON 01/100 SOLES) más el concepto de CTS equivalente al 9.72% de S/ 3.01 (TRES CON 01/100 SOLES)  y el concepto de Gratificaciones de fiestas patrias y de navidad equivalente al 16.66% de S/ 5.17 (CINCO CON 17/100 SOLES), monto del cual se deducirán las aportaciones y descuentos establecidos en la ley. Adicionalmente una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo. Así mismo el trabajador elegirá recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 2.
+                <br><b>8.2</b> Ambas partes acuerdan que la modalidad y fecha de pago de la remuneración será fijada y modificada por EL <b>EMPLEADOR</b> de acuerdo con sus necesidades operativas y/o administrativas.
+                <br><b>8.3</b> <b>EL EMPLEADOR</b> al encontrarse acogido al Régimen Agrario, precisa que la remuneración abonada a EL TRABAJADOR incluye la Compensación por Tiempo de Servicios y las Gratificaciones de Fiestas Patrias y de Navidad, más una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo, conforme lo previsto en los incisos c) y e) de la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial. De la misma forma, de acuerdo al inciso d) del mismo cuerpo normativo, de forma facultativa, el trabajador elegirá recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 3.
+                <br><b>8.4</b> Las ausencias injustificadas por parte de <b>EL TRABAJADOR</b> implican la pérdida de la remuneración proporcional a la duración de dicha ausencia, sin perjuicio del ejercicio de las facultades disciplinarias propias de EL EMPLEADOR previstas en las normas laborales y en las normas internas de este último.
+                <br><b>8.5</b> Adicionalmente, las partes acuerdan que, de conformidad con el artículo 19° del Decreto Supremo N° 001-98-TR, modificado por el Decreto Supremo N° 009-2011-TR, <b>EL EMPLEADOR</b> podrá utilizar su firma digitalizada en las boletas de pago. Asimismo, <b>EL EMPLEADOR</b> podrá valerse de tecnologías de la información o comunicación tales como intranet, correo electrónico u otras de similar naturaleza para entregar virtualmente las boletas de pago a <b>EL TRABAJADOR</b>, quien se obliga a acusar recibo por escrito o en forma virtual, dentro del día útil siguiente de recibida virtualmente la boleta de pago, sin perjuicio que EL EMPLEADOR pueda hacer uso de medio distinto, virtual o físico, para acreditar dicha recepción
+                <br><b>8.6</b> <b>EL TRABAJADOR</b> declara que la remuneración señalada en esta cláusula constituye una adecuada compensación por los servicios prestados a <b>EL EMPLEADOR</b>, así como por las obligaciones asumidas en el presente contrato.
             </li>
             <li>
                 <b><u>CLÁUSULA NOVENA:</u> Régimen Laboral del Trabajador.-</b>
-                <br><b>EL TRABAJADOR</b> gozará de los beneficios laborales establecidos en la Ley N° 27360, Ley que aprueba las Normas de Promoción del Sector Agrario.
+                <br><b>EL TRABAJADOR</b> gozará de los beneficios laborales establecidos en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial.
             </li>
             <li>
                 <b><u>CLÁUSULA DÉCIMA:</u> Entrega de Herramientas de Trabajo.-</b>
@@ -522,11 +335,11 @@
             </li>
             <li>
                 <b><u>CLÁUSULA DÉCIMO TERCERA:</u> Sistema de Pensiones.-</b>
-                <br>De acuerdo al inciso 5 del Art.9° de la Ley N° 27360 y de los artículos 15 y 16 de la Ley 28991,<b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su decisión respecto del derecho a afiliarse a cualquiera de los regímenes previsionales, en el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
+                <br>De acuerdo a los artículos 15° y 16° de la Ley 28991, <b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su decisión respecto del derecho a afiliarse a cualquiera de los regímenes previsionales. En el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
             </li>
             <li>
                 <b><u>CLÁUSULA DÉCIMO CUARTO:</u> Seguridad y Salud.-</b>
-                <br>15.1 En cumplimiento de lo establecido en la Ley N° 29783, Ley de Seguridad y Salud en el Trabajo, y habiendo analizado el riesgo de las funciones propias del cargo a desempeñar por <b>EL TRABAJADOR</b>, con la finalidad de dar cumplimiento a las recomendaciones en materia de seguridad y salud destinadas a evitar cualquier riesgo para <b>EL TRABAJADOR</b> durante el desarrollo de las actividades del cargo indicado, se señala de manera expresa la obligación de ejecutar las recomendaciones aplicables, las cuales serán desarrolladas en el Anexo 1 del presente documento.
+                <br>14.1 En cumplimiento de lo establecido en la Ley N° 29783, Ley de Seguridad y Salud en el Trabajo, y habiendo analizado el riesgo de las funciones propias del cargo a desempeñar por <b>EL TRABAJADOR</b>, con la finalidad de dar cumplimiento a las recomendaciones en materia de seguridad y salud destinadas a evitar cualquier riesgo para <b>EL TRABAJADOR</b> durante el desarrollo de las actividades del cargo indicado, se señala de manera expresa la obligación de ejecutar las recomendaciones aplicables, las cuales serán desarrolladas en el Anexo 1 del presente documento.
                 <br>14.2 <b>EL TRABAJADOR</b> entiende que es su obligación conocer el Reglamento de Seguridad y Salud que se le entregará al inicio de la relación laboral, así como asistir a las capacitaciones sobre la materia que sean programadas por <b>EL EMPLEADOR</b>.
                 <br>14.3 <b>EL EMPLEADOR</b> establece de manera expresa que el incumplimiento de obligaciones en materia de seguridad y salud por parte de <b>EL TRABAJADOR</b> son consideradas faltas graves toda vez que suponen un riesgo para la salud e integridad del mismo y de las otras personas que se encuentren en el centro de trabajo. Por lo cual, <b>EL EMPLEADOR</b> establece como lineamiento de actuación el de  “tolerancia cero” respecto a faltas cometidas en materia de seguridad y salud, sancionando las mismas con el despido y la imposibilidad de ser recontratado.
             </li>
@@ -633,6 +446,66 @@
 
     <div class="page-break"></div>
 
+    <div class="page-break"></div>
+
+    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+        <h4 class="titulo">ANEXO 2</h4>
+        <p>
+            <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
+        </p>
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+        </p>
+        <p>
+            De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
+        </p>
+        <p>
+            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+        </p>
+        <br /><br /><br /><br />
+        <p>
+            <b>FIRMA _______________________________________________</b>
+            <br /><br />
+            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+            <br />
+            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+        </p>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
+
+    <div class="page-break"></div>
+
+    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+        <h4 class="titulo">ANEXO 3</h4>
+        <p>
+            <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
+        </p>
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+        </p>
+        <p>
+            De acuerdo a lo establecido en el inciso e) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa el pago de la Bonificación Especial por Trabajo Agrario.
+        </p>
+        <p>
+            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+        </p>
+        <br /><br /><br /><br />
+        <p>
+            <b>FIRMA _______________________________________________</b>
+            <br /><br />
+            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+            <br />
+            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+        </p>
+    </section>
+
+    <div class="page-break"></div>
+
     <section id="page3"></section>
 
     <div class="page-break"></div>
@@ -696,56 +569,6 @@
 
     <div class="page-break"></div>
 
-    <section id="page7"></section>
-
-    <div class="page-break"></div>
-
-    <section id="page8">
-        <h4 class="titulo">CONVENIO DE AUTORIZACIÓN PARA LA TRAMITACIÓN DE ANTECEDENTES POLICIALES </h4>
-        <div style="font-size: 15px">
-            <p>
-                Conste por el presente documento, el CONVENIO DE AUTORIZACIÓN PARA LA TRAMITACIÓN DE ANTECEDENTES POLICIALES (en adelante “<b>EL CONVENIO</b>”) que suscriben de una parte <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C</b>, identificado con RUC Nº 20601438586, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, <b>Daniel José Eyheralde Munita</b>, identificado con C.E. Nº 001555417, a quien en lo sucesivo se denominará <b>EL EMPLEADOR</b>, y de la otra parte <b>{{ $trabajador->apellidos }} {{ $trabajador->nombre }}</b>, identificado (a) con D.N.I. N° <b>{{ $trabajador->rut }}</b>, con domicilio en <b>{{ $trabajador->direccion }}</b>, a quien en adelante se le denominará <b>EL TRABAJADOR</b>, en los términos y condiciones siguientes:
-            </p>
-            <ul class="espacios-lista-md">
-                <li>
-                    <b><u>PRIMERO:</u> ANTECEDENTES</b><br>
-                    <b>EL EMPLEADOR</b> dentro de su Política de Contratación, en el artículo 2° establece los requisitos aplicables todos los trabajadores sin distinción  del cargo que ocupan y la naturaleza de sus funciones. Superado el proceso de selección EL EMPLEADOR,  conforme lo dispuesto en la Ley 29607, exige a <b>EL TRABAJADOR</b> la presentación del certificado de antecedentes policiales. </li>
-                <li>
-                    <b><u>SEGUNDO:</u> OBJETO DEL CONVENIO</b><br>
-                    <b>EL EMPLEADOR</b> con la finalidad de otorgar facilidades suscribe el presente convenio, mediante el cual <b>EL TRABAJADOR</b>  autoriza expresamente a <b>EL EMPLEADOR</b>  la tramitación y obtención del certificado de antecedentes policiales.
-                </li>
-                <li>
-                    <b><u>TERCERO:</u> DEL COSTO DE LOS CERTIFICADOS</b><br>
-                    <b>EL TRABAJADOR</b> será quien asuma el costo de los certificados de antecedentes policiales, siendo el importe de S/. 11.00 (ONCE CON 00/100 SOLES), el cual será descontado de su remuneración en una (1) sola cuota, en el mes de {{ strtoupper($contrato->mes_contrato) }} - {{ $contrato->anio_contrato }}.
-
-                    <b>EL TRABAJADOR</b> conoce y entiende que en el supuesto que se compruebe que mantiene deuda por el trámite de antecedentes policiales, el  costo será descontado del pago por los días efectivamente laborados  o de la liquidación de beneficios sociales respectiva o, por lo cual <b>EL TRABAJADOR</b> deja expresa constancia que autoriza a <b>EL EMPLEADOR</b> a realizar el descuento que corresponda.
-                </li>
-                <li>
-                    <b><u>CUARTO:</u></b><br>
-                    En todo lo no previsto en el presente Convenio, que se mantiene como documento privado, es aplicable la legislación laboral vigente.
-
-                    En señal de conformidad, suscriben el presente documento las partes, en Piura, al <i>{{ $contrato->fecha_larga }}</i>.
-                </li>
-            </ul>
-            <div>
-                <table style="width: 100%; margin-top: 50px; text-align: center">
-                    <tr>
-                        <td>
-                            <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 200px">
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>___________________________<br>EL EMPLEADOR</b></td>
-                        <td><b>___________________________<br>EL TRABAJADOR</b></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <div class="page-break"></div>
-
     <section id="page9"></section>
 
     <div class="page-break"></div>
@@ -791,8 +614,47 @@
 
     <div class="page-break"></div>
 
-    <section id="page11"></section>
 
+    <section id="page11">
+        <table>
+            <tr>
+                <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos1.jpg'}}" width="70px" /></td>
+                <td style="font-size: 14px; vertical-align: bottom"></td>
+            </tr>
+        </table>
+        <br>
+        <h4 class="titulo">
+            DECLARACIÓN  DE RECEPCIÓN DE FORMATO PARA BENEFICIARIOS DE SEGURO VIDA LEY
+        </h4>
+        <br>
+        <div style="padding: 25px;">
+            <p>
+                Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b> identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, declaro que:<br /> Haber recibido el formato de DECLARACION DE BENEFICIARIOS para SEGURO VIDA LEY D. LEG. 688, COMPROMETIENDOME con mi empleador en alcanzar este documento con el detalle de mis beneficiarios y debidamente certificado NOTARIALMENTE, en un plazo máximo de 30 días calendario desde la firma de este documento.
+            </p>
+            <br><br><br><br>
+            <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
+            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+                <tr>
+                    <td>
+                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                    </td>
+                    <td>
+                        <div style="width: 100px; height: 140px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                </tr>
+            </table>
+            <div style="margin-top: 150px; width: 100%">
+                <hr>
+                <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD EXPORTADORA VERFRUT S.A.C.</small>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
     <div class="page-break"></div>
 
     <section id="page12">
@@ -1482,7 +1344,7 @@
 
     <div class="page-break"></div>
 
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
 
     <section>
         <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
@@ -1495,7 +1357,7 @@
         </div>
     </section>
 
-    <div class="page-break"></div>
+    <div class="page-break"></div> --}}
 
     <div class="page-break"></div>
 
@@ -1572,4 +1434,64 @@
     </section>
 
     <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
+
+    <section>
+        <img src="{{ public_path() . '/img/la-positiva.png'}}" width="150px" />
+        <h4 class="titulo" style="font-size: 13px;">
+            DECLARACION DE BENEFICIARIOS PARA SEGUROS DE VIDA LEY D. LEG. 688
+        </h4>
+        <h4 style="text-align: center;" style="font-size: 13px">
+            DECLARACION JURADA
+        </h4>
+        <div style="font-size: 13px;">
+            <p style="text-align: center;">
+                Quien suscribe, en cumplimiento de lo dispuesto en el artículo 6 del Decreto Legislativo 688, efectúa su Declaración de Beneficiarios.
+            </p>
+
+            <p>
+                PRIMER BENEFICIARIO: Cónyuge o Conviviente y sus descendientes (hijos, nietos, bisnietos). Para efectos de acreditar la convivencia, se debe tener declaración notarial o judicial de convivencia.
+            </p>
+
+            <p>
+                Las boletas de pago serán puestas a su disposición en la plataforma virtual, de manera mensual, a más tardar el tercer día hábil siguiente a la fecha de pago de la remuneración, siendo su obligación acusar recibo de la boleta de pago en la plataforma virtual dentro del día hábil siguiente de recibida. En caso de incumplimiento de esta obligación, la Empresa podrá aplicar las sanciones disciplinarias que considere pertinentes.
+            </p>
+
+            <p>
+                Asimismo, le informamos que para poder acceder a la plataforma en mención, el área de Recursos Humanos le hará entrega de su usuario y clave en el desglosable de este documento.
+            </p>
+
+            <p>Atentamente,</p>
+            <br>
+
+            <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg'}}" width="150px" style="margin-left: 300px" />
+
+            <br /><br />
+
+            <div style="font-weight: bold;">
+                _______________________________________________<br>
+                Nombre: <span>{{ $trabajador->nombre . ' ' . $trabajador->apellidos }}</span><br>
+                DNI: <span>{{ $trabajador->rut }}</span><br>
+                Fecha de recepción: {{ $contrato->fecha_larga }}
+            </div>
+            <br>
+            <hr>
+            <br>
+            <div>
+                <div>
+                    <span style="font-weight: bold; background: gray">USUARIO: {{ $trabajador->rut }}</span> <br>
+                    <span style="font-weight: bold; background: gray">CLAVE: {{ $trabajador->fecha_format }}</span>
+                </div>
+                <div>
+                    <b>RECUERDA:</b> La primera vez que ingreses, deberás cambiar la contraseña por una de tu elección y de fácil recordación. Como mínimo debe tener 8 dígitos. <u>No olvides firmar tu boleta, es tu obligación</u>. Para cualquier consulta, acércate a la oficina de Recursos Humanos de tu fundo. <br> <b>Página Web:</b> verfrut.turecibo.com
+                </div>
+            </div>
+        </div>
+    </section> --}}
+
+    <div class="page-break"></div>
+
+    <section>
+        <img src="{{ public_path() . '/img/vida-ley.png'}}" width="100%" />
+    </section>
 @endsection

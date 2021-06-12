@@ -76,9 +76,49 @@
 
 @section('contenido')
 
+    <section style="font-size: 14px">
+        <h3 style="text-align: center;">
+            CONSENTIMIENTO INFORMADO PARA EVALUACION MÉDICA DE INGRESO  Y CUSTODIA DE HISTORIA CLÍNICA
+        </h3>
+        <br />
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo }}</b> de <b>{{ $trabajador->age }}</b> años de edad; identificado con DNI N° <b>{{ $contrato->trabajador->rut }}</b>, domiciliado en: <b>{{ $contrato->trabajador->direccion }}</b> Postulante de la empresa <b>SOCIEDAD AGRÍCOLA RAPEL S.A.C</b>.
+        </p>
+        <br />
+        <p>
+            Certifico que he sido informado acerca de la naturaleza, propósito y posibles complicaciones de las evaluaciones de ingreso, lo cual he comprendido claramente; ya que todas mis dudas y preguntas han sido absueltas; por lo cual, autorizo se me realice la Evaluación de Ingreso y todos los estudios requeridos de acuerdo al programa de Vigilancia de Salud Ocupacional  y en conformidad de las normas vigentes, y a la vez, autorizo la custodia de estos documentos en mi Historia Clínica de la empresa la  cual se encuentra en el archivo del área de Salud Ocupacional.
+        </p>
+        <br />
+        <p>
+            Hago de conocimiento y firmo este documento sin presión alguna y por propia voluntad.<br />
+            Quedando en conformidad de lo anterior descrito firmo a continuación.
+        </p>
+        <br />
+        <p><b>Fecha:</b> 11 de junio del 2021</p>
+        <br />
+        <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+            <tr>
+                <td>
+                    <div style="width: 100px; height: 140px;"></div>
+                </td>
+                <td>
+                    <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 50%">_______________________________<br>{{ $trabajador->nombre_completo }} <br> DNI/CE: {{ $trabajador->rut }}</td>
+                <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+            </tr>
+        </table>
+        <br />
+        <small>NOTA: Si el paciente no puede firmar (Describir motivos)</small>
+    </section>
+
+    <div class="page-break"></div>
+
     <section id="page23">
         <h5 style="text-align: center">
-            Ficha de Sintomatología COVID-19 para Regreso al Trabajo<br/>
+            Ficha de Sintomatología COVID-19 para Ingreso, Retorno y/o Reincorporación al Trabajo<br/>
             Declaración Jurada
         </h5>
         <div style="font-size: 11px; text-align: justify">
@@ -90,7 +130,7 @@
                 Dirección: <span style="font-weight: normal">{{ $trabajador->direccion }}</span> &nbsp;&nbsp;Numero (celular): _____________
             </p>
             <div>
-                <p style="font-weight: bold">En los últimos 14 días calendario ha tenido algunos de los síntomas siguientes</p>
+                <p style="font-weight: bold">A) En los últimos 14 días calendario ha tenido algunos de los síntomas siguientes</p>
                 <table>
                     <tr>
                         <th></th>
@@ -127,38 +167,33 @@
                         <td style="border: 1px solid black"></td>
                     </tr>
                 </table>
-                <p>
-                    Todos los datos expresados en esta ficha constituyen declaración jurada de mi parte<br /><br />
-                    He sido informado que de omitir o falsear información puedo perjudicar la salud de mis compañeros, y la mía propia, lo cual de constituir una falta grave a la salud pública, asumo sus consecuencias
-                </p>
             </div>
             <div>
-                <p style="font-weight: bold;">Fecha: {{ $contrato->fecha_larga }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Firma: ___________________</p>
-                <p>Por favor lea detenidamente y marque con una X en el cajón correspondiente si tuvo la condición:</p>
+                <p style="font-weight: bold;">B) Padece de alguna de estas enfermedades y/o condiciones vulnerables:</p>
                 <table>
                     <tr>
                         <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>Dolor de cabeza crónico</td>
+                        <td>Edad mayor a 65 años</td>
                         <td style="border: 1px solid black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                        <td>Neumonía recurrente</td>
+                        <td>Asma Moderada o Grave</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfermedades del cerebro</td>
+                        <td>Asma Moderada o Grave</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Bronquitis crónica</td>
+                        <td>Enfermedad Pulmonar Crónica</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Desordenes del sistema nervioso central</td>
+                        <td>Enfermedades cardiovasculares graves</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfisema</td>
+                        <td>Enfermedades cardiovasculares graves</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Epilepsia (convulsiones)</td>
+                        <td>Cáncer</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfermedad pleural</td>
+                        <td>Enfermedad o tratamiento inmunosupresor</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
@@ -168,237 +203,21 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Mareos y/o vértigo</td>
+                        <td>Diabetes Mellitus</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Resfríos recurrentes (más de 1 ves a la semana)</td>
+                        <td>Obesidad con IMC de 40 a más</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Sincope o desmayo</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor de oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Pérdida de conciencia</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>sangrado por algún oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Depresión</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>supuración (salida de material purulento) por el oído</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ansiedad</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>zumbido de oídos</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Transtorno bipolar (maniaco-depresivo)</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Disminución de la audición</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Intento de suicidio</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Sensación de oído tapado (más de una ves a la semana)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Tuberculosis pulmonar</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad cardiovascular</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Asma bronquial</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades de la piel</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Tos persistente</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ulcera persistente en la piel</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Palpitaciones</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Lunar que cambia de forma, tamaño y/o color</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Arritmia</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>sensibilidad a la luz solar</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor o disconfort en el tórax</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de mamas (tumoraciones, cambios de color en la piel, etc.)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hipertensión arterial                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad 1endocrinológica</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hinchazón de los miembros inferiores</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Diabetes</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en piernas al caminar</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dislipidemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Episodio coronario de algún tipo</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de tiroides</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dificultad para deglutir</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Gota</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Ardor en el estómago
-                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de las articulaciones</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Úlcera Gástrica o duodena</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Reumatismo</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Desordenes intestinales</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Artritis</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor abdominal recurrente</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Movilidad limitada de miembros superiores o inferiores</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hernias en la pared abdominal</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad ósea (de los huesos)</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Sangrado por el sistema digestivo (como
-                            vómitos o con deposiciones)</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedad de la columna</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades del hígado</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Anemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Vómitos recurrentes</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Desorden de Coagulación o sangrado</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hepatitis tipo A, B o C</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hemolisis</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Cálculos en la vesícula</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Policitemia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Síndrome con colon irritable</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hemofilia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Síndrome con colon irritable</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en la columna dorsal
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Enfermedades de trasmisión sexual</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Lumbalgia</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>SIDA, portador de VIH</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dolor en el cuello</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Disturbios visuales
-                        </td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Movilidad Limitada de la columna</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Alergias a medicinas, comidas u otros agentes</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Otras enfermedades o condiciones no mencionadas arriba
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Infección o enfermedad urinaria</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Cálculos renales</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Presencia de sangre en la orina,
-                            Proteínas o glucosa</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Hiperplasia de Próstata </td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Dificultad al orinar</td>
-                        <td></td>
+                        <td>Otros: ___________________________</td>
+                        <td style="border-top: 1px solid black"></td>
                         <td></td>
                     </tr>
                 </table>
             </div>
             <div>
                 <p>Aquellas enfermedades o condiciones marcadas serán evaluadas con mayor detalle durante la entrevista médica ocupacional</p>
-                <p>TODA LA INFORMACION QUE HE PROPORCIONADO ES VERDADERA, NO HABIENDO OMITIDO NINGUN DATO EN FORMA VOLUNTARIA</p>
+                <p>Todos los datos expresados en esta ficha constituyen declaración jurada de mi parte.<br />He sido informado que de omitir o falsear información puedo perjudicar la salud de mis compañeros,  y la mía propia, asumiendo las responsabilidades que correspondan.</p>
                 <br />
                 <table>
                     <tr>
@@ -654,6 +473,68 @@
 
     <div class="page-break"></div>
 
+    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+        <h4 class="titulo">ANEXO 2</h4>
+        <p>
+            <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
+        </p>
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+        </p>
+        <p>
+            De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
+        </p>
+        <p>
+            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+        </p>
+        <br /><br /><br /><br />
+        <p>
+            <b>FIRMA _______________________________________________</b>
+            <br /><br />
+            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+            <br />
+            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+        </p>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
+
+    <div class="page-break"></div>
+
+    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+        <h4 class="titulo">ANEXO 3</h4>
+        <p>
+            <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
+        </p>
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+        </p>
+        <p>
+            De acuerdo a lo establecido en el inciso e) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa el pago de la Bonificación Especial por Trabajo Agrario.
+        </p>
+        <p>
+            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+        </p>
+        <br /><br /><br /><br />
+        <p>
+            <b>FIRMA _______________________________________________</b>
+            <br /><br />
+            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+            <br />
+            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+        </p>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section id="pagea"></section>
+
+    <div class="page-break"></div>
+
     <section id="page4" style="font-family: 'Times-New-Roman'; font-size: 10px">
         <table style="width: 100%;">
             <tr>
@@ -763,7 +644,7 @@
 
     <div class="page-break"></div>
 
-    <section id="page8">
+    {{-- <section id="page8">
         <h4 class="titulo">CONVENIO DE AUTORIZACIÓN PARA LA TRAMITACIÓN DE ANTECEDENTES POLICIALES </h4>
         <div style="font-size: 15px">
             <p>
@@ -805,11 +686,7 @@
                 </table>
             </div>
         </div>
-    </section>
-
-    <div class="page-break"></div>
-
-    <section id="page9"></section>
+    </section> --}}
 
     <div class="page-break"></div>
 
@@ -847,7 +724,38 @@
 
     <div class="page-break"></div>
 
-    <section id="page11"></section>
+    <section id="page11">
+        <h4 class="titulo">
+            DECLARACIÓN  DE RECEPCIÓN DE FORMATO PARA BENEFICIARIOS DE SEGURO VIDA LEY
+        </h4>
+        <br>
+        <div style="padding: 25px;">
+            <p>
+                Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b> identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, declaro que:<br />Haber recibido el formato de DECLARACION DE BENEFICIARIOS para SEGURO VIDA LEY D. LEG. 688, COMPROMETIENDOME con mi empleador en alcanzar este documento con el detalle de mis beneficiarios y debidamente certificado NOTARIALMENTE, en un plazo máximo de 30 días calendario desde la firma de este documento.
+                <br>
+            </p>
+            <br><br><br><br>
+            <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
+            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+                <tr>
+                    <td>
+                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                    </td>
+                    <td>
+                        <div style="width: 100px; height: 140px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                </tr>
+            </table>
+            <div style="margin-top: 200px; width: 100%">
+                <hr>
+                <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
+            </div>
+        </div>
+    </section>
 
     <div class="page-break"></div>
 
@@ -1873,5 +1781,9 @@
     </section>
 
     <div class="page-break"></div>
+
+    <section>
+        <img src="{{ public_path() . '/img/vida-ley.png'}}" width="100%" />
+    </section>
 
 @endsection
