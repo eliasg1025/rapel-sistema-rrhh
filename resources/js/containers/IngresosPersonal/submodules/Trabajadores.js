@@ -223,6 +223,7 @@ export const Trabajadores = () => {
                 reload={reload}
             />
             <br />
+            <b># Registros: {trabajadores.length} trabajadores</b><br /><br />
             <TablaTrabajadores
                 loading={loading}
                 trabajadores={trabajadores}
@@ -243,6 +244,7 @@ export const Trabajadores = () => {
                 </Space>
             </div>
             <br/>
+            <b># Registros: {trabajadores.length} trabajadores observados</b><br /><br />
             <TablaTrabajadoresObservados
                 usuario={usuario}
                 trabajadoresObservados={trabajadoresObservados}
