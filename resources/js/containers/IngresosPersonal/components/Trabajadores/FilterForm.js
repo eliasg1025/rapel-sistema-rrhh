@@ -1,156 +1,144 @@
-import React, { useState, useEffect } from 'react';
-import {
-    Card,
-    Form,
-    DatePicker,
-    Input,
-    Row,
-    Col,
-    Button,
-    Select,
-    notification,
-} from 'antd';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import { Card, DatePicker, Select, Button } from "antd";
+import moment from "moment";
 
-import { empresa } from '../../../../data/default.json';
+import { empresa } from "../../../../data/default.json";
 
 const FilterForm = props => {
-    const initialState = props.filtro;
+    const [loading, setLoading] = useState();
 
     useEffect(() => {
-        const abortController = new AbortController();
-        const signal = abortController.signal;
-        props.setFiltro({ ...props.filtro, signal });
-        props.getTrabajadores();
-        props.getTrabajadoresObservados();
+        /* if (
+            (props.filtro?.dni === '' || props.filtro?.dni?.length >= 8) &&
+            (props.filtro?.nombre.length >= 3)
+        ) {
+        } */
 
-        return function cleanup() {
-            abortController.abort();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchData();
     }, [props.reload]);
 
-    const handleSubmit = e => {
-        console.log('Filtros enviados: ', props.filtro);
-        e.preventDefault();
-        props.getTrabajadores();
-        props.getTrabajadoresObservados();
+    const fetchData = async () => {
+        setLoading(true);
+        await Promise.all([
+            props.getTrabajadores(),
+            props.getTrabajadoresObservados()
+        ]);
+        setLoading(false);
     };
 
     const handleChange = e => {
         const { name, value } = e.target;
         props.setFiltro({
             ...props.filtro,
-            [name]: value,
+            [name]: value
         });
     };
 
     return (
         <Card>
-            <Form onSubmitCapture={handleSubmit}>
-                <Row gutter={24}>
-                    <Col>
-                        <Form.Item
-                            name="rango_fechas"
-                            initialValue={[
+            <form onSubmit={e => e.preventDefault()}>
+                <div className="row">
+                    <div className="col-md-4">
+                        Desde - Hasta:
+                        <br />
+                        <DatePicker.RangePicker
+                            size="small"
+                            placeholder={["Desde", "Hasta"]}
+                            style={{ width: "100%" }}
+                            onChange={(date, dateString) => {
+                                props.setFiltro({
+                                    ...props.filtro,
+                                    desde: dateString[0],
+                                    hasta: dateString[1]
+                                });
+                            }}
+                            value={[
                                 moment(props.filtro.desde),
-                                moment(props.filtro.hasta),
+                                moment(props.filtro.hasta)
                             ]}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        Empresa:
+                        <br />
+                        <Select
+                            size="small"
+                            showSearch
+                            placeholder="Empresa"
+                            optionFilterProp="children"
+                            style={{ width: "100%" }}
+                            filterOption={(input, option) =>
+                                option.children
+                                    .toLowerCase()
+                                    .indexOf(input.toLowerCase()) >= 0
+                            }
+                            value={props.filtro.empresa_id}
+                            onChange={e => {
+                                props.setFiltro({
+                                    ...props.filtro,
+                                    empresa_id: e
+                                });
+                            }}
                         >
-                            <DatePicker.RangePicker
-                                size="small"
-                                placeholder={['Desde', 'Hasta']}
-                                onChange={(date, dateString) => {
-                                    props.setFiltro({
-                                        ...props.filtro,
-                                        desde: dateString[0],
-                                        hasta: dateString[1],
-                                    });
-                                }}
-                                value={[props.filtro.desde, props.filtro.hasta]}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item name="empresa" initialValue={9}>
-                            <Select
-                                size="small"
-                                showSearch
-                                placeholder="Empresa"
-                                optionFilterProp="children"
-                                filterOption={(input, option) =>
-                                    option.children
-                                        .toLowerCase()
-                                        .indexOf(input.toLowerCase()) >= 0
-                                }
-                                value={props.filtro.empresa_id}
-                                onChange={e => {
-                                    props.setFiltro({
-                                        ...props.filtro,
-                                        empresa_id: e,
-                                    });
-                                }}
-                            >
-                                {empresa.map(option => (
-                                    <Select.Option
-                                        value={option.id}
-                                        key={option.id}
-                                    >
-                                        {option.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item>
-                            <Input
-                                size="small"
-                                type="number"
-                                name="grupo"
-                                placeholder="Grupo"
-                                onChange={handleChange}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item>
-                            <Input
-                                size="small"
-                                name="dni"
-                                placeholder="DNI"
-                                onChange={handleChange}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item>
-                            <Input
-                                size="small"
-                                name="nombre"
-                                placeholder="Nombre"
-                                onChange={handleChange}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
-
-                <Row>
-                    <Col span={24} style={{ textAlign: 'left' }}>
-                        <Button type="primary" htmlType="submit">
+                            {empresa.map(option => (
+                                <Select.Option value={option.id} key={option.id}>
+                                    {option.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-md-4">
+                        Grupo:
+                        <br />
+                        <input
+                            className="form-control"
+                            name="grupo"
+                            placeholder="Buscar por N° Grupo"
+                            type="number"
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        DNI:
+                        <br />
+                        <input
+                            autoComplete="off"
+                            className="form-control"
+                            name="dni"
+                            placeholder="Buscar por DNI"
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        Nombre/Apellidos:
+                        <br />
+                        <input
+                            autoComplete="off"
+                            className="form-control"
+                            name="nombre"
+                            placeholder="Buscar por Nombre o Apellidos"
+                            onChange={handleChange}
+                        />
+                    </div>
+                </div>
+                <br />
+                <div className="row">
+                    <div className="col">
+                        <Button
+                        htmlType="submit"
+                            size="small"
+                            block
+                            type="primary"
+                            onClick={() => props.setReload(!props.reload)}
+                            loading={loading}
+                        >
                             Buscar
                         </Button>
-                        <Button
-                            style={{ margin: '0 8px' }}
-                            onClick={() => props.setFiltro(initialState)}
-                        >
-                            Borrar filtros
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
+                    </div>
+                </div>
+            </form>
         </Card>
     );
-}
+};
 
 export default FilterForm;

@@ -696,16 +696,18 @@ const DatosContrato = props => {
                                 ))}
                             </Select>
                         </div>
-                        <div className="col-md-4">
-                            Código Bus:
-                            <br />
-                            <Input
-                                name="codigo_bus"
-                                value={contrato.codigo_bus ?? ''}
-                                onChange={handleChangeInput}
-                                size="small"
-                            />
-                        </div>
+                        {contrato.tipo_trabajador === 'COMPLEMENTARIO' && (
+                            <div className="col-md-4">
+                                Código Bus:
+                                <br />
+                                <Input
+                                    name="codigo_bus"
+                                    value={contrato.codigo_bus ?? ''}
+                                    onChange={handleChangeInput}
+                                    size="small"
+                                />
+                            </div>
+                        )}
                         <div className="col-md-4">
                             Grupo:
                             <br />

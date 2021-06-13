@@ -368,7 +368,9 @@ export const RegistroMasivo = () => {
             ) : (
                 ''
             )}
-            <b># Registros: {trabajadores.length} trabajadores</b><br /><br />
+            <b style={{ fontSize: "13px" }}>
+                Cantidad: {trabajadores.length} registros
+            </b><br /><br />
             <ListaTrabajadores
                 trabajadores={trabajadores}
                 setTrabajadores={setTrabajadores}

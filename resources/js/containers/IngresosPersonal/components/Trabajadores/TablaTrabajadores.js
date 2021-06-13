@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Table, Button, Tooltip, Checkbox } from 'antd';
+import { Table, Button, Tooltip, Checkbox, Dropdown, Menu } from 'antd';
 import {
     EditOutlined,
     DeleteOutlined,
     FileAddOutlined,
+    DownOutlined
 } from '@ant-design/icons';
-import ButtonGroup from 'antd/lib/button/button-group';
 
 const getColumns = (eliminarContrato) => {
     return [
@@ -94,6 +94,29 @@ const TablaTrabajadores = props => {
         all: false,
     });
 
+    function dropdownMenu() {
+        return (
+            <Menu>
+                <Menu.Item key="0" disabled={!hasSelected}>
+                    <a href="#" onClick={e => {
+                        e.preventDefault();
+                        generarContrato();
+                    }}>
+                        <i className="far fa-file-alt" />&nbsp;Generar Contratos y Fichas
+                    </a>
+                </Menu.Item>
+                <Menu.Item key="1" disabled={!hasSelected}>
+                    <a href="#" onClick={e => {
+                        e.preventDefault();
+                        generarFicha();
+                    }}>
+                        <i className="far fa-file-excel" />&nbsp;Exportar Registros
+                    </a>
+                </Menu.Item>
+            </Menu>
+        );
+    }
+
     const obetenerSeleccionados = () => {
         return props.trabajadores.filter((e, index) => {
             return state.selectedRowKeys.includes(index);
@@ -142,7 +165,7 @@ const TablaTrabajadores = props => {
 
     return (
         <div>
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 16, marginTop: 15, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                     <Checkbox
                         onClick={toggleSeleccionarTodos}
@@ -150,33 +173,22 @@ const TablaTrabajadores = props => {
                     >
                         Seleccionar todos
                     </Checkbox>
-                </div>
-                <br />
-                <div>
-                    <ButtonGroup size="small">
-                        <Button
-                            type="primary"
-                            onClick={generarContrato}
-                            disabled={!hasSelected}
-                            loading={props.loading}
-                        >
-                            <i className="far fa-file-alt" />&nbsp;Generar Contratos
-                        </Button>
-                        <Button
-                            type="primary"
-                            onClick={generarFicha}
-                            disabled={!hasSelected}
-                            loading={props.loading}
-                        >
-                            <i className="far fa-file-excel" />&nbsp;Exportar Registros
-                        </Button>
-                    </ButtonGroup>
-
-                    <span style={{ marginLeft: 8 }}>
-                        {hasSelected
-                            ? `${selectedRowKeys.length} elementos seleccionados `
-                            : ''}
+                    <span style={{ marginLeft: 1 }}>
+                        {hasSelected && `(${selectedRowKeys.length} elementos seleccionados)`}
                     </span>
+                </div>
+                <div>
+                    <Dropdown.Button
+                        overlay={dropdownMenu} size="small"
+                        buttonsRender={([leftButton, rightButton]) => [
+                            <Tooltip title="Utiliza acciones con elementos seleccionados" key="leftButton">
+                                {leftButton}
+                            </Tooltip>,
+                            React.cloneElement(rightButton, { loading: props.loading }),
+                        ]}
+                    >
+                        Acciones
+                    </Dropdown.Button>
                 </div>
             </div>
             {props.estadoCarga && (
