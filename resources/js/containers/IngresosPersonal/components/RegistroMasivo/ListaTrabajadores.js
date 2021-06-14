@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Table, Tooltip, message } from 'antd';
+import { Button, Modal, Table, Tooltip, message, Tag } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const ListaTrabajadores = props => {
@@ -40,6 +40,15 @@ const ListaTrabajadores = props => {
             responsive: ['md'],
         },
         {
+            title: 'Estado',
+            dataIndex: 'estado',
+            render: (value) => <Tag color={value.color}>{ value.descripcion }</Tag>
+        },
+        {
+            title: 'Resultado',
+            dataIndex: 'resultado'
+        },
+        {
             title: 'Acciones',
             dataIndex: 'acciones',
             responsive: ['lg'],
@@ -55,6 +64,7 @@ const ListaTrabajadores = props => {
                     <Tooltip title="Borrar">
                         <Button
                             type="danger"
+                            size="small"
                             onClick={() => eliminarTrabajador(record.rut)}
                         >
                             <DeleteOutlined />

@@ -8,6 +8,26 @@ use App\Models\Usuario;
 
 class JwtAuthService
 {
+    public static function getToken(Usuario $usuario)
+    {
+        try {
+            $token = [
+                'sub' => $usuario->id,
+                'username' => $usuario->username,
+                'rol' => $usuario->rol,
+                'trabajador' => $usuario->trabajador,
+                'iat' => time(),
+                'exp' => time() + (7 * 24 * 60 * 60)
+            ];
+
+            $jwt = JWT::encode($token, env('JWT_KEY') || 'TEST_TOKEN_KEY', 'HS256');
+
+            return $jwt;
+        } catch(\Exception $e) {
+            return null;
+        }
+    }
+
     public static function signin(string $username, string $password)
     {
         try {
@@ -44,7 +64,7 @@ class JwtAuthService
                 'exp' => time() + (7 * 24 * 60 * 60)
             ];
 
-            $jwt = JWT::encode($token, env('JWT_KEY'), 'HS256');
+            $jwt = JWT::encode($token, env('JWT_KEY') || 'TEST_TOKEN_KEY', 'HS256');
 
             return [
                 'error'   => false,
@@ -64,7 +84,7 @@ class JwtAuthService
     {
         $auth = false;
         try {
-            $decoded = JWT::decode($jwt, env('JWT_KEY'), ['HS256']);
+            $decoded = JWT::decode($jwt, env('JWT_KEY') || 'TEST_TOKEN_KEY', ['HS256']);
         } catch (\Exception $e) {
             $auth = false;
         }

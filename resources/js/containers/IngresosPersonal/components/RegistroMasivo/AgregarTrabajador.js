@@ -144,6 +144,10 @@ const FormularioTrabajador = ({
             tipo_trabajador: formRegistroMasivo.tipo_trabajador,
             ruta,
             troncal,
+            estado: {
+                descripcion: 'SIN PROCESAR',
+                color: 'default'
+            }
         });
         return _trabajadores
     };

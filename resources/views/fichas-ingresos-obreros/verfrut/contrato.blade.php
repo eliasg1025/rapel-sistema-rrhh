@@ -446,9 +446,11 @@
 
     <div class="page-break"></div>
 
+    <section></section>
+
     <div class="page-break"></div>
 
-    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+    <section style="font-size: 11px; transform: rotate(270deg); margin-left: 50px; margin-top: 50px; width: 50%;">
         <h4 class="titulo">ANEXO 2</h4>
         <p>
             <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
@@ -473,13 +475,7 @@
         </p>
     </section>
 
-    <div class="page-break"></div>
-
-    <section></section>
-
-    <div class="page-break"></div>
-
-    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+    <section style="font-size: 11px; transform: rotate(270deg); margin-left: 50px; margin-top: 120px; width: 50%;">
         <h4 class="titulo">ANEXO 3</h4>
         <p>
             <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
@@ -504,70 +500,7 @@
         </p>
     </section>
 
-    <div class="page-break"></div>
-
-    <section id="page3"></section>
-
-    <div class="page-break"></div>
-
-    <section id="page4" style="font-family: 'Times-New-Roman'; font-size: 10px">
-        <table style="width: 100%;">
-            <tr>
-                <td><img src="{{ public_path() . '/img/Logo Documentos1.jpg'}}" width="60px" /></td>
-                <td><h4 style="text-align: left" class="titulo">CÓDIGO DE CONDUCTA</h4></td>
-            </tr>
-        </table>
-
-        <p>De acuerdo a la implementación de las normas internacionales (BSCI, SMETA, GRAPS, WALMART, WAITROSE, ETC) que promueven los más altos estándares en responsabilidad laboral y social a nivel mundial, <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C.</b> (en adelante LA EMPRESA) rige su accionar de acuerdo a los siguientes criterios:</p>
-
-        <ol class="espacios-lista">
-            <li>
-                <b>Trabajo infantil</b><br>LA EMPRESA prohíbe el trabajo infantil. En ese sentido, los trabajadores deben tener 18 años de edad como mínimo para ser contratados. Por trabajo infantil se entiende cualquier labor mental, física, social o moralmente peligrosa o dañina para los niños, o que interfiere directamente en sus necesidades de educación obligatoria definida como tal por la autoridad correspondiente.
-            </li>
-            <li>
-                <b>Trabajo de libre elección y no forzoso</b><br>La mano de obra ilegal, abusiva o forzosa no tiene cabida en las actividades de LA EMPRESA ni en las actividades de nuestros proveedores. En ese sentido,  LA EMPRESA no impondrá el trabajo sino que será de libre elección por parte del trabajador. Se prohíbe cualquier tipo de servidumbre esclavizante o forma alguna de realizar el trabajo de manera involuntaria.  LA EMPRESA no exigirá depósitos ni retendrá documentos originales de identidad como condición de trabajo. Asimismo, no subcontratará proveedores o instalaciones de producción que obliguen que el trabajo sea realizado bajo algún tipo de explotación o trabajo forzado.
-            </li>
-            <li>
-                <b>Seguridad y salud en el trabajo</b><br>LA EMPRESA proporciona un lugar de trabajo seguro, higiénico y saludable, tomando así las medidas necesarias para prevenir accidentes y lesiones que surjan en el desarrollo del trabajo, se relacionen con él, o que ocurran como resultado de las operaciones de la empresa. LA EMPRESA tiene sistemas para detectar, evitar y responder a posibles riesgos de la seguridad y la salud de todos sus colaboradores. Asimismo, LA EMPRESA brindará acceso a agua potable, zonas limpias y seguras para almacenamiento de comidas, cumpliendo las necesidades básicas de los trabajadores.  El trabajador podrá negarse a cualquier tipo de trabajo inseguro o que ponga en riesgo su vida. Los trabajadores serán informados de manera regular sobre la seguridad e higiene, ya sean nuevos o reasignados, otorgando la responsabilidad a un representante del Comité de Seguridad y Salud en el Trabajo
-            </li>
-            <li>
-                <b>Libertad de asociación y negociación colectiva</b><br>LA EMPRESA respeta el derecho a formar comités según interés y/o unirse a comités creados por la empresa, además de las decisiones de sus colaboradores, asimismo, facilitará el tiempo necesario para entablar discusiones, encontrar soluciones, y llegar a acuerdos conjuntamente con administración sobre: seguridad, salud, bienestar y demás conflictos colectivos de todos los trabajadores. El empleador y sus representantes velarán por las mejores condiciones y seguridad para sus trabajadores, mostrando una actitud tolerante hacia sus distintas actividades. Los representantes de los trabajadores no serán discriminados y tendrán acceso a desarrollar sus funciones representativas en el lugar de trabajo. El empleador continuará facilitando, sin dificultad alguna, el desarrollo de las actividades, en caso la ley restrinja el derecho de la libertad de asociación y a la negociación colectiva.
-            </li>
-            <li>
-                <b>Discriminación</b><br>LA EMPRESA prohíbe las prácticas de discriminación en la contratación de personal y en la conducta profesional del mismo por cuestiones de raza, color, religión, sexo, edad, capacidades físicas, nacionalidades o cualquier otra condición prohibida legalmente
-            </li>
-            <li>
-                <b>Protección especial para trabajadores</b><br> jóvenes LA EMPRESA promueve la contratación de jóvenes entre 18 a 24 años, para que cuenten con mayores oportunidades de acceso al mercado laboral a través de un empleo con calidad y protección social.
-            </li>
-            <li>
-                <b>Horario de trabajo no excesivo</b><br>LA EMPRESA es responsable de asegurar que sus colaboradores trabajen dentro de la jornada máxima permitida por la normatividad laboral vigente y los estándares laborales referentes al número de horas y días de trabajo. En caso de conflicto entre un estatuto y un estándar industrial mandatorio, LA EMPRESA  deberá dar solución bajo lo establecido en función al que brinde un mayor beneficio para el trabajador. Las horas extras serán de manera voluntaria y, además, debe de existir un convenio colectivo negociado libremente o en circunstancias excepcionales donde el empleador demuestre que surgieron de manera inesperada. Se debe otorgar al personal por lo menos un día libre a continuación de cada período consecutivo de seis días laborados.
-            </li>
-            <li>
-                <b>Remuneración digna</b><br>LA EMPRESA deberá proporcionar a sus colaboradores salarios y beneficios que cumplan al menos con las leyes aplicables, en caso contrario, salarios que cubran las necesidades básicas, incluyendo aquellos referentes al pago por horas extras. LA EMPRESA informará de manera escrita y comprensible antes de que acepten el trabajo, los diversos detalles durante el periodo de su pago, así como también, las deducciones al salario que serán aplicables según ley, las cuales deberán ser registradas.
-            </li>
-            <li>
-                <b>Trabajo precario</b><br>LA EMPRESA proporciona a sus trabajadores información clara sobre sus derechos, responsabilidades, condiciones laborales y condiciones de trabajo dignas.
-            </li>
-            <li>
-                <b>Medio ambiente</b><br>LA EMPRESA realiza sus operaciones en cumplimiento de las normativas aplicables y de sus compromisos ambientales que incluyen monitoreo de emisiones, manejo de aguas residuales, ruido ambiental, residuos sólidos, entre otros; mitigando de esta manera sus impactos ambientales y esforzándose por mejorar continuamente su desempeño ambiental.
-            </li>
-            <li>
-                <b>Comportamiento empresarial ético</b><br>LA EMPRESA se asegurará de que sus proveedores estén informados de este Código de Conducta, de sus términos y condiciones, así como de su significado y lo que implica su implementación.
-                Declaro por tanto haber recibido una copia de código de conducta, así también, declaro haberlo leído cuidadosamente.
-            </li>
-        </ol>
-
-        <div style="margin-top: 35px; margin-left: 40px">
-            <p style="font-weight: bold">
-                ____________________________________________________________<br>
-                Nombre: <span>{{ $trabajador->nombre . ' ' . $trabajador->apellidos }}</span><br>
-                DNI: <span>{{ $trabajador->rut }} </span><br>
-                Cargo: <span>{{ $contrato->oficio->name }}</span><br>
-            </p>
-        </div>
-    </section>
-
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
 
     <section id="page9"></section>
 
@@ -610,7 +543,7 @@
                 <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD EXPORTADORA VERFRUT S.A.C.</small>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <div class="page-break"></div>
 
@@ -660,7 +593,7 @@
     <div class="page-break"></div>
     <div class="page-break"></div>
 
-    <section id="page12">
+    {{-- <section id="page12">
         <table>
             <tr>
                 <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos1.jpg'}}" width="70px" /></td>
@@ -924,7 +857,7 @@
 
     <section></section>
 
-    <div class="page-break"></div>
+    <div class="page-break"></div> --}}
 
     <section id="page18" style="font-size: 12px">
         <table style="width: 100%;">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contrato;
+use App\Services\JwtAuthService;
 use Illuminate\Http\Request;
 
 class IngresosController extends Controller
@@ -62,9 +63,12 @@ class IngresosController extends Controller
         if (!$request->session()->has('usuario'))
             return redirect('/login');
         $usuario = $request->session()->get('usuario');
+        $jwt = JwtAuthService::getToken($usuario);
+
         $data = [
             'usuario' => $usuario,
             'submodule' => 'registro-masivo',
+            'token' => $jwt,
         ];
         return view('pages.ingresos', compact('data'));
     }

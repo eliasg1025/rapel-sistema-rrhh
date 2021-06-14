@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Usuario;
 use App\Services\JwtAuthService;
 use Closure;
 
@@ -23,14 +24,23 @@ class ApiAuthenticate
                 'message' => 'Token no existe o inválido'
             ], 401);
         }
-        $check = JwtAuthService::checkToken($token, true);
 
-        if (!$check) {
+        try {
+            $check = JwtAuthService::checkToken($token, true);
+
+            if (!$check) {
+                return response()->json([
+                    'message' => 'No autorizado'
+                ], 401);
+            }
+            $request->attributes->add([
+                'user' => Usuario::findOrFail($check->sub),
+            ]);
+            return $next($request);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'No autorizado'
+                'message' => $e->getMessage()
             ], 401);
         }
-        $request->attributes->add(['user' => $check]);
-        return $next($request);
     }
 }

@@ -100,6 +100,14 @@ class ContratoController extends Controller
         return response()->json($result, $result['error'] ? 400 : 200);
     }
 
+    public function registroIndividualReniec(Request $request)
+    {
+        ['contrato' => $contrato, 'dni' => $dni] = $request->all();
+
+        $result = Contrato::recordReniec($contrato, $dni);
+        return response()->json($result, $result['error'] ? 400 : 200);
+    }
+
     public function editarMasivo(Request $request)
     {
         $contratos = $request->get('contratos');

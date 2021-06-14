@@ -14,7 +14,6 @@ export const RegistroIndividual = () => {
     const { usuario, trabajador: _trabajador, contrato: _contrato } = JSON.parse(sessionStorage.getItem("data"));
 
     useEffect(() => {
-        console.log(_contrato);
         if (_contrato && _trabajador) {
 
             setTrabajador({
@@ -59,6 +58,7 @@ export const RegistroIndividual = () => {
         apellido_materno: '',
         direccion: '',
         telefono: '',
+        email: '',
         fecha_nacimiento: '',
         nombre_zona: '',
         nombre_via: '',
@@ -66,7 +66,7 @@ export const RegistroIndividual = () => {
         nacionalidad_id: 'PE',
         tipo_via_id: '',
         tipo_zona_id: '',
-        estado_civil_id: '',
+        estado_civil_id: 'S',
         empresa_id: 9
     });
     const [contratoId, setContratoId] = useState(0);
@@ -100,9 +100,6 @@ export const RegistroIndividual = () => {
 
     const clearData = () => {
         let _trabajador = { ...trabajador };
-        console.log('antes', _trabajador.fecha_nacimiento);
-        //_trabajador.fecha_nacimiento = moment(_trabajador.fecha_nacimiento, 'DD/MM/YYYY').format('YYYY-MM-DD').toString();
-        console.log('despues', _trabajador.fecha_nacimiento);
         for (const key in _trabajador) {
             if (_trabajador[key] == null) {
                 _trabajador[key] = '';
@@ -133,7 +130,8 @@ export const RegistroIndividual = () => {
             apellido_materno: '',
             direccion: '',
             telefono: '',
-            fecha_nacimiento: moment(),
+            email: '',
+            fecha_nacimiento: '',
             nombre_zona: '',
             nombre_via: '',
             sexo: '',
@@ -191,7 +189,6 @@ export const RegistroIndividual = () => {
                 contrato_activo: contratoActivo,
                 alertas,
             };
-            console.log('Datos del trabajador y el contrato: ', data);
             registroContrato(data);
         } else {
             notification['warning']({
@@ -205,7 +202,6 @@ export const RegistroIndividual = () => {
             .then(res => {
                if (res.status < 300) {
                    const accion = contratoId !== 0 ? 'actualizado' : 'creado';
-                   console.log(res);
 
                    notification['success']({
                        message: `Contrato para trabajador ${res.data.rut} ${accion} correctamente`,
@@ -217,7 +213,9 @@ export const RegistroIndividual = () => {
                        });
                    }
 
-                   clearFormTrabajador();
+                   if (contratoId === 0) {
+                       clearFormTrabajador();
+                   }
                } else {
                     notification['error']({
                         message: res.response.error,
@@ -225,7 +223,7 @@ export const RegistroIndividual = () => {
                 }
             })
             .catch(err => {
-                console.log(err.response)
+                console.log(err.response);
                 notification['error']({
                     message: err.response.data.error
                 });
@@ -304,16 +302,18 @@ export const RegistroIndividual = () => {
                     />
                 </Collapse.Panel>
                 <Collapse.Panel header="Datos Trabajador" key="2">
-                    <BusquedaTrabajador
-                        trabajador={trabajador}
-                        loading={loading}
-                        clearFormTrabajador={clearFormTrabajador}
-                        setTrabajador={setTrabajador}
-                        setLoading={setLoading}
-                        setAlertas={setAlertas}
-                        setContratoActivo={setContratoActivo}
-                        mostrarObservaciones={mostrarObservaciones}
-                    />
+                    {contratoId === 0 && (
+                        <BusquedaTrabajador
+                            trabajador={trabajador}
+                            loading={loading}
+                            clearFormTrabajador={clearFormTrabajador}
+                            setTrabajador={setTrabajador}
+                            setLoading={setLoading}
+                            setAlertas={setAlertas}
+                            setContratoActivo={setContratoActivo}
+                            mostrarObservaciones={mostrarObservaciones}
+                        />
+                    )}
                     <DatosTrabajador
                         trabajador={trabajador}
                         setDatosTrabajadorValido={setDatosTrabajadorValido}

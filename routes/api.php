@@ -103,6 +103,7 @@ Route::group(['prefix' => 'contrato'], function() {
     Route::post('/', 'ContratoController@test');
     Route::post('/registro-masivo', 'ContratoController@registroMasivo');
     Route::post('/registro', 'ContratoController@registroIndividual');
+    Route::post('/registro-reniec', 'ContratoController@registroIndividualReniec');
     Route::post('/generar-pdf', 'ContratoController@generarPdf');
     Route::post('/generar-ficha-excel', 'ContratoController@generarFichaExcel');
     Route::delete('/{id}', 'ContratoController@delete');
@@ -355,6 +356,11 @@ Route::group(['prefix' => 'planillas-manuales'], function() {
 
 Route::group(['prefix' => 'importaciones-finiquitos'], function() {
     Route::get('/{importacionFiniquito}/export', 'ImportacionesFiniquitosController@export');
+});
+
+Route::group(['prefix' => 'procesos-contratos'], function() {
+    Route::get('/', 'ProcesosContratosController@get')->middleware('api.auth');
+    Route::post('/', 'ProcesosContratosController@create')->middleware('api.auth');
 });
 
 Route::group(['prefix' => 'sqlsrv'], function () {

@@ -4,11 +4,7 @@
 namespace App\Services;
 
 
-use App\Models\Departamento;
-use App\Models\EstadoCivil;
-use App\Models\Provincia;
 use App\Traits\ConsumeApi;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,7 +22,10 @@ class ReniecService
     public function getPersona($dni)
     {
         try {
-            // $path = $dni . '/' . $imagenes;
+            if (!is_string($dni) || !is_numeric($dni) || strlen($dni) !== 8) {
+                throw new \Exception('N° dni no cuenta con formato válido');
+            }
+
             $path = env('RENIEC_API') . "?dni=$dni&refresh=true";
             $response = $this->sendRequest('POST', $path, ['dni' => $dni]);
 

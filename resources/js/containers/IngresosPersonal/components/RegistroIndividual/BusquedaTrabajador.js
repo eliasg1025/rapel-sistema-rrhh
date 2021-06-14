@@ -82,7 +82,6 @@ const BusquedaTrabajador = props => {
             <Form layout="inline" onSubmitCapture={handleSubmit}>
                 <Form.Item
                     name="dni"
-                    label="DNI"
                     rules={[{ required: true, message: 'Dato obligatorio' }]}
                     initialValue={trabajador.rut}
                 >
@@ -90,6 +89,7 @@ const BusquedaTrabajador = props => {
                         autoComplete="off"
                         value={trabajador.rut}
                         placeholder="Numero DNI"
+                        size="small"
                         onChange={e => {
                             setTrabajador({
                                 ...trabajador,
@@ -104,10 +104,11 @@ const BusquedaTrabajador = props => {
                     ) : (
                         <Button
                             type="primary"
+                            size="small"
                             htmlType="submit"
                             disabled={!validForm}
                         >
-                            <SearchOutlined />
+                            Buscar
                         </Button>
                     )}
                 </Form.Item>

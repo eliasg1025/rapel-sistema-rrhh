@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
     Card,
-    Form,
     Input,
     Select,
-    Row,
-    Col,
-    DatePicker,
     notification,
-    message
 } from "antd";
 import Axios from "axios";
 import moment from "moment";
@@ -122,10 +117,10 @@ const DatosContrato = props => {
                     ...contrato,
                     oficio_id: "3",
                     cuartel_id: "SCG",
-                    agrupacion_id: 3,
+                    agrupacion_id: '3',
                     actividad_id: "111",
-                    labor_id: 61,
-                    tipo_contrato_id: 10
+                    labor_id: '61',
+                    tipo_contrato_id: '10'
                 });
             } else {
                 setContrato({
@@ -509,7 +504,7 @@ const DatosContrato = props => {
                         value={contrato.agrupacion_id}
                     >
                         {agrupaciones.map(option => (
-                            <Select.Option value={option.id} key={option.id}>
+                            <Select.Option value={`${option.id}`} key={option.id}>
                                 {`${option.id} - ${option.name}`}
                             </Select.Option>
                         ))}
@@ -565,7 +560,7 @@ const DatosContrato = props => {
                         value={contrato.labor_id}
                     >
                         {labores.map(option => (
-                            <Select.Option value={option.id} key={option.id}>
+                            <Select.Option value={`${option.id}`} key={option.id}>
                                 {`${option.id} - ${option.name}`}
                             </Select.Option>
                         ))}
@@ -593,7 +588,7 @@ const DatosContrato = props => {
                         value={contrato.tipo_contrato_id}
                     >
                         {tiposContratos.map(option => (
-                            <Select.Option value={option.id} key={option.id}>
+                            <Select.Option value={`${option.id}`} key={option.id}>
                                 {`${option.id} - ${option.name}`}
                             </Select.Option>
                         ))}

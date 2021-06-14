@@ -3,12 +3,16 @@ import { Alert, Card, Modal, notification, Form, Row, Col, Button, message, Swit
 import moment from 'moment';
 import Axios from 'axios';
 
+import ModalCustom from '../../Modal';
 import AgregarTrabajador from "../components/RegistroMasivo/AgregarTrabajador";
 import ListaTrabajadores from "../components/RegistroMasivo/ListaTrabajadores";
 import DatosContrato from "../components/RegistroIndividual/DatosContrato";
 
 
 export const RegistroMasivo = () => {
+
+    const { token } = JSON.parse(sessionStorage.getItem("data"));
+
     const [registroReniec, setRegistroReniec] = useState(true);
     const [registrando, setRegistrando] = useState(false);
     const [datosContratoValido, setDatosContratoValido] = useState(false);
@@ -33,6 +37,7 @@ export const RegistroMasivo = () => {
     const [trabajadores, setTrabajadores] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errores, setErrores] = useState([]);
+    const [viewConfigModal, setViewConfigModal] = useState(false);
 
     const [zonasLabor, setZonasLabor] = useState([]);
     const [regimenes, setRegimenes] = useState([]);
@@ -44,6 +49,36 @@ export const RegistroMasivo = () => {
     const [labores, setLabores] = useState([]);
     const [rutas, setRutas] = useState([]);
     const [troncales, setTroncales] = useState([]);
+
+    /* useEffect(() => {
+        fetchProcesosContratos();
+    }, []);
+
+    const fetchProcesosContratos = async () => {
+        try {
+            const res = await Axios.get('/api/procesos-contratos', { headers: { Authorization: token } });
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const createProcesosContratos = async () => {
+        try {
+            const data = {
+                contrato,
+                datos_reniec: registroReniec
+            };
+            const res = await Axios.post('/api/procesos-contratos', data, { headers: { Authorization: token } });
+            console.log(res);
+
+        } catch (err) {
+            console.log(err);
+            notification['error']({
+                message: 'Error al guardar registro'
+            });
+        }
+    } */
 
     const ListaErrores = errores => {
         //console.log('ListaErrores: ', errores);
@@ -85,7 +120,6 @@ export const RegistroMasivo = () => {
     };
 
     const ListaNoRegistrados = no_registrados => {
-        // console.log('No registrados: ', no_registrados);
         return (
             <ul>
                 {no_registrados.no_registrados.map(e => <li key={e.key}>{e.rut}</li>)}
@@ -93,17 +127,61 @@ export const RegistroMasivo = () => {
         );
     };
 
-    const revisionConReniec = () => {
-        Axios.post('http://192.168.60.16/api/trabajador/revision/sin-trabajadores', {trabajadores})
-            .then(res => {
-                console.log('Revision trabajadores', res.data);
-                consultaMasivaReniec(res.data);
+
+
+    const revisionConReniec = async () => {
+        try {
+            const res = await Axios.post('http://192.168.60.16/api/trabajador/revision/sin-trabajadores', {
+                trabajadores: trabajadores.filter(t => t.estado.descripcion === 'SIN PROCESAR')
             })
-            .catch(err => {
+            consultaMasivaReniec(res.data);
+        } catch (err) {
+            console.log(err.response);
+            setLoading(false);
+        }
+
+        /* const dnis = [...trabajadores].filter(t => t.estado.descripcion === 'SIN PROCESAR').map(t => t.rut);
+
+        async function buscar(dni) {
+            try {
+                setLoading(true);
+                const res = await Axios.post(`/api/contrato/registro-reniec`, { dni, contrato });
+                console.log(res);
+
+                const xd = [ ...trabajadores ];
+
+                const index = trabajadores.findIndex(t => t.rut === dni);
+
+                xd.splice(index, 1);
+
+                setTrabajadores(xd);
+            } catch (err) {
                 console.log(err.response);
+                cambiarEstado(dni, err);
+            } finally {
                 setLoading(false);
-            })
+            }
+        }
+
+        async function executeSequentially() {
+            for (const dni of dnis) {
+                await buscar(dni);
+            }
+        }
+
+        executeSequentially(); */
     };
+
+    const cambiarEstado = (dni, res) => {
+        const xd = [ ...trabajadores ];
+
+        const index = trabajadores.findIndex(t => t.rut === dni);
+        const row = trabajadores[index];
+
+        xd.splice(index, 1);
+
+        setTrabajadores(xd);
+    }
 
     const revisionSinReniec = () => {
         Axios.post('http://192.168.60.16/api/trabajador/revision', {trabajadores})
@@ -186,7 +264,7 @@ export const RegistroMasivo = () => {
         Axios.post('/api/contrato/registro-masivo', trabajadores_enviar)
             .then(res => {
                 const { guardados, errores} = res.data;
-                console.log('Resultado registro masivo: ', res.data);
+                // console.log('Resultado registro masivo: ', res.data);
 
                 setErrores(errores);
                 if (guardados) {
@@ -258,6 +336,7 @@ export const RegistroMasivo = () => {
     const empezarRegistro = () => {
         if (validForm()) {
             message.info('Empezo el registro de trabajadores');
+            // createProcesosContratos();
             setRegistrando(true);
         } else {
             notification['warning']({
@@ -281,10 +360,14 @@ export const RegistroMasivo = () => {
         <div className="registro-masivo">
             <Row>
                 <Col span={4} sm={24} xs={24}>
-                    <h4>Registro Masivo </h4>
-                </Col>
-                <Col span={20} sm={24} xs={24}>
-                    Datos de Reniec: <Switch defaultChecked onChange={checked => setRegistroReniec(checked)}/>
+                    <h4>
+                        Registro Masivo&nbsp;<a href="#" onClick={e => {
+                            e.preventDefault();
+                            setViewConfigModal(true);
+                        }}>
+                            <i className="fas fa-cog"></i>
+                        </a>
+                    </h4>
                 </Col>
             </Row>
             <br />
@@ -376,6 +459,13 @@ export const RegistroMasivo = () => {
                 setTrabajadores={setTrabajadores}
                 loading={loading}
             />
+            <ModalCustom
+                isVisible={viewConfigModal}
+                setIsVisible={setViewConfigModal}
+                title="Configuración"
+            >
+                Datos de Reniec: <Switch defaultChecked onChange={checked => setRegistroReniec(checked)}/>
+            </ModalCustom>
         </div>
     );
 }

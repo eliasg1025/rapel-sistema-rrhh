@@ -45,6 +45,10 @@
         border: 1px solid black;
     }
 
+    .tabla-sm th, .tabla-sm td {
+        border: 0.5px solid black;
+    }
+
     td {
         padding: 5px;
     }
@@ -473,7 +477,7 @@
 
     <div class="page-break"></div>
 
-    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+    <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
         <h4 class="titulo">ANEXO 2</h4>
         <p>
             <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
@@ -498,13 +502,7 @@
         </p>
     </section>
 
-    <div class="page-break"></div>
-
-    <section></section>
-
-    <div class="page-break"></div>
-
-    <section style="font-size: 15px; margin: 20px; margin-top: 30px;">
+    <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
         <h4 class="titulo">ANEXO 3</h4>
         <p>
             <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
@@ -638,7 +636,7 @@
         </div>
     </section>
 
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
 
     <section id="page7"></section>
 
@@ -674,7 +672,7 @@
                 <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <div class="page-break"></div>
 
@@ -715,7 +713,7 @@
         </div>
     </section>
 
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
 
     <section></section>
 
@@ -760,9 +758,9 @@
                 <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
             </tr>
         </table>
-    </section>
+    </section> --}}
 
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div>
 
     <section></section>
 
@@ -812,174 +810,166 @@
 
     <div class="page-break"></div>
 
-    <section id="page14">
-        <table>
-            <tr>
-                <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
-                <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
-            </tr>
-        </table>
-        <br>
-        <h4 class="titulo">POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO</h4>
-        <div style="font-size: 14px">
-            <p>
-                SOCIEDAD AGRÍCOLA RAPEL SAC; empresa dedicada al cultivo, procesamiento y comercialización de uva de mesa, reconoce que el capital humano constituye lo más importante para la organización, por tal motivo se compromete a:
-            </p>
-            <ol>
-                <li>
-                    Proteger la integridad y la salud de todos los trabajadores, proveedores, clientes y visitantes que laboren o ingresen en cualquiera de nuestras instalaciones; ejecutando los planes, programas y medidas de prevención destinadas a prevenir accidentes y enfermedades ocupacionales.
-                </li>
-                <li>
-                    Promover una cultura preventiva, basada en la identificación de los peligros y evaluación los riesgos determinando las medidas de control orientadas a eliminar o minimizar los impactos a la seguridad y salud de nuestros colaboradores.
-                </li>
-                <li>
-                    Cumplir las normas legales, las normas técnicas de adhesión voluntaria, convenios de negociación colectiva y otros requisitos relativos a la seguridad y salud en el trabajo suscritos por nuestra empresa.
-                </li>
-                <li>
-                    Garantizar la comunicación y consulta a los trabajadores y sus representantes, así como su capacitación, información y participación activa en el Sistema de Gestión de Seguridad y Salud en el Trabajo de acuerdo a lo estipulado en la legislación nacional.
-                </li>
-                <li>
-                    Implementar y mejorar continuamente el Sistema de Gestión de Seguridad y Salud en el Trabajo e integrarlo a los demás sistemas desarrollados en la Empresa.
-                </li>
-            </ol>
+    <section style="position: absolute;">
+        <section id="page15" style="font-size: 9px; transform: rotate(270deg); width: 50%; margin: auto; margin-top: -50px;">
+            <table>
+                <tr>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="20px" /></td>
+                    <td style="vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
+                </tr>
+            </table>
+            <h4 class="titulo">COMPROMISO</h4>
+            <div>
+                <p>
+                    Considerando que todos los que trabajamos en Sociedad Agrícola Rapel S.A.C., compartimos como valor fundamental el respeto por la vida y la seguridad de las personas, lo que debiera manifestarse en una permanente actitud de auto cuidado, y teniendo plena conciencia del dolor que provocan en nosotros los accidentes, en especial si sus consecuencias son fatales, me comprometo a
+                </p>
+                <ol>
+                    <li>
+                        Que ninguna meta productiva o contingencia operacional exponga a mis compañeros o a mi persona a riesgos no suficientemente controlados.
+                    </li>
+                    <li>
+                        Cumplir la normativa, los reglamentos y los procedimientos de trabajo que se han hecho para proteger nuestras vidas.
+                    </li>
+                    <li>
+                        Analizar al inicio de cada trabajo los riesgos que tiene asociados y las medidas de control, para asegurar la ejecución del trabajo, evitar accidentes y para proteger el medio ambiente
+                    </li>
+                    <li>
+                        Informar las condiciones inseguras que pudieran existir en los lugares donde desarrollo mis actividades y hacer lo que esté a mi alcance para eliminarlas y/o controlarlas
+                    </li>
+                    <li>
+                        Participar activamente en los planes y programas que se implementen para fomentar en nosotros una conducta segura y responsable.
+                    </li>
+                </ol>
+
+                <p>
+                    Los principios antes mencionados se traducen en acciones concretas que tendré presente y guiarán mi trabajo en todo momento, según corresponda, comprometiendo SIEMPRE a:
+                </p>
+
+                <ul>
+                    <li>Usar correctamente los elementos de protección personal. </li>
+                    <li>Operar sólo los equipos para los cuales estoy autorizado. </li>
+                    <li>Intervenir o permitir intervenir solo equipos que estén des energizados y bloqueados. </li>
+                    <li>Trabajar con equipos, materiales y herramientas en buen estado. </li>
+                    <li>Cuidar  obedecer  las señalizaciones y los dispositivos de seguridad diseñados para protegerme. </li>
+                    <li>Ubicarme fuera del alcance de equipos en movimiento y fuentes de energía. </li>
+                    <li>Conducir atento a las condiciones del tránsito y a una velocidad razonable y prudente. </li>
+                </ul>
+
+                <p>
+                    El compromiso que aquí suscribo voluntariamente, expresa mi firme decisión de proteger mi integridad física y mi vida, así como la de mis compañeros de trabajo. Constituyendo además un incentivo para que todos los que trabajamos en esta Empresa; ejecutivos, profesionales, supervisores y trabajadores, continuemos cumpliendo nuestras obligaciones en materia de prevención de riesgos por nuestro propio bienestar y el de nuestras familias
+                </p>
+
+                <table class="tabla-sm" style="width: 80%; margin-left: 10px;">
+                    <tbody>
+                        <tr>
+                            <td>Nombre y Apellidos:</td>
+                            <td>{{ $trabajador->nombre }} {{ $trabajador->apellidos }}</td>
+                        </tr>
+                        <tr>
+                            <td>Cargo:</td>
+                            <td>{{ $contrato->oficio->name }}</td>
+                        </tr>
+                        <tr>
+                            <td>DNI N°:</td>
+                            <td>{{ $trabajador->rut }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fecha:</td>
+                            <td>{{ $contrato->fecha_larga }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="width: 80%; font-weight: bold; text-align: center">
+                    <tr>
+                        <td>
+                            <div style="border: 1px solid black; width: 30px; height: 50px; margin: auto;"></div>
+                        </td>
+                        <td>
+                            <div style="width: 30px; height: 50px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                        <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <section id="page14" style="font-size: 9px; transform: rotate(270deg); width: 49%; margin-left: 150px; margin-top: -200px;">
+            <table>
+                <tr>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="40px" /></td>
+                    <td style="vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
+                </tr>
+            </table>
             <br>
-            <table class="tabla" style="width: 80%; margin-left: 20px">
-                <tbody>
+            <h4 class="titulo">POLÍTICA DE SEGURIDAD Y SALUD EN EL TRABAJO</h4>
+            <div>
+                <p>
+                    SOCIEDAD AGRÍCOLA RAPEL SAC; empresa dedicada al cultivo, procesamiento y comercialización de uva de mesa, reconoce que el capital humano constituye lo más importante para la organización, por tal motivo se compromete a:
+                </p>
+                <ol>
+                    <li>
+                        Proteger la integridad y la salud de todos los trabajadores, proveedores, clientes y visitantes que laboren o ingresen en cualquiera de nuestras instalaciones; ejecutando los planes, programas y medidas de prevención destinadas a prevenir accidentes y enfermedades ocupacionales.
+                    </li>
+                    <li>
+                        Promover una cultura preventiva, basada en la identificación de los peligros y evaluación los riesgos determinando las medidas de control orientadas a eliminar o minimizar los impactos a la seguridad y salud de nuestros colaboradores.
+                    </li>
+                    <li>
+                        Cumplir las normas legales, las normas técnicas de adhesión voluntaria, convenios de negociación colectiva y otros requisitos relativos a la seguridad y salud en el trabajo suscritos por nuestra empresa.
+                    </li>
+                    <li>
+                        Garantizar la comunicación y consulta a los trabajadores y sus representantes, así como su capacitación, información y participación activa en el Sistema de Gestión de Seguridad y Salud en el Trabajo de acuerdo a lo estipulado en la legislación nacional.
+                    </li>
+                    <li>
+                        Implementar y mejorar continuamente el Sistema de Gestión de Seguridad y Salud en el Trabajo e integrarlo a los demás sistemas desarrollados en la Empresa.
+                    </li>
+                </ol>
+                <br>
+                <table class="tabla" style="width: 80%; margin-left: 20px">
+                    <tbody>
+                        <tr>
+                            <td>Nombre:</td>
+                            <td>{{ $trabajador->nombre }}</td>
+                        </tr>
+                        <tr>
+                            <td>Apellidos:</td>
+                            <td>{{ $trabajador->apellidos }}</td>
+                        </tr>
+                        <tr>
+                            <td>Cargo:</td>
+                            <td>{{ $contrato->oficio->name }}</td>
+                        </tr>
+                        <tr>
+                            <td>DNI N°:</td>
+                            <td>{{ $trabajador->rut }}</td>
+                        </tr>
+                        <tr>
+                            <td>Fecha:</td>
+                            <td>{{ $contrato->fecha_larga }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table style="width: 100%; font-weight: bold; margin-top: 30px; text-align: center">
                     <tr>
-                        <td>Nombre:</td>
-                        <td>{{ $trabajador->nombre }}</td>
+                        <td>
+                            <div style="border: 1px solid black; width: 70px; height: 100px; margin: auto;"></div>
+                        </td>
+                        <td>
+                            <div style="width: 100px; height: 100px;"></div>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Apellidos:</td>
-                        <td>{{ $trabajador->apellidos }}</td>
+                        <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                        <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
                     </tr>
-                    <tr>
-                        <td>Cargo:</td>
-                        <td>{{ $contrato->oficio->name }}</td>
-                    </tr>
-                    <tr>
-                        <td>DNI N°:</td>
-                        <td>{{ $trabajador->rut }}</td>
-                    </tr>
-                    <tr>
-                        <td>Fecha:</td>
-                        <td>{{ $contrato->fecha_larga }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-                <tr>
-                    <td>
-                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                    </td>
-                    <td>
-                        <div style="width: 100px; height: 140px;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-
-    <div class="page-break"></div>
-
-    <section></section>
-
-    <div class="page-break"></div>
-
-    <section id="page15">
-        <table>
-            <tr>
-                <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
-                <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
-            </tr>
-        </table>
-        <h4 class="titulo">COMPROMISO</h4>
-        <div style="font-size: 12px">
-            <p>
-                Considerando que todos los que trabajamos en Sociedad Agrícola Rapel S.A.C., compartimos como valor  fundamental el respeto por la vida y la seguridad de las personas, lo que debiera manifestarse en una permanente actitud de auto cuidado, y teniendo plena conciencia del dolor que provocan en nosotros los accidentes, en especial si sus consecuencias son fatales, me comprometo a
-            </p>
-            <ol>
-                <li>
-                    Que ninguna meta productiva o contingencia operacional exponga a mis compañeros o a mi persona a riesgos no suficientemente controlados.
-                </li>
-                <li>
-                    Cumplir la normativa, los reglamentos y los procedimientos de trabajo que se han hecho para proteger nuestras vidas.
-                </li>
-                <li>
-                    Analizar al inicio de cada trabajo los riesgos que tiene asociados y las medidas de control, para asegurar la ejecución del trabajo, evitar accidentes y para proteger el medio ambiente
-                </li>
-                <li>
-                    Informar las condiciones inseguras que pudieran existir en los lugares donde desarrollo mis actividades y hacer lo que esté a mi alcance para eliminarlas y/o controlarlas
-                </li>
-                <li>
-                    Participar activamente en los planes y programas que se implementen para fomentar en nosotros una conducta segura y responsable.
-                </li>
-            </ol>
-
-            <p>
-                Los principios antes mencionados se traducen en acciones concretas que tendré presente y guiarán mi trabajo en todo momento, según corresponda, comprometiendo SIEMPRE a:
-            </p>
-
-            <ul>
-                <li>Usar correctamente los elementos de protección personal. </li>
-                <li>Operar sólo los equipos para los cuales estoy autorizado. </li>
-                <li>Intervenir o permitir intervenir solo equipos que estén des energizados y bloqueados. </li>
-                <li>Trabajar con equipos, materiales y herramientas en buen estado. </li>
-                <li>Cuidar  obedecer  las señalizaciones y los dispositivos de seguridad diseñados para protegerme. </li>
-                <li>Ubicarme fuera del alcance de equipos en movimiento y fuentes de energía. </li>
-                <li>Conducir atento a las condiciones del tránsito y a una velocidad razonable y prudente. </li>
-            </ul>
-
-            <p>
-                El compromiso que aquí suscribo voluntariamente, expresa mi firme decisión de proteger mi integridad física y mi vida, así como la de mis compañeros de trabajo. Constituyendo además un incentivo para que todos los que trabajamos en esta Empresa; ejecutivos, profesionales, supervisores y trabajadores, continuemos cumpliendo nuestras obligaciones en materia de prevención de riesgos por nuestro propio bienestar y el de nuestras familias
-            </p>
-
-            <table class="tabla" style="width: 80%; margin-left: 20px">
-                <tbody>
-                    <tr>
-                        <td>Nombre:</td>
-                        <td>{{ $trabajador->nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td>Apellidos:</td>
-                        <td>{{ $trabajador->apellidos }}</td>
-                    </tr>
-                    <tr>
-                        <td>Cargo:</td>
-                        <td>{{ $contrato->oficio->name }}</td>
-                    </tr>
-                    <tr>
-                        <td>DNI N°:</td>
-                        <td>{{ $trabajador->rut }}</td>
-                    </tr>
-                    <tr>
-                        <td>Fecha:</td>
-                        <td>{{ $contrato->fecha_larga }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-                <tr>
-                    <td>
-                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                    </td>
-                    <td>
-                        <div style="width: 100px; height: 140px;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-        </div>
-    </section>
+                </table>
+            </div>
+        </section>
+    </section> --}}
 
     <div class="page-break"></div>
 
@@ -1498,7 +1488,7 @@
 
     <div class="page-break"></div>
 
-    <section id="page21">
+    <section id="page21" style="font-size: 10px;">
         <table style="width: 100%;">
             <tr>
                 <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
@@ -1510,8 +1500,8 @@
 
         <h4 style="text-align: center">Hoja de Ruta para Trabajadores Nuevos</h4>
 
-        <table class="tabla" style="font-size: 14px; width: 80%; margin: auto">
-            <tr style="height: 200px;">
+        <table class="tabla" style="font-size: 10px; width: 80%; margin: auto">
+            <tr style="height: 150px;">
                 <td style="width: 50%">
                     <b>Apellidos y Nombres:</b><br>
                     <span>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</span>
@@ -1521,7 +1511,7 @@
                     <span>{{ $contrato->fecha_larga }}</span>
                 </td>
             </tr>
-            <tr style="height: 200px">
+            <tr style="height: 150px">
                 <td>
                     <b>Puesto de Trabajo:</b><br>
                     <span>{{ $contrato->oficio->name }}</span>
@@ -1534,7 +1524,7 @@
         </table>
         <br><br>
 
-        <div style="font-size: 14px">
+        <div style="font-size: 110x">
             <table style="width: 90%; margin: auto">
                 <tr>
                     <td>
@@ -1542,7 +1532,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-olga-vilela.png'}}" width="200px" />
+                        <img src="{{ public_path() . '/img/firma-olga-vilela.png'}}" width="150px" />
                     </td>
                 </tr>
                 <tr>
@@ -1557,7 +1547,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-jose-reyes.png'}}" width="100px" />
+                        <img src="{{ public_path() . '/img/firma-jose-reyes.png'}}" width="75px" />
                     </td>
                 </tr>
                 <tr>
@@ -1572,7 +1562,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-karla-salazar.png'}}" width="200px" />
+                        <img src="{{ public_path() . '/img/firma-karla-salazar.png'}}" width="150px" />
                     </td>
                 </tr>
                 <tr>
@@ -1587,7 +1577,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-remo-galindo.png'}}" width="100px" />
+                        <img src="{{ public_path() . '/img/firma-remo-galindo.png'}}" width="75px" />
                     </td>
                 </tr>
                 <tr>
@@ -1598,7 +1588,7 @@
                 </tr>
             </table>
 
-            <ol>
+            <ol >
                 <li>
                     <b>Recursos Humanos/Administración</b><br>
                     Puntos a considerar:
@@ -1659,6 +1649,10 @@
             </ol>
         </div>
     </section>
+
+    <div class="page-break"></div>
+
+    <section></section>
 
     <div class="page-break"></div>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Form, Row, Col, Input, Select, DatePicker, notification } from 'antd'
+import { Card, Select, notification } from 'antd'
 import moment from 'moment';
 
 import { sexo, estado_civil } from '../../../../data/default.json';
@@ -11,7 +11,6 @@ const DatosTrabajador = props => {
         trabajador, setTrabajador, departamentos, provincias,  distritos, nacionalidades, tiposZonas, tiposVias,
         setDepartamentos, setProvincias, setDistritos, setNacionalidades, setTiposVias, setTiposZonas, contrato
     } = props;
-    const { Item } = Form;
 
     const [edad, setEdad] = useState(0);
     const [validacionEdad, setValidacionEdad] = useState({
@@ -221,13 +220,6 @@ const DatosTrabajador = props => {
             ...trabajador,
             distrito_id: e
         });
-        console.log(e);
-    };
-
-    const layout = {
-        labelCol: {
-            span: 6
-        }
     };
 
     return (
@@ -239,7 +231,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="nombre"
-                        value={trabajador.nombre}
+                        value={trabajador?.nombre}
                         onChange={e => setTrabajador({ ...trabajador, nombre: e.target.value })}
                     />
                 </div>
@@ -249,7 +241,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="apellido_paterno"
-                        value={trabajador.apellido_paterno}
+                        value={trabajador?.apellido_paterno}
                         onChange={e => setTrabajador({ ...trabajador, apellido_paterno: e.target.value })}
                     />
                 </div>
@@ -259,7 +251,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="apellido_materno"
-                        value={trabajador.apellido_materno}
+                        value={trabajador?.apellido_materno}
                         onChange={e => setTrabajador({ ...trabajador, apellido_materno: e.target.value })}
                     />
                 </div>
@@ -287,7 +279,7 @@ const DatosTrabajador = props => {
                         onChange={e => {
                             setTrabajador({ ...trabajador, sexo: e });
                         }}
-                        value={trabajador.sexo}
+                        value={trabajador?.sexo}
                         required={true}
                     >
                         {sexo.map(option => (
@@ -310,7 +302,7 @@ const DatosTrabajador = props => {
                         onChange={e => {
                             setTrabajador({ ...trabajador, estado_civil_id: e });
                         }}
-                        value={trabajador.estado_civil_id}
+                        value={trabajador?.estado_civil_id}
 
                     >
                         {estado_civil.map(option => (
@@ -340,7 +332,7 @@ const DatosTrabajador = props => {
                         onChange={e => {
                             setTrabajador({ ...trabajador, nacionalidad_id: e });
                         }}
-                        value={trabajador.nacionalidad_id}
+                        value={trabajador?.nacionalidad_id}
 
                     >
                         {nacionalidades.map(option => (
@@ -359,7 +351,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="telefono"
-                        value={trabajador.telefono}
+                        value={trabajador?.telefono}
                         onChange={handleChangeInput}
                         size="small"
                     />
@@ -370,7 +362,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="email"
-                        value={trabajador.email}
+                        value={trabajador?.email}
                         onChange={handleChangeInput}
                     />
                 </div>
@@ -389,7 +381,7 @@ const DatosTrabajador = props => {
                                 .indexOf(input.toLowerCase()) >= 0
                         }
                         onChange={handleChangeDepartamento}
-                        value={trabajador.departamento_id}
+                        value={trabajador?.departamento_id}
 
                     >
                         {departamentos.map(option => (
@@ -417,7 +409,7 @@ const DatosTrabajador = props => {
                                 .indexOf(input.toLowerCase()) >= 0
                         }
                         onChange={handleChangeProvincia}
-                        value={trabajador.provincia_id}
+                        value={trabajador?.provincia_id}
 
                     >
                         {provincias.map(option => (
@@ -445,7 +437,7 @@ const DatosTrabajador = props => {
                                 .indexOf(input.toLowerCase()) >= 0
                         }
                         onChange={handleChangeDistrito}
-                        value={trabajador.distrito_id}
+                        value={trabajador?.distrito_id}
 
                     >
                         {distritos.map(option => (
@@ -475,7 +467,7 @@ const DatosTrabajador = props => {
                         onChange={e =>
                             setTrabajador({ ...trabajador, tipo_zona_id: e })
                         }
-                        value={trabajador.tipo_zona_id}
+                        value={trabajador?.tipo_zona_id}
                     >
                         {tiposZonas.map(option => (
                             <Select.Option
@@ -493,7 +485,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="nombre_zona"
-                        value={trabajador.nombre_zona}
+                        value={trabajador?.nombre_zona}
                         onChange={handleChangeInput}
                     />
                 </div>
@@ -514,7 +506,7 @@ const DatosTrabajador = props => {
                         onChange={e =>
                             setTrabajador({ ...trabajador, tipo_via_id: e })
                         }
-                        value={trabajador.tipo_via_id}
+                        value={trabajador?.tipo_via_id}
                     >
                         {tiposVias.map(option => (
                             <Select.Option
@@ -532,7 +524,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="nombre_via"
-                        value={trabajador.nombre_via}
+                        value={trabajador?.nombre_via}
                         onChange={handleChangeInput}
                     />
                 </div>
@@ -542,7 +534,7 @@ const DatosTrabajador = props => {
                         className="form-control"
                         autoComplete="off"
                         name="direccion"
-                        value={trabajador.direccion}
+                        value={trabajador?.direccion}
                         onChange={e => setTrabajador({ ...trabajador, direccion: e.target.value })}
                     />
                 </div>

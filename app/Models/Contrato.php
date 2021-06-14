@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ReniecService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -477,6 +478,26 @@ class Contrato extends Model
             return [
                 'rut' => $data['rut'],
                 'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ];
+        }
+    }
+
+    public static function recordReniec(array $contrato, string $dni)
+    {
+        try {
+            $persona = (new ReniecService())->getPersona($dni);
+
+            return [
+                'message' => 'Guardado correctamente',
+                'trabajador' => $persona,
+                'observado' => false,
+                'error' => false,
+            ];
+        } catch(\Exception $e) {
+            return [
+                'message' => $e->getMessage(),
+                'observado' => false,
+                'error' => true,
             ];
         }
     }
