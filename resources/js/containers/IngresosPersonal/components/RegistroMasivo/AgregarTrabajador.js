@@ -5,7 +5,7 @@ import Modal from "../../../Modal";
 
 const AgregarTrabajador = props => {
     const {
-        form, registrando, trabajadores, setTrabajadores, regimenes, oficios, actividades, agrupaciones, tiposContratos,
+        form, registrando, newTrabajadores, dispatchNewTrabajadores, regimenes, oficios, actividades, agrupaciones, tiposContratos,
         cuarteles, labores, rutas, troncales, zonasLabor
     } = props;
     const [isVisibleModal, setIsVisibleModal] = useState(false);
@@ -30,8 +30,8 @@ const AgregarTrabajador = props => {
                 setIsVisible={setIsVisibleModal}
             >
                 <FormularioTrabajador
-                    trabajadores={trabajadores}
-                    setTrabajadores={setTrabajadores}
+                    newTrabajadores={newTrabajadores}
+                    dispatchNewTrabajadores={dispatchNewTrabajadores}
                     formRegistroMasivo={form}
                     regimenes={regimenes}
                     oficios={oficios}
@@ -51,8 +51,8 @@ const AgregarTrabajador = props => {
 
 const FormularioTrabajador = ({
     formRegistroMasivo,
-    trabajadores = [],
-    setTrabajadores,
+    newTrabajadores,
+    dispatchNewTrabajadores,
     regimenes,
     oficios,
     actividades,
@@ -88,18 +88,19 @@ const FormularioTrabajador = ({
             return;
         }
 
-        const repetido = trabajadores.findIndex(t => t.rut == form.rut) > -1;
+        const repetido = newTrabajadores.findIndex(t => t.rut == form.rut) > -1;
 
         if (repetido) {
             message['warn']({
                 content: 'Este RUT ya esta en la lista, por favor ingrese otro',
             });
         } else {
-            let _trabajadores = agregarTrabajador([...trabajadores]);
-            setTrabajadores(_trabajadores);
+            agregarTrabajador();
+            /* let _trabajadores = agregarTrabajador([...trabajadores]);
+            setTrabajadores(_trabajadores); */
 
             message['success']({
-                content: 'Agregado',
+                content: `Agregado ${form.rut}`,
             });
         }
         clearForm();
@@ -112,7 +113,7 @@ const FormularioTrabajador = ({
         });
     };
 
-    const agregarTrabajador = (_trabajadores) => {
+    /* const agregarTrabajador = (_trabajadores) => {
         let regimen = regimenes.filter(e => e.id == formRegistroMasivo.regimen_id)[0];
         let cuartel = cuarteles.filter(e => e.id == formRegistroMasivo.cuartel_id)[0];
         let agrupacion = agrupaciones.filter(e => e.id == formRegistroMasivo.agrupacion_id)[0];
@@ -150,6 +151,46 @@ const FormularioTrabajador = ({
             }
         });
         return _trabajadores
+    }; */
+
+    const agregarTrabajador = () => {
+        let regimen = regimenes.filter(e => e.id == formRegistroMasivo.regimen_id)[0];
+        let cuartel = cuarteles.filter(e => e.id == formRegistroMasivo.cuartel_id)[0];
+        let agrupacion = agrupaciones.filter(e => e.id == formRegistroMasivo.agrupacion_id)[0];
+        let actividad = actividades.filter(e => e.id == formRegistroMasivo.actividad_id)[0];
+        let labor = labores.filter(e => e.id == formRegistroMasivo.labor_id)[0];
+        let tipo_contrato = tiposContratos.filter(e => e.id == formRegistroMasivo.tipo_contrato_id)[0];
+        let oficio = oficios.filter(e => e.id == formRegistroMasivo.oficio_id)[0];
+        let ruta = rutas.filter(e => e.id === formRegistroMasivo.ruta_id)[0];
+        let troncal = troncales.filter(e => e.id == formRegistroMasivo.troncal_id)[0];
+        let zona_labor = zonasLabor.filter(e => e.id == formRegistroMasivo.zona_labor_id)[0];
+
+        dispatchNewTrabajadores({
+            type: 'add',
+            value: {
+                trabajador: {
+                    key: form.rut,
+                    rut: form.rut,
+                    empresa_id: formRegistroMasivo.empresa_id,
+                    zona_labor_id: formRegistroMasivo.zona_labor_id,
+                    codigo_bus: formRegistroMasivo.codigo_bus,
+                    grupo: formRegistroMasivo.grupo,
+                    fecha_ingreso: formRegistroMasivo.fecha_ingreso,
+                    fecha_termino: formRegistroMasivo.fecha_termino,
+                    zona_labor,
+                    regimen,
+                    cuartel,
+                    agrupacion,
+                    actividad,
+                    labor,
+                    tipo_contrato,
+                    oficio,
+                    tipo_trabajador: formRegistroMasivo.tipo_trabajador,
+                    ruta,
+                    troncal,
+                }
+            }
+        })
     };
 
     const handleInput = e => {

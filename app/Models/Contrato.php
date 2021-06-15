@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Sqlsrv\{AlertaTrabajador, Contrato as ContratoSqlsrv};
 use App\Services\ReniecService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -487,17 +488,44 @@ class Contrato extends Model
         try {
             $persona = (new ReniecService())->getPersona($dni);
 
+            $t = DB::connection('sqlsrv')
+                ->table('dbo.Trabajador')
+                ->where('RutTrabajador', $dni)
+                ->whereIn('IdEmpresa', ['9', '14'])
+                ->first();
+
+            $alertas = AlertaTrabajador::get($dni);
+            $contrato_activo = ContratoSqlsrv::activo($dni);
+
+            $persona['empresa_id'] = $contrato['empresa_id'];
+
+            $data = [
+                'rut'               => $dni,
+                'contrato'          => $contrato,
+                'trabajador'        => $persona,
+                'alertas'           => $alertas,
+                'contrato_activo'   => $contrato_activo
+            ];
+
+            $result = self::record($data);
+
+            if ( $result['error'] ) {
+                throw new \Exception($result['error']);
+            }
+
+            $esObservado = (sizeof($alertas) > 0 || sizeof($contrato_activo) > 0);
+
             return [
-                'message' => 'Guardado correctamente',
-                'trabajador' => $persona,
-                'observado' => false,
-                'error' => false,
+                'message'       => !$esObservado ? 'Guardado correctamente' : 'Tiene observación',
+                'trabajador'    => $persona,
+                'observado'     => $result['observado'],
+                'error'         => false,
             ];
         } catch(\Exception $e) {
             return [
-                'message' => $e->getMessage(),
+                'message'   => $e->getMessage(),
                 'observado' => false,
-                'error' => true,
+                'error'     => true,
             ];
         }
     }

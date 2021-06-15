@@ -58,7 +58,7 @@ class ReniecService
 
             $estado_civil_code = DB::table('estado_civiles')->where('name', 'like', $estado)->first()->code;
 
-            if ($data->ubi_dir_depa_desc == "")
+            if (is_null($data->ubi_dir_depa_desc) || $data->ubi_dir_depa_desc == "")
             {
                 $provincia_id = 67; // CALLAO
             }

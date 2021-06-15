@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Card, Modal, notification, Form, Row, Col, Button, message, Switch } from 'antd';
+import React, { useState, useEffect, useReducer } from 'react';
+import { Alert, Card, Modal, notification, Form, Row, Col, Button, message, Switch, Progress } from 'antd';
 import moment from 'moment';
 import Axios from 'axios';
 
@@ -50,6 +50,54 @@ export const RegistroMasivo = () => {
     const [rutas, setRutas] = useState([]);
     const [troncales, setTroncales] = useState([]);
 
+    const [completed, dispatchCompleted] = useReducer((state, action) => {
+        switch (action.type) {
+            case 'increment':
+                return state + 1;
+            case 'decrement':
+                return state - 1;
+            default:
+                throw new Error();
+        }
+    }, 0);
+
+    const [newTrabajadores, dispatchtNewTrabajadores] = useReducer((state, action) => {
+        const { type, value } = action;
+
+        switch (type) {
+            case 'add':
+                return [
+                    ...state,
+                    {
+                        ...value.trabajador,
+                        estado: { descripcion: 'SIN PROCESAR', color: 'default' }
+                    }
+                ];
+            case 'remove':
+                return state.filter(t => t.rut !== value.trabajador.rut);
+            case 'success':
+                return [
+                    {
+                        ...value.trabajador,
+                        estado: { descripcion: 'PROCESADO', color: 'success' },
+                        resultado: value.resultado
+                    },
+                    ...state.filter(t => t.rut !== value.trabajador.rut),
+                ];
+            case 'failure':
+                return [
+                    {
+                        ...value.trabajador,
+                        estado: { descripcion: 'ERROR', color: 'error' },
+                        resultado: value.resultado
+                    },
+                    ...state.filter(t => t.rut !== value.trabajador.rut),
+                ];
+            default:
+                return state;
+        }
+    }, []);
+
     /* useEffect(() => {
         fetchProcesosContratos();
     }, []);
@@ -80,8 +128,19 @@ export const RegistroMasivo = () => {
         }
     } */
 
+    const percent = newTrabajadores.length > 0
+        ? Math.round((completed / newTrabajadores.length) * 100)
+        : 0;
+
+    const ListaNoRegistrados = no_registrados => {
+        return (
+            <ul>
+                {no_registrados.no_registrados.map(e => <li key={e.key}>{e.rut}</li>)}
+            </ul>
+        );
+    };
+
     const ListaErrores = errores => {
-        //console.log('ListaErrores: ', errores);
         return (
             <ul>
                 {errores.errores.map((err, index) => (
@@ -104,33 +163,8 @@ export const RegistroMasivo = () => {
         });
     };
 
-    const guardarTrabajadores = () => {
-        setLoading(true);
-
-        if (trabajadores.length !== 0) {
-            if (registroReniec) {
-                revisionConReniec();
-            } else {
-                revisionSinReniec();
-            }
-        } else {
-            setLoading(false);
-            setRegistrando(false);
-        }
-    };
-
-    const ListaNoRegistrados = no_registrados => {
-        return (
-            <ul>
-                {no_registrados.no_registrados.map(e => <li key={e.key}>{e.rut}</li>)}
-            </ul>
-        );
-    };
-
-
-
     const revisionConReniec = async () => {
-        try {
+        /* try {
             const res = await Axios.post('http://192.168.60.16/api/trabajador/revision/sin-trabajadores', {
                 trabajadores: trabajadores.filter(t => t.estado.descripcion === 'SIN PROCESAR')
             })
@@ -138,50 +172,48 @@ export const RegistroMasivo = () => {
         } catch (err) {
             console.log(err.response);
             setLoading(false);
-        }
+        } */
 
-        /* const dnis = [...trabajadores].filter(t => t.estado.descripcion === 'SIN PROCESAR').map(t => t.rut);
+        const _trabajadores = newTrabajadores.filter(t => t.estado.descripcion === 'SIN PROCESAR');
+        const dnis = _trabajadores.map(t => t.rut);
 
-        async function buscar(dni) {
+        const buscar = async dni => {
             try {
-                setLoading(true);
-                const res = await Axios.post(`/api/contrato/registro-reniec`, { dni, contrato });
-                console.log(res);
-
-                const xd = [ ...trabajadores ];
-
-                const index = trabajadores.findIndex(t => t.rut === dni);
-
-                xd.splice(index, 1);
-
-                setTrabajadores(xd);
+                const { data: { message } } = await Axios.post(`/api/contrato/registro-reniec`, {
+                    dni,
+                    contrato: newTrabajadores.find(t => t.rut === dni)
+                });
+                dispatchtNewTrabajadores({
+                    type: 'success',
+                    value: {
+                        trabajador: _trabajadores.find(t => t.rut === dni),
+                        resultado: message
+                    }
+                });
             } catch (err) {
-                console.log(err.response);
-                cambiarEstado(dni, err);
-            } finally {
-                setLoading(false);
+                const { message } = err.response.data;
+
+                dispatchtNewTrabajadores({
+                    type: 'failure',
+                    value: {
+                        trabajador: _trabajadores.find(t => t.rut === dni),
+                        resultado: message
+                    }
+                });
             }
         }
 
         async function executeSequentially() {
-            for (const dni of dnis) {
-                await buscar(dni);
+            for (let index = 0; index < dnis.length; index++) {
+                await buscar(dnis[index]);
+                dispatchCompleted({ type: 'increment' });
             }
         }
 
-        executeSequentially(); */
+        setLoading(true);
+        await executeSequentially();
+        setLoading(false);
     };
-
-    const cambiarEstado = (dni, res) => {
-        const xd = [ ...trabajadores ];
-
-        const index = trabajadores.findIndex(t => t.rut === dni);
-        const row = trabajadores[index];
-
-        xd.splice(index, 1);
-
-        setTrabajadores(xd);
-    }
 
     const revisionSinReniec = () => {
         Axios.post('http://192.168.60.16/api/trabajador/revision', {trabajadores})
@@ -243,8 +275,9 @@ export const RegistroMasivo = () => {
         Axios.post('/api/trabajador/reniec/masiva', data)
             .then(res => {
                 console.log('Consulta masiva RENIEC:', res.data);
-                if (res.status >= 400)
+                if (res.status >= 400){
                     throw new Error();
+                }
 
                 const trabajadores_enviar = {
                     registrados: clearData(res.data),
@@ -300,7 +333,9 @@ export const RegistroMasivo = () => {
         let xd = [...trabajadores];
         guardados.forEach(g => {
             const index = xd.findIndex(t => t.rut == g.rut);
-            if (index > -1) xd.splice(index, 1);
+            if (index > -1) {
+                xd.splice(index, 1);
+            }
         });
         setTrabajadores(xd);
     };
@@ -351,7 +386,15 @@ export const RegistroMasivo = () => {
             content: `¿Esta seguro que desea terminar con el registro? Se revisará los dni de los trabajadores antes de registrarlos`,
             okText: 'Aceptar',
             onOk() {
-                guardarTrabajadores();
+                if (newTrabajadores.length !== 0) {
+                    if (registroReniec) {
+                        revisionConReniec();
+                    } else {
+                        revisionSinReniec();
+                    }
+                } else {
+                    setRegistrando(false);
+                }
             },
         });
     };
@@ -427,8 +470,8 @@ export const RegistroMasivo = () => {
             <AgregarTrabajador
                 form={contrato}
                 registrando={registrando}
-                trabajadores={trabajadores}
-                setTrabajadores={setTrabajadores}
+                newTrabajadores={newTrabajadores}
+                dispatchNewTrabajadores={dispatchtNewTrabajadores}
                 regimenes={regimenes}
                 oficios={oficios}
                 actividades={actividades}
@@ -452,11 +495,19 @@ export const RegistroMasivo = () => {
                 ''
             )}
             <b style={{ fontSize: "13px" }}>
-                Cantidad: {trabajadores.length} registros
-            </b><br /><br />
+                Cantidad: {newTrabajadores.length} registros
+            </b>
+            <br /><br />
+            {loading && (
+                <>
+                    <Progress percent={percent} />
+                    <b style={{ fontSize: '13px', marginTop: '2px' }}>Completados {completed} de {newTrabajadores.length}</b>
+                    <br /><br />
+                </>
+            )}
             <ListaTrabajadores
-                trabajadores={trabajadores}
-                setTrabajadores={setTrabajadores}
+                newTrabajadores={newTrabajadores}
+                dispatchNewTrabajadores={dispatchtNewTrabajadores}
                 loading={loading}
             />
             <ModalCustom

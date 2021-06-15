@@ -4,19 +4,23 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const ListaTrabajadores = props => {
 
-    const eliminarTrabajador = rut => {
-        const { trabajadores, setTrabajadores } = props;
+    const eliminarTrabajador = trabajador => {
+        const { dispatchNewTrabajadores } = props;
         Modal.confirm({
             title: 'Eliminar registro',
-            content: `¿Está seguro que desea eliminar a ${rut}?`,
+            content: `¿Está seguro que desea eliminar a ${trabajador.rut}?`,
             okText: 'Eliminar',
             okType: 'danger',
             cancelText: 'Cancelar',
             onOk() {
-                const new_trab = trabajadores.filter(t => t.rut !== rut);
-                setTrabajadores(new_trab);
+                dispatchNewTrabajadores({
+                    type: 'remove',
+                    value: {
+                        trabajador,
+                    }
+                })
                 message['success']({
-                    content: `Trabajador ${rut} eliminado`
+                    content: `Trabajador ${trabajador.rut} eliminado`
                 });
             },
         });
@@ -54,18 +58,11 @@ const ListaTrabajadores = props => {
             responsive: ['lg'],
             render: (_, record) => (
                 <Button.Group>
-                    {/*
-                    <Tooltip title="Editar">
-                        <Button type="primary" onClick={console.log}>
-                            <EditOutlined />
-                        </Button>
-                    </Tooltip>
-                     */}
                     <Tooltip title="Borrar">
                         <Button
                             type="danger"
                             size="small"
-                            onClick={() => eliminarTrabajador(record.rut)}
+                            onClick={() => eliminarTrabajador(record)}
                         >
                             <DeleteOutlined />
                         </Button>
@@ -80,7 +77,7 @@ const ListaTrabajadores = props => {
             size="small"
             loading={props.loading}
             columns={columns}
-            dataSource={props.trabajadores}
+            dataSource={props.newTrabajadores}
         />
     );
 }
