@@ -101,11 +101,11 @@ class ReniecService
             }
 
             if (isset($data->dir_dpto_piso) && !is_null($data->dir_dpto_piso)) {
-                $direccion .= ' ' . $data->dir_dpto_piso;
+                $direccion = $data->dir_dpto_piso . ' ' . $direccion;
             }
 
             if (isset($data->dir_etapa) && !is_null($data->dir_etapa)) {
-                $direccion .= ' ' . $data->dir_etapa;
+                $direccion .= ' ETAPA ' . $data->dir_etapa;
             }
 
             if (isset($data->dir_manzana) && !is_null($data->dir_manzana)) {
@@ -116,18 +116,30 @@ class ReniecService
                 $direccion .= ' LT. ' . $data->dir_lote;
             }
 
-            if (trim($direccion) === '') {
+            if (isset($data->dir_nombre) && !is_null($data->dir_nombre) && strlen($data->dir_nombre) <= 25) {
+                $direccion = $data->dir_nombre . ' ' . $direccion;
+            }
+
+            /* if (trim($direccion) === '') {
                 $direccion = isset($data->dir_nombre) && !is_null($data->dir_nombre)
                     ? $data->dir_nombre
                     : 'S/N';
-            }
+            } */
+
+            $direccion = str_replace("-", "", $direccion);
+            $direccion = str_replace("?", "Ñ", $direccion);
 
             $direccion = $direccion . ' - ' . $data->ubi_dir_dist_desc;
+
+            $apellido_paterno = $data->apellido_paterno;
+            if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio)) {
+                $apellido_paterno .= ' ' . $data->apellido_matrimonio;
+            }
 
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
-                'apellido_paterno'  => $data->apellido_paterno,
+                'apellido_paterno'  => $apellido_paterno,
                 'apellido_materno'  => $data->apellido_materno,
                 'direccion'         => strtoupper($direccion),
                 'fecha_nacimiento'  => $data->fecha_nacimiento,

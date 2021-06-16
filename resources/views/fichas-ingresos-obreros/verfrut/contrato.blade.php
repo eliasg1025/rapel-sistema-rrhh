@@ -1,7 +1,7 @@
 @extends('pdf-layout')
 
 @section('titulo')
-    FICHA PERSONAL contrato declaracion topico - <span style="text-transform: capitalize">{{ $contrato->oficio->name }}</span>
+    FICHA PERSONAL contrato declaracion topico - {{ $contrato->oficio->name }}
 @endsection
 
 <style>
