@@ -98,7 +98,7 @@
             Quedando en conformidad de lo anterior descrito firmo a continuación.
         </p>
         <br />
-        <p><b>Fecha:</b> 11 de junio del 2021</p>
+        <p><b>Fecha:</b> {{ $contrato->fecha_larga }}</p>
         <br />
         <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
             <tr>
@@ -309,7 +309,7 @@
             </li>
             <li>
                 <b><u>SEXTO:</u> Período de Prueba.-</b>
-                <br><b>EL EMPLEADOR</b> señala que conforme a lo establecido en el artículo 10° de la LPCL-, <b>EL TRABAJADOR</b> estará sujeto a un período de prueba de tres (3) meses. <b>EL TRABAJADOR</b> conoce y entiende que durante este período de prueba <b>EL EMPLEADOR</b> podrá extinguir la relación laboralsin expresión de causa, y ello no generará el pago de concepto indemnizatorio alguno.
+                <br><b>EL EMPLEADOR</b> señala que conforme a lo establecido en el artículo 10° de la LPCL-, <b>EL TRABAJADOR</b> estará sujeto a un período de prueba de tres (3) meses. <b>EL TRABAJADOR</b> conoce y entiende que durante este período de prueba <b>EL EMPLEADOR</b> podrá extinguir la relación laboral sin expresión de causa, y ello no generará el pago de concepto indemnizatorio alguno.
             </li>
             <li>
                 <b><u>SEPTIMO:</u> Jornada y horario de trabajo.-</b>
@@ -320,14 +320,14 @@
                 <br>7.5	<b>EL EMPLEADOR</b> señala que <b>EL TRABAJADOR</b> tendrá derecho a gozar del día de descanso semanal obligatorio conforme lo establecido en el artículo 1° del Decreto Legislativo N° 713.
             </li>
             <li>
-                <b><u>OCTAVO:</u> Obligaciones del Trabajador.-</b>
+                <b><u>OCTAVO:</u> Prestaciones del Trabajador.-</b>
                 <br>8.1	<b>EL TRABAJADOR</b> debe desarrollar las labores a su cargo de manera puntual, responsable y eficiente, cumpliendo con las indicaciones e instrucciones impartidas por <b>EL EMPLEADOR</b>.
                 <br>8.2	<b>EL TRABAJADOR</b> recibirá una copia del Reglamento Interno de Trabajo, del Reglamento de Seguridad y Salud en el Trabajo, y de las políticas establecidas por <b>EL EMPLEADOR</b>, estando obligado a revisarlos, conocer su contenido y cumplir con lo señalado en dichos documentos.
             </li>
             <li>
                 <b><u>NOVENO:</u> Remuneración.-</b>
-                <br>9.1	En contraprestación a los servicios prestados por <b>EL TRABAJADOR</b>, <b>EL EMPLEADOR</b> se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/. 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), remuneración que se encuentra comprendida por el básico de S/ 31.01 (TREINTA Y UNO CON 01/100 SOLES) más el concepto de CTS equivalente al 9.72% de S/ 3.01 (TRES CON 01/100 SOLES) y el concepto de Gratificaciones de fiestras patrias y de navidad equivalente al 16.66% de S/ 5.17(CINCO CON 17/100 SOLES), monto del cual deducirán las aportaciones y descuentos establecidos en la ley. Adicionalmente una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo. <br />Así mismo el trabajador elegiría recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 2.
-                <br>9.2	<b>EL EMPLEADOR</b> al encontrarse acogido al régimen agrario, precisa que la remuneración abonada a <b>EL TRABAJADOR</b> incluye la compensación por tiempo de servicios y las gratificaciones de fiestas patrias y de navidad, más una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo, conforme lo previsto en los incisos c) y el e) de la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial. De la msima forma, de acuerdo al inciso d) del mismo cuerpo normativo, de forma facultativa, el trabajador elegirá recibir los conceptos de CTS y gratificaciones en los plazos que la let estable, sin que entren a ser prorrateados en la RD; elección que forma parte de integrante de este contrato como Anexo 3.
+                <br>9.1	En contraprestación a los servicios prestados por <b>EL TRABAJADOR</b>, <b>EL EMPLEADOR</b> se obliga a pagar una remuneración diaria (jornal) bruta ascendente a S/. 39.19 (TREINTA Y NUEVE CON 19/100 SOLES), remuneración que se encuentra comprendida por el básico de S/ 31.01 (TREINTA Y UNO CON 01/100 SOLES) más el concepto de CTS equivalente al 9.72% de S/ 3.01 (TRES CON 01/100 SOLES) y el concepto de Gratificaciones de fiestras patrias y de navidad equivalente al 16.66% de S/ 5.17(CINCO CON 17/100 SOLES), monto del cual se deducen las aportaciones y descuentos establecidos en la ley. Adicionalmente una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo. <br />Así mismo el trabajador elegiría recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 2.
+                <br>9.2	<b>EL EMPLEADOR</b> al encontrarse acogido al régimen agrario, precisa que la remuneración abonada a <b>EL TRABAJADOR</b> incluye la compensación por tiempo de servicios y las gratificaciones de fiestas patrias y de navidad, más una Bonificación Especial por Trabajo Agrario (BETA) del 30% de la RMV con carácter no remunerativo, conforme lo previsto en los incisos c) y el e) de la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial. De la msima forma, de acuerdo al inciso d) del mismo cuerpo normativo, de forma facultativa, el trabajador elegirá recibir los conceptos de CTS y gratificaciones en los plazos que la ley establece, sin que entren a ser prorrateados en la RD; elección que forma parte integrante de este contrato como Anexo 3.
                 <br>9.3	<b>EL TRABAJADOR</b> declara que la remuneración señalada en esta cláusula constituye una adecuada compensación por los servicios prestados a <b>EL EMPLEADOR</b>, así como por las obligaciones asumidas en el presente contrato.
             </li>
             <li>
@@ -337,7 +337,7 @@
             </li>
             <li>
                 <b><u>DECIMO PRIMERO:</u> Buena Fe.-</b>
-                <br><b>EL TRABAJADOR</b> se obliga en forma expresa a poner al servicio d<b>el EMPLEADOR</b> toda su capacidad y lealtad, así como a la protección de sus intereses, en razón del cargo para el cual se le contrata. Asimismo, desarrollará las labores encargadas según las indicaciones impartidas por <b>EL EMPLEADOR</b>.
+                <br><b>EL TRABAJADOR</b> se obliga en forma expresa a poner al servicio del <b>EMPLEADOR</b> toda su capacidad y lealtad, así como a la protección de sus intereses, en razón del cargo para el cual se le contrata. Asimismo, desarrollará las labores encargadas según las indicaciones impartidas por <b>EL EMPLEADOR</b>.
             </li>
             <li>
                 <b><u>DECIMO SEGUNDO:</u> Exclusividad.-</b>
@@ -349,7 +349,7 @@
             </li>
             <li>
                 <b><u>DECIMO CUARTO:</u> Sistema de Pensiones.-</b>
-                <br>De acuerdo a los artículos 15 y 16 de la Ley 28991, <b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su desición respecto del derecho a afiliarse a cualquiera de los regímenes previsionales, en el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
+                <br>De acuerdo a los artículos 15 y 16 de la Ley 28991, <b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su decisión respecto del derecho a afiliarse a cualquiera de los regímenes previsionales, en el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
             </li>
             <li>
                 <b><u>DECIMO QUINTO:</u> Seguridad y Salud.-</b>
@@ -358,10 +358,10 @@
                 <br>15.3 <b>EL EMPLEADOR</b> establece de manera expresa que el incumplimiento de obligaciones en materia de seguridad y salud por parte de <b>EL TRABAJADOR</b> son consideradas faltas graves toda vez que suponen un riesgo para la salud e integridad del mismo y de las otras personas que se encuentren en el centro de trabajo. Por lo cual, <b>EL EMPLEADOR</b> establece como lineamiento de actuación el de  “tolerancia cero” respecto a faltas cometidas en materia de seguridad y salud, sancionando las mismas con el despido y la imposibilidad de ser recontratado.
             </li>
             <li>
-                <b><u>DECIMOSEXTO:</u> Del período de inactividad.-</b>
+                <b><u>DECIMO SEXTO:</u> Del período de inactividad.-</b>
                 <br>16.1 	Conforme la naturaleza intermitente de las actividades realizadas por <b>EL TRABAJADOR</b>, en el supuesto que exista un período de inactividad, <b>EL CONTRATO</b> podrá ser suspendido. El período de suspensión no afecta la vigencia de <b>EL CONTRATO</b>.
                 <br>16.2	La suspensión será comunicada a <b>EL TRABAJADOR</b>, indicándosele la fecha probable del reinicio de las actividades. En el supuesto que en la fecha señalada no existan las condiciones adecuadas para el reinicio de labores, se procederá a indicar una nueva fecha.
-                <br>16.3	El cálculo de los beneficios sociales de ELTRABAJADOR, y el tiempo de servicios se determinarán en función de los períodos efectivamente laborados, razón por la cual los períodos en que no exista prestación efectiva de labores por parte de <b>EL TRABAJADOR</b>, serán considerados suspensión perfecta de labores.
+                <br>16.3	El cálculo de los beneficios sociales de <b>EL TRABAJADOR</b>, y el tiempo de servicios se determinarán en función de los períodos efectivamente laborados, razón por la cual los períodos en que no exista prestación efectiva de labores por parte de <b>EL TRABAJADOR</b>, serán considerados suspensión perfecta de labores.
                 <br>16.4	Ambas partes declaran que durante la suspensión perfecta de labores <b>EL TRABAJADOR</b> no deberá asistir al centro de labores, ni realizará labores efectivas, por lo tanto <b>EL EMPLEADOR</b> no abonará remuneración alguna durante dicho período.
                 <br>16.5	<b>EL TRABAJADOR</b> entiende y conoce que la suspensión de labores no genera pago de remuneración durante el período de suspensión; asimismo, conoce y entiende que la suspensión del contrato de trabajo bajo ninguna circunstancia equivale a despido.
             </li>
@@ -409,7 +409,7 @@
         <table class="tabla">
             <thead>
                 <tr>
-                    <td><b>Cargo o Puesto de trabajador</b></td>
+                    <td><b>Cargo o Puesto de Trabajo</b></td>
                     <td><b>{{ $contrato->oficio->name }}</b></td>
                 </tr>
             </thead>
@@ -465,7 +465,7 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
-                    <td style="vertical-align: top">__________________<br/>EL TRABAJADOR<br/>DNI: {{ $trabajador->rut }}</td>
+                    <td style="vertical-align: top">__________________<br/>{{ $trabajador->nombre_completo }}<br/>DNI: {{ $trabajador->rut }}</td>
                 </tr>
             </table>
         </div>
@@ -560,7 +560,7 @@
                 <b>Discriminación</b><br>LA EMPRESA prohíbe las prácticas de discriminación en la contratación de personal y en la conducta profesional del mismo por cuestiones de raza, color, religión, sexo, edad, capacidades físicas, nacionalidades o cualquier otra condición prohibida legalmente
             </li>
             <li>
-                <b>Protección especial para trabajadores</b><br> jóvenes LA EMPRESA promueve la contratación de jóvenes entre 18 a 24 años, para que cuenten con mayores oportunidades de acceso al mercado laboral a través de un empleo con calidad y protección social.
+                <b>Protección especial para trabajadores jóvenes</b><br> LA EMPRESA promueve la contratación de jóvenes entre 18 a 24 años, para que cuenten con mayores oportunidades de acceso al mercado laboral a través de un empleo con calidad y protección social.
             </li>
             <li>
                 <b>Horario de trabajo no excesivo</b><br>LA EMPRESA es responsable de asegurar que sus colaboradores trabajen dentro de la jornada máxima permitida por la normatividad laboral vigente y los estándares laborales referentes al número de horas y días de trabajo. En caso de conflicto entre un estatuto y un estándar industrial mandatorio, LA EMPRESA  deberá dar solución bajo lo establecido en función al que brinde un mayor beneficio para el trabajador. Las horas extras serán de manera voluntaria y, además, debe de existir un convenio colectivo negociado libremente o en circunstancias excepcionales donde el empleador demuestre que surgieron de manera inesperada. Se debe otorgar al personal por lo menos un día libre a continuación de cada período consecutivo de seis días laborados.
@@ -587,6 +587,8 @@
                 DNI: <span>{{ $trabajador->rut }} </span><br>
                 Cargo: <span>{{ $contrato->oficio->name }}</span><br>
             </p>
+            <br />
+            <p style="float: right;"><b>El Papayo, {{ $contrato->fecha_larga }}</b></p>
         </div>
     </section>
 
@@ -691,7 +693,7 @@
                 <br>
             </p>
             <br><br><br><br>
-            <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
+            <p style="text-align: right"><b>El Papayo,  {{ $contrato->fecha_larga }}.</b></p>
             <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
                 <tr>
                     <td>
@@ -703,7 +705,7 @@
                 </tr>
                 <tr>
                     <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL(A) TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
                 </tr>
             </table>
             <div style="margin-top: 200px; width: 100%">
@@ -1185,9 +1187,9 @@
                 </tr>
                 <tr>
                     <td>Horario de Trabajo:</td>
-                    <td colspan="2"> </td>
+                    <td colspan="2">Lunes a Sabados</td>
                     <td>Hora:</td>
-                    <td colspan="12">6:15 am a 15:15am - 11:00am a 15:00pm</td>
+                    <td colspan="12">6:15 am a 10:15am - 11:00am a 15:00pm</td>
                 </tr>
                 <tr>
                     <td>En caso de Emergencia, Comunicarse a:</td>
@@ -1223,10 +1225,10 @@
             </table>
 
             <ul style="list-style: none">
-                <li>______ DNI</li>
+                <li>______ D.N.I.</li>
                 <li>______ Certificado Antecedentes Policiales</li>
-                <li>______ DNI Esposa</li>
-                <li>______ DNI Hijos</li>
+                <li>______ D.N.I. Esposa</li>
+                <li>______ D.N.I. Hijos</li>
                 <li>______ Partida/Acta de Matrimonio o Documentación de Convivencia</li>
             </ul>
         </div>
@@ -1359,12 +1361,12 @@
                     <b><u>DATOS DEL VÍNCULO LABORAL</u></b><br>
                     <table>
                         <tr>
-                            <td>1.- FECHA DE INICIO DE LA RELACION:</td>
+                            <td>1.- FECHA DE INICIO DE LA RELACION LABORAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>{{ $contrato->fecha_larga }}</b></td>
                         </tr>
                         <tr>
                             <td>2.- REMUNERACIÓN:</td>
-                            <td style="border-bottom: 0.5px solid black"><b>S/ 39.19</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b> </b></td>
                         </tr>
                     </table>
                 </li>
@@ -1716,7 +1718,7 @@
             <br>
             <div>
                 <div>
-                    <span style="font-weight: bold; background: gray">USUARIO: {{ $trabajador->rut }}</span> <br>
+                    <span style="font-weight: bold; background: gray">USUARIO: {{ $trabajador->rut }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span style="font-weight: bold; background: gray">CLAVE: {{ $trabajador->fecha_format }}</span>
                 </div>
                 <div>
@@ -1751,7 +1753,7 @@
                 <u>PRIMER BENEFICIARIO: Cónyuge o Conviviente y sus descendientes (hijos, nietos, bisnietos).</u><br /> Para efectos de acreditar la convivencia, se debe tener declaración notarial o judicial de convivencia.
             </p>
 
-            <table style="width: 100%">
+            <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td>
                         <u><b>Nombres y Apellidos</b></u>
@@ -1767,40 +1769,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>1. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>1. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>2. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>2. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>3. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>3. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>4. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>4. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>5. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>5. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>6. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>6. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
             </table>
             <br />
@@ -1823,40 +1825,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>1. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>1. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>2. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>2. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>3. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>3. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>4. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>4. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>5. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>5. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>6. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>6. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
             </table>
             <br />
@@ -1869,7 +1871,7 @@
             </p>
             <br />
             <p>
-                <b>Firma de Asegurado que debe ser certificada notarialemente:</b> ........................................................................
+                <b>Firma del Asegurado que debe ser certificada notarialemente:</b> ........................................................................
             </p>
         </div>
     </section>

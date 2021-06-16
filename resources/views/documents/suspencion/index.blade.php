@@ -98,7 +98,7 @@
                 </p>
             @else
                 <p class="justify">
-                    El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, {{ $texto[0] }}
+                    El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, {{ $texto[0] ?? '' }}
                 </p>
             @endif
 
@@ -167,6 +167,26 @@
                 <p><b>Artículo 56°.-</b>Todo trabajador de la empresa debe observar las siguientes prohibiciones:</p>
                 <div style="padding-left: 10px;">
                     <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la Empresa.</p>
+                </div>
+            @elseif ($sancion->incidencia->name === 'MAL COMPORTAMIENTO (SUSPENCION)')
+                <p><b>Artículo 52°.-</b>son obligaciones del trabajador:</p>
+                <div style="padding-left: 10px;">
+                    <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo, de las políticas de aseguramiento de la calidad.</p>
+                    <p>u) Cumplir con las capacitaciones que la Empresa disponga.</p>
+                </div>
+                <p><b>Artículo 56°.-</b>Todo trabajador de la empresa debe observar las siguientes prohibiciones:</p>
+                <div style="padding-left: 10px;">
+                    <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la Empresa.</p>
+                </div>
+                <p><b>Artículo 62°.-</b>La empresa considera causales de sanción disciplinaria las siguientes:</p>
+                <div style="padding-left: 10px;">
+                    <p>e) Cometer dentro de las horas de trabajo actos contrarios a la disciplina, higiene o reñidos contra la moral. Colocar ilustraciones, afiches, grabados, cuadros, leyendas, almanaques, etc. en los diferentes ambientes de la empresa.</p>
+                </div>
+                <br />
+                <p>Así como también a incumplido en las normas de seguridad y salud en el trabajo en lo siguiente:</p>
+                <p><b>Artículo 7°.-</b></p>
+                <div style="padding-left: 10px;">
+                    <p>3. Mantener condiciones de orden y limpieza en todos los lugares y actividades.</p>
                 </div>
             @endif
             <p class="justify">
