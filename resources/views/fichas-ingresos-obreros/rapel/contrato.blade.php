@@ -1187,7 +1187,7 @@
                 </tr>
                 <tr>
                     <td>Horario de Trabajo:</td>
-                    <td colspan="2">Lunes a Sabados</td>
+                    <td colspan="2">Lunes a Sábados</td>
                     <td>Hora:</td>
                     <td colspan="12">6:15 am a 10:15am - 11:00am a 15:00pm</td>
                 </tr>
@@ -1244,7 +1244,7 @@
         <table style="width: 100%;">
             <tr>
                 <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
-                <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DE SISTEMA PENSIONARIO</h4></td>
+                <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DEL SISTEMA PENSIONARIO</h4></td>
             </tr>
         </table>
         <div style="font-size: 11px; text-align: justify">
@@ -1344,7 +1344,7 @@
                     <b><u>DATOS DE LA ENTIDAD EMPLEADORA</u></b><br>
                     <table>
                         <tr>
-                            <td>1.- NOMBRE O RAZON SOCIAL:</td>
+                            <td>1.- NOMBRE O RAZÓN SOCIAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>SOCIEDAD AGRICOLA RAPEL SAC</b></td>
                         </tr>
                         <tr>
@@ -1352,7 +1352,7 @@
                             <td style="border-bottom: 0.5px solid black"><b>20451779711</b></td>
                         </tr>
                         <tr>
-                            <td>3.- DEPARTAMENTO DEL DOMICILIO FISCAL:</td>
+                            <td>3.- DIRECCIÓN DEL DOMICILIO FISCAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>CASERIO EL PAPAYO MZ "O"-CASTILLA-PIURA</b></td>
                         </tr>
                     </table>
@@ -1408,7 +1408,7 @@
                                     </table>
                                     <table style="width: 70%">
                                         <tr>
-                                            <td>Envio de estado de cuenta por correo</td>
+                                            <td>Envio de estado de cuenta por correo electrónico</td>
                                             <td>
                                                 <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
                                             </td>
@@ -1463,7 +1463,7 @@
                 </li>
             </ol>
             <small>
-                DECLARO HABER RECIBIDO EL BOLETIN INFORMATIVO SOBRE LAS CARACTERÍSTICAS, DIFERENCIAS Y DEMÁS PECULIARIDADES PERNSIONARIOS VIGENTES SPP - SNP.
+                DECLARO HABER RECIBIDO EL BOLETIN INFORMATIVO SOBRE LAS CARACTERÍSTICAS, DIFERENCIAS Y DEMÁS PECULIARIDADES PENSIONARIOS VIGENTES SPP - SNP.
             </small>
             <br><br><br>
             <table style="width: 100%">

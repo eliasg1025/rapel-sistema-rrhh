@@ -253,7 +253,7 @@
         </div>
         <br /><br />
         <h4 class="titulo">CONTRATO DE TRABAJO SUJETO A MODALIDAD <b>{{ $contrato->tipo_contrato->name }}</b></h4>
-        <p>Conste mediante el presente documento el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
+        <p>Conste por el presente documento que se extiende por duplicado, el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>-, que se suscribe de conformidad con lo establecido en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial; y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
         <ul>
             <li>
                 <b>SOCIEDAD EXPORTADORA VERFRUT S.A.C.</b>, R.U.C. Nº 20601438586, con domicilio en Caserío el Papayo Mz. O, Distrito de Castilla, Provincia y Departamento de Piura, debidamente representada por su Apoderado, <b>Daniel José Eyheralde Munita</b>, identificado con Documento Nacional de Identidad C.E. Nº 001555417, a la que en adelante le denominará <b>EL EMPLEADOR</b>; y de la otra parte,
@@ -265,10 +265,10 @@
         <p>En los términos y condiciones que constan en las cláusulas siguientes:</p>
         <ol>
             <li>
-                <b><u>CLÁUSULA PRIMERA</u>: Antecedentes.-</b><br/>
-                1.1	<b>EL EMPLEADOR</b> es una persona jurídica cuya actividad principales de naturaleza agrícola, desarrollando los procesos necesarios involucrados en la siembra, cosecha, empaque, y exportación del producto agrícola.
-                <br>1.2	<b>EL TRABAJADOR</b> declara estar capacitado para desempeñarse en el cargo para el que se le contrata, contando con experiencia para cumplir con la prestación de servicios en el cargo objeto de <b>EL CONTRATO</b>.
-                <br>1.3 	Los antecedentes antes señalados y las competencias y aptitudes que son inherentes a los mismos han sido tenidos en especial consideración por <b>EL EMPLEADOR</b> para la contratación de <b>EL TRABAJADOR</b>, acordando las partes que tales competencias y aptitudes tienen el carácter de esenciales para la celebración de este contrato.
+                <b><u>CLÁUSULA PRIMERA</u>: De las partes.-</b>
+                <br>1.1	<b>EL EMPLEADOR</b> es una persona jurídica de derecho privado, debidamente inscrito en los Registros Públicos de Lima, cuya actividad económica principal es la explotación de bienes raíces y agrícolas, sean estos propios o arrendados, así como la producción, comercialización y exportación de los productos agrícolas y frutícolas originados en esta explotación.
+                <br>1.2	<b>EL TRABAJADOR</b> declara estar capacitado para desempeñarse en el cargo para el que se le contrata, contando con acreditada experiencia para cumplir con la prestación de servicios en el cargo objeto de <b>EL CONTRATO</b>.
+                <br>1.3 Los antecedentes antes señalados y las competencias y aptitudes que son inherentes a los mismos han sido tenidos en especial consideración por <b>EL EMPLEADOR</b> para la contratación de <b>EL TRABAJADOR</b>, acordando las partes que tales competencias y aptitudes tienen el carácter de esenciales para la celebración de este contrato.
 
             </li>
             <li>
@@ -289,15 +289,15 @@
             </li>
             <li>
                 <b><u>CLÁUSULA QUINTA:</u> Plazo del Contrato.-</b>
-                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) meses, y rige desde el <b>{{ $contrato->fecha_larga }}</b> hasta el <b>{{ $contrato->fecha_larga_termino }}</b>.
-                <br>5.2 <b>EL EMPLEADOR</b> no está obligado a dar aviso adicional alguno referente al término del presente contrato, operando su extinción en la fecha de su vencimiento, oportunidad en la cual se abonará a <b>EL TRABAJADOR</b> los beneficios sociales que le pudieran corresponder, de acuerdo a Ley.
+                <br>5.1	El plazo de vigencia del presente contrato es de tres (3) mes(es), y rige desde el <b>{{ $contrato->fecha_larga }}</b> hasta el <b>{{ $contrato->fecha_larga_termino }}</b>.
+                <br>5.2 Queda entendido que <b>EL EMPLEADOR</b> no está obligado a dar aviso alguno adicional referente al término del presente contrato, operando su extinción en la fecha de su vencimiento.
                 <br>5.3	Si la naturaleza del trabajo así lo requiere se podrá prorrogar el tiempo de vigencia de <b>EL CONTRATO</b>, en común acuerdo de ambas partes, debiéndose de firmar en este caso la prórroga respectiva.
                 <br>5.4	La suspensión de <b>EL CONTRATO</b>, cualquiera que fuera el supuesto, no interrumpe ni suspende el plazo de extinción de la relación laboral sujeta a plazo fijo. Por ende, si por alguna circunstancia <b>EL TRABAJADOR</b> estuviera percibiendo prestaciones por enfermedad o accidente de trabajo al vencimiento calendario del presente contrato, ello no significa en forma alguna la prolongación del plazo fijo contratado, ni la conversión de éste en indeterminado.
                 <br>Siendo así, simultáneamente a la cesación en la percepción de prestaciones, se producirá la terminación de la relación contractual de trabajo descrita en el presente documento, con efectividad a la fecha de vencimiento del mismo.
             </li>
             <li>
                 <b><u>CLÁUSULA SEXTA:</u> Período de Prueba.-</b>
-                <br><b>EL EMPLEADOR</b> señala que conforme a lo establecido en el artículo 10° de la LPCL-, <b>EL TRABAJADOR</b> estará sujeto a un período de prueba de tres (3) meses. <b>EL TRABAJADOR</b> conoce y entiende que durante este período de prueba <b>EL EMPLEADOR</b> podrá extinguir la relación laboralsin expresión de causa, y ello no generará el pago de concepto indemnizatorio alguno.
+                <br><b>EL EMPLEADOR</b> señala que conforme a lo establecido en el artículo 10° de la LPCL-, <b>EL TRABAJADOR</b> estará sujeto a un período de prueba de tres (3) meses. <b>EL TRABAJADOR</b> entiende y conoce que durante este período de prueba <b>EL EMPLEADOR</b> podrá extinguir la relación laboral sin expresión de causa, y ello no generará el pago de concepto indemnizatorio alguno.
             </li>
             <li>
                 <b><u>CLÁUSULA SÉPTIMA:</u> Jornada y horario de trabajo.-</b>
@@ -322,8 +322,8 @@
             </li>
             <li>
                 <b><u>CLÁUSULA DÉCIMA:</u> Entrega de Herramientas de Trabajo.-</b>
-                <br>10.1	<b>EL EMPLEADOR</b> proporcionará a <b>EL TRABAJADOR</b> los materiales y herramientas de trabajo necesarias para el adecuado desarrollo de sus actividades, <b>EL TRABAJADOR</b> será responsable de mantener el buen estado de las herramientas y/bienes de trabajo asignados, los mismas que sólo deben sufrir el desgaste propio y natural provocado por el uso normal.
-                <br>10.2	<b>EL TRABAJADOR</b> será responsable por los daños, pérdidas, extravíos o robos de las herramientas y/o bienes de trabajo que se le hayan asignado. En este sentido y conforme lo establecido en la “Política de Entrega y Manejo de Herramientas, Bienes y Vehículos de Trabajo” <b>EL TRABAJADOR</b> autoriza expresamente a <b>EL EMPLEADOR</b> a deducir de su remuneración (de su liquidación de beneficios sociales en caso de extinción de la relación laboral) el costo de la reparación o reposición de la o las herramientas de trabajo.
+                <br>10.1    <b>EL EMPLEADOR</b> proporcionará a <b>EL TRABAJADOR</b> los materiales y herramientas de trabajo necesarias para el adecuado desarrollo de sus actividades, <b>EL TRABAJADOR</b> será responsable de mantener el buen estado de las herramientas y/bienes de trabajo asignados, los mismas que sólo deben sufrir el desgaste propio y natural provocado por el uso normal.
+                <br>10.2    <b>EL TRABAJADOR</b> será responsable por los daños, pérdidas y/o extravíos de las herramientas y/o bienes de trabajo que se le hayan asignado. En este sentido, <b>EL TRABAJADOR</b> autoriza expresamente a <b>EL EMPLEADOR</b> a deducir de su remuneración, y de ser el caso de su liquidación de beneficios sociales (en caso de extinción de la relación laboral) el costo de la reparación o reposición de la o las herramientas de trabajo.
             </li>
             <li>
                 <b><u>CLÁUSULA DÉCIMO PRIMERA:</u> Buena Fe.-</b>
@@ -338,7 +338,7 @@
                 <br>De acuerdo a los artículos 15° y 16° de la Ley 28991, <b>EL TRABAJADOR</b> dentro del plazo legal comunicará a <b>EL EMPLEADOR</b> su decisión respecto del derecho a afiliarse a cualquiera de los regímenes previsionales. En el supuesto que <b>EL TRABAJADOR</b> no cumpla con la comunicación indicada, <b>EL EMPLEADOR</b> lo afiliará al Sistema Privado de Pensiones (AFP) en las condiciones señaladas en el artículo 6° del TUO de la Ley del Sistema Privado de Pensiones.
             </li>
             <li>
-                <b><u>CLÁUSULA DÉCIMO CUARTO:</u> Seguridad y Salud.-</b>
+                <b><u>CLÁUSULA DÉCIMO CUARTA:</u> Seguridad y Salud.-</b>
                 <br>14.1 En cumplimiento de lo establecido en la Ley N° 29783, Ley de Seguridad y Salud en el Trabajo, y habiendo analizado el riesgo de las funciones propias del cargo a desempeñar por <b>EL TRABAJADOR</b>, con la finalidad de dar cumplimiento a las recomendaciones en materia de seguridad y salud destinadas a evitar cualquier riesgo para <b>EL TRABAJADOR</b> durante el desarrollo de las actividades del cargo indicado, se señala de manera expresa la obligación de ejecutar las recomendaciones aplicables, las cuales serán desarrolladas en el Anexo 1 del presente documento.
                 <br>14.2 <b>EL TRABAJADOR</b> entiende que es su obligación conocer el Reglamento de Seguridad y Salud que se le entregará al inicio de la relación laboral, así como asistir a las capacitaciones sobre la materia que sean programadas por <b>EL EMPLEADOR</b>.
                 <br>14.3 <b>EL EMPLEADOR</b> establece de manera expresa que el incumplimiento de obligaciones en materia de seguridad y salud por parte de <b>EL TRABAJADOR</b> son consideradas faltas graves toda vez que suponen un riesgo para la salud e integridad del mismo y de las otras personas que se encuentren en el centro de trabajo. Por lo cual, <b>EL EMPLEADOR</b> establece como lineamiento de actuación el de  “tolerancia cero” respecto a faltas cometidas en materia de seguridad y salud, sancionando las mismas con el despido y la imposibilidad de ser recontratado.
@@ -395,7 +395,7 @@
                 ciudad de Piura, el <b>{{ $contrato->fecha_larga }}</b>.
             </li>
         </ol>
-        <p>En señal de conformidad, las partes suscriben el presente documento por triplicado, en la ciudad de Piura, el <b>{{ $contrato->fecha_larga }}</b>.</p>
+        <p>En señal de conformidad, las partes intervinientes suscriben el presente documento en dos ejemplares de idéntico tenor, en la ciudad de Piura, el <b>{{ $contrato->fecha_larga }}</b>.</p>
         <table style="width: 100%; font-weight: bold; text-align: center; margin-top: 100px">
             <tr>
                 <td>___________________<br>EL EMPLEADOR</td>
@@ -450,31 +450,6 @@
 
     <div class="page-break"></div>
 
-    <section style="font-size: 11px; transform: rotate(270deg); margin-left: 50px; margin-top: 50px; width: 50%;">
-        <h4 class="titulo">ANEXO 2</h4>
-        <p>
-            <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
-        </p>
-        <p>
-            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
-        </p>
-        <p>
-            De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
-        </p>
-        <p>
-            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
-        </p>
-        <br /><br /><br /><br />
-        <p>
-            <b>FIRMA _______________________________________________</b>
-            <br /><br />
-            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
-            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
-            <br />
-            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-        </p>
-    </section>
-
     <section style="font-size: 11px; transform: rotate(270deg); margin-left: 50px; margin-top: 120px; width: 50%;">
         <h4 class="titulo">ANEXO 3</h4>
         <p>
@@ -488,6 +463,31 @@
         </p>
         <p>
             Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+        </p>
+        <br /><br /><br /><br />
+        <p>
+            <b>FIRMA _______________________________________________</b>
+            <br /><br />
+            <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+            <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+            <br />
+            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+        </p>
+    </section>
+
+    <section style="font-size: 11px; transform: rotate(270deg); margin-left: 50px; margin-top: 50px; width: 50%;">
+        <h4 class="titulo">ANEXO 2</h4>
+        <p>
+            <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
+        </p>
+        <p>
+            Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+        </p>
+        <p>
+            De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
+        </p>
+        <p>
+            Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
         </p>
         <br /><br /><br /><br />
         <p>
@@ -568,7 +568,7 @@
                 Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b> identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, declaro que:<br /> Haber recibido el formato de DECLARACION DE BENEFICIARIOS para SEGURO VIDA LEY D. LEG. 688, COMPROMETIENDOME con mi empleador en alcanzar este documento con el detalle de mis beneficiarios y debidamente certificado NOTARIALMENTE, en un plazo máximo de 30 días calendario desde la firma de este documento.
             </p>
             <br><br><br><br>
-            <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
+            <p style="text-align: right"><b>El Papayo,  {{ $contrato->fecha_larga }}.</b></p>
             <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
                 <tr>
                     <td>
@@ -580,7 +580,7 @@
                 </tr>
                 <tr>
                     <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL(A) TRABAJADOR(A) <br> DNI/CE: {{ $trabajador->rut }}</td>
                 </tr>
             </table>
             <div style="margin-top: 150px; width: 100%">
@@ -995,9 +995,9 @@
                 </tr>
                 <tr>
                     <td>Horario de Trabajo:</td>
-                    <td colspan="2"> </td>
+                    <td colspan="2">Lunes a Sábados</td>
                     <td>Hora:</td>
-                    <td colspan="12">6:15 am a 15:15am - 11:00am a 15:00pm</td>
+                    <td colspan="12">6:15 am a 10:15am - 11:00am a 15:00pm</td>
                 </tr>
                 <tr>
                     <td>En caso de Emergencia, Comunicarse a:</td>
@@ -1016,8 +1016,8 @@
                     <td colspan="15"> </td>
                 </tr>
                 <br>
-                <small>Declaro Bajo Juramento que la información brindada es verdadera y que en caso se determine la falsedad de la misma, será causal de falta grave. </small>
             </table>
+            <small>Declaro Bajo Juramento que la información brindada es verdadera y que en caso se determine la falsedad de la misma, será causal de falta grave.</small>
             <br><br>
             <table class="tabla" style="width: 80%; text-align: center; margin: auto">
                 <tr>
@@ -1033,10 +1033,10 @@
             </table>
 
             <ul style="list-style: none">
-                <li>______ DNI</li>
+                <li>______ D.N.I.</li>
                 <li>______ Certificado Antecedentes Policiales</li>
-                <li>______ DNI Esposa</li>
-                <li>______ DNI Hijos</li>
+                <li>______ D.N.I. Esposa</li>
+                <li>______ D.N.I. Hijos</li>
                 <li>______ Partida/Acta de Matrimonio o Documentación de Convivencia</li>
             </ul>
         </div>
@@ -1052,7 +1052,7 @@
         <table style="width: 100%;">
             <tr>
                 <td><img src="{{ public_path() . '/img/Logo Documentos1.jpg'}}" width="50px" /></td>
-                <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DE SISTEMA PENSIONARIO</h4></td>
+                <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DEL SISTEMA PENSIONARIO</h4></td>
             </tr>
         </table>
         <div style="font-size: 11px; text-align: justify">
@@ -1152,7 +1152,7 @@
                     <b><u>DATOS DE LA ENTIDAD EMPLEADORA</u></b><br>
                     <table>
                         <tr>
-                            <td>1.- NOMBRE O RAZON SOCIAL:</td>
+                            <td>1.- NOMBRE O RAZÓN SOCIAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>SOCIEDAD EXPORTADORA VERFRUT SAC</b></td>
                         </tr>
                         <tr>
@@ -1160,7 +1160,7 @@
                             <td style="border-bottom: 0.5px solid black"><b>20601438586</b></td>
                         </tr>
                         <tr>
-                            <td>3.- DEPARTAMENTO DEL DOMICILIO FISCAL:</td>
+                            <td>3.- DIRECCIÓN DEL DOMICILIO FISCAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>Mz. L Lote. 06 A.H. Ignacio Merino -PIURA</b></td>
                         </tr>
                     </table>
@@ -1169,12 +1169,12 @@
                     <b><u>DATOS DEL VÍNCULO LABORAL</u></b><br>
                     <table>
                         <tr>
-                            <td>1.- FECHA DE INICIO DE LA RELACION:</td>
+                            <td>1.- FECHA DE INICIO DE LA RELACIÓN LABORAL:</td>
                             <td style="border-bottom: 0.5px solid black"><b>{{ $contrato->fecha_larga }}</b></td>
                         </tr>
                         <tr>
                             <td>2.- REMUNERACIÓN:</td>
-                            <td style="border-bottom: 0.5px solid black"><b>S/ 39.19</b></td>
+                            <td style="border-bottom: 0.5px solid black"><b> </b></td>
                         </tr>
                     </table>
                 </li>
@@ -1216,7 +1216,7 @@
                                     </table>
                                     <table style="width: 70%">
                                         <tr>
-                                            <td>Envio de estado de cuenta por correo</td>
+                                            <td>Envio de estado de cuenta por correo electrónico</td>
                                             <td>
                                                 <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
                                             </td>
@@ -1271,7 +1271,7 @@
                 </li>
             </ol>
             <small>
-                DECLARO HABER RECIBIDO EL BOLETIN INFORMATIVO SOBRE LAS CARACTERÍSTICAS, DIFERENCIAS Y DEMÁS PECULIARIDADES PERNSIONARIOS VIGENTES SPP - SNP.
+                DECLARO HABER RECIBIDO EL BOLETIN INFORMATIVO SOBRE LAS CARACTERÍSTICAS, DIFERENCIAS Y DEMÁS PECULIARIDADES PENSIONARIOS VIGENTES SPP - SNP.
             </small>
             <br><br><br>
             <table style="width: 100%">
@@ -1460,7 +1460,7 @@
                 <u>PRIMER BENEFICIARIO: Cónyuge o Conviviente y sus descendientes (hijos, nietos, bisnietos).</u><br /> Para efectos de acreditar la convivencia, se debe tener declaración notarial o judicial de convivencia.
             </p>
 
-            <table style="width: 100%">
+            <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td>
                         <u><b>Nombres y Apellidos</b></u>
@@ -1476,40 +1476,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>1. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>1. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>2. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>2. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>3. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>3. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>4. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>4. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>5. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>5. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>6. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>6. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
             </table>
             <br />
@@ -1532,40 +1532,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>1. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>1. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>2. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>2. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>3. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>3. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>4. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>4. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>5. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>5. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
                 <tr>
-                    <td>6. .........................</td>
-                    <td>....................</td>
-                    <td>.......</td>
-                    <td>....................</td>
+                    <td>6. .......................................................</td>
+                    <td>...................................</td>
+                    <td>............</td>
+                    <td>...................................</td>
                 </tr>
             </table>
             <br />
@@ -1578,7 +1578,7 @@
             </p>
             <br />
             <p>
-                <b>Firma de Asegurado que debe ser certificada notarialemente:</b> ........................................................................
+                <b>Firma del Asegurado que debe ser certificada notarialemente:</b> ........................................................................
             </p>
         </div>
     </section>
