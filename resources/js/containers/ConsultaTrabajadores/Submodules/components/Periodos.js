@@ -1,6 +1,10 @@
 import React from 'react';
 import { Table } from 'antd';
 
+const { usuario } = JSON.parse(sessionStorage.getItem('data'));
+
+console.log(usuario);
+
 const columns = [
     {
         title: 'Empresa',
@@ -35,14 +39,17 @@ const columns = [
         dataIndex: 'oficio'
     },
     {
-        title: 'Sueldo',
-        dataIndex: 'sueldo'
-    },
-    {
         title: 'Inciso',
         dataIndex: 'inciso'
-    }
+    },
 ];
+
+if (usuario?.modulo_rol?.tipo?.name !== 'SIN SUELDO') {
+    columns.push({
+        title: 'Sueldo',
+        dataIndex: 'sueldo'
+    });
+}
 
 export const Periodos = ({ periodos }) => {
     return (

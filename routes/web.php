@@ -103,7 +103,7 @@ Route::group(['middleware' => 'web.auth'], function() {
         });
     });
 
-    Route::group(['prefix' => 'consulta-trabajadores'], function() {
+    Route::group(['prefix' => 'consulta-trabajadores', 'middleware' => 'module:consulta-trabajadores'], function() {
         Route::get('/', 'Web\ViewController@consultaTrabajadores');
         Route::get('/historial-busqueda', 'Web\ViewController@historialConsultaTrabajadores');
     });
