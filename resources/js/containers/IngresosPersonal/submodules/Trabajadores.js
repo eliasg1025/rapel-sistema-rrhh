@@ -91,6 +91,13 @@ export const Trabajadores = () => {
     const generarContrato = async lista_contratos => {
         setLoading(true);
         try {
+            if (lista_contratos.length === 0) {
+                notification['error']({
+                    message: 'No hay trabajadores seleccionados',
+                });
+                return;
+            }
+
             const res = await Axios.post("/api/contrato/generar-pdf", {
                 usuario,
                 empresa_id: filtro.empresa_id,
@@ -122,6 +129,13 @@ export const Trabajadores = () => {
     const generarFicha = async lista_contratos => {
         setLoading(true);
         try {
+            if (lista_contratos.length === 0) {
+                notification['error']({
+                    message: 'No hay trabajadores seleccionados',
+                });
+                return;
+            }
+
             const res = await Axios.post("/api/contrato/generar-ficha-excel", {
                 usuario,
                 empresa_id: filtro.empresa_id,

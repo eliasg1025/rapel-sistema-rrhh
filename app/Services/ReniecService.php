@@ -52,7 +52,12 @@ class ReniecService
     private function formatData($data)
     {
         try {
-            $estado = $data->estado_civil === "" || $data->estado_civil === 'null'
+            $estado = (
+                    $data->estado_civil === '' ||
+                    $data->estado_civil === 'null' ||
+                    !isset($data->estado_civil) ||
+                    is_null($data->estado_civil)
+                )
                 ? "SOLTERO"
                 : explode('(', $data->estado_civil)[0];
 
