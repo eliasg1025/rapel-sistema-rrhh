@@ -312,7 +312,7 @@ const DatosContrato = props => {
     }, [contrato.empresa_id, contrato.actividad_id]);
 
     return (
-        <Card>
+        <Card disabled={true}>
             <div className="row">
                 <div className="col-md-4">
                     Empresa:

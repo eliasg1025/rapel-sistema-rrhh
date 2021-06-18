@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ContratosExport;
 use App\Models\Contrato;
 use App\Services\{ContratosService, FichasExcelService};
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use iio\libmergepdf\Merger;
 
 class ContratoController extends Controller
 {
@@ -57,7 +53,7 @@ class ContratoController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage()
+                'message' => $e->getMessage() . ' - ' . $e->getLine(),
             ]);
         }
     }

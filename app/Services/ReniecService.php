@@ -132,7 +132,7 @@ class ReniecService
             $direccion = $direccion . ' - ' . $data->ubi_dir_dist_desc;
 
             $apellido_paterno = $data->apellido_paterno;
-            if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio)) {
+            if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio) && $data->cod_sexo !== '1') {
                 $apellido_paterno .= ' ' . $data->apellido_matrimonio;
             }
 

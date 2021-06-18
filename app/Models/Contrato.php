@@ -52,6 +52,11 @@ class Contrato extends Model
         return $this->belongsTo('App\Models\Oficio');
     }
 
+    public function regimen()
+    {
+        return $this->belongsTo('App\Models\Regimen');
+    }
+
     /**
      * Mutators
      */
@@ -271,36 +276,36 @@ class Contrato extends Model
 
             return [
                 '' => '',
-                'RutTrabajador' => $trabajador->rut,
-                'CodigoTrabajador' => '',
-                'Ap.Paterno' => $trabajador->apellido_paterno,
-                'Ap. Materno' => $trabajador->apellido_materno,
-                'Nombre' => $trabajador->nombre,
-                'FechaNacimiento' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
-                'F. Nac. Letras' => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
-                'Edad' => $trabajador->age,
-                'Sexo' => $trabajador->sexo,
-                'Direccion' => $trabajador->direccion,
-                'DISTRITO' => $trabajador->distrito->name,
-                'PROVINCIA' => $trabajador->distrito->provincia->name,
-                'DEPARTAMENTO' => $trabajador->distrito->provincia->departamento->name,
-                'EstadoCivil' => $trabajador->estado_civil->code,
-                'F. Ingreso' => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
-                'F. Ingreso Letras' => $contrato->fecha_larga,
-                'F. Término Letras' => $contrato->fecha_larga_termino,
-                'Activo' => '',
-                'Alerta' => '',
-                'GRUPO' => $contrato->group,
-                'CODIGO' => $contrato->codigo_bus,
-                'TRONCAL' => $contrato->troncal->name,
-                'RUTA' => $contrato->ruta->name,
-                'Mes de Desc. Antec. Polic.' => '',
-                'Mes Desc. Letras' => '',
-                'FUNDO' => $contrato->zona_labor->name,
-                'ESTADO CIVIL' => $trabajador->estado_civil->name,
-                'TELEFONO' => '',
-                'EMAIL' => '',
-                'EMPRESA' => $contrato->empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
+                'RutTrabajador'                 => $trabajador->rut,
+                'CodigoTrabajador'              => '',
+                'Ap.Paterno'                    => $trabajador->apellido_paterno,
+                'Ap. Materno'                   => $trabajador->apellido_materno,
+                'Nombre'                        => $trabajador->nombre,
+                'FechaNacimiento'               => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
+                'F. Nac. Letras'                => Carbon::parse($trabajador->fecha_nacimiento)->format('d/m/Y'),
+                'Edad'                          => $trabajador->age,
+                'Sexo'                          => $trabajador->sexo,
+                'Direccion'                     => $trabajador->direccion,
+                'DISTRITO'                      => $trabajador->distrito->name,
+                'PROVINCIA'                     => $trabajador->distrito->provincia->name,
+                'DEPARTAMENTO'                  => $trabajador->distrito->provincia->departamento->name,
+                'EstadoCivil'                   => $trabajador->estado_civil->code,
+                'F. Ingreso'                    => Carbon::parse($contrato->fecha_inicio)->format('d/m/Y'),
+                'F. Ingreso Letras'             => $contrato->fecha_larga,
+                'F. Término Letras'             => $contrato->fecha_larga_termino,
+                'Activo'                        => '',
+                'Alerta'                        => '',
+                'GRUPO'                         => $contrato->group,
+                'CODIGO'                        => $contrato->codigo_bus,
+                'TRONCAL'                       => $contrato->troncal->name,
+                'RUTA'                          => $contrato->ruta->name,
+                'Mes de Desc. Antec. Polic.'    => (int) Carbon::parse($contrato->fecha_inicio)->format('m'),
+                'Mes Desc. Letras'              => strtoupper($contrato->mes_contrato),
+                'FUNDO'                         => $contrato->zona_labor->name,
+                'ESTADO CIVIL'                  => $trabajador->estado_civil->name,
+                'TELEFONO'                      => '',
+                'EMAIL'                         => '',
+                'EMPRESA'                       => $contrato->empresa_id == 9 ? 'RAPEL' : 'VERFRUT',
             ];
         } catch (\Exception $e) {
             return $e->getMessage();
