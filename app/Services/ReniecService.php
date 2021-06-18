@@ -53,10 +53,10 @@ class ReniecService
     {
         try {
             $estado = (
-                    $data->estado_civil === '' ||
-                    $data->estado_civil === 'null' ||
                     !isset($data->estado_civil) ||
-                    is_null($data->estado_civil)
+                    is_null($data->estado_civil) ||
+                    $data->estado_civil === '' ||
+                    $data->estado_civil === 'null'
                 )
                 ? "SOLTERO"
                 : explode('(', $data->estado_civil)[0];
