@@ -125,28 +125,24 @@ class ReniecService
                 $direccion = $data->dir_nombre . ' ' . $direccion;
             }
 
-            /* if (trim($direccion) === '') {
-                $direccion = isset($data->dir_nombre) && !is_null($data->dir_nombre)
-                    ? $data->dir_nombre
-                    : 'S/N';
-            } */
-
             $direccion = str_replace("-", "", $direccion);
             $direccion = str_replace("?", "Ñ", $direccion);
 
-            $direccion = $direccion . ' - ' . $data->ubi_dir_dist_desc;
+            $direccion = strtoupper($direccion . ' - ' . $data->ubi_dir_dist_desc);
 
             $apellido_paterno = $data->apellido_paterno;
             if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio) && $data->cod_sexo !== '1') {
                 $apellido_paterno .= ' ' . $data->apellido_matrimonio;
             }
 
+            dd(explode("URB", $direccion));
+
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
                 'apellido_paterno'  => $apellido_paterno,
                 'apellido_materno'  => $data->apellido_materno,
-                'direccion'         => strtoupper($direccion),
+                'direccion'         => $direccion,
                 'fecha_nacimiento'  => $data->fecha_nacimiento,
                 'sexo'              => $data->cod_sexo === '1' ? 'M' : 'F',
                 'nacionalidad_id'   => 'PE',

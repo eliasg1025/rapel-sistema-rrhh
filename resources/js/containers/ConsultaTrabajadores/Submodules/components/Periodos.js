@@ -3,7 +3,7 @@ import { Table } from 'antd';
 
 const { usuario } = JSON.parse(sessionStorage.getItem('data'));
 
-console.log(usuario);
+// console.log(usuario);
 
 const columns = [
     {
@@ -44,12 +44,12 @@ const columns = [
     },
 ];
 
-if (usuario?.modulo_rol?.tipo?.name !== 'SIN SUELDO') {
+/* if (usuario?.modulo_rol?.tipo?.name !== 'SIN SUELDO') {
     columns.push({
         title: 'Sueldo',
         dataIndex: 'sueldo'
     });
-}
+} */
 
 export const Periodos = ({ periodos }) => {
     return (
