@@ -135,8 +135,6 @@ class ReniecService
                 $apellido_paterno .= ' ' . $data->apellido_matrimonio;
             }
 
-            dd(explode("URB", $direccion));
-
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
