@@ -121,12 +121,12 @@ class ReniecService
                 $direccion .= ' LT. ' . $data->dir_lote;
             }
 
-            if (isset($data->dir_nombre) && !is_null($data->dir_nombre) && strlen($data->dir_nombre) <= 25) {
+            if (isset($data->dir_nombre) && !is_null($data->dir_nombre)) {
                 $direccion = $data->dir_nombre . ' ' . $direccion;
             }
 
-            $direccion = str_replace("-", "", $direccion);
-            $direccion = str_replace("?", "Ñ", $direccion);
+            $direccion = str_replace('-', '', $direccion);
+            $direccion = str_replace('?', 'Ñ', $direccion);
 
             $direccion = strtoupper($direccion . ' - ' . $data->ubi_dir_dist_desc);
 
