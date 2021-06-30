@@ -98,7 +98,18 @@ class ReniecService
              */
             $direccion = '';
             if (isset($data->dir_urb) && !is_null($data->dir_urb)) {
-                $direccion .= $data->dir_urb;
+                $tmp_direccion = '';
+                $tiposZonas = ['CASERIO', 'URB'];
+                foreach ($tiposZonas as $tipoZona) {
+                    $arr = explode($tipoZona, strtoupper(trim($data->dir_urb)));
+
+                    if (sizeof($arr) > 1) {
+                        $tmp_direccion = implode(" ", [$tipoZona, ...$arr]);
+                        break;
+                    }
+                }
+
+                $direccion .= $tmp_direccion;
             }
 
             if (isset($data->dir_bloque) && !is_null($data->dir_bloque)) {
@@ -130,16 +141,16 @@ class ReniecService
 
             $direccion = strtoupper($direccion . ' - ' . $data->ubi_dir_dist_desc);
 
-            $apellido_paterno = $data->apellido_paterno;
+            $apellido_materno = $data->apellido_materno;
             if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio) && $data->cod_sexo !== '1') {
-                $apellido_paterno .= ' ' . $data->apellido_matrimonio;
+                $apellido_materno .= ' ' . $data->apellido_matrimonio;
             }
 
             return [
                 'rut'               => $data->num_doc,
                 'nombre'            => $data->nombres,
-                'apellido_paterno'  => $apellido_paterno,
-                'apellido_materno'  => $data->apellido_materno,
+                'apellido_paterno'  => $data->apellido_paterno,
+                'apellido_materno'  => $apellido_materno,
                 'direccion'         => $direccion,
                 'fecha_nacimiento'  => $data->fecha_nacimiento,
                 'sexo'              => $data->cod_sexo === '1' ? 'M' : 'F',
