@@ -7,6 +7,7 @@ import { TablaCuentas } from "../components/TablaCuentas";
 import { BusquedaTrabajador } from "../components/BusquedaTrabajador";
 import Axios from "axios";
 import { EtiquetaAdministrador } from "../../shared";
+import { Switch, Card } from "antd";
 
 export const RegistroCuenta = () => {
     const { usuario, editar, submodule } = JSON.parse(
@@ -29,6 +30,7 @@ export const RegistroCuenta = () => {
     const [contratoActivo, setContratoActivo] = useState(null);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [reloadData, setReloadData] = useState(false);
+    const [isAvailable, setIsAvailable] = useState(false);
 
     const [form, setForm] = useState(initialState);
 
@@ -53,7 +55,20 @@ export const RegistroCuenta = () => {
 
             fetchCuenta();
         }
+
+        fetchHabilitacion();
     }, []);
+
+    const fetchHabilitacion = () => {
+        Axios.post('/api/modulos/habilitado', { modulo_slug: 'cuentas' })
+            .then(res => {
+                const { data: { data: { habilitado } } } = res;
+                setIsAvailable(habilitado);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -112,6 +127,18 @@ export const RegistroCuenta = () => {
             });
     };
 
+    const handleHabilitacion = value => {
+
+        Axios.put('/api/modulos/habilitar', { modulo_slug: 'cuentas', value: !isAvailable })
+            .then(res => {
+                const { data: { data: { habilitado } } } = res;
+                setIsAvailable(habilitado);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
     return (
         <>
             <div className="mb-3">
@@ -119,22 +146,41 @@ export const RegistroCuenta = () => {
                     Cuentas{" "}
                     {usuario.cuentas === 2 && <EtiquetaAdministrador />}
                 </h4>
+                {usuario.cuentas === 2 && (
+                    <div className="d-flex">
+                        <span className="mr-2">Habilitado:</span>
+                        <Switch
+                            checked={isAvailable}
+                            onChange={handleHabilitacion}
+                        >
+                            Hola
+                        </Switch>
+                    </div>
+                )}
             </div>
-            {!editar && (
-                <BusquedaTrabajador
-                    form={form}
-                    setForm={setForm}
-                    setTrabajador={setTrabajador}
-                />
-            )}
-            <DatosCuenta
-                handleSubmit={handleSubmit}
-                form={form}
-                setForm={setForm}
-                bancos={bancos}
-                setBancos={setBancos}
-                loadingSubmit={loadingSubmit}
-            />
+            <Card>
+                {isAvailable ? (
+                    <>
+                        {!editar && (
+                            <BusquedaTrabajador
+                                form={form}
+                                setForm={setForm}
+                                setTrabajador={setTrabajador}
+                            />
+                        )}
+                        <DatosCuenta
+                            handleSubmit={handleSubmit}
+                            form={form}
+                            setForm={setForm}
+                            bancos={bancos}
+                            setBancos={setBancos}
+                            loadingSubmit={loadingSubmit}
+                        />
+                    </>
+                ) : (
+                    <h5>El ingreso de cuentas se encuentras deshabilitado por el momento</h5>
+                )}
+            </Card>
             <hr />
             <br />
             {!editar && (

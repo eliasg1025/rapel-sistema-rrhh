@@ -152,6 +152,20 @@ class Trabajador extends Model
     public static function _get(array $filtro=[])
     {
         try {
+            /* $subQuery = DB::table('contratos_has_estados')
+                ->select([
+                    DB::raw('MAX(created_at) as created_at'),
+                    'contrato_id'
+                ])
+                ->groupBy('contrato_id');
+
+            dd($subQuery->get());
+            $subQuery2 = DB::table('contratos_has_estados as pv')
+                ->joinSub($subQuery, 'sub', function($join) {
+                    $join->on('sub.created_at', '=', 'pv.created_at')
+                        ->on('sub.contrato_id', '=', 'pb.contrato_id');
+                }); */
+
             $contratos = DB::table('contratos')
                 ->select(
                     'trabajadores.*',

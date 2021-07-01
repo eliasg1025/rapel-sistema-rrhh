@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ModulosService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -134,6 +135,14 @@ class Cuenta extends Model
 
     public static function _create(array $data)
     {
+        $habilitado = (new ModulosService)->findBySlug('cuentas')->habilitado;
+
+        if (!$habilitado) {
+            return [
+                'error' => 'Los registros de cuentas se encuentran desactivados temporalmente'
+            ];
+        }
+
         if (!$data['apertura']) {
             if ($data['banco']['id'] == '59') {
                 if (

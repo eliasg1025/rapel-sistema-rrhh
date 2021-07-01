@@ -35,6 +35,8 @@ Route::group(['prefix' => 'usuario'], function() {
 
 Route::group(['prefix' => 'modulos'], function() {
     Route::get('/{modulo}/usuarios', 'ModulosController@getUsuarios');
+    Route::post('/habilitado', 'ModulosController@getHabilitado');
+    Route::put('/habilitar', 'ModulosController@habilitar');
 });
 
 Route::get('/empresa', 'EmpresasController@all');

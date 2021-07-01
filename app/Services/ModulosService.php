@@ -26,4 +26,9 @@ class ModulosService
             ->get();
         return $modulos;
     }
+
+    public function findBySlug($slug)
+    {
+        return Modulo::where('slug', $slug)->first();
+    }
 }

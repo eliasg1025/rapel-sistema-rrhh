@@ -42,6 +42,10 @@ const getColumns = (eliminarContrato) => {
             dataIndex: 'fecha_ingreso',
         },
         {
+            title: 'Estado',
+            dataIndex: 'estado',
+        },
+        {
             title: 'Acciones',
             dataIndex: 'acciones',
             render: (_, record) => (
