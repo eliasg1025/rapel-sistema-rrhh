@@ -125,7 +125,7 @@ const FilterForm = props => {
                 <div className="row">
                     <div className="col">
                         <Button
-                        htmlType="submit"
+                            htmlType="submit"
                             size="small"
                             block
                             type="primary"

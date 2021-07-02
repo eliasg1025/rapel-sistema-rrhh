@@ -1,102 +1,161 @@
-import React, { useState } from 'react';
-import { Table, Button, Tooltip, Checkbox, Dropdown, Menu } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Tooltip, Checkbox, Dropdown, Menu, Tag, Select, notification } from 'antd';
 import {
     EditOutlined,
     DeleteOutlined,
     FileAddOutlined,
-    DownOutlined
+    DownOutlined,
+    FileSyncOutlined
 } from '@ant-design/icons';
+import Modal from '../../../Modal';
+import Axios from 'axios';
 
-const getColumns = (eliminarContrato) => {
-    return [
-        {
-            title: 'Empresa',
-            dataIndex: 'empresa',
-        },
-        {
-            title: 'Regimen',
-            dataIndex: 'regimen'
-        },
-        {
-            title: 'DNI',
-            dataIndex: 'dni',
-        },
-        {
-            title: 'Apellidos',
-            dataIndex: 'apellidos',
-        },
-        {
-            title: 'Nombre',
-            dataIndex: 'nombre',
-        },
-        {
-            title: 'Zona Labor',
-            dataIndex: 'zona_labor',
-        },
-        {
-            title: 'Grupo',
-            dataIndex: 'grupo',
-        },
-        {
-            title: 'Fecha Ingreso',
-            dataIndex: 'fecha_ingreso',
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-        },
-        {
-            title: 'Acciones',
-            dataIndex: 'acciones',
-            render: (_, record) => (
-                <Acciones
-                    record={record}
-                    eliminarContrato={eliminarContrato}
-                />
-            ),
-        },
-    ];
-};
-
-function Acciones({ record, eliminarContrato }) {
-    return (
-        <Button.Group size="small">
-            <Tooltip title="Ver ficha-trabajador">
-                <Button
-                    type="primary"
-                    onClick={() =>
-                        window.open(
-                            `/ficha/${record.contrato_id}`,
-                            '_blank'
-                        )
-                    }
-                >
-                    <FileAddOutlined />
-                </Button>
-            </Tooltip>
-            <Tooltip title="Editar registro">
-                <Button
-                    type="primary"
-                    onClick={() => window.open(`/ingresos/registro-individual/editar/${record.contrato_id}`)}
-                >
-                    <EditOutlined />
-                </Button>
-            </Tooltip>
-            <Tooltip title="Borrar trabajador">
-                <Button type="danger" onClick={() => eliminarContrato(record.contrato_id)}>
-                    <DeleteOutlined />
-                </Button>
-            </Tooltip>
-        </Button.Group>
-    );
-}
 
 const TablaTrabajadores = props => {
+    const getColumns = (eliminarContrato) => {
+        return [
+            {
+                title: 'Empresa',
+                dataIndex: 'empresa',
+            },
+            {
+                title: 'Regimen',
+                dataIndex: 'regimen'
+            },
+            {
+                title: 'DNI',
+                dataIndex: 'dni',
+            },
+            {
+                title: 'Apellidos',
+                dataIndex: 'apellidos',
+            },
+            {
+                title: 'Nombre',
+                dataIndex: 'nombre',
+            },
+            {
+                title: 'Zona Labor',
+                dataIndex: 'zona_labor',
+            },
+            {
+                title: 'Grupo',
+                dataIndex: 'grupo',
+            },
+            {
+                title: 'Fecha Ingreso',
+                dataIndex: 'fecha_ingreso',
+            },
+            {
+                title: 'Estado',
+                dataIndex: 'estado',
+                render: (_, { estado, estado_color }) => <Tag color={estado_color}>{estado}</Tag>
+            },
+            {
+                title: 'Acciones',
+                dataIndex: 'acciones',
+                render: (_, record) => (
+                    <Acciones
+                        record={record}
+                        eliminarContrato={eliminarContrato}
+                    />
+                ),
+            },
+        ];
+    };
+
+    function Acciones({ record, eliminarContrato }) {
+        return (
+            <Button.Group size="small">
+                <Tooltip title="Cambiar Estado">
+                    <Button type="ghost" onClick={() => openModal(record)}>
+                        <FileSyncOutlined />
+                    </Button>
+                </Tooltip>
+                <Tooltip title="Ver ficha-trabajador">
+                    <Button
+                        type="primary"
+                        onClick={() =>
+                            window.open(
+                                `/ficha/${record.contrato_id}`,
+                                '_blank'
+                            )
+                        }
+                    >
+                        <FileAddOutlined />
+                    </Button>
+                </Tooltip>
+                <Tooltip title="Editar registro">
+                    <Button
+                        type="primary"
+                        onClick={() => window.open(`/ingresos/registro-individual/editar/${record.contrato_id}`)}
+                    >
+                        <EditOutlined />
+                    </Button>
+                </Tooltip>
+                <Tooltip title="Borrar trabajador">
+                    <Button type="danger" onClick={() => eliminarContrato(record.contrato_id)}>
+                        <DeleteOutlined />
+                    </Button>
+                </Tooltip>
+            </Button.Group>
+        );
+    };
+
     const [state, setState] = useState({
         selectedRowKeys: [], // Check here to configure the default column
         data: {},
         all: false,
     });
+    const [isVisible, setIsVisible] = useState(false);
+    const [contratoSelected, setContratoSelected] = useState(null);
+    const [estados, setEstados] = useState([]);
+    const [form, setForm] = useState({
+        estado_id: '',
+        contrato_id: ''
+    });
+
+    useEffect(() => {
+        Axios.get('/api/estados-contratos')
+            .then(res => {
+                const { data: { data } } = res;
+                setEstados(data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }, []);
+
+    function openModal(contrato) {
+        setIsVisible(true);
+        setContratoSelected(contrato);
+        setForm({
+            estado_id: contrato?.estado_id,
+            contrato_id: contrato.contrato_id
+        });
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        attach();
+    }
+
+    const attach = () => {
+        Axios.post('/api/estados-contratos', { ...form })
+            .then(res => {
+                props.getTrabajadores();
+                setIsVisible(false);
+                notification['success']({
+                    message: 'Estado asignado de manera correcta'
+                });
+            })
+            .catch(err => {
+                notification['error']({
+                    message: 'Error al asignar estado'
+                });
+            });
+    }
 
     function dropdownMenu() {
         return (
@@ -229,6 +288,41 @@ const TablaTrabajadores = props => {
                 scroll={{ x: 1200 }}
                 pagination={{ pageSize: 20 }}
             />
+            <Modal
+                title="Asignar Estado"
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+            >
+                <form onSubmit={handleSubmit}>
+                    Estados:<br />
+                    <Select
+                        showSearch
+                        optionFilterProp="children"
+                        size="small"
+                        style={{ width: "100%" }}
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setForm({ ...form, estado_id: e })}
+                        value={form.estado_id}
+                    >
+                        {estados.map(option => (
+                            <Select.Option value={option.id} key={option.id}>
+                                {option.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                    <br /><br />
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                    >
+                        Asignar estado
+                    </Button>
+                </form>
+            </Modal>
         </div>
     );
 };

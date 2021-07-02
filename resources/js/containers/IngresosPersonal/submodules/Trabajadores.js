@@ -50,7 +50,9 @@ export const Trabajadores = () => {
                             grupo: trabajador.grupo,
                             fecha_ingreso: moment(
                                 trabajador.fecha_inicio
-                            ).format("DD/MM/YYYY")
+                            ).format("DD/MM/YYYY"),
+                            estado: trabajador.estado,
+                            estado_color: trabajador.estado_color
                         };
                     });
                     setTrabajadores(trabajadores);
@@ -244,6 +246,7 @@ export const Trabajadores = () => {
             <TablaTrabajadores
                 loading={loading}
                 trabajadores={trabajadores}
+                getTrabajadores={getTrabajadores}
                 generarContrato={generarContrato}
                 generarFicha={generarFicha}
                 eliminarContrato={eliminarContrato}

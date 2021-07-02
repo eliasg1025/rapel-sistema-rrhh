@@ -152,19 +152,25 @@ class Trabajador extends Model
     public static function _get(array $filtro=[])
     {
         try {
-            /* $subQuery = DB::table('contratos_has_estados')
+            $subQuery = DB::table('contratos_has_estados')
                 ->select([
                     DB::raw('MAX(created_at) as created_at'),
                     'contrato_id'
                 ])
                 ->groupBy('contrato_id');
 
-            dd($subQuery->get());
             $subQuery2 = DB::table('contratos_has_estados as pv')
+                ->select([
+                    'ec.*',
+                    'pv.contrato_id',
+                ])
                 ->joinSub($subQuery, 'sub', function($join) {
-                    $join->on('sub.created_at', '=', 'pv.created_at')
-                        ->on('sub.contrato_id', '=', 'pb.contrato_id');
-                }); */
+                    $join->on([
+                        'sub.created_at' =>  'pv.created_at',
+                        'sub.contrato_id' => 'pv.contrato_id'
+                    ]);
+                })
+                ->join('estados_contratos as ec', 'pv.estado_id', 'ec.id');
 
             $contratos = DB::table('contratos')
                 ->select(
@@ -175,12 +181,18 @@ class Trabajador extends Model
                     'empresas.name as empresa_name',
                     'empresas.id as empresa_id',
                     'zona_labores.name as zona_labor_name',
-                    'regimenes.name as regimen'
+                    'regimenes.name as regimen',
+                    'estados.name as estado',
+                    'estados.id as estado_id',
+                    'estados.color as estado_color',
                 )
                 ->join('trabajadores', 'trabajadores.id', '=', 'contratos.trabajador_id')
                 ->join('empresas', 'empresas.id', '=', 'contratos.empresa_id')
                 ->join('zona_labores', 'zona_labores.id', '=', 'contratos.zona_labor_id')
                 ->join('regimenes', 'regimenes.id', '=', 'contratos.regimen_id')
+                ->leftJoinSub($subQuery2, 'estados', function($join) {
+                    $join->on(['estados.contrato_id' => 'contratos.id']);
+                })
                 ->whereBetween('contratos.fecha_inicio', [$filtro['desde'], $filtro['hasta']])
                 ->where('contratos.empresa_id', $filtro['empresa_id'])
                 ->where('trabajadores.nombre', 'LIKE', '%' . ($filtro['nombre'] ?? '') . '%')

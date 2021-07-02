@@ -365,6 +365,11 @@ Route::group(['prefix' => 'procesos-contratos'], function() {
     Route::post('/', 'ProcesosContratosController@create')->middleware('api.auth');
 });
 
+Route::group(['prefix' => 'estados-contratos'], function() {
+    Route::get('/', 'EstadosContratosController@get');
+    Route::post('/', 'EstadosContratosController@attach');
+});
+
 Route::group(['prefix' => 'sqlsrv'], function () {
     Route::group(['prefix' => 'trabajador'], function() {
         Route::get('/{rut}/{empresaId}', 'InformesDescansosController@getTrabajador')->where('empresaId', '[0-9]+');
