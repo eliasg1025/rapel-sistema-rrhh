@@ -142,6 +142,32 @@
                 <div style="padding-left: 10px;">
                     <p>p) La acción u omisión que afecte el normal desarrollo de las actividades de la empresa.</p>
                 </div>
+            @elseif ($sancion->incidencia_id === 17)
+                <ol>
+                    <li>Que Ud. Ha incurrido en falta al cumplimientos de sus obligaciones en el sentido siguiente:</li>
+                </ol>
+                <p class="justify">
+                    Presentar reiteradas inasistencias, sin presentar justificación alguna, lo que ocasiona retrasos en las labores programadas, se le recomienda cambiar de actitud y cumplir con los deberes como trabajador y funciones asignadas, caso contrario se procederá a tomar otras medidas correctivas.
+                </p>
+                <p class="justify">
+                    Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted, habiendo incumplido lo establecido en el Reglamento Interno de Trabajo.
+                </p>
+                <p style="text-align: center;">
+                    <b>CAPITULO V</b><br />
+                    <b>NORMAS DE PERMANENCIA EN EL PUESTO DE TRABAJO, DE LAS AUSENCIAS, PERMISOS Y LICENCIAS</b>
+                </p>
+                <p class="justify">
+                    <b>Artículo 45°.-</b> En caso que el trabajador se ausente de sus labores sin que se le haya otorgado permiso o licencia, será considerada como ausencia injustificada, y se le aplicará las sanciones previstas en el presente Reglamento y las establecidas por ley. Cuando el trabajador no pueda concurrir al centro de labores por razones de enfermedad o imprevistos, deberá avisar dentro de la primera hora de haberse iniciado la jornada de trabajo, a su supervisor jerárquico inmediato y/o gerente de área con la finalidad de que empresa adopte las medidas necesarias para el normal desarrollo de sus actividades.
+                </p>
+                <p class="justify">
+                    <b>Artículo 50°.-</b> En el supuesto que el trabajador supere los tres (03) días de ausencia consecutivos sin que hubiese comunicado a la empresa, se procederá a iniciar el proceso de despido por causal de abandono de trabajo.
+                </p>
+                <p class="justify">
+                    <b>Artículo 56.-</b> Todo trabajador de la empresa debe observar las siguientes prohibiciones:<br />
+                    <b>p)</b> La acción u omisión que afecte el normal desarrollo de las actividades de la empresa.
+                </p>
+
+                <p>Estos artículos han sido vulnerados toda vez que usted ha incurrido en faltas al incumplimiento de las normas y procedimientos de la Empresa.</p>
             @elseif ($sancion->incidencia_id != 5)
                 <ol>
                     <li>Que Ud. Ha incumplido con las normas de la empresa en el sentido siguiente:</li>

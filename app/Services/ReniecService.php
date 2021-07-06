@@ -99,11 +99,14 @@ class ReniecService
             $direccion = '';
             if (isset($data->dir_urb) && !is_null($data->dir_urb)) {
                 $tmp_direccion = '';
-                $tiposZonas = ['CASERIO', 'URB'];
+                $tiposZonas = ['URB', 'CASERIO', 'C.POBLADO', 'ASENT.H.'];
                 foreach ($tiposZonas as $tipoZona) {
                     $arr = explode($tipoZona, strtoupper(trim($data->dir_urb)));
 
                     if (sizeof($arr) > 1) {
+                        $arr = array_filter($arr, function($item) {
+                            return $item !== "";
+                        });
                         $tmp_direccion = implode(" ", [$tipoZona, ...$arr]);
                         break;
                     }
