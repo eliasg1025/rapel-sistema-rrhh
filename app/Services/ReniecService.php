@@ -98,20 +98,16 @@ class ReniecService
              */
             $direccion = '';
             if (isset($data->dir_urb) && !is_null($data->dir_urb)) {
-                $tmp_direccion = '';
+                $tmp_direccion = $data->dir_urb;
                 $tiposZonas = ['URB', 'CASERIO', 'C.POBLADO', 'ASENT.H.'];
                 foreach ($tiposZonas as $tipoZona) {
                     $arr = explode($tipoZona, strtoupper(trim($data->dir_urb)));
 
                     if (sizeof($arr) > 1) {
-                        $arr = array_filter($arr, function($item) {
-                            return $item !== "";
-                        });
                         $tmp_direccion = implode(" ", [$tipoZona, ...$arr]);
                         break;
                     }
                 }
-
                 $direccion .= $tmp_direccion;
             }
 
@@ -139,10 +135,10 @@ class ReniecService
                 $direccion = $data->dir_nombre . ' ' . $direccion;
             }
 
-            $direccion = str_replace('-', '', $direccion);
+            $direccion = str_replace('-', ' ', $direccion);
             $direccion = str_replace('?', 'Ñ', $direccion);
-
             $direccion = strtoupper($direccion . ' - ' . $data->ubi_dir_dist_desc);
+            $direccion = str_replace('  ', ' ', $direccion);
 
             $apellido_materno = $data->apellido_materno;
             if (isset($data->apellido_matrimonio) && !is_null($data->apellido_matrimonio) && $data->cod_sexo !== '1') {
