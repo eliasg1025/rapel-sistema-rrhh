@@ -8,6 +8,7 @@ import AgregarSancion from "./Submodules/AgregarSancion";
 import { Reportes } from './Submodules/Reportes';
 import { Desvinculaciones } from './Submodules/Desvinculaciones';
 import { Analista, Supervisor } from './Submodules/Sst';
+import { EPP } from './Submodules/EPP';
 
 
 const { Content, Footer, Sider } = Layout;
@@ -45,12 +46,19 @@ export default function Sanciones() {
                         </SubMenu>
                     )}
                     {usuario.sanciones === 2 && (
+                        <Menu.Item key="epp" icon={<BookOutlined />}>
+                            <a href="/sanciones/epp">
+                                EPPs
+                            </a>
+                        </Menu.Item>
+                    )}
+                    {/* {usuario.sanciones === 2 && (
                         <Menu.Item key="desvinculaciones" icon={<BookOutlined />}>
                             <a href="/sanciones/desvinculaciones">
                                 Desvinculaciones
                             </a>
                         </Menu.Item>
-                    )}
+                    )} */}
                     {usuario.sanciones === 2 && (
                         <Menu.Item key="reportes" icon={<BarChartOutlined />}>
                             <a href="/sanciones/reportes">
@@ -64,6 +72,7 @@ export default function Sanciones() {
                 <Content style={{ margin: '20px 16px 0' }}>
                     <div className="site-layout-background" style={{padding: 24, minHeight: '100vh'}}>
                         {submodule === 'sanciones' && <AgregarSancion />}
+                        {submodule === 'epp' && <EPP />}
                         {submodule === 'desvinculaciones' && <Desvinculaciones />}
                         {submodule === 'reportes' && <Reportes />}
 

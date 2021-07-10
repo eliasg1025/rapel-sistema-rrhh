@@ -264,61 +264,41 @@
     <section style="font-size: 14px">
         <h4 class="titulo">ANEXO 1</h4>
         <p>
-            El presente documento ha sido elaborado en virtud de lo establecido en el inciso c) del artículo 35° de la Ley N° 29783, Ley de Seguridad y Salud en el Trabajo, indicándose las funciones propias de <b>{{ $contrato->oficio->name }}</b>, a ser desarrolladas por <b>EL TRABAJADOR</b>.
+            <b>Recomendaciones de Seguridad y Salud en el Trabajo al Trabajador.</b>
         </p>
-        <p>
-            Igualmente se establecerán los posibles riesgos a los cuales puede encontrarse expuesto por la realización de dichas funciones y las recomendaciones referidas a las medidas de prevención destinadas a evitar los riesgos mencionados.
-        </p>
-        <br />
-        <table class="tabla">
-            <thead>
-                <tr>
-                    <td><b>Cargo o Puesto de Trabajo</b></td>
-                    <td><b>{{ $contrato->oficio->name }}</b></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>Descripción de Funciones</b></td>
-                    <td>Encargado de realizar las labores en los campos designados. </td>
-                </tr>
-                <tr>
-                    <td><b>Riesgos expuestos</b></td>
-                    <td>
-                        <ul class="lista-sin-estilos">
-                            <li>Exposición a altas temperaturas</li>
-                            <li>Caída de personas a distinto nivel</li>
-                            <li>Caída de personas al mismo nivel</li>
-                            <li>Atropellos o golpes con vehículos</li>
-                            <li>Choque contra objetos fijos</li>
-                            <li>Golpes y cortes con objetos y herramientas</li>
-                            <li>Atrapamiento por o entre objetos</li>
-                            <li>Vuelco de máquinas o vehículos</li>
-                            <li>Posturas prolongadas, movimientos repetitivos (riesgos disergonómicos)</li>
-                            <li>Sobreesfuerzos (riesgo disergonómico)</li>
-                            <li>Proyección de fragmentos o partículas</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Medidas de Prevención</b></td>
-                    <td>
-                        <ul class="lista-sin-estilos">
-                            <li>Uso de ropa adecuada</li>
-                            <li>Señalización</li>
-                            <li>Orden y limpieza</li>
-                            <li>Capacitación de los trabajadores</li>
-                            <li>Mantener distancias de seguridad</li>
-                            <li>Cumplimiento de normas de manual de instrucciones, objetos punzantes de embalajes, piezas, etc</li>
-                            <li>Adecuado uso y mantenimiento del equipo de protección personal</li>
-                            <li>Diseño ergonómico del puesto de trabajo</li>
-                            <li>Al levantar materiales, el Trabajador deberá doblar las rodillas y mantener la espalda lo más recta posible</li>
-                            <li>Debe proveerse de lentes de seguridad, en todos aquellos trabajos donde esté presente dicho riesgo</li>
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <ol style="font-size: 12px;">
+            <li>
+                <b>Generales</b>
+                <br />-	Todo Trabajador está en la obligación de respetar y cumplir el reglamento de seguridad y salud en el trabajo de EL Empleador; así como aquellas normas, políticas, programas y directrices que sobre el particular señale la ley y El empleador, colaborando en toda circunstancia para evitar toda clase de accidentes e incidentes que pongan en riesgo al personal y las operaciones.
+                <br />-	Durante su labor diaria, El trabajador se encuentra en la obligación de protegerse tanto a sí mismo como a sus compañeros de trabajo, contra toda clase de accidentes e imprevistos.
+            </li>
+            <li>
+                <b>Específicas a los riesgos asociados</b>
+                <br />-	En campo agrícola siempre camina a un lado de la carretera, por la derecha y en forma ordenada, evita apresurarte o correr.
+                <br />-	Durante el traslado por las vías de acceso a los campos de la empresa, se debe estar atento al tránsito de los vehículos que circulan por la zona.
+                <br />-	Usar los EPP según la labor a realizar, durante toda la jornada de trabajo, y solo podrán retirárselos cuando haga uso de los servicios higiénicos o durante su refrigerio.
+                <br />-	Para protegerte de la radiación solar deberás utilizar tu gorro árabe, polera y el bloqueador solar.
+                <br />-	No dejar desperdicios, materiales, herramientas de trabajo en lugares que puedan ocasionar accidentes, conserva el lugar de trabajo siempre limpio y ordenado.
+                <br />-	No se debe ingresar a los cuarteles que presentan señalización de seguridad (banderas de color rojo) en las esquinas, dado que se ha realizado una aplicación de productos fitosanitarios.
+                <br />-	Si la labor necesita de uso de una herramienta o material de trabajo, debes verificar su estado antes de usarlo y reportar a tu jefe inmediato cualquier desperfecto encontrado.
+                <br />-	El uso de herramientas es exclusivamente para labor designada, en ningún caso se utilizarán para otras labores.
+                <br />-	Cuando la labor requiera utilizar herramientas punzocortantes (tijeras u otros)  utilizar en todo momento los guantes y lentes de seguridad.
+                <br />-	Todas las herramientas punzocortantes (tijeras u otros) deben ser utilizadas de forma adecuada con sus fundas protectoras y no ser colocadas en los bolsillos. No hacer bromas pesadas durante el uso de las herramientas punzocortantes ni correr por el campo sobre todo portándolas.
+                <br />-	Para el control de picaduras de insectos, al inicio de la jornada de trabajo debes verificar la zona de trabajo y en caso se identifique insectos u ofidios reportar al jefe inmediato.
+                <br />-	No hacer sobreesfuerzos o fuerza excesiva al momento de la realización de sus labores, si la labor requiere manipular cargas debes aplicar correctamente las técnicas de levantamiento de cargas y sus estándares (Peso máximo de carga 25 Kg hombres y 15 Kg mujeres).
+                <br />-	Al terminar la jornada de trabajo, se dejaran las herramientas y materiales de trabajo de forma ordenada.
+            </li>
+            <li>
+                <b>Con relación a COVID-19</b>
+                <br />-	Utiliza tu protector facial y mascarilla en los espacios cerrados (bus de transporte de personal).
+                <br />-	En la ejecución de las labores utiliza siempre tu mascarilla.
+                <br />-	Lávate o desinféctate las manos antes de subir al bus de transporte, después de bajar de tu bus de transporte y antes de ingresar a tu campo.
+                <br />-	Si no tienes un lavamanos cerca, usa tu atomizador de alcohol para desinfectar tus manos.
+                <br />-	Evita tocarte los ojos, nariz y boca con las manos sucias.
+                <br />-	En los comedores recuerda mantener el distanciamiento (2 mts) y no compartas alimentos, bebidas, vasos, cubiertos ni utensilios personales.
+                <br />-	Cúbrete la nariz y boca con el antebrazo o pañuelo desechable, al toser o estornudar.
+            </li>
+        </ol>
         <div style="margin-top: 20px; font-weight: bold">
             <table style="width: 100%; text-align: center">
                 <tr>
@@ -503,81 +483,78 @@
         </div>
     </section>
 
-    {{-- <div class="page-break"></div>
+    <div class="page-break"></div>
 
     <section id="page7"></section>
 
     <div class="page-break"></div>
 
-    <section id="page10">
-        <h4 class="titulo">CONSTANCIA DE ENTREGA DE REGLAMENTO INTERNO DE TRABAJO</h4>
-        <br>
-        <div style="padding: 25px;">
-            <p>
-                Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b><br>
-                Identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, manifiesto haber recibido un ejemplar del Reglamento Interno de Trabajo, comprometiéndome a leerlo, estudiarlo y cumplirlo, durante la vigencia del vínculo laboral que mantengo con La Empresa.<br><br>
-                Me comprometo voluntariamente a difundir y velar por su cumplimiento entre mis compañeros de trabajo.
-            </p>
-            <br><br><br><br>
-            <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
-            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-                <tr>
-                    <td>
-                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                    </td>
-                    <td>
-                        <div style="width: 100px; height: 140px;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-            <div style="margin-top: 200px; width: 100%">
-                <hr>
-                <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
+    <section style="position: absolute;">
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
+            <h4 class="titulo">
+                DECLARACIÓN  DE RECEPCIÓN DE FORMATO PARA BENEFICIARIOS DE SEGURO VIDA LEY
+            </h4>
+            <br>
+            <div style="padding: 10px;">
+                <p>
+                    Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b> identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, declaro que:<br />Haber recibido el formato de DECLARACION DE BENEFICIARIOS para SEGURO VIDA LEY D. LEG. 688, COMPROMETIENDOME con mi empleador en alcanzar este documento con el detalle de mis beneficiarios y debidamente certificado NOTARIALMENTE, en un plazo máximo de 30 días calendario desde la firma de este documento.
+                    <br>
+                </p>
+                <br><br><br><br>
+                <p style="text-align: right"><b>El Papayo,  {{ $contrato->fecha_larga }}.</b></p>
+                <table style="width: 100%; font-weight: bold; margin-top: 20px; text-align: center">
+                    <tr>
+                        <td>
+                            <div style="border: 1px solid black; width: 70px; height: 98px; margin: auto;"></div>
+                        </td>
+                        <td>
+                            <div style="width: 70px; height: 98px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                        <td style="width: 50%">_______________________________<br>FIRMA DEL(A) TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                    </tr>
+                </table>
+                <div style="margin-top: 100px; width: 100%">
+                    <hr>
+                    <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
+                </div>
             </div>
-        </div>
-    </section> --}}
-
-    <div class="page-break"></div>
-
-    <section></section>
-
-    <div class="page-break"></div>
-
-    <section id="page11">
-        <h4 class="titulo">
-            DECLARACIÓN  DE RECEPCIÓN DE FORMATO PARA BENEFICIARIOS DE SEGURO VIDA LEY
-        </h4>
-        <br>
-        <div style="padding: 25px;">
-            <p>
-                Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b> identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, declaro que:<br />Haber recibido el formato de DECLARACION DE BENEFICIARIOS para SEGURO VIDA LEY D. LEG. 688, COMPROMETIENDOME con mi empleador en alcanzar este documento con el detalle de mis beneficiarios y debidamente certificado NOTARIALMENTE, en un plazo máximo de 30 días calendario desde la firma de este documento.
-                <br>
-            </p>
-            <br><br><br><br>
-            <p style="text-align: right"><b>El Papayo,  {{ $contrato->fecha_larga }}.</b></p>
-            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-                <tr>
-                    <td>
-                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                    </td>
-                    <td>
-                        <div style="width: 100px; height: 140px;"></div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                    <td style="width: 50%">_______________________________<br>FIRMA DEL(A) TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-            <div style="margin-top: 200px; width: 100%">
-                <hr>
-                <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
+        </section>
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
+            <h4 class="titulo">
+                CONSTANCIA DE ENTREGA DE REGLAMENTO INTERNO DE TRABAJO
+            </h4>
+            <br>
+            <div style="padding: 10px;">
+                <p>
+                    Yo, <b>{{ $trabajador->apellidos }}, {{ $trabajador->nombre }}</b><br>
+                    Identificado con D.N.I N° <b>{{ $trabajador->rut }}</b>, manifiesto haber recibido un ejemplar del Reglamento Interno de Trabajo, comprometiéndome a leerlo, estudiarlo y cumplirlo, durante la vigencia del vínculo laboral que mantengo con La Empresa.<br><br>
+                    Me comprometo voluntariamente a difundir y velar por su cumplimiento entre mis compañeros de trabajo.
+                </p>
+                <br><br><br><br>
+                <p style="text-align: right"><b>Piura,  {{ $contrato->fecha_larga }}.</b></p>
+                <table style="width: 100%; font-weight: bold; margin-top: 20px; text-align: center">
+                    <tr>
+                        <td>
+                            <div style="border: 1px solid black; width: 70px; height: 98px; margin: auto;"></div>
+                        </td>
+                        <td>
+                            <div style="width: 70px; height: 98px;"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                        <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                    </tr>
+                </table>
+                <div style="margin-top: 100px; width: 100%">
+                    <hr>
+                    <small>Prohibida la reproducción total o parcial de este documento sin autorización de  SOCIEDAD AGRICOLA RAPEL S.A.C.</small>
+                </div>
             </div>
-        </div>
+        </section>
     </section>
 
     {{-- <div class="page-break"></div>
@@ -627,48 +604,90 @@
         </table>
     </section> --}}
 
-    {{-- <div class="page-break"></div>
+    <div class="page-break"></div>
 
     <section></section>
 
     <div class="page-break"></div>
 
-    <section id="page13">
-        <table>
-            <tr>
-                <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
-                <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
-            </tr>
-        </table>
-        <br>
-        <h4 class="titulo">RADIACIÓN ULTRAVIOLETA</h4>
-        <br>
-        <p>
-            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro haber recibido instrucción e información sobre la Guía para el cumplimiento legal de la Ley Nº 30102, “LEY QUE DISPONE MEDIDAS PREVENTIVAS CONTRA LOS EFECTOS NOCIVOS PARA LA SALUD POR LA EXPOSICIÓN PROLONGADA A LA RADIACIÓN SOLAR”, indicándome los riesgos específicos de exposición laboral a radiación UV de origen solar y sus medidas de control en los siguientes términos: “la exposición excesiva y/o acumulada de radiación ultravioleta produce efectos dañinos a corto y largo plazo, principalmente en ojos y piel que van desde quemaduras solares, queratitis actínica y alteraciones de la respuesta inmune hasta foto envejecimiento, tumores malignos de piel y cataratas a nivel ocular”, en los siguientes términos:
-        </p>
-        <ol>
-            <li>Efectos en la salud por exposición a radiación UV.</li>
-            <li>Expuestos y puestos de trabajo en riesgo dentro de la empresa.</li>
-            <li>Medidas de control y de protección personal</li>
-            <li>Concientización sobre la correcta utilización y cuidados de los elementos de protección personal</li>
-        </ol>
-        <p style="margin-top: 80px; text-align: right">
-            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-        </p>
-        <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-            <tr>
-                <td>
-                    <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                </td>
-                <td>
-                    <div style="width: 100px; height: 140px;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-            </tr>
-        </table>
+    <section style="position: absolute;">
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -50px;">
+            <table>
+                <tr>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
+                    <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
+                </tr>
+            </table>
+            <br>
+            <h4 class="titulo">RADIACIÓN ULTRAVIOLETA</h4>
+            <br>
+            <p>
+                Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro haber recibido instrucción e información sobre la Guía para el cumplimiento legal de la Ley Nº 30102, “LEY QUE DISPONE MEDIDAS PREVENTIVAS CONTRA LOS EFECTOS NOCIVOS PARA LA SALUD POR LA EXPOSICIÓN PROLONGADA A LA RADIACIÓN SOLAR”, indicándome los riesgos específicos de exposición laboral a radiación UV de origen solar y sus medidas de control en los siguientes términos: “la exposición excesiva y/o acumulada de radiación ultravioleta produce efectos dañinos a corto y largo plazo, principalmente en ojos y piel que van desde quemaduras solares, queratitis actínica y alteraciones de la respuesta inmune hasta foto envejecimiento, tumores malignos de piel y cataratas a nivel ocular”, en los siguientes términos:
+            </p>
+            <ol>
+                <li>Efectos en la salud por exposición a radiación UV.</li>
+                <li>Expuestos y puestos de trabajo en riesgo dentro de la empresa.</li>
+                <li>Medidas de control y de protección personal</li>
+                <li>Concientización sobre la correcta utilización y cuidados de los elementos de protección personal</li>
+            </ol>
+            <p style="margin-top: 80px; text-align: right">
+                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+            </p>
+            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+                <tr>
+                    <td>
+                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                    </td>
+                    <td>
+                        <div style="width: 100px; height: 140px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                </tr>
+            </table>
+        </section>
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -200px;">
+            <table>
+                <tr>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
+                    <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
+                </tr>
+            </table>
+            <br>
+            <h4 class="titulo">DECLARACIÓN DE ACEPTACIÓN DEL REGLAMENTO INTERNO DE SEGURIDAD  Y SALUD EN EL TRABAJO</h4>
+            <br>
+            <p>
+                Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro que desarrollare mis labores en forma segura, comprometiéndome a cumplir y acatar todas las normativas y procedimientos de Seguridad y Salud en el Trabajo establecidas por la Empresa en el presente Reglamento y demás directivas o políticas internas; siendo esto condición imprescindible para mi permanencia en la Empresa.
+            </p>
+            <p>
+                Asimismo, declaro que me regiré por los procedimientos mencionados de Seguridad y Salud en el Trabajo y las normas que sobre el tema se han dictado y se dicten en adelante; adecuando mi desempeño laboral a una conducta segura e higiénica, y de respeto hacia mis compañeros de trabajo, jefes, clientes, comunidad y medio ambiente. Cualquier incumplimiento de las normas y procedimientos establecidos en SOCIEDAD AGRICOLA RAPEL S.A.C., me obligará a someterme a las sanciones establecidas en el Reglamento Interno de Seguridad y Salud en el Trabajo, y demás normas internas de la Empresa., las cuales conozco y acato en su totalidad.
+            </p>
+            <p>
+                Finalmente,  declaro  haber recibido un ejemplar del Reglamento Interno de Seguridad y Salud en el Trabajo, así también declaro haberlo leído cuidadosamente y me comprometo a darle estricto cumplimiento.
+            </p>
+            <p>
+                Dejo presente que dicho ejemplar me fue entregado en forma gratuita.
+            </p>
+            <p style="margin-top: 80px; text-align: right">
+                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+            </p>
+            <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
+                <tr>
+                    <td>
+                        <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
+                    </td>
+                    <td>
+                        <div style="width: 100px; height: 140px;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
+                    <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
+                </tr>
+            </table>
+        </section>
     </section>
 
     <div class="page-break"></div>
@@ -836,7 +855,7 @@
                 </table>
             </div>
         </section>
-    </section> --}}
+    </section>
 
     <div class="page-break"></div>
 

@@ -12,6 +12,8 @@ class BonosReglasController extends Controller
         $laborActividad = explode(" - ", $request->get('laborId'));
 
         $zona_id = $request->get('zonaId');
+        $regimen_id = $request->get('regimenId');
+        $etapa = $request->get('etapa');
         $variedad_id = $request->get('variedadId');
         $cuartel_id = $request->get('cuartelId');
         $unidad_medida_id = $request->get('unidadMedidaId');
@@ -22,6 +24,8 @@ class BonosReglasController extends Controller
         $rut = $request->get('rut');
 
         $regla = new BonoRegla();
+        $regla->regimen_id = $regimen_id;
+        $regla->etapa = $etapa;
         $regla->zona_id = $zona_id;
         $regla->variedad_id = $variedad_id;
         $regla->cuartel_id = $cuartel_id;

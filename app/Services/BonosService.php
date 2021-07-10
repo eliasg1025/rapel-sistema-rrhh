@@ -277,6 +277,9 @@ class BonosService
                 ->when($regla->zona_id !== '0', function($query) use ($regla) {
                     $query->where('a.IdZona', $regla->zona_id);
                 })
+                ->when($regla->regimen_id !== '0', function ($query) use ($regla) {
+                    $query->where('c.IdRegimen', $regla->regimen_id);
+                })
                 ->when($regla->labor_id !== '0', function($query) use ($regla) {
                     $query->where('act.IdActividad', $regla->labor_id);
                 })
@@ -291,6 +294,9 @@ class BonosService
                 })
                 ->when($regla->ciclo, function($query) use ($regla) {
                     $query->where('a.Ciclo', $regla->ciclo);
+                })
+                ->when($regla->etapa, function($query) use ($regla) {
+                    $query->where('a.ETAPA', $regla->etapa);
                 })
                 ->whereBetween('a.FechaActividad', [$desde, $hasta])
                 ->where('a.idEmpresa', $bono->empresa_id);

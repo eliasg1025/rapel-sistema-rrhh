@@ -60,9 +60,27 @@ class SancionesController extends Controller
         }
 
         $data = [
-            'usuario' => $usuario,
-            'editar' => 0,
+            'usuario'   => $usuario,
+            'editar'    => 0,
             'submodule' => 'reportes',
+        ];
+
+        return view('pages.sanciones', compact('data'));
+    }
+
+    public function epp(Request $request)
+    {
+        $usuario = $request->session()->get('usuario');
+
+        if ( $usuario->sanciones == 0 ) {
+            $nombre_modulo = 'sanciones';
+            return view('pages.no-acceso', compact('nombre_modulo'));
+        }
+
+        $data = [
+            'usuario'   => $usuario,
+            'editar'    => 0,
+            'submodule' => 'epp'
         ];
 
         return view('pages.sanciones', compact('data'));
@@ -78,8 +96,8 @@ class SancionesController extends Controller
         }
 
         $data = [
-            'usuario' => $usuario,
-            'editar' => 0,
+            'usuario'   => $usuario,
+            'editar'    => 0,
             'submodule' => 'desvinculaciones',
         ];
 

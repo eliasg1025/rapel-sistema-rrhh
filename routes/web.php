@@ -92,6 +92,7 @@ Route::group(['middleware' => 'web.auth'], function() {
     Route::group(['prefix' => 'sanciones'], function() {
         Route::get('/', 'Web\SancionesController@index');
         Route::get('/editar/{id}', 'Web\SancionesController@editar');
+        Route::get('/epp', 'Web\SancionesController@epp');
         Route::get('/reportes', 'Web\SancionesController@reportes');
         Route::get('/desvinculaciones', 'Web\SancionesController@desvinculaciones');
         Route::group(['prefix' => 'sst'], function() {

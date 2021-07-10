@@ -15,17 +15,28 @@ export const ReglasBono = ({ bono, reglas, setReglas, reload, setReload }) => {
 };
 
 const AgregarRegla = ({ bono, reload, setReload }) => {
+
+    const etapas = [
+        'Cosecha',
+        'Inversion',
+        'Produccion',
+        'Formacion'
+    ];
+
     const [zonas, setZonas] = useState([]);
+    const [regimenes, setRegimenes] = useState([]);
     const [variedades, setVariedades] = useState([]);
     const [unidadesMedidas, setUnidadesMedidas] = useState([]);
     const [labores, setLabores] = useState([]);
     const [cuarteles, setCuarteles] = useState([]);
     const [form, setForm] = useState({
         zonaId: 0,
+        regimenId: 0,
         variedadId: 0,
         unidadMedidaId: 0,
         cuartelId: 0,
         laborId: 0,
+        etapa: "",
         ciclo: "",
         rut: ""
     });
@@ -54,6 +65,14 @@ const AgregarRegla = ({ bono, reload, setReload }) => {
         )
             .then(res => {
                 setUnidadesMedidas(res.data.data);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+
+        Axios.get(`http://192.168.60.16/api/regimen`)
+            .then(res => {
+                setRegimenes(res.data.data);
             })
             .catch(err => {
                 console.error(err);
@@ -131,6 +150,58 @@ const AgregarRegla = ({ bono, reload, setReload }) => {
                         {zonas.map(e => (
                             <Select.Option value={e.id} key={e.id}>
                                 {`${e.id} - ${e.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Regimen:<br />
+                    <Select
+                        value={form.regimenId}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setForm({ ...form, regimenId: e })}
+                        style={{
+                            width: "100%"
+                        }}
+                    >
+                        <Select.Option value={0} key={0}>
+                            TODOS
+                        </Select.Option>
+                        {regimenes.map(e => (
+                            <Select.Option value={e.id} key={e.id}>
+                                {`${e.id} - ${e.name}`}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </div>
+                <div className="col-md-4">
+                    Etapas:<br />
+                    <Select
+                        value={form.etapa}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.children
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={e => setForm({ ...form, etapa: e })}
+                        style={{
+                            width: "100%"
+                        }}
+                    >
+                        <Select.Option value={''} key={''}>
+                            TODOS
+                        </Select.Option>
+                        {etapas.map(e => (
+                            <Select.Option value={e} key={e}>
+                                {`${e}`}
                             </Select.Option>
                         ))}
                     </Select>
