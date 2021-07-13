@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sancion;
 use App\Models\SancionEpp;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,14 @@ class SancionesEppsController extends Controller
     public function delete($id)
     {
         $form = SancionEpp::find($id);
+
+        if (!is_null($form->sancion_id)) {
+            $sancion = Sancion::where('id', $form->sancion_id)->first();
+
+            if ($sancion) {
+                $sancion->delete();
+            }
+        }
 
         if ($form->delete()) {
             return response()->json([

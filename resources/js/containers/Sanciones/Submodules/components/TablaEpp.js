@@ -9,7 +9,7 @@ export const TablaEpp = ({ reloadData, setReloadData }) => {
     const { usuario } = JSON.parse(sessionStorage.getItem('data'));
     const [filtro, setFiltro] = useState({
         desde: moment().subtract(1, 'days').format('YYYY-MM-DD').toString(),
-        hasta: moment().add(1, 'days').format('YYYY-MM-DD').toString(),
+        hasta: moment().add(6, 'days').format('YYYY-MM-DD').toString(),
     });
     const [data, setData] = useState([]);
 
@@ -86,6 +86,7 @@ export const TablaEpp = ({ reloadData, setReloadData }) => {
     const handleEliminar = id => {
         Swal.fire({
             title: '¿Deseas eliminar este registro?',
+            html: 'Se eliminará la <b>SUSPENCIÓN</b> o <b>MEMORANDUM</b> si es que tiene alguno',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

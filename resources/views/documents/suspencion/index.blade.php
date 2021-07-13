@@ -96,6 +96,21 @@
                     , el cual indica que al {{ $texto[1] }}, se detectó que no usaba su implemento de bioseguridad <b>({{ $texto[0] }})</b>
                     para protegerse, ante este hecho se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad, los cuales fueron entregados a su persona. En tal sentido le hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la finalidad de prevenir accidentes, los cuales se puedan producir  por negligencia suya.
                 </p>
+            @elseif ($epp['active'])
+                <p class="justify">
+                    El hecho ocurrió los días @foreach($epp['fechas'] as $fecha)
+                        <b>{{ $fecha }}</b>,
+                    @endforeach según informe alcanzado por el
+                    Supervisor de Recursos Humanos, el cual indica que al realizar las labores correspondientes de
+                    campo, se detectó que no usaba / tenía su(s) EPP(s) (Equipo de Protección Personal), @foreach($epp['epps'] as $epp)
+                        <b>{{ $epp }}</b>,
+                    @endforeach ante este hecho
+                    se le recomienda cambiar de actitud y en adelante utilizar los Implementos de Seguridad y Salud
+                    en el Trabajo, los cuales le fueron entregados para su protección personal. En tal sentido le
+                    hacemos recordar que debe tomar en cuenta y poner en práctica las sugerencias y capacitaciones
+                    que el personal de Seguridad y Salud en el Trabajo realiza en cada capacitación; ello con la
+                    finalidad de prevenir accidentes, los cuales se puedan producir por negligencia suya.
+                </p>
             @else
                 <p class="justify">
                     El hecho ocurrió el día <b>{{ $sancion->fecha_incidencia_largo }}</b>, {{ $texto[0] ?? '' }}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sancion;
+use App\Models\SancionEpp;
 use Illuminate\Http\Request;
 
 class SancionesController extends Controller
@@ -67,11 +68,36 @@ class SancionesController extends Controller
     public function verFicha(Sancion $sancion)
     {
         try {
+            $sancion_epp = SancionEpp::where('sancion_id', $sancion->id)->get();
+            $epp = false;
+            $fechas = [];
+            $epps = [];
+
+            if (sizeof($sancion_epp) > 0) {
+                $epp = true;
+                $epps = SancionEpp::where('trabajador_id', $sancion_epp[0]->trabajador_id);
+                $fechas = $epps->pluck('fecha_incidencia');
+                $epps = $epps->pluck('epps')->toArray();
+
+                $arr = [];
+                foreach ($epps as $epp) {
+                    $newArr = json_decode($epp);
+
+                    $arr = [ ...$arr, ...$newArr ];
+                }
+                $epps = array_unique($arr);
+            }
+
             $data = [
                 'sancion'        => $sancion,
                 'texto'          => json_decode($sancion->incidencia->texto)->texto,
                 'trabajador'     => $sancion->trabajador,
                 'codigo'         => 4 . '@' . $sancion->id,
+                'epp'            => [
+                    'active'    => $epp,
+                    'fechas'    => $fechas,
+                    'epps'      => $epps
+                ]
             ];
 
             if ( $sancion->incidencia->documento === 'MIXTO' ) {

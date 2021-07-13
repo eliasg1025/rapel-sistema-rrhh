@@ -105,7 +105,7 @@ class SancionEpp extends Model
                 ];
             }
 
-            $ofico_id          = Oficio::findOrCreate($data['oficio']);
+            $ofico_id = Oficio::findOrCreate($data['oficio']);
 
             $registro_mismo_dia = SancionEpp::where('trabajador_id', $trabajador_id)
                 ->whereDate('fecha_incidencia', $data['fecha_incidencia'])
@@ -132,6 +132,12 @@ class SancionEpp extends Model
             $data['motivo'] !== 'NO REPORTAR TRABAJADOR SIN EPP(s)' && $sancion->epps = json_encode($data['epps']);
 
             $contador = SancionEpp::where('trabajador_id', $trabajador_id)
+                ->when($data['motivo'] === 'NO REPORTAR TRABAJADOR SIN EPP(s)', function($query) {
+                    $query->where('motivo', 'NO REPORTAR TRABAJADOR SIN EPP(s)');
+                })
+                ->when($data['motivo'] !== 'NO REPORTAR TRABAJADOR SIN EPP(s)', function($query) {
+                    $query->where('motivo', '<>', 'NO REPORTAR TRABAJADOR SIN EPP(s)');
+                })
                 ->count() + 1;
 
             $message .= 'Esta es la ' . $contador . ' incidencia';
@@ -139,21 +145,37 @@ class SancionEpp extends Model
             $sancion->contador = $contador;
 
             $info_sancion = [
-                'generar' => false,
-                'tipo' => null,
+                'generar'       => false,
+                'tipo'          => null,
+                'incidencia_id' => 0,
+                'mensaje'       => ''
             ];
 
             if ($data['motivo'] !== 'NO REPORTAR TRABAJADOR SIN EPP(s)') {
-                if ($contador >= 3) {
-                    $info_sancion['generar'] = true;
-                    $info_sancion['tipo'] = 'SUSPENCION';
-                    $info_sancion['incidencia_id'] = 19;
+                switch ($contador) {
+                    case 4:
+                    case 3:
+                        $info_sancion['generar'] = true;
+                        $info_sancion['tipo'] = 'SUSPENCION';
+                        $info_sancion['incidencia_id'] = 19;
+                        break;
+                    case 5:
+                        $info_sancion['generar'] = true;
+                        $info_sancion['tipo'] = 'SUSPENCION';
+                        $info_sancion['incidencia_id'] = null;
+                        $info_sancion['mensaje'] = 'Evaluar cese del trabajador';
+                        break;
+                    default:
+                        break;
                 }
             } else {
-                if ($contador >= 1) {
-                    $info_sancion['generar'] = true;
-                    $info_sancion['tipo'] = 'MEMORANDUM';
-                    $info_sancion['incidencia_id'] = 5;
+                switch ($contador) {
+                    case 1:
+                    default:
+                        $info_sancion['generar'] = true;
+                        $info_sancion['tipo'] = 'MEMORANDUM';
+                        $info_sancion['incidencia_id'] = 5;
+                        break;
                 }
             }
 
@@ -184,6 +206,13 @@ class SancionEpp extends Model
         try {
             $sancion = Sancion::_create($data);
             $sancionEpp = SancionEpp::find($id);
+            if ($sancion['error']) {
+                DB::rollBack();
+                $sancionEpp->delete();
+                return [
+                    'error' => $sancion['error']
+                ];
+            }
             $sancionEpp->sancion_id = $sancion['id'];
 
             if ($sancionEpp->save()) {

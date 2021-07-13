@@ -19,6 +19,7 @@ export const DatosEpp = props => {
         'RESPIRADOR',
         'ZAPATOS DE SEGURIDAD',
         'CASCO',
+        'MASCARILLA',
         //'OTRO'
     ];
 

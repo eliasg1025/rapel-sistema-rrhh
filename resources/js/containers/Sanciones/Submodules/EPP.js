@@ -232,11 +232,15 @@ export const EPP = () => {
                     title: message,
                     icon: error ? 'error' : 'success'
                 })
-                .then(() => {
-                    setReloadData(!reloadData);
-                    setIsVisible(false);
-                    clearForm();
-                });
+                    .then(() => {
+                        setReloadData(!reloadData);
+                        setIsVisible(false);
+                        clearForm();
+                    })
+                    .catch(err => {
+                        setIsVisible(false);
+                        setReloadData(!reloadData);
+                    });
             })
             .catch(err => {
                 console.log(err, err.response);
