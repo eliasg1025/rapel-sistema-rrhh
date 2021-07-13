@@ -68,7 +68,7 @@ class SancionesController extends Controller
     public function verFicha(Sancion $sancion)
     {
         try {
-            $sancion_epp = SancionEpp::where('sancion_id', $sancion->id)->get();
+            $sancion_epp = SancionEpp::where('sancion_id', $sancion->id)->where('motivo', 'NO REPORTAR TRABAJADOR SIN EPP')->get();
             $epp = false;
             $fechas = [];
             $epps = [];
