@@ -40,6 +40,47 @@ export const TablaEpp = ({ reloadData, setReloadData }) => {
 
     function handleExportar() {
         console.log(data);
+
+        const headings = [
+            'Empresa',
+            'Fecha Solicitud',
+            'RUT',
+            'Trabajador',
+            'Fecha Incidencia',
+            'Regimen',
+            'Zona Labor',
+            'Motivo',
+            'EPP(s)'
+        ];
+
+        const d = data.map(item => {
+            return {
+                empresa: item.empresa,
+                fecha_solicitud: item.fecha_solicitud,
+                dni: item.rut,
+                trabajador: item.nombre_completo,
+                fecha_incidencia: item.fecha_incidencia,
+                regimen: item.regimen,
+                zona_labor: item.zona_labor,
+                motivo: item.motivo,
+                epps: item.epps
+            };
+        });
+
+        Axios({
+            url: '/descargar',
+            data: {headings, data: d},
+            method: 'POST',
+            responseType: 'blob'
+        })
+            .then(response => {
+                console.log(response);
+                let blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+                let link = document.createElement('a')
+                link.href = window.URL.createObjectURL(blob)
+                link.download = `REGISTROS-SANCIONES-EPPS-${filtro.estado == 0 ? "NO_ENVIADO" : "ENVIADOS"}-${filtro.desde}-${filtro.hasta}.xlsx`
+                link.click();
+            });
     }
 
     const handleEliminar = id => {
@@ -74,6 +115,10 @@ export const TablaEpp = ({ reloadData, setReloadData }) => {
     }
 
     const columns = [
+        {
+            title: 'Empresa',
+            dataIndex: 'empresa'
+        },
         {
             title: 'Fecha Solicitud',
             dataIndex: 'fecha_solicitud'
@@ -115,6 +160,13 @@ export const TablaEpp = ({ reloadData, setReloadData }) => {
             render: (_, record) => (
                 <>
                     <div className="btn-group">
+                        {record.sancion_id && (
+                            <Tooltip title="Ver Sanción Generada">
+                                <a className="btn btn-primary btn-sm" href={`/ficha/sancion/${record.sancion_id}`} target="_blank">
+                                    <i className="fas fa-search"/>
+                                </a>
+                            </Tooltip>
+                        )}
                         <Tooltip title="Eliminar">
                             <button className="btn btn-danger btn-sm" onClick={() => handleEliminar(record.id)}>
                                 <i className="fas fa-trash-alt" />

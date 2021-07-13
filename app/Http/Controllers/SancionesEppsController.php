@@ -49,4 +49,14 @@ class SancionesEppsController extends Controller
 
         return response()->json($result, 400);
     }
+
+    public function generarSancion($id, Request $request)
+    {
+        $result = SancionEpp::_generarSancion($id, $request->all());
+        if (!$result['error']) {
+            return response()->json($result);
+        }
+
+        return response()->json($result, 400);
+    }
 }

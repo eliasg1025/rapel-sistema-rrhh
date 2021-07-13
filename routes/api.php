@@ -170,6 +170,7 @@ Route::group(['prefix' => 'sancion'], function() {
 Route::group(['prefix' => 'sancion-epp'], function() {
     Route::post('/', 'SancionesEppsController@create');
     Route::post('/get', 'SancionesEppsController@get');
+    Route::post('/{id}/generar-sancion', 'SancionesEppsController@generarSancion');
     Route::delete('/{id}', 'SancionesEppsController@delete');
 });
 

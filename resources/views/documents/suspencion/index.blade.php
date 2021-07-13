@@ -113,7 +113,7 @@
             <p class="justify">
                 Esta actitud refleja una falta al cumplimiento de sus obligaciones, quebrando la confianza depositada en usted; incumpliendo con las disposiciones establecidas en el Reglamento Interno de la empresa en el sentido de lo siguiente:
             </p>
-            @if (in_array($sancion->incidencia->name, ['NO USAR MASCARILLA', 'NO USAR PROTECTOR FACIAL', 'NO USAR MASCARILLA (PLANTA)', 'NO USAR PROTECTOR FACIAL (PLANTA)']))
+            @if (in_array($sancion->incidencia->name, ['NO USAR MASCARILLA', 'NO USAR PROTECTOR FACIAL', 'NO USAR MASCARILLA (PLANTA)', 'NO USAR PROTECTOR FACIAL (PLANTA)', 'NO USAR/TRAER EPPs']))
                 <p><b>Artículo 55°.-</b>son obligaciones del trabajador:</p>
                 <div style="padding-left: 10px;">
                     <p>b) Conocer y cumplir con las disposiciones de este reglamento interno de trabajo, del reglamento interno de seguridad y salud en el trabajo de las políticas de aseguramiento de la calidad.</p>

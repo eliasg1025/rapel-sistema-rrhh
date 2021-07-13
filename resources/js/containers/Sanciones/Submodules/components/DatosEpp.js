@@ -15,7 +15,7 @@ export const DatosEpp = props => {
     const epps = [
         'LENTE DE SEGURIDAD',
         'GUANTES',
-        'GORRO ÁRABE',
+        'GORRO ARABE',
         'RESPIRADOR',
         'ZAPATOS DE SEGURIDAD',
         'CASCO',
@@ -180,7 +180,7 @@ export const DatosEpp = props => {
                         </Select>
                     </div>
                 )}
-                 <div className="form-group col-md-12">
+                <div className="form-group col-md-12">
                     Observación:
                     <br />
                     <textarea

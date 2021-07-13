@@ -64,7 +64,8 @@ class SancionEpp extends Model
                         'o.name  as oficio',
                         'f.motivo',
                         'f.epps',
-                        'f.contador'
+                        'f.contador',
+                        'f.sancion_id'
                     )
                     ->join('trabajadores as t', 't.id', '=', 'f.trabajador_id')
                     ->join('empresas as e', 'e.id', '=', 'f.empresa_id')
@@ -128,7 +129,7 @@ class SancionEpp extends Model
             $sancion->zona_labor_id         = $zona_labor_id;
             $sancion->cuartel_id            = $cuartel_id;
             $sancion->motivo                = $data['motivo'];
-            $sancion->epps                  = json_encode($data['epps']);
+            $data['motivo'] !== 'NO REPORTAR TRABAJADOR SIN EPP(s)' && $sancion->epps = json_encode($data['epps']);
 
             $contador = SancionEpp::where('trabajador_id', $trabajador_id)
                 ->count() + 1;
@@ -137,6 +138,25 @@ class SancionEpp extends Model
 
             $sancion->contador = $contador;
 
+            $info_sancion = [
+                'generar' => false,
+                'tipo' => null,
+            ];
+
+            if ($data['motivo'] !== 'NO REPORTAR TRABAJADOR SIN EPP(s)') {
+                if ($contador >= 3) {
+                    $info_sancion['generar'] = true;
+                    $info_sancion['tipo'] = 'SUSPENCION';
+                    $info_sancion['incidencia_id'] = 19;
+                }
+            } else {
+                if ($contador >= 1) {
+                    $info_sancion['generar'] = true;
+                    $info_sancion['tipo'] = 'MEMORANDUM';
+                    $info_sancion['incidencia_id'] = 5;
+                }
+            }
+
             if ($sancion->save()) {
                 DB::commit();
                 return [
@@ -144,12 +164,41 @@ class SancionEpp extends Model
                     'rut'       => $sancion->trabajador->rut,
                     'message'   => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente' . '<br />' . $message,
                     'id'        => $sancion->id,
-                    'generar_sancion' => false,
+                    'info_sancion' => $info_sancion,
                 ];
             }
 
             DB::rollBack();
             return 0;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'error' => $e->getMessage() . ' -- ' . $e->getLine()
+            ];
+        }
+    }
+
+    public static function _generarSancion($id, array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $sancion = Sancion::_create($data);
+            $sancionEpp = SancionEpp::find($id);
+            $sancionEpp->sancion_id = $sancion['id'];
+
+            if ($sancionEpp->save()) {
+                DB::commit();
+                return [
+                    'error'     => false,
+                    'rut'       => $sancionEpp->trabajador->rut,
+                    'message'   => 'Sanción ' . (isset($data['id']) ? 'actualizada' : 'creada') . ' correctamente',
+                    'id'        => $sancionEpp->id
+                ];
+            }
+
+            DB::rollBack();
+            return 0;
+
         } catch (\Exception $e) {
             DB::rollBack();
             return [
