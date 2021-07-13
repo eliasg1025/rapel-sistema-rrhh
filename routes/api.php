@@ -165,7 +165,12 @@ Route::group(['prefix' => 'sancion'], function() {
     Route::put('/marcar-enviado/{id}', 'SancionesController@marcarEnviado');
     Route::put('/marcar-subido/{id}', 'SancionesController@marcarSubido');
     Route::delete('/{id}', 'SancionesController@delete');
+});
 
+Route::group(['prefix' => 'sancion-epp'], function() {
+    Route::post('/', 'SancionesEppsController@create');
+    Route::post('/get', 'SancionesEppsController@get');
+    Route::delete('/{id}', 'SancionesEppsController@delete');
 });
 
 Route::group(['prefix' => 'covid'], function() {

@@ -378,27 +378,43 @@ const TablaReglas = ({ bono, reglas, setReglas, reload, setReload }) => {
     const columns = [
         {
             title: 'Zona',
-            dataIndex: 'zona_id'
+            dataIndex: 'zona_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
+        },
+        {
+            title: 'Regimen',
+            dataIndex: 'regimen_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
+        },
+        {
+            title: 'Etapa',
+            dataIndex: 'etapa',
+            render: (value) => !value ? 'TODOS' : value,
         },
         {
             title: 'Variedad',
-            dataIndex: 'variedad_id'
+            dataIndex: 'variedad_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
         },
         {
             title: 'Cuartel',
-            dataIndex: 'cuartel_id'
+            dataIndex: 'cuartel_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
         },
         {
             title: 'Unidad de Medida',
-            dataIndex: 'unidad_medida_id'
+            dataIndex: 'unidad_medida_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
         },
         {
             title: 'Labor',
-            dataIndex: 'labor_id'
+            dataIndex: 'labor_id',
+            render: (value) => value == 0 ? 'TODOS' : value,
         },
         {
             title: 'Ciclo',
-            dataIndex: 'ciclo'
+            dataIndex: 'ciclo',
+            render: (value) => value == 0 ? 'TODOS' : value,
         },
         {
             title: 'RUT',

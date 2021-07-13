@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { DatePicker, message, Tooltip } from 'antd';
-import { MDBDataTableV5 } from 'mdbreact';
+import { DatePicker, message } from 'antd';
 import Axios from 'axios';
 import Swal from 'sweetalert2';
 import {TablaS} from "./TablaS";

@@ -45,7 +45,7 @@ export default function Sanciones() {
                             )}
                         </SubMenu>
                     )}
-                    {usuario.sanciones === 2 && (
+                    {[1, 2].includes(usuario.sanciones) && (
                         <Menu.Item key="epp" icon={<BookOutlined />}>
                             <a href="/sanciones/epp">
                                 EPPs

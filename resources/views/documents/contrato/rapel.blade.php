@@ -86,7 +86,7 @@
         </h3>
         <br />
         <p>
-            Yo, <b>{{ $contrato->trabajador->nombre_completo }}</b> de <b>{{ $trabajador->age }}</b> años de edad; identificado con DNI N° <b>{{ $contrato->trabajador->rut }}</b>, domiciliado en: <b>{{ $contrato->trabajador->direccion }}</b> Postulante de la empresa <b>SOCIEDAD AGRÍCOLA RAPEL S.A.C</b>.
+            Yo, <b>{{ $contrato->trabajador->nombre_completo }}</b> de <b>{{ $trabajador->age }}</b> años de edad; identificado con DNI N° <b>{{ $contrato->trabajador->rut }}</b>, domiciliado en: <b>{{ $contrato->trabajador->direccion }}</b>, postulante de la empresa <b>SOCIEDAD AGRÍCOLA RAPEL S.A.C</b>.
         </p>
         <br />
         <p>
@@ -142,7 +142,7 @@
                         <th>NO</th>
                     </tr>
                     <tr>
-                        <td>1. sensación de alza térmica o fiebre</td>
+                        <td>1. Sensación de alza térmica o fiebre</td>
                         <td style="border: 1px solid black">
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
@@ -151,22 +151,27 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>2. tos, estornudos o flema o dificultad para respirar</td>
+                        <td>2. Tos, estornudos o dificultad para respirar</td>
                         <td style="border: 1px solid black"></td>
                         <td style="border: 1px solid black"></td>
                     </tr>
                     <tr>
-                        <td>3. expectoración de flema amarilla o verdosa</td>
+                        <td>3. Expectoración de flema amarilla o verdosa</td>
                         <td style="border: 1px solid black"></td>
                         <td style="border: 1px solid black"></td>
                     </tr>
                     <tr>
-                        <td>4. contacto con persona(s) con un caso confirmado de COVID-19</td>
+                        <td>4. Pérdida de gusto y/o del olfato</td>
                         <td style="border: 1px solid black"></td>
                         <td style="border: 1px solid black"></td>
                     </tr>
                     <tr>
-                        <td>5. Estas tomando alguna medicación (detallar cual o cuales):</td>
+                        <td>5. Contacto con persona(s) con un caso confirmado de COVID-19</td>
+                        <td style="border: 1px solid black"></td>
+                        <td style="border: 1px solid black"></td>
+                    </tr>
+                    <tr>
+                        <td>6. Está tomando alguna medicación (detallar cuál o cuáles:</td>
                         <td style="border: 1px solid black"></td>
                         <td style="border: 1px solid black"></td>
                     </tr>
@@ -183,7 +188,7 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
-                        <td>Asma Moderada o Grave</td>
+                        <td>Hipertensión Arterial Refractaria</td>
                         <td style="border: 1px solid black"></td>
                         <td>Enfermedad Pulmonar Crónica</td>
                     </tr>
@@ -191,19 +196,13 @@
                         <td style="border: 1px solid black"></td>
                         <td>Enfermedades cardiovasculares graves</td>
                         <td style="border: 1px solid black"></td>
-                        <td>Enfermedades cardiovasculares graves</td>
+                        <td>Insuficiencia Renal Crónica en tratamiento con Hemodiálisis</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>
                         <td>Cáncer</td>
                         <td style="border: 1px solid black"></td>
                         <td>Enfermedad o tratamiento inmunosupresor</td>
-                    </tr>
-                    <tr>
-                        <td style="border: 1px solid black"></td>
-                        <td>Parálisis o parecías (parálisis parcial</td>
-                        <td style="border: 1px solid black"></td>
-                        <td>Tos con rasgos de sangre o sangrado al toser (hemoptisis)</td>
                     </tr>
                     <tr>
                         <td style="border: 1px solid black"></td>

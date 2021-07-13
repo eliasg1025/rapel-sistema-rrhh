@@ -39,9 +39,9 @@ class BonosService
         ];
     }
 
-    public function getInasistencias(Bono $bono, $desde, $hasta)
+    public function getPermisosInasistencias(Bono $bono, $desde, $hasta)
     {
-        return DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
+        $permisosInasistencias = DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
             ->select(
                 'IdEmpresa as empresa_id',
                 'idTrabajador as codigo',
@@ -51,10 +51,32 @@ class BonosService
                 'MotivoAusencia as motivo'
             )
             ->where('p.IdEmpresa', $bono->empresa_id)
-            ->where('p.MotivoAusencia', 'FALTA')
             ->where('p.HoraInasistencia', 8)
             ->whereBetween('p.FechaInicio', [$desde, $hasta])
             ->get();
+
+        return $permisosInasistencias;
+    }
+
+    public function getInasistencias(Bono $bono, $desde, $hasta)
+    {
+        // ['FALTA', 'FALTA JUSTIFICADA', 'PERMISO']
+        $permisosInasistencias = DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
+            ->select(
+                'IdEmpresa as empresa_id',
+                'idTrabajador as codigo',
+                'RutTrabajador as rut',
+                DB::raw('CAST(FechaInicio as date) as fecha'),
+                DB::raw('DATEPART(DAY, FechaInicio) as dia'),
+                'MotivoAusencia as motivo'
+            )
+            ->where('p.IdEmpresa', $bono->empresa_id)
+            // ->whereIn('p.MotivoAusencia', ['FALTA', 'FALTA JUSTIFICADA', 'PERMISO'])
+            ->where('p.HoraInasistencia', 8)
+            ->whereBetween('p.FechaInicio', [$desde, $hasta])
+            ->get();
+
+        return $permisosInasistencias;
     }
 
     private function getResultados($fechas, $condicion, $recuentos, $inasistencias)
@@ -63,6 +85,7 @@ class BonosService
 
         $acc = 0;
         $accRecuentos = 0;
+
         foreach ($asArr as $key => $value)
         {
             $condicional = 0;
@@ -86,12 +109,12 @@ class BonosService
 
             $hayInasistencia = in_array($key, $inasistencias);
 
-            if (!$hayInasistencia) {
+            if ($hayInasistencia) {
+                $newValue = ((double) $condicion->valor_descuento) * (-1);
+            } else {
                 $newValue = !is_null($value) ? (
                     $condicional ? (double) $condicion->valor_bono : null
                 ) : null;
-            } else {
-                $newValue = ((double) $condicion->valor_descuento) * (-1);
             }
 
             $asArr[$key] = $newValue;
@@ -205,6 +228,9 @@ class BonosService
         return $actividades;
     }
 
+    /**
+     * Permite obtener la tarja de los trabajadores a los que se les aplicará el bono
+     */
     public function getPlanilla(Bono $bono, $_desde, $_hasta)
     {
         $desde = Carbon::parse($_desde)->subDay()->format('Ymd h:i:s');
@@ -289,7 +315,7 @@ class BonosService
                 ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
                     $query->where('c.IdCuartel', $regla->cuartel_id);
                 })
-                ->when($regla->rut, function($query) use ($regla) {
+                ->when(!is_null($regla->rut), function($query) use ($regla) {
                     $query->where('a.RutTrabajador', $regla->rut);
                 })
                 ->when($regla->ciclo, function($query) use ($regla) {
@@ -387,11 +413,7 @@ class BonosService
             ->orderBy('nombre_completo', 'ASC')
             ->get();
 
-        $inasistencias = collect($this->getInasistencias($bono, $desde, $hasta));
-
-        /* $inasistencias = collect([
-            ['codigo' => '455336', 'dia' => 17]
-        ]); */
+        $inasistencias = $this->getInasistencias($bono, $desde, $hasta);
 
         $result->transform(function($item) use ($pivotTable, $fechas, $bono, $recuentos, $inasistencias) {
             $dias = array_values($pivotTable->where('codigo', $item->codigo)->toArray());
@@ -400,11 +422,11 @@ class BonosService
             $item->inasistencias = [];
 
             foreach ($dias as $dia) {
-                $item->fechas->{$dia->dia} = (double) $dia->{$dia->dia};
+                $item->fechas->{$dia->dia} = is_numeric($dia->{$dia->dia}) ? (double) $dia->{$dia->dia} : $dia->{$dia->$dia};
             }
 
             foreach ($inasistencias as $inasistencia) {
-                array_push($item->inasistencias, $inasistencia['dia']);
+                array_push($item->inasistencias, $inasistencia->dia);
             }
 
             $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos, $item->inasistencias);
@@ -415,13 +437,13 @@ class BonosService
         return [
             'info' => [
                 'columnas' => [
-                    'actividades' => $this->getColumnsFromDates($fechas, $recuentos, 'actividades'),
-                    'resultados' => $this->getColumnsFromDates($fechas, $recuentos, 'resultados')
+                    'actividades'   => $this->getColumnsFromDates($fechas, $recuentos, 'actividades'),
+                    'resultados'    => $this->getColumnsFromDates($fechas, $recuentos, 'resultados')
                 ],
                 'recuentos' => $recuentos
             ],
-            'output' => $result,
-            'rows' => $dataSinProcesar,
+            'output'    => $result,
+            'rows'      => $dataSinProcesar,
         ];
     }
 }
