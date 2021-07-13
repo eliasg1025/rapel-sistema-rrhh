@@ -173,7 +173,7 @@ export const TablaFiniquitosIndividual = ({ reload, setReload, form, setForm }) 
     useEffect(() => {
         Axios.get('/api/finiquitos/estados')
             .then(res => {
-                console.log(res);
+                setEstados(res.data.data);
             })
             .catch(err => {
                 console.log(err);

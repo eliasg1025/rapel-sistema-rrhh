@@ -34,6 +34,7 @@ class FiniquitosController extends Controller
         $desde = $request->get('desde');
         $hasta = $request->get('hasta');
         $personaId = $request->get('persona_id');
+        $estado = $request->get('estado_id');
 
         $rol = (Usuario::find($usuarioId))->getRol('finiquitos');
 
@@ -57,10 +58,22 @@ class FiniquitosController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $finiquitos->transform(function ($item) {
+        $finiquitos->transform(function ($item) use ($estado) {
             $item->estado = $item->getEstado();
+
+            if ($estado) {
+                if ($item->estado->name !== $estado) {
+                    return null;
+                }
+            }
             return $item;
         });
+
+        $finiquitos = json_decode(json_encode($finiquitos));
+
+        $finiquitos = array_values(array_filter($finiquitos, function($finiquito) {
+            return $finiquito !== null;
+        }));
 
         return response()->json([
             'message' => 'Data obtenida',
