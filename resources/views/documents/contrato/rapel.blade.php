@@ -10,7 +10,7 @@
     }
 
     .contrato {
-        font-size: 11px;
+        font-size: 10.7px;
     }
 
     p, li {
@@ -260,116 +260,7 @@
 
     <div class="page-break"></div>
 
-    <section style="font-size: 14px">
-        <h4 class="titulo">ANEXO 1</h4>
-        <p>
-            <b>Recomendaciones de Seguridad y Salud en el Trabajo al Trabajador.</b>
-        </p>
-        <ol style="font-size: 12px;">
-            <li>
-                <b>Generales</b>
-                <br />-	Todo Trabajador está en la obligación de respetar y cumplir el reglamento de seguridad y salud en el trabajo de EL Empleador; así como aquellas normas, políticas, programas y directrices que sobre el particular señale la ley y El empleador, colaborando en toda circunstancia para evitar toda clase de accidentes e incidentes que pongan en riesgo al personal y las operaciones.
-                <br />-	Durante su labor diaria, El trabajador se encuentra en la obligación de protegerse tanto a sí mismo como a sus compañeros de trabajo, contra toda clase de accidentes e imprevistos.
-            </li>
-            <li>
-                <b>Específicas a los riesgos asociados</b>
-                <br />-	En campo agrícola siempre camina a un lado de la carretera, por la derecha y en forma ordenada, evita apresurarte o correr.
-                <br />-	Durante el traslado por las vías de acceso a los campos de la empresa, se debe estar atento al tránsito de los vehículos que circulan por la zona.
-                <br />-	Usar los EPP según la labor a realizar, durante toda la jornada de trabajo, y solo podrán retirárselos cuando haga uso de los servicios higiénicos o durante su refrigerio.
-                <br />-	Para protegerte de la radiación solar deberás utilizar tu gorro árabe, polera y el bloqueador solar.
-                <br />-	No dejar desperdicios, materiales, herramientas de trabajo en lugares que puedan ocasionar accidentes, conserva el lugar de trabajo siempre limpio y ordenado.
-                <br />-	No se debe ingresar a los cuarteles que presentan señalización de seguridad (banderas de color rojo) en las esquinas, dado que se ha realizado una aplicación de productos fitosanitarios.
-                <br />-	Si la labor necesita de uso de una herramienta o material de trabajo, debes verificar su estado antes de usarlo y reportar a tu jefe inmediato cualquier desperfecto encontrado.
-                <br />-	El uso de herramientas es exclusivamente para labor designada, en ningún caso se utilizarán para otras labores.
-                <br />-	Cuando la labor requiera utilizar herramientas punzocortantes (tijeras u otros)  utilizar en todo momento los guantes y lentes de seguridad.
-                <br />-	Todas las herramientas punzocortantes (tijeras u otros) deben ser utilizadas de forma adecuada con sus fundas protectoras y no ser colocadas en los bolsillos. No hacer bromas pesadas durante el uso de las herramientas punzocortantes ni correr por el campo sobre todo portándolas.
-                <br />-	Para el control de picaduras de insectos, al inicio de la jornada de trabajo debes verificar la zona de trabajo y en caso se identifique insectos u ofidios reportar al jefe inmediato.
-                <br />-	No hacer sobreesfuerzos o fuerza excesiva al momento de la realización de sus labores, si la labor requiere manipular cargas debes aplicar correctamente las técnicas de levantamiento de cargas y sus estándares (Peso máximo de carga 25 Kg hombres y 15 Kg mujeres).
-                <br />-	Al terminar la jornada de trabajo, se dejaran las herramientas y materiales de trabajo de forma ordenada.
-            </li>
-            <li>
-                <b>Con relación a COVID-19</b>
-                <br />-	Utiliza tu protector facial y mascarilla en los espacios cerrados (bus de transporte de personal).
-                <br />-	En la ejecución de las labores utiliza siempre tu mascarilla.
-                <br />-	Lávate o desinféctate las manos antes de subir al bus de transporte, después de bajar de tu bus de transporte y antes de ingresar a tu campo.
-                <br />-	Si no tienes un lavamanos cerca, usa tu atomizador de alcohol para desinfectar tus manos.
-                <br />-	Evita tocarte los ojos, nariz y boca con las manos sucias.
-                <br />-	En los comedores recuerda mantener el distanciamiento (2 mts) y no compartas alimentos, bebidas, vasos, cubiertos ni utensilios personales.
-                <br />-	Cúbrete la nariz y boca con el antebrazo o pañuelo desechable, al toser o estornudar.
-            </li>
-        </ol>
-        <div style="margin-top: 20px; font-weight: bold">
-            <table style="width: 100%; text-align: center">
-                <tr>
-                    <td>
-                        <img src="{{ public_path() . '/img/Firma-Federico.jpg' }}" style="width: 180px">
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
-                    <td style="vertical-align: top">__________________<br/>{{ $trabajador->nombre_completo }}<br/>DNI: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-
-    <div class="page-break"></div>
-
-    <section id="page3"></section>
-
-    <div class="page-break"></div>
-
-    <section style="position: absolute;">
-        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
-            <h4 class="titulo">ANEXO 3</h4>
-            <p>
-                <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
-            </p>
-            <p>
-                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
-            </p>
-            <p>
-                De acuerdo a lo establecido en el inciso e) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa el pago de la Bonificación Especial por Trabajo Agrario.
-            </p>
-            <p>
-                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
-            </p>
-            <br /><br /><br /><br />
-            <p>
-                <b>FIRMA _______________________________________________</b>
-                <br /><br />
-                <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
-                <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
-                <br />
-                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-            </p>
-        </section>
-        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
-            <h4 class="titulo">ANEXO 2</h4>
-            <p>
-                <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
-            </p>
-            <p>
-                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
-            </p>
-            <p>
-                De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
-            </p>
-            <p>
-                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
-            </p>
-            <br /><br /><br /><br />
-            <p>
-                <b>FIRMA _______________________________________________</b>
-                <br /><br />
-                <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
-                <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
-                <br />
-                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-            </p>
-        </section>
-    </section>
+    @yield('anexos')
 
     <div class="page-break"></div>
 
@@ -380,8 +271,8 @@
     <section id="page4" style="font-family: 'Times-New-Roman'; font-size: 10px">
         <table style="width: 100%;">
             <tr>
-                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
-                <td><h4 style="text-align: left" class="titulo">CÓDIGO DE CONDUCTA</h4></td>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="80px" /></td>
+                <td><h4 style="text-align: left; font-size: 12px;" class="titulo">CÓDIGO DE CONDUCTA</h4></td>
             </tr>
         </table>
 
@@ -443,6 +334,11 @@
     <div class="page-break"></div>
 
     <section id="page6">
+        <table style="width: 100%;">
+            <tr>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="80px" /></td>
+            </tr>
+        </table>
         <div style="padding: 20px">
             <h4 class="titulo">DECLARACIÓN JURADA DE NO TENER ANTECEDENTES POLICIALES, PENALES NI JUDICIALES </h4>
             <br>
@@ -490,6 +386,11 @@
 
     <section style="position: absolute;">
         <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
+            <table style="width: 100%;">
+                <tr>
+                    <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
+                </tr>
+            </table>
             <h4 class="titulo">
                 DECLARACIÓN  DE RECEPCIÓN DE FORMATO PARA BENEFICIARIOS DE SEGURO VIDA LEY
             </h4>
@@ -504,10 +405,10 @@
                 <table style="width: 100%; font-weight: bold; margin-top: 20px; text-align: center">
                     <tr>
                         <td>
-                            <div style="border: 1px solid black; width: 70px; height: 98px; margin: auto;"></div>
+                            <div style="border: 1px solid black; width: 100px; height: 100px; margin: auto;"></div>
                         </td>
                         <td>
-                            <div style="width: 70px; height: 98px;"></div>
+                            <div style="width: 100px; height: 100px;"></div>
                         </td>
                     </tr>
                     <tr>
@@ -521,7 +422,12 @@
                 </div>
             </div>
         </section>
-        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -150px;">
+            <table style="width: 100%;">
+                <tr>
+                    <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
+                </tr>
+            </table>
             <h4 class="titulo">
                 CONSTANCIA DE ENTREGA DE REGLAMENTO INTERNO DE TRABAJO
             </h4>
@@ -537,10 +443,10 @@
                 <table style="width: 100%; font-weight: bold; margin-top: 20px; text-align: center">
                     <tr>
                         <td>
-                            <div style="border: 1px solid black; width: 70px; height: 98px; margin: auto;"></div>
+                            <div style="border: 1px solid black; width: 100px; height: 100px; margin: auto;"></div>
                         </td>
                         <td>
-                            <div style="width: 70px; height: 98px;"></div>
+                            <div style="width: 100px; height: 100px;"></div>
                         </td>
                     </tr>
                     <tr>
@@ -556,53 +462,6 @@
         </section>
     </section>
 
-    {{-- <div class="page-break"></div>
-
-    <section></section>
-
-    <div class="page-break"></div>
-
-    <section id="page12">
-        <table>
-            <tr>
-                <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="70px" /></td>
-                <td style="font-size: 14px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
-            </tr>
-        </table>
-        <br>
-        <h4 class="titulo">DECLARACIÓN DE ACEPTACIÓN DEL REGLAMENTO INTERNO DE SEGURIDAD  Y SALUD EN EL TRABAJO</h4>
-        <br>
-        <p>
-            Yo, <b>{{ $trabajador->nombre_completo }}</b>, identificado con DNI N° <b>{{ $trabajador->rut }}</b>, desempeñándome en el cargo de <b>{{ $contrato->oficio->name }}</b>, declaro que desarrollare mis labores en forma segura, comprometiéndome a cumplir y acatar todas las normativas y procedimientos de Seguridad y Salud en el Trabajo establecidas por la Empresa en el presente Reglamento y demás directivas o políticas internas; siendo esto condición imprescindible para mi permanencia en la Empresa.
-        </p>
-        <p>
-            Asimismo, declaro que me regiré por los procedimientos mencionados de Seguridad y Salud en el Trabajo y las normas que sobre el tema se han dictado y se dicten en adelante; adecuando mi desempeño laboral a una conducta segura e higiénica, y de respeto hacia mis compañeros de trabajo, jefes, clientes, comunidad y medio ambiente. Cualquier incumplimiento de las normas y procedimientos establecidos en SOCIEDAD AGRICOLA RAPEL S.A.C., me obligará a someterme a las sanciones establecidas en el Reglamento Interno de Seguridad y Salud en el Trabajo, y demás normas internas de la Empresa., las cuales conozco y acato en su totalidad.
-        </p>
-        <p>
-            Finalmente,  declaro  haber recibido un ejemplar del Reglamento Interno de Seguridad y Salud en el Trabajo, así también declaro haberlo leído cuidadosamente y me comprometo a darle estricto cumplimiento.
-        </p>
-        <p>
-            Dejo presente que dicho ejemplar me fue entregado en forma gratuita.
-        </p>
-        <p style="margin-top: 80px; text-align: right">
-            <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-        </p>
-        <table style="width: 100%; font-weight: bold; margin-top: 70px; text-align: center">
-            <tr>
-                <td>
-                    <div style="border: 1px solid black; width: 100px; height: 140px; margin: auto;"></div>
-                </td>
-                <td>
-                    <div style="width: 100px; height: 140px;"></div>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 50%">HUELLA DIGITAL <br> (INDICE DERECHO)</td>
-                <td style="width: 50%">_______________________________<br>FIRMA DEL TRABAJADOR <br> DNI/CE: {{ $trabajador->rut }}</td>
-            </tr>
-        </table>
-    </section> --}}
-
     <div class="page-break"></div>
 
     <section></section>
@@ -613,7 +472,7 @@
         <section style="font-size: 10px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
             <table>
                 <tr>
-                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
                     <td style="font-size: 11px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
                 </tr>
             </table>
@@ -650,7 +509,7 @@
         <section style="font-size: 10px; transform: rotate(270deg); margin-left: 150px; width: 50%; margin-top: -100px;">
             <table>
                 <tr>
-                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
                     <td style="font-size: 11px; vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
                 </tr>
             </table>
@@ -696,10 +555,10 @@
     <div class="page-break"></div>
 
     <section style="position: absolute;">
-        <section id="page15" style="font-size: 9px; transform: rotate(270deg); width: 50%; margin: auto; margin-top: -50px;">
+        <section id="page15" style="font-size: 8.5px; transform: rotate(270deg); width: 50%; margin: auto; margin-top: -50px;">
             <table>
                 <tr>
-                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="20px" /></td>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
                     <td style="vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
                 </tr>
             </table>
@@ -764,14 +623,14 @@
                         </tr>
                     </tbody>
                 </table>
-
+                <br />
                 <table style="width: 80%; font-weight: bold; text-align: center">
                     <tr>
                         <td>
-                            <div style="border: 1px solid black; width: 30px; height: 50px; margin: auto;"></div>
+                            <div style="border: 1px solid black; width: 70px; height: 100px; margin: auto;"></div>
                         </td>
                         <td>
-                            <div style="width: 30px; height: 50px;"></div>
+                            <div style="width: 70px; height: 100px;"></div>
                         </td>
                     </tr>
                     <tr>
@@ -785,7 +644,7 @@
         <section id="page14" style="font-size: 9px; transform: rotate(270deg); width: 49%; margin-left: 150px; margin-top: -200px;">
             <table>
                 <tr>
-                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="40px" /></td>
+                    <td style="vertical-align: center"><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
                     <td style="vertical-align: bottom">REGLAMENTO INTERNO DE SEGURIDAD Y SALUD EN EL TRABAJO</td>
                 </tr>
             </table>
@@ -900,11 +759,11 @@
         </ul>
         <p><b>TEMAS:</b></p>
         <ul>
-            <li>HIGIENE Y HABITOS DEL PERSONAL</li>
-            <li>DEBERES, CUIDADOS Y MANEJOS CON LOS ALIMENTOS</li>
-            <li>POLITICAS DE LA EMPRESA</li>
-            <li>EVALUACION DE RIESGOS</li>
-            <li>INSTRUCCIONES PARA LIMPIEZA Y DESINFECCIÓN DE NUESTRA AREA</li>
+            <li><b>HIGIENE Y HABITOS DEL PERSONAL</b></li>
+            <li><b>DEBERES, CUIDADOS Y MANEJOS CON LOS ALIMENTOS</b></li>
+            <li><b>POLITICAS DE LA EMPRESA</b></li>
+            <li><b>EVALUACION DE RIESGOS</b></li>
+            <li><b>INSTRUCCIONES PARA LIMPIEZA Y DESINFECCIÓN DE NUESTRA AREA</b></li>
         </ul>
         <p>
             <b>NUESTRO DEBER ES HACER CUMPLIR LAS NORMAS DE LA EMPRESA<br>
@@ -937,7 +796,7 @@
     <section id="page18" style="font-size: 12px">
         <table style="width: 100%;">
             <tr>
-                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="80px" /></td>
                 <td><h4 style="text-align: left" class="titulo">FICHA DE INGRESO Y CONTRATACIÓN</h4></td>
             </tr>
         </table>
@@ -1090,13 +949,13 @@
                     <td>Observaciones varias:</td>
                     <td colspan="15"> </td>
                 </tr>
-                <br>
-                <small>Declaro Bajo Juramento que la información brindada es verdadera y que en caso se determine la falsedad de la misma, será causal de falta grave. </small>
             </table>
+            <br>
+            <small>Declaro Bajo Juramento que la información brindada es verdadera y que en caso se determine la falsedad de la misma, será causal de falta grave. </small>
             <br><br>
             <table class="tabla" style="width: 80%; text-align: center; margin: auto">
                 <tr>
-                    <td></td>
+                    <td style="width: 50%"></td>
                     <td>
                         <img src="{{ public_path() . '/img/Firma-Federico.jpg' }}" style="width: 180px">
                     </td>
@@ -1126,7 +985,7 @@
     <section id="page19">
         <table style="width: 100%;">
             <tr>
-                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="80px" /></td>
                 <td><h4 style="text-align: left" class="titulo">FORMATO DE ELECCIÓN DEL SISTEMA PENSIONARIO</h4></td>
             </tr>
         </table>
@@ -1334,10 +1193,6 @@
                                     <td>
                                         <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
                                     </td>
-                                    <td>HORIZONTE</td>
-                                    <td>
-                                        <div style="border: 1px black solid; height: 15px; width: 15px; margin: auto;"></div>
-                                    </td>
                                     <td>O.N.P.</td>
                                 </tr>
                             </table>
@@ -1373,10 +1228,10 @@
 
     <div class="page-break"></div>
 
-    <section id="page21" style="font-size: 10px;">
+    <section id="page21" style="font-size: 9.5px;">
         <table style="width: 100%;">
             <tr>
-                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" /></td>
+                <td><img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="60px" /></td>
                 <td style="text-align: right;"><small>Código: FG-SSO-01<br>Revisión: 00</small></td>
             </tr>
         </table>
@@ -1409,7 +1264,7 @@
         </table>
         <br><br>
 
-        <div style="font-size: 110x">
+        <div>
             <table style="width: 90%; margin: auto">
                 <tr>
                     <td>
@@ -1417,7 +1272,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-olga-vilela.png'}}" width="150px" />
+                        <img src="{{ public_path() . '/img/firma-olga-vilela.png'}}" width="100px" />
                     </td>
                 </tr>
                 <tr>
@@ -1432,7 +1287,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-jose-reyes.png'}}" width="75px" />
+                        <img src="{{ public_path() . '/img/firma-jose-reyes.png'}}" width="50px" />
                     </td>
                 </tr>
                 <tr>
@@ -1447,7 +1302,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-karla-salazar.png'}}" width="150px" />
+                        <img src="{{ public_path() . '/img/firma-karla-salazar.png'}}" width="100px" />
                     </td>
                 </tr>
                 <tr>
@@ -1462,7 +1317,7 @@
                         <small>Nombre del Instructor: </small>
                     </td>
                     <td>
-                        <img src="{{ public_path() . '/img/firma-remo-galindo.png'}}" width="75px" />
+                        <img src="{{ public_path() . '/img/firma-remo-galindo.png'}}" width="50px" />
                     </td>
                 </tr>
                 <tr>
@@ -1522,16 +1377,37 @@
                 <li>
                     <b>ALMACEN</b><br>
                     Entrega de Equipos de Protección personal
-                    <ul>
-                        <li>Casco de seguridad <span></span></li>
-                        <li>Zapatos de seguridad <span></span></li>
-                        <li>Guantes de seguridad <span></span></li>
-                        <li>Tapones auditivos/Orejeras <span></span></li>
-                        <li>Respirador <span></span></li>
-                        <li>Lentes de Seguridad <span></span></li>
-                    </ul>
+                    <table>
+                        <tr style="height: 0.5px;">
+                            <td>Casco de seguridad</td>
+                            <td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        </tr>
+                        <tr style="height: 0.5px;">
+                            <td>Zapatos de seguridad</td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr style="height: 0.5px;">
+                            <td>Guantes de seguridad</td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr style="height: 0.5px;">
+                            <td>Tapones auditivos/Orejeras</td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr style="height: 0.5px;">
+                            <td>Respirador</td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                        <tr style="height: 0.5px;">
+                            <td>Lentes de Seguridad</td>
+                            <td style="border: 1px solid black;"></td>
+                        </tr>
+                    </table>
                 </li>
             </ol>
+            <p style="text-align: center; margin-top: 20px;">
+                <small>Devolver este formato debidamente firmado al Área de RRHH o Administración</small>
+            </p>
         </div>
     </section>
 
@@ -1542,7 +1418,7 @@
     <div class="page-break"></div>
 
     <section id="page22">
-        <img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="50px" />
+        <img src="{{ public_path() . '/img/Logo Documentos2.jpg'}}" width="80px" />
         <h4 class="titulo">MEMORÁNDUM N° 001-{{ $contrato->anio_contrato }}-G.GRAL./RAPEL </h4>
         <br>
         <div style="font-size: 14px;">
@@ -1586,7 +1462,7 @@
             <p>Atentamente,</p>
             <br>
 
-            <img src="{{ public_path() . '/img/PostFirma - Daniel E  RAPEL SAC.jpg'}}" width="200px" />
+            <img src="{{ public_path() . '/img/Firma-Federico.jpg' }}" style="width: 200px">
 
             <br><br><br>
 
@@ -1608,7 +1484,9 @@
                     <b>RECUERDA:</b> La primera vez que ingreses, deberás cambiar la contraseña por una de tu elección y de fácil recordación. Como mínimo debe tener 8 dígitos. <u>No olvides firmar tu boleta, es tu obligación</u>. Para cualquier consulta, acércate a la oficina de Recursos Humanos de tu fundo. <br> <b>Página Web:</b> rapel.turecibo.com
                 </div>
             </div>
-
+            <small>
+                FECHA DE INGRESO <b>{{ $contrato->fecha_larga }}</b> A <b>{{ $contrato->zona_labor->name }}</b> {!! $contrato->ruta_id ? "DE LA RUTA <b>{$contrato->ruta->name}</b>" : '' !!} {!! $contrato->codigo_bus ? "CODIGO <b>{$contrato->codigo_bus}</b>" : '' !!}
+            </small>
         </div>
 
     </section>
@@ -1631,7 +1509,7 @@
                 La finalidad del tratamiento de mis datos personales, será para la elaboración de mi contrato laboral con <b>SOCIEDAD AGRICOLA RAPEL S.A.C.</b>, la cual entregué al momento de suscribir toda la documentación necesaria en el proceso de contratación de personal. La información suministrada incluye, de forma no taxativa: Nombres, Apellidos, Domicilio, Nacionalidad, Estado Civil, Número de Documento de Identidad, Sexo, Fecha de Nacimiento, Profesión u Oficio, Estudios realizados, familiares con los que convivo y dependen de mí, estado de salud, correos electrónicos, teléfonos fijos y celulares, huellas, firma. Adicionalmente, me comprometo a mantener actualizada la información consignada durante la vigencia de mi relación contractual con <b>SOCIEDAD AGRICOLA RAPEL S.A.C.</b>
             </p>
             <p>
-                <b>SOCIEDAD AGRICOLA RAPEL S.A.C.</b>, podrá tratar mis datos personales, incluidos mis datos sensibles, de manera directa o a través de los proveedores cuya información se encuentra en sus Bases de Datos, a quienes podrá encargar el tratamiento; lo cual, de conformidad con el Reglamento, no constituye una transferencia de datos. El plazo de conservación de mis datos personales, incluidos mis datos sensibles, en la Base de Datos de la Empresa, será por un plazo indeterminado incluso con posterioridad al término de la relación laboral.
+                <b>{{ $contrato->empresa->name }}</b>, podrá tratar mis datos personales, incluidos mis datos sensibles, de manera directa o a través de los proveedores cuya información se encuentra en sus Bases de Datos, a quienes podrá encargar el tratamiento; lo cual, de conformidad con el Reglamento, no constituye una transferencia de datos. El plazo de conservación de mis datos personales, incluidos mis datos sensibles, en la Base de Datos de la Empresa, será por un plazo indeterminado incluso con posterioridad al término de la relación laboral.
             </p>
             <p>
                 He sido previamente informado en forma detallada, sencilla, expresa e inequívoca de los alcances de otorgar mi consentimiento y sobre la posibilidad de revocarlo en cualquier momento, así como de ejercitar mis derechos de acceso, rectificación, cancelación, oposición, inclusión y actualización de los datos de la Base de Datos Personales de la empresa SOCIEDAD AGRICOLA RAPEL S.A.C, en los términos previstos en la Ley y su Reglamento.
@@ -1657,9 +1535,6 @@
     </section>
 
     <div class="page-break"></div>
-
-    <section></section>
-
     <div class="page-break"></div>
 
     <section>
@@ -1812,116 +1687,7 @@
 
     <div class="page-break"></div>
 
-    <section style="font-size: 14px">
-        <h4 class="titulo">ANEXO 1</h4>
-        <p>
-            <b>Recomendaciones de Seguridad y Salud en el Trabajo al Trabajador.</b>
-        </p>
-        <ol style="font-size: 12px;">
-            <li>
-                <b>Generales</b>
-                <br />-	Todo Trabajador está en la obligación de respetar y cumplir el reglamento de seguridad y salud en el trabajo de EL Empleador; así como aquellas normas, políticas, programas y directrices que sobre el particular señale la ley y El empleador, colaborando en toda circunstancia para evitar toda clase de accidentes e incidentes que pongan en riesgo al personal y las operaciones.
-                <br />-	Durante su labor diaria, El trabajador se encuentra en la obligación de protegerse tanto a sí mismo como a sus compañeros de trabajo, contra toda clase de accidentes e imprevistos.
-            </li>
-            <li>
-                <b>Específicas a los riesgos asociados</b>
-                <br />-	En campo agrícola siempre camina a un lado de la carretera, por la derecha y en forma ordenada, evita apresurarte o correr.
-                <br />-	Durante el traslado por las vías de acceso a los campos de la empresa, se debe estar atento al tránsito de los vehículos que circulan por la zona.
-                <br />-	Usar los EPP según la labor a realizar, durante toda la jornada de trabajo, y solo podrán retirárselos cuando haga uso de los servicios higiénicos o durante su refrigerio.
-                <br />-	Para protegerte de la radiación solar deberás utilizar tu gorro árabe, polera y el bloqueador solar.
-                <br />-	No dejar desperdicios, materiales, herramientas de trabajo en lugares que puedan ocasionar accidentes, conserva el lugar de trabajo siempre limpio y ordenado.
-                <br />-	No se debe ingresar a los cuarteles que presentan señalización de seguridad (banderas de color rojo) en las esquinas, dado que se ha realizado una aplicación de productos fitosanitarios.
-                <br />-	Si la labor necesita de uso de una herramienta o material de trabajo, debes verificar su estado antes de usarlo y reportar a tu jefe inmediato cualquier desperfecto encontrado.
-                <br />-	El uso de herramientas es exclusivamente para labor designada, en ningún caso se utilizarán para otras labores.
-                <br />-	Cuando la labor requiera utilizar herramientas punzocortantes (tijeras u otros)  utilizar en todo momento los guantes y lentes de seguridad.
-                <br />-	Todas las herramientas punzocortantes (tijeras u otros) deben ser utilizadas de forma adecuada con sus fundas protectoras y no ser colocadas en los bolsillos. No hacer bromas pesadas durante el uso de las herramientas punzocortantes ni correr por el campo sobre todo portándolas.
-                <br />-	Para el control de picaduras de insectos, al inicio de la jornada de trabajo debes verificar la zona de trabajo y en caso se identifique insectos u ofidios reportar al jefe inmediato.
-                <br />-	No hacer sobreesfuerzos o fuerza excesiva al momento de la realización de sus labores, si la labor requiere manipular cargas debes aplicar correctamente las técnicas de levantamiento de cargas y sus estándares (Peso máximo de carga 25 Kg hombres y 15 Kg mujeres).
-                <br />-	Al terminar la jornada de trabajo, se dejaran las herramientas y materiales de trabajo de forma ordenada.
-            </li>
-            <li>
-                <b>Con relación a COVID-19</b>
-                <br />-	Utiliza tu protector facial y mascarilla en los espacios cerrados (bus de transporte de personal).
-                <br />-	En la ejecución de las labores utiliza siempre tu mascarilla.
-                <br />-	Lávate o desinféctate las manos antes de subir al bus de transporte, después de bajar de tu bus de transporte y antes de ingresar a tu campo.
-                <br />-	Si no tienes un lavamanos cerca, usa tu atomizador de alcohol para desinfectar tus manos.
-                <br />-	Evita tocarte los ojos, nariz y boca con las manos sucias.
-                <br />-	En los comedores recuerda mantener el distanciamiento (2 mts) y no compartas alimentos, bebidas, vasos, cubiertos ni utensilios personales.
-                <br />-	Cúbrete la nariz y boca con el antebrazo o pañuelo desechable, al toser o estornudar.
-            </li>
-        </ol>
-        <div style="margin-top: 20px; font-weight: bold">
-            <table style="width: 100%; text-align: center">
-                <tr>
-                    <td>
-                        <img src="{{ public_path() . '/img/Firma-Federico.jpg' }}" style="width: 180px">
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
-                    <td style="vertical-align: top">__________________<br/>{{ $trabajador->nombre_completo }}<br/>DNI: {{ $trabajador->rut }}</td>
-                </tr>
-            </table>
-        </div>
-    </section>
-
-    <div class="page-break"></div>
-
-    <section id="page3"></section>
-
-    <div class="page-break"></div>
-
-    <section style="position: absolute;">
-        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
-            <h4 class="titulo">ANEXO 3</h4>
-            <p>
-                <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
-            </p>
-            <p>
-                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
-            </p>
-            <p>
-                De acuerdo a lo establecido en el inciso e) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa el pago de la Bonificación Especial por Trabajo Agrario.
-            </p>
-            <p>
-                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
-            </p>
-            <br /><br /><br /><br />
-            <p>
-                <b>FIRMA _______________________________________________</b>
-                <br /><br />
-                <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
-                <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
-                <br />
-                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-            </p>
-        </section>
-        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 50px; width: 50%;">
-            <h4 class="titulo">ANEXO 2</h4>
-            <p>
-                <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
-            </p>
-            <p>
-                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
-            </p>
-            <p>
-                De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
-            </p>
-            <p>
-                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
-            </p>
-            <br /><br /><br /><br />
-            <p>
-                <b>FIRMA _______________________________________________</b>
-                <br /><br />
-                <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
-                <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
-                <br />
-                <b>El Papayo, {{ $contrato->fecha_larga }}</b>
-            </p>
-        </section>
-    </section>
+    @yield('anexos')
 
     <div class="page-break"></div>
 @endsection

@@ -152,12 +152,23 @@
                     </li>
                 </ol>
                 <p>En señal de conformidad, las partes intervinientes suscriben el presente documento en dos ejemplares de idéntico tenor, en la ciudad de Piura, el <b>{{ $contrato->fecha_larga }}</b>.</p>
-                <table style="width: 100%; font-weight: bold; text-align: center; margin-top: 100px">
+                <table style="width: 100%; font-weight: bold; text-align: center;">
+                    <tr>
+                        <td>
+                            <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 150px" />
+                        </td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td>___________________<br>EL EMPLEADOR</td>
                         <td>___________________<br>EL TRABAJADOR</td>
                     </tr>
                 </table>
+                <br /><br /><br /><br />
+                <div style="float: right;">
+                    <span>RECIBÍ UNA COPIA DEL PRESENTE CONTRATO: _______________________________</span><br />
+                    <span><b>{{ $trabajador->nombre_completo }}</b></span>
+                </div>
             @elseif ($contrato->tipo_contrato->name === 'DE TEMPORADA')
                 <p>Conste por el presente documento que se extiende por duplicado, el <b style="text-transform: uppercase">Contrato de Trabajo sujeto a modalidad <span style="text-transform: capitalize">{{ $contrato->tipo_contrato->name }}</span></b> en adelante <b>EL CONTRATO</b>, que se suscribe de conformidad con lo establecido en la Ley N° 31110, Ley del Régimen Laboral Agrario y de Incentivos para el Sector Agrario y Riego, Agroexportador y Agroindustrial y los artículos 64° al 66° del Texto Único Ordenado del Decreto Legislativo Nº 728, Ley de Productividad y Competitividad Laboral, D.S. Nº 003-97-TR (en adelante LPCL), entre:</p>
                 <ul>
@@ -251,12 +262,23 @@
                     </li>
                 </ol>
                 <p>Conformes con todas las cláusulas anteriores, firman las partes, por triplicado, en Piura el <b>{{ $contrato->fecha }}</b>.</p>
-                <table style="width: 100%; font-weight: bold; text-align: center; margin-top: 100px">
+                <table style="width: 100%; font-weight: bold; text-align: center;">
+                    <tr>
+                        <td>
+                            <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 150px" />
+                        </td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td>___________________<br>EL EMPLEADOR</td>
                         <td>___________________<br>EL TRABAJADOR</td>
                     </tr>
                 </table>
+                <br /><br /><br /><br />
+                <div style="float: right;">
+                    <span>RECIBÍ UNA COPIA DEL PRESENTE CONTRATO: _______________________________</span><br />
+                    <span><b>{{ $trabajador->nombre_completo }}</b></span>
+                </div>
             @endif
         @endif
     </section>
@@ -264,4 +286,154 @@
     @if ($contrato->regimen->name === 'Obreros' && $contrato->tipo_contrato->name === 'INTERMITENTE')
         <div class="page-break"></div>
     @endif
+@endsection
+
+@section('anexos')
+    <section style="font-size: 14px">
+        <table style="width: 100%;">
+            <tr>
+                <td><img src="{{ public_path() . '/img/Logo Documentos1.jpg'}}" width="80px" /></td>
+            </tr>
+        </table>
+        <h4 class="titulo">
+            ANEXO N°1
+        </h4>
+        <p style="text-align: center; margin-top: -5px;">
+            <b>Recomendaciones de Seguridad y Salud en el Trabajo al Trabajador.</b>
+        </p>
+        <ol style="font-size: 12px;">
+            <li>
+                <b>Generales</b>
+                <br />-	Todo Trabajador está en la obligación de respetar y cumplir el reglamento de seguridad y salud en el trabajo de <b>El Empleador</b>; así como aquellas normas, políticas, programas y directrices que sobre el particular señale la ley y <b>El empleador</b>, colaborando en toda circunstancia para evitar toda clase de accidentes e incidentes que pongan en riesgo al personal y las operaciones.
+                <br />-	Durante su labor diaria, <b>El trabajador</b> se encuentra en la obligación de protegerse tanto a sí mismo como a sus compañeros de trabajo, contra toda clase de accidentes e imprevistos.
+            </li>
+            <li>
+                <b>Específicas a los riesgos asociados</b>
+                <br />-	En campo agrícola siempre camina a un lado de la carretera, por la derecha y en forma ordenada, evita apresurarte o correr.
+                <br />-	Durante el traslado por las vías de acceso a los campos de la empresa, se debe estar atento al tránsito de los vehículos que circulan por la zona.
+                <br />-	Usar los EPP según la labor a realizar, durante toda la jornada de trabajo, y solo podrán retirárselos cuando haga uso de los servicios higiénicos o durante su refrigerio.
+                <br />-	Para protegerte de la radiación solar deberás utilizar tu gorro árabe, polera y el bloqueador solar.
+                <br />-	No dejar desperdicios, materiales, herramientas de trabajo en lugares que puedan ocasionar accidentes, conserva el lugar de trabajo siempre limpio y ordenado.
+                <br />-	No se debe ingresar a los cuarteles que presentan señalización de seguridad (banderas de color rojo) en las esquinas, dado que se ha realizado una aplicación de productos fitosanitarios.
+                <br />-	Si la labor necesita de uso de una herramienta o material de trabajo, debes verificar su estado antes de usarlo y reportar a tu jefe inmediato cualquier desperfecto encontrado.
+                <br />-	El uso de herramientas es exclusivamente para labor designada, en ningún caso se utilizarán para otras labores.
+                <br />-	Cuando la labor requiera utilizar herramientas punzocortantes (tijeras u otros)  utilizar en todo momento los guantes y lentes de seguridad.
+                <br />-	Todas las herramientas punzocortantes (tijeras u otros) deben ser utilizadas de forma adecuada con sus fundas protectoras y no ser colocadas en los bolsillos. No hacer bromas pesadas durante el uso de las herramientas punzocortantes ni correr por el campo sobre todo portándolas.
+                <br />-	Para el control de picaduras de insectos, al inicio de la jornada de trabajo debes verificar la zona de trabajo y en caso se identifique insectos u ofidios reportar al jefe inmediato.
+                <br />-	No hacer sobreesfuerzos o fuerza excesiva al momento de la realización de sus labores, si la labor requiere manipular cargas debes aplicar correctamente las técnicas de levantamiento de cargas y sus estándares (Peso máximo de carga 25 Kg hombres y 15 Kg mujeres).
+                <br />-	Al terminar la jornada de trabajo, se dejaran las herramientas y materiales de trabajo de forma ordenada.
+            </li>
+            <li>
+                <b>Con relación a COVID-19</b>
+                <br />-	Utiliza tu protector facial y mascarilla en los espacios cerrados (bus de transporte de personal).
+                <br />-	En la ejecución de las labores utiliza siempre tu mascarilla.
+                <br />-	Lávate o desinféctate las manos antes de subir al bus de transporte, después de bajar de tu bus de transporte y antes de ingresar a tu campo.
+                <br />-	Si no tienes un lavamanos cerca, usa tu atomizador de alcohol para desinfectar tus manos.
+                <br />-	Evita tocarte los ojos, nariz y boca con las manos sucias.
+                <br />-	En los comedores recuerda mantener el distanciamiento (2 mts) y no compartas alimentos, bebidas, vasos, cubiertos ni utensilios personales.
+                <br />-	Cúbrete la nariz y boca con el antebrazo o pañuelo desechable, al toser o estornudar.
+            </li>
+        </ol>
+        <div style="margin-top: 20px; font-weight: bold">
+            <table style="width: 100%; text-align: center">
+                <tr>
+                    <td>
+                        <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 170px">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
+                    <td style="vertical-align: top">__________________<br/>{{ $trabajador->nombre_completo }}<br/>DNI: {{ $trabajador->rut }}</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section id="page3"></section>
+
+    <div class="page-break"></div>
+
+    <section style="position: absolute;">
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; margin-top: -75px; width: 50%;">
+            <h4 class="titulo">ANEXO 3</h4>
+            <p>
+                <b>DECLARACIÓN JURADA ELECCIÓN VOLUNTARIA SOBRE EL  PAGO DE LA BONIFICACIÓN ESPECIAL POR TRABAJO AGRARIO.</b>
+            </p>
+            <p>
+                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+            </p>
+            <p>
+                De acuerdo a lo establecido en el inciso e) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa el pago de la Bonificación Especial por Trabajo Agrario.
+            </p>
+            <p>
+                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes este concepto dentro de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+            </p>
+            <br /><br /><br />
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 65%;">
+                        <b>FIRMA _______________________________________________</b>
+                        <br /><br />
+                        <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+                        <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+                        <br />
+                        <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+                    </td>
+                    <td style="width: 35%">
+                        <div style="border: 1px solid black; width: 75px; height: 100px; margin: auto;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 150px">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
+                </tr>
+            </table>
+        </section>
+        <section style="font-size: 12px; transform: rotate(270deg); margin-left: 150px; margin-top: -150px; width: 50%;">
+            <h4 class="titulo">ANEXO 2</h4>
+            <p>
+                <b>DECLARACIÓN JURADA  ELECCIÓN VOLUNTARIA SOBRE EL ABONO DE LA COMPENSACIÓN POR TIEMPO DE SERVICIOS  Y GRATIFICACIONES.</b>
+            </p>
+            <p>
+                Yo, <b>{{ $contrato->trabajador->nombre_completo_doc }}</b> Identificado con DNI N° 02815445, solicito y declaro bajo juramento que:
+            </p>
+            <p>
+                De acuerdo a lo establecido en el inciso d) del artículo 3° de la Ley N° 31110, <b>LEY DEL RÉGIMEN LABORAL AGRARIO Y DE INCENTIVOS PARA EL SECTOR AGRARIO Y RIEGO, AGROEXPORTADOR Y AGROINDUSTRIAL</b>, puedo elegir de manera facultativa la periodicidad del pago de los conceptos de Compensación por Tiempo de Servicios y Gratificaciones.
+            </p>
+            <p>
+                Por lo tanto,  declaro a mi empleador elegir de manera voluntaria, percibir  en mis haberes ambos conceptos dentro  de mi remuneración diaria. Por lo expuesto firmo la presente en señal de conformidad.
+            </p>
+            <br /><br /><br />
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 65%;">
+                        <b>FIRMA _______________________________________________</b>
+                        <br /><br />
+                        <b>NOMBRE Y APELLIDOS: {{ $contrato->trabajador->nombre_completo_doc }}</b><br />
+                        <b>DNI: {{ $contrato->trabajador->rut }}</b><br />
+                        <br />
+                        <b>El Papayo, {{ $contrato->fecha_larga }}</b>
+                    </td>
+                    <td style="width: 35%">
+                        <div style="border: 1px solid black; width: 75px; height: 100px; margin: auto;"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ public_path() . '/img/PostFirma - Daniel E  VERFRUT SAC.jpg' }}" style="width: 150px">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top">__________________<br/>EL EMPLEADOR</td>
+                </tr>
+            </table>
+        </section>
+    </section>
 @endsection

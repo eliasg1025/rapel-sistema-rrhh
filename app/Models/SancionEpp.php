@@ -107,7 +107,7 @@ class SancionEpp extends Model
 
             $ofico_id = Oficio::findOrCreate($data['oficio']);
 
-            $registro_mismo_dia = SancionEpp::where('trabajador_id', $trabajador_id)
+            /* $registro_mismo_dia = SancionEpp::where('trabajador_id', $trabajador_id)
                 ->whereDate('fecha_incidencia', $data['fecha_incidencia'])
                 ->first();
 
@@ -117,7 +117,7 @@ class SancionEpp extends Model
                     'rut' => $data['trabajador']['rut'],
                     'error' => 'Ya existe una sanción (EPP) por para el ' . $data['fecha_incidencia'] . '<br />USUARIO: ' . $registro_mismo_dia->usuario->trabajador->nombre_completo
                 ];
-            }
+            } */
 
             $sancion                        = new SancionEpp();
             $sancion->fecha_incidencia      = $data['fecha_incidencia'];

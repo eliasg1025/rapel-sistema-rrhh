@@ -39,7 +39,7 @@ class BonosService
         ];
     }
 
-    public function getPermisosInasistencias(Bono $bono, $desde, $hasta)
+    public function getPermisosInasistencias(Bono $bono, $desde, $hasta, array $ruts=[])
     {
         $permisosInasistencias = DB::connection('sqlsrv')->table('dbo.PermisosInasistencias as p')
             ->select(
@@ -48,11 +48,14 @@ class BonosService
                 'RutTrabajador as rut',
                 DB::raw('CAST(FechaInicio as date) as fecha'),
                 DB::raw('DATEPART(DAY, FechaInicio) as dia'),
+                'HoraInasistencia as horas',
                 'MotivoAusencia as motivo'
             )
             ->where('p.IdEmpresa', $bono->empresa_id)
-            ->where('p.HoraInasistencia', 8)
             ->whereBetween('p.FechaInicio', [$desde, $hasta])
+            ->when(sizeof($ruts) !== 0, function($query) use ($ruts) {
+                $query->whereIn('RutTrabajador', $ruts);
+            })
             ->get();
 
         return $permisosInasistencias;
@@ -71,7 +74,7 @@ class BonosService
                 'MotivoAusencia as motivo'
             )
             ->where('p.IdEmpresa', $bono->empresa_id)
-            // ->whereIn('p.MotivoAusencia', ['FALTA', 'FALTA JUSTIFICADA', 'PERMISO'])
+            ->whereIn('p.MotivoAusencia', ['FALTA', 'FALTA JUSTIFICADA', 'PERMISO'])
             ->where('p.HoraInasistencia', 8)
             ->whereBetween('p.FechaInicio', [$desde, $hasta])
             ->get();
@@ -237,105 +240,97 @@ class BonosService
         $hasta = Carbon::parse($_hasta)->format('Ymd h:i:s');
         $periodo = CarbonPeriod::create($_desde, $_hasta);
 
+        /**
+         * Recuperando la ultima condicion de pago para el bono
+         */
         $bono->reglas;
-        $bono->condicion = BonoCondicionPago::where('bono_id', $bono->id)
-            ->orderBy('created_at', 'DESC')
-            ->first();
+        $bono->condicion = BonoCondicionPago::where('bono_id', $bono->id)->orderBy('created_at', 'DESC')->first();
 
-        [$fechas, $recuentos] = $this->getInfoFechas($periodo, $bono->condicion);
+        $sql = DB::connection('sqlsrv')->table('dbo.ActividadTrabajador as a')
+            ->select([
+                DB::raw('DATEPART(DAY, a.fechaActividad) as dia'),
+                DB::raw('DATEPART(WEEK, a.fechaActividad) as semana'),
+                DB::raw("(t.ApellidoPaterno + ' ' + t.ApellidoMaterno + ' ' + t.Nombre) as nombre_completo"),
+                DB::raw("
+                    CASE
+                        WHEN t.IdTipoDctoIden = 1
+                            THEN RIGHT('000000' + CAST(t.RutTrabajador as varchar), 8)
+                        ELSE
+                            RIGHT('000000' + CAST(t.RutTrabajador as varchar), 9)
+                    END AS rut
+                "),
+                't.IdTrabajador as codigo',
+                'a.idEmpresa as empresa_id',
+                DB::raw('cast(c.FechaInicioPeriodo as date) as fecha_ingreso'),
+                DB::raw('cast(c.FechaTermino as date) as fecha_finiquito'),
+                'act.IdActividad as labor_id',
+                'act.Nombre as labor',
+                'cu.IdCuartel as cuartel_id',
+                'cu.Nombre as cuartel',
+                'a.'. $bono->condicion->variable_utilizada . ' as horas',
+                'b.Nombre as banco',
+                DB::raw("(cast(z.IdZona as varchar) + ' ' + z.Nombre) zona_labor"),
+            ])
+            ->join('dbo.Trabajador as t', [
+                'a.idTrabajador' => 't.idTrabajador',
+                'a.idEmpresa' => 't.idEmpresa'
+            ])
+            ->join('dbo.Contratos as c', [
+                'c.idContrato' => 'a.idContrato',
+                'a.idEmpresa' => 'c.idEmpresa'
+            ])
+            ->join('dbo.Cuartel as cu', [
+                'cu.idEmpresa' => 'a.idEmpresa',
+                'cu.idZona' => 'a.idZona',
+                'cu.idCuartel' => 'a.idCuartel'
+            ])
+            ->join('dbo.Actividades as act', [
+                'act.idFamilia' => 'a.idFamilia',
+                'act.idEmpresa' => 'a.idEmpresa',
+                'act.idActividad' => 'a.idActividad'
+            ])
+            ->join('dbo.Banco as b', [
+                'b.idBanco' => 't.idBanco',
+                'b.idEmpresa' => 't.idEmpresa'
+            ])
+            ->join('dbo.Zona as z', [
+                'z.IdZona' => 'a.IdZona',
+                'z.IdEmpresa' => 'a.IdEmpresa'
+            ]);
 
-        $i = 0;
         foreach ($bono->reglas as $regla) {
-            $q = DB::connection('sqlsrv')->table('dbo.ActividadTrabajador as a')
-                ->select(
-                    DB::raw('DATEPART(DAY, a.fechaActividad) as dia'),
-                    DB::raw('DATEPART(WEEK, a.fechaActividad) as semana'),
-                    DB::raw("(t.ApellidoPaterno + ' ' + t.ApellidoMaterno + ' ' + t.Nombre) as nombre_completo"),
-                    DB::raw("
-                        CASE
-                            WHEN t.IdTipoDctoIden = 1
-                                THEN RIGHT('000000' + CAST(t.RutTrabajador as varchar), 8)
-                            ELSE
-                                RIGHT('000000' + CAST(t.RutTrabajador as varchar), 9)
-                        END AS rut
-                    "),
-                    't.IdTrabajador as codigo',
-                    'a.idEmpresa as empresa_id',
-                    //'c.FechaInicioPeriodo as fecha_ingreso',
-                    //'c.FechaTermino as fecha_finiquito',
-                    DB::raw('cast(c.FechaInicioPeriodo as date) as fecha_ingreso'),
-                    DB::raw('cast(c.FechaTermino as date) as fecha_finiquito'),
-                    'act.IdActividad as labor_id',
-                    'act.Nombre as labor',
-                    'cu.IdCuartel as cuartel_id',
-                    'cu.Nombre as cuartel',
-                    // DB::raw("CAST(ROUND(a." . $bono->condicion->variable_utilizada . ", 2, 0) as decimal(18, 2)) horas"),
-                    'a.'. $bono->condicion->variable_utilizada . ' as horas',
-                    'b.Nombre as banco',
-                    DB::raw("(cast(z.IdZona as varchar) + ' ' + z.Nombre) zona_labor"),
-                )
-                ->join('dbo.Trabajador as t', [
-                    'a.idTrabajador' => 't.idTrabajador',
-                    'a.idEmpresa' => 't.idEmpresa'
-                ])
-                ->join('dbo.Contratos as c', [
-                    'c.idContrato' => 'a.idContrato',
-                    'a.idEmpresa' => 'c.idEmpresa'
-                ])
-                ->join('dbo.Cuartel as cu', [
-                    'cu.idEmpresa' => 'a.idEmpresa',
-                    'cu.idZona' => 'a.idZona',
-                    'cu.idCuartel' => 'a.idCuartel'
-                ])
-                ->join('dbo.Actividades as act', [
-                    'act.idFamilia' => 'a.idFamilia',
-                    'act.idEmpresa' => 'a.idEmpresa',
-                    'act.idActividad' => 'a.idActividad'
-                ])
-                ->join('dbo.Banco as b', [
-                    'b.idBanco' => 't.idBanco',
-                    'b.idEmpresa' => 't.idEmpresa'
-                ])
-                ->join('dbo.Zona as z', [
-                    'z.IdZona' => 'a.IdZona',
-                    'z.IdEmpresa' => 'a.IdEmpresa'
-                ])
-                ->when($regla->zona_id !== '0', function($query) use ($regla) {
-                    $query->where('a.IdZona', $regla->zona_id);
-                })
-                ->when($regla->regimen_id !== '0', function ($query) use ($regla) {
-                    $query->where('c.IdRegimen', $regla->regimen_id);
-                })
-                ->when($regla->labor_id !== '0', function($query) use ($regla) {
-                    $query->where('act.IdActividad', $regla->labor_id);
-                })
-                ->when($regla->actividad_id !== '0', function($query) use ($regla) {
-                    $query->where('act.IdFamilia', $regla->actividad_id);
-                })
-                ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
-                    $query->where('c.IdCuartel', $regla->cuartel_id);
-                })
-                ->when(!is_null($regla->rut), function($query) use ($regla) {
-                    $query->where('a.RutTrabajador', $regla->rut);
-                })
-                ->when($regla->ciclo, function($query) use ($regla) {
-                    $query->where('a.Ciclo', $regla->ciclo);
-                })
-                ->when($regla->etapa, function($query) use ($regla) {
-                    $query->where('a.ETAPA', $regla->etapa);
-                })
-                ->whereBetween('a.FechaActividad', [$desde, $hasta])
-                ->where('a.idEmpresa', $bono->empresa_id);
-
-            if ($i < 1) {
-                $actividades = $q;
-            } else {
-                $actividades->union($q);
-            }
-            $i++;
+            $sql->orWhere(function($query) use ($regla, $bono, $desde, $hasta) {
+                $query
+                    ->where('a.idEmpresa', $bono->empresa_id)
+                    ->whereBetween('a.FechaActividad', [$desde, $hasta])
+                    ->when($regla->zona_id !== '0', function($query) use ($regla) {
+                        $query->where('a.IdZona', $regla->zona_id);
+                    })
+                    ->when($regla->regimen_id !== '0', function ($query) use ($regla) {
+                        $query->where('c.IdRegimen', $regla->regimen_id);
+                    })
+                    ->when($regla->labor_id !== '0', function($query) use ($regla) {
+                        $query->where('act.IdActividad', $regla->labor_id);
+                    })
+                    ->when($regla->actividad_id !== '0', function($query) use ($regla) {
+                        $query->where('act.IdFamilia', $regla->actividad_id);
+                    })
+                    ->when($regla->cuartel_id !== '0', function($query) use ($regla) {
+                        $query->where('c.IdCuartel', $regla->cuartel_id);
+                    })
+                    ->when(!is_null($regla->rut), function($query) use ($regla) {
+                        $query->where('a.RutTrabajador', $regla->rut);
+                    })
+                    ->when($regla->ciclo, function($query) use ($regla) {
+                        $query->where('a.Ciclo', $regla->ciclo);
+                    })
+                    ->when($regla->etapa, function($query) use ($regla) {
+                        $query->where('a.ETAPA', $regla->etapa);
+                    });
+            });
         }
 
-        $dataSinProcesar = $this->getResumen($bono->condicion, $actividades->get());
+        $dataSinProcesar = $this->getResumen($bono->condicion, $sql->get());
 
         $pivotQuery = "
             asistencias.codigo,
@@ -382,17 +377,17 @@ class BonosService
 
         $pivotTable = DB::connection('sqlsrv')->table('dbo.Trabajador as t')
             ->selectRaw($pivotQuery)
-            ->joinSub($actividades, 'asistencias', function($join) {
+            ->joinSub($sql, 'asistencias', function($join) {
                 $join->on([
                     'asistencias.codigo' => 't.idTrabajador',
                     'asistencias.empresa_id' => 't.idEmpresa'
                 ]);
             })->get();
 
-        $pivot = function ($query) use ($actividades, $pivotQuery) {
+        $pivot = function ($query) use ($sql, $pivotQuery) {
             $query->selectRaw($pivotQuery)
                 ->from('dbo.Trabajador as t')
-                ->joinSub($actividades, 'asistencias', function($join) {
+                ->joinSub($sql, 'asistencias', function($join) {
                     $join->on([
                         'asistencias.codigo' => 't.idTrabajador',
                         'asistencias.empresa_id' => 't.idEmpresa'
@@ -410,26 +405,44 @@ class BonosService
                 'banco'
             )
             ->groupBy('codigo', 'rut', 'nombre_completo', 'banco', 'fecha_ingreso')
-            ->orderBy('nombre_completo', 'ASC')
-            ->get();
+            ->orderBy('nombre_completo', 'ASC');
 
-        $inasistencias = $this->getInasistencias($bono, $desde, $hasta);
+        $ruts = $result->pluck('rut')->toArray();
 
-        $result->transform(function($item) use ($pivotTable, $fechas, $bono, $recuentos, $inasistencias) {
+        $inasistencias = $this->getPermisosInasistencias($bono, $desde, $hasta, $ruts);
+
+        $result = $result->get();
+
+        /**
+         * Obteniendo la fechas de la tarja asi como las fechas de los recuentos dependiendo de las condiciones
+         */
+        [$fechas, $recuentos] = $this->getInfoFechas($periodo, $bono->condicion);
+
+        $result->transform(function($item) use ($pivotTable, $bono, $fechas, $recuentos, $inasistencias, $desde, $hasta) {
             $dias = array_values($pivotTable->where('codigo', $item->codigo)->toArray());
             $inasistencias = array_values($inasistencias->where('codigo', $item->codigo)->toArray());
+
             $item->fechas = clone $fechas;
             $item->inasistencias = [];
 
             foreach ($dias as $dia) {
-                $item->fechas->{$dia->dia} = is_numeric($dia->{$dia->dia}) ? (double) $dia->{$dia->dia} : $dia->{$dia->$dia};
+                $item->fechas->{$dia->dia} = (double) $dia->{$dia->dia};
             }
 
-            foreach ($inasistencias as $inasistencia) {
-                array_push($item->inasistencias, $inasistencia->dia);
+            foreach ($fechas as $fecha => $valor) {
+                $permisoInasistencia = array_search($fecha, array_column($inasistencias, 'dia'));
+                if (!is_bool($permisoInasistencia)) {
+                    $motivo = $this->getSiglaMotivo($inasistencias[$permisoInasistencia]->motivo);
+                    $item->fechas->{$fecha} = $item->fechas->{$fecha} != 0 ? $item->fechas->{$fecha} . '/' . $motivo : $motivo;
+                } else {
+                    if ($item->fechas->{$fecha} == 0) {
+                        // dd($item->fechas);
+                        $item->fechas->{$fecha} = 'A';
+                    }
+                }
             }
 
-            $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos, $item->inasistencias);
+            $item->resultado = $this->getResultados($item->fechas, $bono->condicion, $recuentos, []);
 
             return $item;
         });
@@ -445,5 +458,44 @@ class BonosService
             'output'    => $result,
             'rows'      => $dataSinProcesar,
         ];
+    }
+
+    public function getSiglaMotivo($motivoPalabra) {
+        $motivo = '';
+        switch ($motivoPalabra) {
+            case 'PERMISO CON':
+                $motivo = 'PC';
+                break;
+
+            case 'LICENCIA':
+                $motivo = 'L';
+                break;
+
+            case 'PERMISO':
+                $motivo = 'PS';
+                break;
+
+            case 'PERSONAL SUSPENDIDOS':
+                $motivo = 'S';
+                break;
+
+            case 'PERSONAL CON S.P.L':
+                $motivo = 'SPL';
+                break;
+
+            case 'FALTA JUSTIFICADA';
+                $motivo = 'FJ';
+                break;
+
+            case 'FALTA';
+                $motivo = 'F';
+                break;
+
+            default:
+                $motivo = 'A';
+                break;
+        }
+
+        return $motivo;
     }
 }
