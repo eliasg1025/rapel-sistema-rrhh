@@ -5,6 +5,7 @@ import Axios from 'axios';
 import BuscarTrabajador from '../../shared/BuscarTrabajador';
 import { DatosAfp, TablaAfps } from '../components';
 import { EtiquetaAdministrador } from '../../shared';
+import Swal from 'sweetalert2';
 
 const initialFormState = {
     nombre_completo: '',
@@ -79,7 +80,10 @@ export const Home = () => {
                     });
             })
             .catch(err => {
-                console.log(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: err?.response?.data?.error || 'Error al ingresar registro'
+                });
             });
     };
 
